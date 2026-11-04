@@ -3,7 +3,7 @@ day: 32
 track: video
 phase: 2
 title: "Your brand kit, written as code"
-summary: "Put colours, fonts, logo and motion into one config, build a title, lower third and end card — then re-skin a video by editing only the config."
+summary: "Put colours, fonts, logo and motion in one config, build a title, lower third and end card, then re-skin a video by config alone."
 estMinutes: 90
 resources:
   - "https://www.remotion.dev/docs/"
