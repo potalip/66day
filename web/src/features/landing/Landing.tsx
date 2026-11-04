@@ -480,9 +480,9 @@ function Final({ t, start }: { t: LandingStrings; start: string }) {
           <p className="mx-auto mt-4 max-w-[46ch] text-[1.0625rem] opacity-90 sm:text-lg">{t.finalSub}</p>
           <div className="mt-8 flex justify-center">
             <ButtonLink to={start} size="lg" variant="secondary" iconRight={<ArrowRight />}
-              className="bg-accent-fg text-accent hover:bg-accent-fg/90 sm:px-8">{t.ctaStart}</ButtonLink>
+              className="bg-accent-fg text-accent hover:bg-accent-fg/90 focus-visible:outline-accent-fg sm:px-8">{t.ctaStart}</ButtonLink>
           </div>
-          <p className="mt-4 text-sm opacity-80">{t.finalNote}</p>
+          <p className="mt-4 text-sm opacity-90">{t.finalNote}</p>
         </div>
       </Reveal>
     </section>
