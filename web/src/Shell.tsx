@@ -25,6 +25,9 @@ export function Shell() {
   const rest = loc.pathname.replace(/^\/(ru|en)/, "").replace(/\/$/, "");
   const isLanding = rest === "";
   const isFocus = rest === "/start"; // onboarding: no tab bar, minimal chrome
+  // Shared links opened by strangers/recruiters: visitor chrome (CTA, no app nav, no tab bar, full footer, no game calls).
+  const isPublic = /^\/(portfolio|certificate)\/(?!me(\/|$))[^/]+/.test(rest);
+  const visitor = isLanding || isPublic;
 
   useEffect(() => { document.documentElement.lang = l; }, [l]);
   const resolved = useResolvedTheme();
@@ -49,12 +52,12 @@ export function Shell() {
           {s.skip}
         </a>
         <div className="flex min-h-dvh flex-col">
-          <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70">
+          <header className="sticky top-0 z-40 print:hidden border-b border-line bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70">
             <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:h-16 sm:px-6">
               <Link to={`/${l}`} className="-ml-1 rounded-lg px-1 py-1">
                 <Logo size={26} />
               </Link>
-              {!isFocus && (
+              {!isFocus && !isPublic && (
                 <nav aria-label={s.mainNav} className="ml-4 hidden flex-1 items-center gap-0.5 md:flex">
                   {NAV.map((n) => (
                     <NavLink key={n.key} to={`/${l}/${n.to}`} className={cn(desktopItem, "[&_svg]:size-4")}>
@@ -66,7 +69,7 @@ export function Shell() {
               <div className="ml-auto flex items-center gap-1.5 sm:gap-2">
                 <LangSwitcher />
                 <ThemeToggle variant="icon" />
-                {isLanding ? (
+                {visitor ? (
                   <span className="ml-1 hidden sm:block"><ButtonLink to={`/${l}/start`} size="sm">{s.start}</ButtonLink></span>
                 ) : !isFocus && (
                   <NavLink to={`/${l}/me`} aria-label={s.nav.me} title={s.nav.me}
@@ -78,19 +81,19 @@ export function Shell() {
             </div>
           </header>
 
-          {!isLanding && <Suspense fallback={null}><GameLayer /></Suspense>}
+          {!visitor && <Suspense fallback={null}><GameLayer /></Suspense>}
           <main id="main" tabIndex={-1} className={cn("flex-1 focus:outline-none",
-            isLanding ? "" : "mx-auto w-full max-w-6xl px-4 pb-28 pt-6 sm:px-6 sm:pt-10 md:pb-16")}>
+            isLanding ? "" : cn("mx-auto w-full max-w-6xl px-4 pt-6 sm:px-6 sm:pt-10 md:pb-16", isPublic ? "pb-16" : "pb-28"))}>
             <Suspense fallback={isLanding ? null : <RouteFallback />}>
               <Outlet />
             </Suspense>
           </main>
 
-          {(isLanding || !isFocus) && <Footer lang={l} compact={!isLanding} />}
+          {(visitor || !isFocus) && <Footer lang={l} compact={!visitor} />}
 
-          {!isLanding && !isFocus && (
+          {!visitor && !isFocus && (
             <nav aria-label={s.mainNav}
-              className="pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/90 backdrop-blur-md md:hidden">
+              className="print:hidden pb-safe fixed inset-x-0 bottom-0 z-40 border-t border-line bg-bg/90 backdrop-blur-md md:hidden">
               <ul className="mx-auto grid h-16 max-w-md grid-cols-5">
                 {NAV.map((n) => (
                   <li key={n.key} className="contents">
@@ -118,7 +121,7 @@ function Footer({ lang: l, compact }: { lang: Lang; compact: boolean }) {
   const year = new Date().getFullYear();
   if (compact) {
     return (
-      <footer className="hidden border-t border-line md:block">
+      <footer className="hidden border-t border-line md:block print:hidden">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-6 py-6 text-sm text-muted">
           <span className="inline-flex items-center gap-2"><LeafMark size={18} /> {s.footer.tagline}</span>
           <ThemeToggle />
@@ -129,7 +132,7 @@ function Footer({ lang: l, compact }: { lang: Lang; compact: boolean }) {
   const col = "grid content-start gap-2.5 text-sm";
   const link = "text-muted transition-colors hover:text-fg";
   return (
-    <footer className="border-t border-line bg-surface">
+    <footer className="border-t border-line bg-surface print:hidden">
       <div className="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:px-6 md:grid-cols-[1.4fr_1fr_1fr_auto]">
         <div className="max-w-xs">
           <Logo size={26} />
