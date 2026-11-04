@@ -63,10 +63,10 @@ Issues: read and write permission only, and store it as a secret (`GITHUB_TOKEN_
 
 ```text
 Goal: an in-app feedback button that creates a GitHub issue.
-Context: our app (React + Vite front end, API backend). Repo is <owner/repo>. Token in env GITHUB_TOKEN_ISSUES.
+Context: our app (React + Vite front end, API on Cloudflare Workers + D1). Repo is <owner/repo>. Token in env GITHUB_TOKEN_ISSUES.
 Constraints:
-- A small "Feedback" button on every page opens a dialog: type (bug / confusing / idea), message (10–1000 chars),
-  optional screenshot toggle that only captures our page.
+- A small "Feedback" button on every page opens a dialog: type (bug / confusing / idea), message (10–1000 chars).
+  No screenshots in v1 (the GitHub API can't attach images to issues easily); the page URL is enough.
 - POST /api/feedback validates input, rate-limits (3 per user per hour), and creates an issue via the GitHub REST
   API with a clear title, the message, page URL, app version, browser, and label "feedback" + the type.
 - Never include emails or names in the public issue; store reporter id in our DB, linked to the issue number.

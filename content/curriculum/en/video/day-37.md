@@ -67,7 +67,8 @@ Your storyboard knows exactly which scene is on screen at every second. That's a
 Goal: retention.py that maps audience drop-offs to storyboard scenes.
 Input: a retention CSV (time_s, percent_watching) — exported from the platform's analytics, typed in by hand from the
 graph (10-12 points is enough), or fetched via the YouTube Analytics API (metric audienceWatchRatio by
-elapsedVideoTimeRatio) if I pass --youtube <videoId>. Plus runs/<slug>/storyboard.resolved.json.
+elapsedVideoTimeRatio; needs the yt-analytics.readonly OAuth scope, separate from day 36's upload token) if I pass
+--youtube <videoId>. Plus runs/<slug>/storyboard.resolved.json.
 Output:
 - out/retention.png: the curve with scene boundaries as vertical lines and scene ids on top.
 - A table: the 3 steepest drops (percentage points lost per second), with time, scene id, that scene's vo line and visual.

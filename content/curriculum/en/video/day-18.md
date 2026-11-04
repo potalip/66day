@@ -43,7 +43,7 @@ frame and hands them to ffmpeg. Exactly what you did by hand, at scale.
   in `src/Root.tsx`. One project can hold many compositions.
 - **`useCurrentFrame()`** — inside a component, returns the frame being drawn. Your whole animation is a function of
   this number, just like your Python scripts.
-- **`interpolate(frame, [0, 30], [0, 1], { extrapolateRight: "clamp" })`** — yesterday's progress → value recipe in
+- **`interpolate(frame, [0, 30], [0, 1], { extrapolateRight: "clamp" })`** — day 16's progress → value recipe in
   one call. Add `easing: Easing.out(Easing.cubic)` and you have day 16 in a single line.
 - **`spring({ frame, fps, config: { damping: 200 } })`** — a physics-based 0 → 1 that settles naturally. Less damping =
   more bounce. Great for logos and pop-ins.
@@ -115,7 +115,7 @@ npx remotion render Intro out/intro.mp4
 ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 out/intro.mp4
 ```
 
-Duration should be `10.000000`. Upload `intro.mp4`. Commit the project (the agent will already have a `.gitignore`
+Duration should be `10.000000` (or a few milliseconds off). Upload `intro.mp4`. Commit the project (the agent will already have a `.gitignore`
 that skips `node_modules` and `out/`).
 
 > **Tip:** ask the agent "explain Intro.tsx to me line by line, like I know Python but not React". Ten minutes of

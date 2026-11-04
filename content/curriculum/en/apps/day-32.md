@@ -65,7 +65,7 @@ monthly Price, and copy the Price id (`price_...`). Put your **test** secret key
 
 ```bash
 stripe login
-stripe listen --forward-to localhost:8787/api/stripe/webhook
+stripe listen --forward-to localhost:5173/api/stripe/webhook   # use the port npm run dev prints
 # it prints a webhook signing secret: whsec_... → save it as STRIPE_WEBHOOK_SECRET
 ```
 
@@ -73,11 +73,11 @@ stripe listen --forward-to localhost:8787/api/stripe/webhook
 
 ```text
 Goal: users can buy "Pro" with Stripe Checkout (test mode) and Pro unlocks only via a verified webhook.
-Context: our app (React + Vite, API on Cloudflare Workers / Node, D1 database, auth from day 24).
+Context: our app (React + Vite, API on Cloudflare Workers + D1, auth from day 24).
 Price id is in env STRIPE_PRICE_ID; keys in STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.
 Constraints:
 - POST /api/billing/checkout (signed-in only) creates a Checkout Session with client_reference_id = user id
-  and returns the URL. Never accept price or user id from the browser.
+  (mode "payment" for a one-time price, "subscription" for a monthly one) and returns the URL. Never accept price or user id from the browser.
 - POST /api/stripe/webhook reads the RAW body and verifies the Stripe-Signature header
   (on Workers use the async verification with the SubtleCrypto provider). Reject invalid signatures with 400.
 - On checkout.session.completed with payment_status "paid": set users.plan = 'pro' for client_reference_id.
@@ -102,8 +102,9 @@ Real money is mostly edge cases. Make each one boring:
 - **Cancelled**: user closes the Stripe page or hits back. They land on `cancel_url`: friendly message, still free, no error.
 - **Failed**: card declined. Test with `4000 0000 0000 0002`. Stripe shows the error on its page; nothing changes in
   your database. Check it.
-- **Duplicate webhook**: Stripe retries webhooks and may send one twice. Re-send it yourself:
-  `stripe events resend evt_...`. Your `stripe_events` table must make the second one a no-op.
+- **Duplicate webhook**: Stripe retries webhooks and may send one twice. Re-send a real event yourself (Stripe CLI
+  `stripe events resend evt_...`, or Resend in the dashboard's event view; check the CLI docs if it doesn't reach your
+  local listener). Your `stripe_events` table must make the second one a no-op.
 - **Webhook arrives before the redirect** (or long after): your success page polls, so both orders work.
 - **Refund** (bonus): handle `charge.refunded` and set the plan back to free.
 
@@ -112,7 +113,8 @@ stripe trigger checkout.session.completed
 stripe events resend evt_XXXXXXXX
 ```
 
-Paste for task 3: how each of the four cases behaves in your app and which line of code makes the duplicate safe.
+`stripe trigger` sends a fixture event with no `client_reference_id`, so it matches no user: your handler should log
+it and still answer 200, not crash. Paste for task 3: how each of the four cases behaves in your app and which line of code makes the duplicate safe.
 
 > **Security:** never log full webhook payloads with customer emails to public places, never put the secret key in the
 > front end, and before going live switch to live keys only in production env, after a review.

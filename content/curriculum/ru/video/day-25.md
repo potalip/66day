@@ -61,6 +61,7 @@ tasks:
 Выбери один. Сомневаешься — бери Manim: Python ты уже знаешь.
 
 ```bash
+# в ~/66/video, окружение .venv активно (день 15)
 pip install manim
 manim --version
 ```

@@ -60,19 +60,19 @@ tasks:
 
 ### 2. Создай два worktree (10 мин)
 
-Из основной папки проекта:
+Из основной папки проекта (`~/66/apps/main-app`):
 
 ```bash
 git switch main && git pull
-git worktree add ../myapp-issue-21 -b fix/issue-21
-git worktree add ../myapp-issue-22 -b fix/issue-22
+git worktree add ../main-app-issue-21 -b fix/issue-21
+git worktree add ../main-app-issue-22 -b fix/issue-22
 git worktree list
 ```
 
 В каждой новой папке нужны свои зависимости и локальные настройки:
 
 ```bash
-cd ../myapp-issue-21 && npm install && cp ../myapp/.dev.vars .dev.vars
+cd ../main-app-issue-21 && npm install && cp ../main-app/.dev.vars .dev.vars
 ```
 
 (Со второй папкой то же самое. Файлы с локальными секретами копируй руками: они в `.gitignore`, git их не перенесёт.)
@@ -88,7 +88,7 @@ cd ../myapp-issue-21 && npm install && cp ../myapp/.dev.vars .dev.vars
 другую задачу; не обращай на него внимания, но не выходи за пределы этой папки и этой задачи.
 Ограничения:
 - Трогай только файлы, нужные для этой задачи. Никаких обновлений зависимостей и переформатирования остального.
-- Если запускаешь dev-сервер — на порту 5174 (у второго агента 5175).
+- Если запускаешь dev-сервер — на порту 5174 (`npm run dev -- --port 5174`; у второго агента 5175).
 - Добавь тест, который падает до исправления. Запусти npm test и npm run build.
 - Закоммить, запушь и открой PR через gh pr create: что поменялось, зачем, как проверить, "Fixes #21".
 Готово, когда: PR открыт, CI зелёный. Потом остановись и подведи итог в трёх строках.
@@ -122,7 +122,7 @@ cd ../myapp-issue-21 && npm install && cp ../myapp/.dev.vars .dev.vars
 правильно — влей и прибери за собой:
 
 ```bash
-git worktree remove ../myapp-issue-21
+git worktree remove ../main-app-issue-21
 git branch -d fix/issue-21
 ```
 

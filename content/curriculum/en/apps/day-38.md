@@ -60,19 +60,19 @@ fix and one API or data fix. Ask yourself: would both changes edit the same file
 
 ### 2. Make two worktrees (10 min)
 
-From your main project folder:
+From your main project folder (`~/66/apps/main-app`):
 
 ```bash
 git switch main && git pull
-git worktree add ../myapp-issue-21 -b fix/issue-21
-git worktree add ../myapp-issue-22 -b fix/issue-22
+git worktree add ../main-app-issue-21 -b fix/issue-21
+git worktree add ../main-app-issue-22 -b fix/issue-22
 git worktree list
 ```
 
 Each new folder needs its own install and local config:
 
 ```bash
-cd ../myapp-issue-21 && npm install && cp ../myapp/.dev.vars .dev.vars
+cd ../main-app-issue-21 && npm install && cp ../main-app/.dev.vars .dev.vars
 ```
 
 (Same for the second one. Copy local secrets files by hand; they're in `.gitignore`, so git won't bring them.)
@@ -88,7 +88,7 @@ Context: you're working in a git worktree on branch fix/issue-21. Another agent 
 in parallel in another folder; don't worry about it, but stay inside this folder and this issue.
 Constraints:
 - Touch only files needed for this issue. No dependency upgrades, no formatting changes elsewhere.
-- If you run a dev server, use port 5174 (the other agent uses 5175).
+- If you run a dev server, use port 5174 (`npm run dev -- --port 5174`; the other agent uses 5175).
 - Add a test that fails before the fix. Run npm test and npm run build.
 - Commit, push, and open a PR with gh pr create: what changed, why, how to test, "Fixes #21".
 Done when: the PR is open and CI is green. Then stop and summarise in 3 lines.
@@ -122,7 +122,7 @@ Then hand the comments back: `gh pr view 21 --comments` in that agent's session 
 when it's right, then clean up:
 
 ```bash
-git worktree remove ../myapp-issue-21
+git worktree remove ../main-app-issue-21
 git branch -d fix/issue-21
 ```
 

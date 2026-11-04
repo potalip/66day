@@ -86,6 +86,8 @@ Constraints:
 - Light and dark theme; Lighthouse mobile performance 90+; proper <title>, meta description and an Open Graph
   image so the link looks good when shared.
 - Track a "cta_clicked" event with the analytics from day 34.
+- If the app moves to /app, update every redirect: sign-in callbacks in the auth provider's dashboard (day 24) and
+  the Stripe success/cancel URLs (day 32).
 Done when: it's deployed and you show me phone and desktop screenshots in both themes.
 ```
 

@@ -84,11 +84,12 @@ Cut the scope until it scares you a little. Send the brief to the client for a "
 ### 2. Build and deploy (90 min)
 
 You have all the parts: a UI, a database, auth, AI with fallback, scheduled jobs, Telegram, tests, CI. Start a fresh
-repo and give the agent the brief:
+folder and repo next to your main app, e.g. `~/66/apps/marta-waitlist`, and give the agent the brief:
 
 ```text
 Goal: build v1 of the tool described in BRIEF.md (paste the brief into the repo first).
-Context: reuse our usual stack (React + Vite + Tailwind, Workers/D1 or our hosting of choice, Telegram helper if needed).
+Context: reuse our usual stack (React + Vite + Tailwind, Cloudflare Workers + D1, auth as on day 24,
+the day-31 Telegram helper if needed).
 Constraints:
 - Only the 3 user stories in scope. Mobile-first, both themes, in the client's language.
 - Simple sign-in for the client's staff only; per-business data isolation.
@@ -99,7 +100,8 @@ Done when: deployed, the 3 stories work end to end at 390px, and CI is green. Pl
 ```
 
 For Marta, that might be: a class list with a waitlist per class, a "spot freed" button, and an automatic Telegram or
-email message to the next person with a link to confirm within 2 hours. Test every story as the client would, on a
+email message to the next person with a link to confirm within 2 hours
+(a Telegram bot can only message people who have pressed Start in it, so email is the safe default). Test every story as the client would, on a
 phone. Paste the live link for task 2.
 
 > **If you're stuck:** at the halfway mark, if a story isn't working, cut it and tell the client honestly: "This is v1;

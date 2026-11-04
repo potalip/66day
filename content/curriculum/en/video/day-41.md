@@ -69,7 +69,7 @@ Reels/TikTok/Shorts. Run it through your tools:
 
 ```text
 Goal: produce a 3-video client pack with my pipeline.
-Context: client brief below; my make-video pipeline, brand kit, series template and formats flag (days 32-40).
+Context: client brief below; my make-video pipeline, brand kit, series template and formats flag (days 32–40). If my day-40 app works, submit the jobs through it instead of the command line.
 Steps:
 1. Create brand/client-<name>.json from the client's logo and colours (check contrast; use a licensed font).
 2. Generate storyboards: one explainer (45-60 s, 16:9) and two shorts (15-25 s, 9:16) as a mini-series with the same

@@ -34,8 +34,8 @@ tasks:
 ---
 
 On day 26 you gave the AI *inside* your app two tools. Today you flip it around: you give AI assistants *outside* your
-app (Claude Code, Claude Desktop, other MCP-capable tools) a way to use it. Ask your agent "what did my users add
-this week?" and it simply checks. That's MCP, and once you've built one server, you'll see plugs everywhere.
+app (Claude Code, Claude Desktop, other MCP-capable tools) a way to use it. Ask your agent "what did I add this
+week?" and it simply checks. That's MCP, and once you've built one server, you'll see plugs everywhere.
 
 ## MCP in one picture
 
@@ -91,16 +91,18 @@ connected, what you asked, and what it found.
 
 ### 2. Build your own: 2 tools (60 min)
 
-Make a small separate folder (or a `mcp/` folder in your repo) for a server that talks to **your app's API** with a
+Put your server in an `mcp/` folder of your repo (`main-app/mcp/`, next to `bot/`). It talks to **your app's API** with a
 personal token, so it respects the same auth and limits as the app does.
 
 Choose two tools: one **read** and one **write**. For example `list_recent_items` and `add_item`.
 
 ```text
 Goal: a tiny MCP server for my app, in TypeScript, using the official MCP TypeScript SDK (@modelcontextprotocol/sdk)
-and zod for input schemas. Use stdio transport. Check the SDK README for current import paths and APIs.
+and zod for input schemas. Use stdio transport. Check the SDK README for current package names, import paths and
+APIs (they change between major versions).
 Context: my app's API is at APP_URL with endpoints <list them>; auth with an API token in env APP_TOKEN.
-Add a POST /api/tokens endpoint to the app that lets a signed-in user create a personal token (store only a hash).
+Add a POST /api/tokens endpoint to the app that lets a signed-in user create a personal token (store only a hash),
+and let the API accept "Authorization: Bearer <token>" as an alternative to the session cookie, mapped to that user.
 Tools:
 1. list_recent_items: input { limit: integer 1–50, default 10 }; returns a short readable list.
 2. add_item: input { title: string 1–200 chars, note?: string }; creates an item via the API; returns its id and link.
@@ -127,7 +129,8 @@ Call each tool by hand. Then connect it to your agent:
 claude mcp add myapp -e APP_URL=https://your-app.example -e APP_TOKEN=your-token -- node /full/path/to/build/index.js
 ```
 
-Now ask, in plain words: *"Add an item called 'Try MCP' and then show me my five latest items."* Watch the agent pick
+The token lands in your local Claude Code config, not in the repo. Don't add `--scope project` here: that writes
+a `.mcp.json` meant to be committed. Now ask, in plain words: *"Add an item called 'Try MCP' and then show me my five latest items."* Watch the agent pick
 your tools by their descriptions. Push the server and paste the repo link for task 3.
 
 > **If you're stuck:** the agent doesn't see your tools? Run `claude mcp list` and check the status. Most failures are

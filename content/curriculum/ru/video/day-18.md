@@ -115,7 +115,7 @@ npx remotion render Intro out/intro.mp4
 ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1 out/intro.mp4
 ```
 
-Длительность должна быть `10.000000`. Загрузи `intro.mp4` и закоммить проект (агент уже добавил `.gitignore`,
+Длительность должна быть `10.000000` (плюс-минус несколько миллисекунд). Загрузи `intro.mp4` и закоммить проект (агент уже добавил `.gitignore`,
 который пропускает `node_modules` и `out/`).
 
 > **Совет:** попроси агента: «объясни Intro.tsx построчно, как человеку, который знает Python, но не React».

@@ -79,9 +79,14 @@ ffmpeg -i render/episode-01.mov -c:v prores_ks -profile:v 3 -c:a pcm_s16le maste
 sha256sum masters/* delivery/*/* > checksums.sha256
 ```
 
+The input is the pipeline's own high-quality render, never an already compressed delivery mp4: a master is only as
+good as its source. On macOS use `shasum -a 256` instead of `sha256sum`; on Windows the agent can use PowerShell's
+`Get-FileHash`.
+
 Upload the folder to cloud storage (Google Drive, Dropbox, or an object storage bucket) and share a view link.
-Then **replace** the scheduled uploads from day 62 with files from `delivery/` if anything changed — and check them
-one last time in the platform studio.
+If a launch video changed since day 62, delete that scheduled upload and schedule the new file from `delivery/`:
+most platforms won't let you swap the file under an existing video. Then check every scheduled item one last time in the
+platform studio.
 
 > **If you're stuck:** ProRes masters are huge and your upload is slow? Keep ProRes on your disk and an external
 > backup, and upload the delivery files plus README to the shared folder. The rule is "one authoritative master

@@ -4,7 +4,7 @@ track: apps
 phase: 3
 title: "Поговори с ним: голосовой ассистент для одной задачи"
 summary: "Собираешь голосового ассистента для одной узкой задачи, меряешь каждую задержку и решаешь, где голос лучше экрана."
-estMinutes: 120
+estMinutes: 135
 resources:
   - "https://github.com/SYSTRAN/faster-whisper"
   - "https://yandex.cloud/ru/docs/speechkit/"

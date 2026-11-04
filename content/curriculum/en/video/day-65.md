@@ -29,7 +29,7 @@ tasks:
     proof: link
 ---
 
-Sixty-four days ago you rendered 90 frames of a moving square and felt like a wizard. Today you launch a body of work
+Fifty days ago, on day 15, you rendered 90 frames of a circle sliding across the screen and felt like a wizard. Today you launch a body of work
 made by your own pipeline: masters locked, trailer cut, uploads scheduled, a service page waiting for clients. The
 making is done. Launch day is about **showing up**: posting well, answering every person, fixing what breaks in
 public, and writing down what happened while it's fresh.
@@ -70,18 +70,19 @@ Then open on your phone: the main video, captions on, then off. Keep three tabs 
 
 ### T+0: Go live and post (15 min)
 
-The main video goes public (or your scheduled premiere starts). Post your launch message on the main channel with the
-trailer attached. Templates to adapt — make them sound like you:
+The main video goes public (or your scheduled YouTube Premiere starts): for a series, the newest episode joins the ones from
+your premiere in one playlist; for a tool, the public version with its gallery; for a showreel, the day 58 reel at
+the top of your page. Post your launch message on the main channel with the trailer attached. Templates to adapt — make them sound like you:
 
 ```text
 X / THREADS / LINKEDIN
 1/ Today I'm launching [series / tool / reel]: [what it is for whom, one line]. [trailer, uploaded natively]
 2/ Every frame is made by code: [one striking detail — "the charts are rendered from live data"].
 3/ What 5 test viewers taught me: [one honest insight — "the first version lost people at 0:41"].
-4/ Episode 1 is live: [link]. New episodes [schedule]. I'm reading every comment today.
+4/ The series is live, [n] episodes so far: [playlist link]. New episodes [schedule]. I'm reading every comment today.
 
 PINNED COMMENT UNDER THE VIDEO
-Thanks for watching! This is episode 1 of [N]. What should I explain next? (Made with my own code pipeline —
+Thanks for watching! This is episode [n] of [N]. What should I explain next? (Made with my own code pipeline —
 ask me anything about how.)
 
 SHOW HN / PRODUCT HUNT (only for a tool people can try)
@@ -99,7 +100,7 @@ one specific question I'd love feedback on.
 
 The first two hours shape everything. Reply to every comment within ~15 minutes — specific answers, not "thanks!🔥".
 Heart or like good comments; answer questions about *how* it's made generously; that's your proof of craft for future
-clients. Criticism? "Fair — noted for episode 2." Never argue about taste.
+clients. Criticism? "Fair — noted for the next episode." Never argue about taste.
 
 Something broken? Classic launch-day video bugs: captions missing on one platform, a dead description link, the wrong
 thumbnail, audio out of sync on a re-encode. Fix the metadata in the studio immediately. If the video file itself is

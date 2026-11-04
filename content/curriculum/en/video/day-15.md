@@ -56,13 +56,25 @@ smaller and blurrier) and **pixel format** `yuv420p` (the colour layout every ph
 
 ## Step 1 — draw 90 frames, glue them together
 
-Open your phase-2 video workshop from day 14 (`~/66/video`) and make a `day15/` folder there. All paths in this track
-are relative to that folder. Then give your agent this:
+Open your phase-2 video workshop from day 14 (`~/66/video`) and make a `day15/` folder there. Until day 27, every path
+in this track is relative to `~/66/video`. First give the workshop one Python environment for the whole track — the same
+`.venv` trick as day 12, so pip never says "externally-managed-environment":
+
+```bash
+cd ~/66/video
+python3 -m venv .venv
+source .venv/bin/activate        # Windows: .venv\Scripts\activate
+pip install pillow
+```
+
+Activate it in every new terminal before running a script (your prompt shows `(.venv)`), and add one line to the
+workshop's `CLAUDE.md`: "Python packages go into ~/66/video/.venv". From now on, every "install it" in a prompt means
+into this venv. Then give your agent this:
 
 ```text
 Goal: a Python script that draws 90 PNG frames for a 3-second animation.
-Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are available
-(install Pillow with pip if missing).
+Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are installed
+in ~/66/video/.venv (activated).
 Constraints:
 - 1920x1080, dark background, a bright circle that moves from the left edge to the right edge over 90 frames.
 - Draw the frame number in the top-left corner in large text so I can see individual frames.

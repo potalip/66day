@@ -4,7 +4,7 @@ track: video
 phase: 2
 title: "Пайплайн v1: одна команда — готовый ролик"
 summary: "Собираешь всё сделанное в make-video \"тема\": раскадровка, голос, визуал, субтитры, музыка и рендер, с кэшем на каждом этапе."
-estMinutes: 120
+estMinutes: 150
 badges: [pipeline-architect]
 resources:
   - "https://www.anthropic.com/engineering/building-effective-agents"
@@ -90,7 +90,7 @@ edit.py с монтажным листом (30-й), компоненты фир�
 - Ключи хранятся в runs/<slug>/cache.json. Если ключ совпал и выходы на месте — пропусти этап и выведи «из кэша».
 - Флаги: --from <этап>, --force <этап>, --seconds 45, --aspect 16:9, --ai-clips (по умолчанию выключен), --brand <файл>.
 - run.json пишет по каждому этапу: статус, сколько секунд занял, оценку стоимости.
-- Установи как команду (pyproject [project.scripts] через uv или маленькая shell-обёртка).
+- Установи как команду в ~/66/video/.venv (pyproject [project.scripts] + pip install -e . или маленькая shell-обёртка).
 Готово, когда: make-video "тест" проходит все заглушки, а второй запуск пишет «из кэша» на каждом этапе.
 ```
 

@@ -61,6 +61,7 @@ Three rules that keep explainers clear:
 Pick one. If unsure, take Manim: you already know Python.
 
 ```bash
+# in ~/66/video with the venv active (day 15)
 pip install manim
 manim --version
 ```

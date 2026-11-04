@@ -104,7 +104,8 @@ Constraints:
 Done when: I trigger a test event and a test error and see both.
 ```
 
-Add a hidden test button or run `throw new Error("test from day 34")` in the browser console. Check your Plausible
+Add a hidden test button or run `setTimeout(() => { throw new Error("test from day 34") })` in the browser console
+(a bare `throw` typed into the console doesn't reach your error handler). Check your Plausible
 or PostHog dashboard for `core_action_done`. Paste for task 3: which tools you chose, the three events, and the first
 event and first error you saw.
 

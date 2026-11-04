@@ -67,7 +67,7 @@ tasks:
 Цель: retention.py, который привязывает падения удержания к сценам раскадровки.
 Вход: CSV удержания (time_s, percent_watching) — выгрузка из статистики площадки, вбитые руками точки с графика
 (10–12 точек хватит) или, если я передам --youtube <videoId>, данные из YouTube Analytics API (метрика
-audienceWatchRatio по elapsedVideoTimeRatio). Плюс runs/<slug>/storyboard.resolved.json.
+audienceWatchRatio по elapsedVideoTimeRatio; нужно отдельное OAuth-право yt-analytics.readonly). Плюс runs/<slug>/storyboard.resolved.json.
 Выход:
 - out/retention.png: кривая, границы сцен вертикальными линиями, id сцен сверху.
 - Таблица: 3 самых крутых падения (сколько процентных пунктов теряется в секунду) — время, id сцены, её реплика vo и визуал.

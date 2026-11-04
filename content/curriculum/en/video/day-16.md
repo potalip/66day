@@ -61,6 +61,7 @@ Today we draw with **pycairo**, a Python binding to the Cairo vector library: sm
 and it can hand raw pixels straight to ffmpeg, so you don't need thousands of PNG files on disk.
 
 ```bash
+# in ~/66/video with the venv active (day 15)
 pip install pycairo
 python -c "import cairo; print(cairo.version)"
 ```

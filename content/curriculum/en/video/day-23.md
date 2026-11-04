@@ -57,6 +57,7 @@ timings and take the words from your script. Best of both.
 ## Step 1 — words with timestamps, then SRT
 
 ```bash
+# in ~/66/video with the venv active (day 15)
 pip install faster-whisper
 ```
 

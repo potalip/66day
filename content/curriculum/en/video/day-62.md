@@ -109,7 +109,6 @@ so schedule it by hand in YouTube Studio instead. Then mark each item:
 
 - [ ] Series only: every episode you promised in CAPSTONE.md is rendered with `make-video --batch` and QC'd
       (episodes 4–5 if they're in scope; if not, say "3 episodes" honestly in the plan).
-
 - [ ] Every launch video: final title, description with chapters, tags, language, category set.
 - [ ] Thumbnails chosen and checked at phone size; captions (SRT) uploaded, not just burned in.
 - [ ] AI-content disclosure set where the platform asks for it; music and font licences on file.

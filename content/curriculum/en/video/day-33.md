@@ -4,7 +4,7 @@ track: video
 phase: 2
 title: "Pipeline v1: one command, one finished video"
 summary: "Wire everything you've built into make-video \"topic\": storyboard, voice, visuals, captions, music and render, with caching per stage."
-estMinutes: 120
+estMinutes: 150
 badges: [pipeline-architect]
 resources:
   - "https://www.anthropic.com/engineering/building-effective-agents"
@@ -89,7 +89,7 @@ Step 1 only: build the orchestrator with each stage as a function stub that writ
 - Keys stored in runs/<slug>/cache.json. Skip a stage if its key matches and outputs exist; print "cached".
 - Flags: --from <stage>, --force <stage>, --seconds 45, --aspect 16:9, --ai-clips (off by default), --brand <file>.
 - run.json logs every stage: status, seconds taken, estimated cost.
-- Install it as a command (pyproject [project.scripts] with uv, or a small shell wrapper).
+- Install it as a command into ~/66/video/.venv (pyproject [project.scripts] + pip install -e ., or a small shell wrapper).
 Done when: make-video "test" runs all stubs, and a second run prints "cached" for every stage.
 ```
 

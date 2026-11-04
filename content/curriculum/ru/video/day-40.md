@@ -4,7 +4,7 @@ track: video
 phase: 3
 title: "Пайплайн как приложение"
 summary: "Ставишь перед make-video Telegram-бота или веб-форму: заявки встают в очередь, прогресс виден, готовый ролик приходит обратно."
-estMinutes: 120
+estMinutes: 150
 resources:
   - "https://docs.aiogram.dev/"
   - "https://core.telegram.org/bots/api"

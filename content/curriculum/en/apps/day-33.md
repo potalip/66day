@@ -114,21 +114,25 @@ Two belts, both required:
 
 - **Provider side**: in your AI provider's console set a **monthly spend limit** and a usage alert at 50%. This is the
   cap that still works when your code has a bug.
-- **App side**: per-user limits on expensive endpoints, e.g. 20 AI calls per user per day, 5 sign-in attempts per
+- **App side**: per-user limits on expensive endpoints. Day 23 capped media calls; now cover every AI route, e.g. 20 AI calls per user per day, 5 sign-in attempts per
   minute per IP, plus a global daily token budget that switches AI to the fallback when hit.
 
 ```text
 Goal: add rate limiting and a daily AI budget.
-Context: Cloudflare Workers (use the Rate Limiting binding if available on our plan, otherwise a D1 counter)
-or Node (a small middleware with a store).
+Context: Cloudflare Workers + D1. Per-minute limits: the Workers Rate Limiting binding (check current docs).
+Daily limits: extend the D1 counter from day 23.
 Constraints: limit per user id for AI routes (20/day) and per IP for auth (5/min). Return 429 with a friendly
 message and Retry-After. Track estimated tokens per day; above DAILY_TOKEN_BUDGET use the no-AI fallback and
-send me one Telegram alert (reuse yesterday's job helper).
+send me one Telegram alert (reuse the day-31 Telegram helper).
 Done when: a curl loop gets 429 after the limit, and the config values live in env, not code.
 ```
 
+Set the limit to 3 for the test (it saves real AI calls), sign in, put your session cookie into a variable with
+`read -rs MY_COOKIE` as on day 24, and run:
+
 ```bash
-for i in $(seq 1 25); do curl -s -o /dev/null -w "%{http_code}\n" -X POST https://your-app.example/api/ai -H "Cookie: ..."; done
+for i in $(seq 1 6); do curl -s -o /dev/null -w "%{http_code}\n" -X POST https://your-app.example/api/extract \
+  -H "Cookie: $MY_COOKIE" -H "Content-Type: application/json" -d '{"text":"test"}'; done
 ```
 
 Paste for task 4: your limits, the provider's monthly cap, and the output where 200s turn into 429s.

@@ -61,6 +61,7 @@ tasks:
 и умеет отдавать пиксели прямо в ffmpeg, так что тысячи PNG на диске больше не нужны.
 
 ```bash
+# в ~/66/video, окружение .venv активно (день 15)
 pip install pycairo
 python -c "import cairo; print(cairo.version)"
 ```

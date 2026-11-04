@@ -4,7 +4,7 @@ track: apps
 phase: 3
 title: "Talk to it: a voice assistant for one job"
 summary: "Build a voice assistant for one narrow job, measure every millisecond of delay, and learn where voice beats a screen."
-estMinutes: 120
+estMinutes: 135
 resources:
   - "https://platform.openai.com/docs/guides/text-to-speech"
   - "https://github.com/SYSTRAN/faster-whisper"

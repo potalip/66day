@@ -93,7 +93,7 @@ finished result) for task 2.
 
 > **If you're stuck:** progress jumps from 0 to 100? The worker only updates at the end. Ask for updates after each
 > stage. Job never starts locally? With the cron approach, trigger the scheduled handler by hand
-> (`curl "http://localhost:8787/__scheduled"` with `wrangler dev --test-scheduled`); with Queues, check the consumer is
+> with the same test URL as on day 31 (`/cdn-cgi/handler/scheduled` on your dev port); with Queues, check the consumer is
 > configured in the wrangler config.
 
 ### 3. Retries and dead-letter (25 min)

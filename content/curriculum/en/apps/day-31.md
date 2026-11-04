@@ -47,7 +47,7 @@ builder required. You already have a bot (day 20) and a backend. Today they star
 Where to run it:
 
 - **Cloudflare Workers Cron Triggers** if your backend is already on Workers: add a `scheduled()` handler next to
-  your `fetch()` handler. Precise, fast, free tier is generous.
+  your `fetch()` handler. Precise and free at this scale.
 - **GitHub Actions `schedule`** if your job is a script in a repo. Easy, but runs can start minutes late, and
   scheduled workflows in inactive public repos get paused after 60 days.
 
@@ -55,7 +55,7 @@ Where to run it:
 
 If the thing you watch has an API or RSS feed, use that. If you must read a web page: check `robots.txt` and the
 site's terms, request at most once every few minutes, send a `User-Agent` with a way to contact you, cache results,
-and never scrape behind a login or collect personal data. Being polite is also practical: rude scrapers get blocked.
+and never scrape behind a login or collect personal data. Rude scrapers get blocked anyway.
 
 ## Step by step
 
@@ -128,7 +128,7 @@ Trigger it twice. One message? Paste task 3: how your retries work, your run key
 
 > **Tip:** if a run crashes *after* writing the key but *before* sending, you'd skip it forever. A good fix is to
 > mark the row `status = sent` only after success, and let a retry pick up rows still `pending`. Ask the agent to
-> explain this trade-off. It's a classic interview question too.
+> explain this trade-off.
 
 ## Quiz
 

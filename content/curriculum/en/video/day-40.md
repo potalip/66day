@@ -4,7 +4,7 @@ track: video
 phase: 3
 title: "Your pipeline as an app"
 summary: "Put a web form or Telegram bot in front of make-video: requests become queued jobs, progress is visible, and the finished video comes back."
-estMinutes: 120
+estMinutes: 150
 resources:
   - "https://www.sqlite.org/docs.html"
   - "https://core.telegram.org/bots/api"
