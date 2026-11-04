@@ -7,7 +7,7 @@ import { strings as libStrings } from "../library/strings";
 import type { LessonMaterial, MaterialRecord } from "../library/types";
 import { Button, Chip, Pill, Spinner, cx } from "../library/ui";
 
-const field = "w-full rounded-lg border border-line bg-bg px-2.5 py-2 text-sm outline-none focus:border-accent";
+const field = "w-full rounded-[var(--radius-sm)] border border-line-strong bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/80 transition-[border-color,box-shadow] focus:outline-none focus:border-accent focus:ring-3 focus:ring-accent/20";
 const lines = (s: string) => s.split("\n").map((x) => x.trim()).filter(Boolean);
 const TRACKS = ["common", "apps", "video"] as const;
 const LEVELS = ["beginner", "intermediate", "advanced"] as const;

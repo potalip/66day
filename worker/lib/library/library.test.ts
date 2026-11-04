@@ -179,3 +179,34 @@ describe("generateMaterial", () => {
     for (const lang of ["ru", "en"] as const) expect(lessonMaterialSchema.safeParse(starterMaterial(resource, lang, null)).success).toBe(true);
   });
 });
+
+import { pipelineSteps, attentionReason } from "./progress";
+describe("pipelineSteps / attentionReason", () => {
+  const base = { status: "processing" as const, sourceType: "youtube" as const, transcriptState: "none" as const, aiState: "idle" as const, audience: ["ru", "en"] as ("ru" | "en")[] };
+  const st = (steps: ReturnType<typeof pipelineSteps>) => Object.fromEntries(steps.map((s) => [s.key, s.state]));
+  it("fresh link: fetching", () => {
+    const s = pipelineSteps(base, {}, new Set(["created"]));
+    expect(st(s)).toMatchObject({ fetch: "active", transcript: "todo", lesson_ru: "todo", publish: "todo" });
+    expect(attentionReason(s)).toBeNull();
+  });
+  it("needs transcript + starter drafts → founder must add a transcript", () => {
+    const s = pipelineSteps({ ...base, status: "review", transcriptState: "needed" }, { ru: "not_configured", en: "not_configured" }, new Set(["metadata"]));
+    expect(st(s)).toMatchObject({ fetch: "done", transcript: "warn", lesson_ru: "warn", publish: "ready" });
+    expect(attentionReason(s)).toBe("transcript");
+  });
+  it("generating blocks attention; a failed lesson surfaces", () => {
+    expect(attentionReason(pipelineSteps({ ...base, transcriptState: "ready" }, { ru: "generating", en: "ready" }, new Set(["metadata"])))).toBeNull();
+    expect(attentionReason(pipelineSteps({ ...base, status: "review", transcriptState: "ready" }, { ru: "failed", en: "ready" }, new Set(["metadata"])))).toBe("lesson_failed");
+  });
+  it("both lessons ready → review; published → nothing to do; audience skips the other language", () => {
+    expect(attentionReason(pipelineSteps({ ...base, status: "review", transcriptState: "ready" }, { ru: "ready", en: "ready" }, new Set(["metadata"])))).toBe("review");
+    const pub = pipelineSteps({ ...base, status: "published", transcriptState: "ready", audience: ["en"] }, { en: "ready" }, new Set(["metadata"]));
+    expect(st(pub)).toMatchObject({ lesson_ru: "skip", lesson_en: "done", publish: "done" });
+    expect(attentionReason(pub)).toBeNull();
+  });
+  it("upload without metadata step counts as fetched; ingest failure is an error", () => {
+    expect(st(pipelineSteps({ ...base, sourceType: "upload" }, {}, new Set()))).toMatchObject({ fetch: "done" });
+    const f = pipelineSteps({ ...base, status: "failed" }, {}, new Set(["created"]));
+    expect(attentionReason(f)).toBe("failed");
+  });
+});

@@ -1,11 +1,12 @@
 // OWNER: library agent. Student library: search, filters, curated shelves, grid.
 import { useEffect, useMemo, useState } from "react";
-import { Link, useSearchParams } from "react-router";
+import { useSearchParams } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { api } from "@web/api";
 import { strings } from "./strings";
 import type { Collection, LibraryList } from "./types";
 import { ResourceCardView } from "./ResourceCardView";
+import { ButtonLink, PageHeader, Select } from "@web/ui";
 import { Button, Chip, Empty, Skeleton, SearchIcon, cx } from "./ui";
 
 const TRACKS = ["common", "apps", "video"] as const;
@@ -60,13 +61,8 @@ export default function Library() {
 
   return (
     <div className="space-y-8">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div className="max-w-2xl">
-          <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{s.title}</h1>
-          <p className="mt-2 text-muted sm:text-lg">{s.lead}</p>
-        </div>
-        <Link to={`/${lang}/library/me`} className="self-start text-sm font-medium text-accent hover:underline sm:self-auto">{s.myList} →</Link>
-      </header>
+      <PageHeader title={s.title} description={s.lead} className="mb-0 sm:mb-0"
+        actions={<ButtonLink to={`/${lang}/library/me`} variant="soft" size="sm">{s.myList}</ButtonLink>} />
 
       <div className="space-y-3">
         <label className="relative block">
@@ -74,7 +70,7 @@ export default function Library() {
           <SearchIcon className="pointer-events-none absolute left-3.5 top-1/2 size-5 -translate-y-1/2 text-muted" />
           <input
             type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder={s.searchPlaceholder}
-            className="w-full rounded-xl border border-line bg-surface py-3 pl-11 pr-4 text-base outline-none placeholder:text-muted focus:border-accent"
+            className="h-12 w-full rounded-[var(--radius)] border border-line-strong bg-surface pl-11 pr-4 text-base text-fg placeholder:text-muted/80 transition-[border-color,box-shadow] focus:border-accent focus:outline-none focus:ring-3 focus:ring-accent/20"
           />
         </label>
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label={s.filters.track}>
@@ -84,8 +80,8 @@ export default function Library() {
           {types.map((t) => <Chip key={t} active={f.type === t} onClick={() => set("type", f.type === t ? "" : t)}>{s.type[t]}</Chip>)}
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <Select label={s.filters.level} value={f.level} onChange={(v) => set("level", v)} options={[["", s.filters.level], ...LEVELS.map((l) => [l, s.level[l]] as [string, string])]} />
-          <Select label={s.filters.topic} value={f.topic} onChange={(v) => set("topic", v)} options={[["", s.filters.anyTopic], ...topics.map((t) => [t, s.topics[t] ?? t] as [string, string])]} />
+          <FilterSelect label={s.filters.level} value={f.level} onChange={(v) => set("level", v)} options={[["", s.filters.level], ...LEVELS.map((l) => [l, s.level[l]] as [string, string])]} />
+          <FilterSelect label={s.filters.topic} value={f.topic} onChange={(v) => set("topic", v)} options={[["", s.filters.anyTopic], ...topics.map((t) => [t, s.topics[t] ?? t] as [string, string])]} />
           {filtered && <Button variant="ghost" size="sm" onClick={() => { setQ(""); setParams(new URLSearchParams(), { replace: true }); }}>{s.filters.clear}</Button>}
           {data && <span className="ml-auto text-sm text-muted" aria-live="polite">{s.results(data.total)}</span>}
         </div>
@@ -131,17 +127,11 @@ function Grid({ children }: { children: React.ReactNode }) {
   return <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{children}</div>;
 }
 
-function Select({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: [string, string][] }) {
+function FilterSelect({ label, value, onChange, options }: { label: string; value: string; onChange: (v: string) => void; options: [string, string][] }) {
   return (
-    <label className="relative">
-      <span className="sr-only">{label}</span>
-      <select
-        value={value} onChange={(e) => onChange(e.target.value)}
-        className={cx("appearance-none rounded-xl border bg-surface py-2 pl-3 pr-8 text-sm outline-none focus:border-accent", value ? "border-accent text-fg" : "border-line text-muted")}
-      >
-        {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
-      </select>
-      <span aria-hidden className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-xs text-muted">▾</span>
-    </label>
+    <Select aria-label={label} value={value} onChange={(e) => onChange(e.target.value)}
+      className={cx("[&_select]:h-9 [&_select]:rounded-full [&_select]:text-sm", value ? "[&_select]:border-fg" : "[&_select]:text-muted")}>
+      {options.map(([v, l]) => <option key={v} value={v}>{l}</option>)}
+    </Select>
   );
 }
