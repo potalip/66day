@@ -4,10 +4,11 @@ import { NavLink, Route, Routes } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { api } from "@web/api";
 import { strings } from "./strings";
-import { Button, Card, Spinner, cx } from "../library/ui";
+import { AiNotice, Badge, Button, Card, Input, PageHeader, Spinner } from "@web/ui";
 import Board from "./Board";
 import AddResources from "./AddResources";
 import Review from "./Review";
+import Guide from "./Guide";
 
 export interface Session { configured: boolean; authed: boolean; ai: boolean }
 
@@ -20,34 +21,32 @@ export default function Admin() {
   useEffect(() => { load(); }, [load]);
   useEffect(() => { if (session?.authed) api<typeof status>("/pipeline/status").then(setStatus).catch(() => {}); }, [session?.authed]);
 
-  if (!session) return <div className="grid place-items-center py-24"><Spinner className="size-6" /></div>;
+  if (!session) return <div className="grid place-items-center py-24 text-muted"><Spinner className="size-6" /></div>;
   if (!session.authed) return <Gate session={session} onDone={load} />;
 
-  const tab = "rounded-lg px-3 py-1.5 text-sm text-muted hover:text-fg aria-[current=page]:bg-surface-2 aria-[current=page]:text-fg";
+  const tab = "relative -mb-px inline-flex h-11 items-center border-b-2 border-transparent px-1 text-sm font-medium text-muted hover:text-fg aria-[current=page]:border-accent aria-[current=page]:text-fg";
   return (
-    <div className="space-y-6">
-      <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{s.title}</h1>
-          <p className="mt-1 max-w-2xl text-muted">{s.subtitle}</p>
-        </div>
-        <div className="flex items-center gap-2">
-          {status && (
-            <span className={cx("inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium", status.ai ? "bg-accent-soft text-accent" : "bg-gold-soft text-gold")}>
-              <span className={cx("size-1.5 rounded-full", status.ai ? "bg-accent" : "bg-gold")} />{status.ai ? s.ai.on(status.model) : s.ai.off}
-            </span>
-          )}
+    <div>
+      <PageHeader
+        eyebrow="FlowLeaf 66 · admin"
+        title={s.title}
+        description={s.subtitle}
+        actions={<>
+          {status && <Badge tone={status.ai ? "accent" : "gold"}>{status.ai ? s.ai.on(status.model) : s.ai.off}</Badge>}
           <Button size="sm" variant="ghost" onClick={async () => { await api("/admin/logout", { method: "POST" }); load(); }}>{s.gate.logout}</Button>
-        </div>
-      </header>
-      {status && !status.ai && <Card className="border-gold/40 bg-gold-soft p-4 text-sm leading-relaxed">{s.ai.offBody}</Card>}
-      <nav className="flex gap-1 border-b border-line pb-2">
+        </>}
+        className="mb-6 sm:mb-6"
+      />
+      {status && !status.ai && <AiNotice title={s.ai.off} className="mb-6">{s.ai.offBody}</AiNotice>}
+      <nav className="no-scrollbar mb-6 flex gap-6 overflow-x-auto border-b border-line">
         <NavLink end to={`/${lang}/admin`} className={tab}>{s.nav.board}</NavLink>
         <NavLink to={`/${lang}/admin/add`} className={tab}>{s.nav.add}</NavLink>
+        <NavLink to={`/${lang}/admin/guide`} className={tab}>{s.nav.guide}</NavLink>
       </nav>
       <Routes>
         <Route index element={<Board />} />
         <Route path="add" element={<AddResources />} />
+        <Route path="guide" element={<Guide />} />
         <Route path="r/:id" element={<Review />} />
       </Routes>
     </div>
@@ -61,7 +60,7 @@ function Gate({ session, onDone }: { session: Session; onDone: () => void }) {
   const [busy, setBusy] = useState(false);
   return (
     <div className="mx-auto max-w-sm py-12">
-      <Card className="p-6">
+      <Card>
         <h1 className="text-xl font-semibold">{s.gate.title}</h1>
         {!session.configured ? <p className="mt-2 text-sm leading-relaxed text-muted">{s.gate.notConfigured}</p> : (
           <form className="mt-4 space-y-3" onSubmit={async (e) => {
@@ -71,11 +70,10 @@ function Gate({ session, onDone }: { session: Session; onDone: () => void }) {
             <p className="text-sm text-muted">{s.gate.body}</p>
             <label className="block">
               <span className="text-sm font-medium">{s.gate.label}</span>
-              <input type="password" autoComplete="current-password" value={token} onChange={(e) => setToken(e.target.value)} autoFocus
-                className="mt-1 w-full rounded-xl border border-line bg-bg px-3 py-2.5 outline-none focus:border-accent" aria-invalid={err} />
+              <Input type="password" autoComplete="current-password" value={token} onChange={(e) => setToken(e.target.value)} autoFocus className="mt-1.5" invalid={err} />
             </label>
             {err && <p role="alert" className="text-sm text-danger">{s.gate.wrong}</p>}
-            <Button type="submit" variant="primary" className="w-full" disabled={!token || busy}>{busy ? <Spinner /> : s.gate.submit}</Button>
+            <Button type="submit" variant="primary" block loading={busy} disabled={!token}>{s.gate.submit}</Button>
           </form>
         )}
       </Card>

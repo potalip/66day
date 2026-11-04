@@ -9,8 +9,10 @@ import type { LessonMaterial, MaterialRecord, PipelineEvent, Resource } from "..
 import { ArrowIcon, Button, Card, Chip, Pill, Skeleton, Spinner, Thumb, cx, hostOf } from "../library/ui";
 import { MaterialEditor } from "./MaterialEditor";
 import { statusTone } from "./Board";
+import { DayPicker, type DayRef } from "./parts";
 
 interface Detail {
+  queue: { total: number; position: number | null; next: string | null; prev: string | null };
   resource: Resource;
   materials: Partial<Record<"ru" | "en", MaterialRecord>>;
   transcript: { source: string; lang: string | null; chars: number; text: string; truncated: boolean; createdAt: number } | null;
@@ -18,7 +20,7 @@ interface Detail {
   ai: boolean;
 }
 const TOPICS = ["claude-code", "prompting", "llm-basics", "agents", "apis", "web-basics", "git", "deploy", "python", "motion-graphics", "remotion", "ffmpeg", "ai-video", "workflow", "career"];
-const field = "w-full rounded-lg border border-line bg-bg px-2.5 py-2 text-sm outline-none focus:border-accent";
+const field = "w-full rounded-[var(--radius-sm)] border border-line-strong bg-surface px-3 py-2 text-sm text-fg placeholder:text-muted/80 transition-[border-color,box-shadow] focus:outline-none focus:border-accent focus:ring-3 focus:ring-accent/20";
 
 export default function Review() {
   const { id = "" } = useParams();
@@ -48,7 +50,14 @@ export default function Review() {
 
   return (
     <div className="space-y-6">
-      <Link to={`/${lang}/admin`} className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"><ArrowIcon dir="left" className="size-4" />{r.back}</Link>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <Link to={`/${lang}/admin`} className="inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"><ArrowIcon dir="left" className="size-4" />{r.back}</Link>
+        <div className="flex items-center gap-2 text-sm">
+          {d.queue.position && <span className="text-muted">{s.queue.pos(d.queue.position, d.queue.total)}</span>}
+          {d.queue.prev && <Link to={`/${lang}/admin/r/${d.queue.prev}`} className="rounded-lg px-2 py-1 text-muted hover:bg-surface-2 hover:text-fg">← {s.queue.prev}</Link>}
+          {d.queue.next && d.queue.next !== id && <Link to={`/${lang}/admin/r/${d.queue.next}`} className="rounded-lg px-2 py-1 font-medium text-accent-ink hover:bg-surface-2">{s.queue.next} →</Link>}
+        </div>
+      </div>
       <header className="flex flex-col gap-4 lg:flex-row lg:items-start">
         <Thumb src={res.thumbnailUrl} type={res.sourceType} label={res.title} className="w-full max-w-xs shrink-0 rounded-xl" />
         <div className="min-w-0 flex-1 space-y-2">
@@ -60,6 +69,9 @@ export default function Review() {
           <h1 className="text-xl font-semibold leading-snug sm:text-2xl">{res.title || res.url}</h1>
           {res.lastError && <p className="text-sm text-danger">{res.lastError}</p>}
           <div className="flex flex-wrap gap-2 pt-1">
+            {res.status === "review" && d.queue.next && d.queue.next !== id && (
+              <Button size="sm" variant="primary" onClick={async () => { await act("pub", `/admin/resources/${id}/publish`); nav(`/${lang}/admin/r/${d.queue.next}`); }} disabled={!!busy || working}>{s.queue.publishNext}</Button>
+            )}
             {res.status === "published"
               ? <><Button size="sm" onClick={() => act("unpub", `/admin/resources/${id}/unpublish`)} disabled={!!busy}>{r.unpublish}</Button>
                   <Link to={`/${lang}/library/${id}`}><Button size="sm" variant="ghost">{libStrings[lang].title} ↗</Button></Link></>
@@ -176,7 +188,7 @@ function DetailsForm({ res, onSaved }: { res: Resource; onSaved: () => void }) {
         <Lbl t={r.fields.origLang}><select className={field} value={f.origLang} onChange={(e) => set("origLang", e.target.value)}><option value="en">EN</option><option value="ru">RU</option><option value="other">—</option></select></Lbl>
         <div><div className="mb-1 text-xs text-muted">{r.fields.audience}</div><div className="flex gap-1.5">{["ru", "en"].map((l) => <Chip key={l} active={f.audience.includes(l)} onClick={() => { const n = toggle(f.audience, l); if (n.length) set("audience", n); }}>{l.toUpperCase()}</Chip>)}</div></div>
       </div>
-      <Lbl t={r.fields.days}><input className={field} value={f.days} onChange={(e) => set("days", e.target.value)} placeholder="3, 15:apps" /></Lbl>
+      <div><div className="mb-1 text-xs text-muted">{r.fields.days}</div><DayPicker value={f.days} onChange={(v) => set("days", v)} /></div>
       <Lbl t={r.fields.notes}><textarea rows={2} className={field} value={f.notes} onChange={(e) => set("notes", e.target.value)} /></Lbl>
       <label className="flex items-center gap-2 text-sm"><input type="checkbox" className="accent-[var(--accent)]" checked={f.featured} onChange={(e) => set("featured", e.target.checked)} />{r.fields.featured}</label>
       <div className="flex items-center gap-3">
@@ -196,14 +208,14 @@ function toForm(res: Resource) {
   return {
     title: res.title, author: res.author ?? "", thumbnailUrl: res.thumbnailUrl ?? "", duration: res.durationSec ? String(Math.round(res.durationSec / 60)) : "",
     tracks: res.tracks as string[], topics: res.topics, level: res.level as string, origLang: res.origLang, audience: res.audience as string[],
-    days: res.suggestedDays.map((x) => (x.track === "common" ? `${x.day}` : `${x.day}:${x.track}`)).join(", "), notes: res.adminNotes ?? "", featured: res.featured,
+    days: res.suggestedDays.map((x) => ({ day: x.day, track: x.track, reason: x.reason })) as DayRef[], notes: res.adminNotes ?? "", featured: res.featured,
   };
 }
 function fromForm(f: ReturnType<typeof toForm>) {
   return {
     title: f.title, author: f.author || null, thumbnailUrl: f.thumbnailUrl || null, durationSec: f.duration ? Math.round(+f.duration * 60) : null,
     tracks: f.tracks, topics: f.topics, level: f.level, origLang: f.origLang, audience: f.audience, featured: f.featured, adminNotes: f.notes || null,
-    suggestedDays: f.days.split(/[,;\s]+/).filter(Boolean).map((t) => { const [d, tr] = t.split(":"); return { day: +d, track: tr === "apps" || tr === "video" ? tr : "common", reason: "" }; }).filter((x) => x.day >= 1 && x.day <= 66),
+    suggestedDays: f.days.map((x) => ({ day: x.day, track: x.track, reason: x.reason ?? "" })),
   };
 }
 

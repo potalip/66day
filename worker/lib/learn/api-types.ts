@@ -115,6 +115,8 @@ export interface DayResponse {
   next: DaySummary | null;
   /** What the student may do with the following day right now. */
   nextAccess: DayAccess | null;
+  /** The student's track (for track-filtered extras such as library picks). */
+  userTrack: Track;
   /** True for the day the student should work on now. */
   isToday: boolean;
 }

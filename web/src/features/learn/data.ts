@@ -101,3 +101,31 @@ export function useBadges(): Record<string, BadgeDef> {
   }, []);
   return map;
 }
+
+// ---- library resources for a day (library agent's API; see docs/requests/library-to-learn.md) ----
+import type { ResourceCard } from "@web/features/library/types";
+export function useDayResources(lang: Lang, day: number, track: string, urls: string[]) {
+  const [state, setState] = useState<{ resolved: { input: string; card: ResourceCard | null }[]; extra: ResourceCard[] }>({
+    resolved: urls.map((input) => ({ input, card: null })), extra: [],
+  });
+  const key = `${lang}|${day}|${track}|${urls.join(" ")}`;
+  useEffect(() => {
+    let live = true;
+    const fallback = urls.map((input) => ({ input, card: null as ResourceCard | null }));
+    setState({ resolved: fallback, extra: [] });
+    const q = new URLSearchParams({ lang });
+    for (const u of urls) q.append("url", u);
+    const resolve = urls.length
+      ? call<{ items: { input: string; card: ResourceCard | null }[] }>(`/library/resolve?${q}`).then((r) => r.items).catch(() => fallback)
+      : Promise.resolve(fallback);
+    const byDay = call<{ items: ResourceCard[] }>(`/library/by-day/${day}?track=${track}&lang=${lang}`).then((r) => r.items).catch(() => []);
+    void Promise.all([resolve, byDay]).then(([resolved, items]) => {
+      if (!live) return;
+      const seen = new Set(resolved.map((x) => x.card?.id).filter(Boolean));
+      setState({ resolved, extra: items.filter((c) => !seen.has(c.id)).slice(0, 4) });
+    });
+    return () => { live = false; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key]);
+  return state;
+}

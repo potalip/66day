@@ -30,3 +30,6 @@ export function initials(name: string) {
   if (!parts.length) return "·";
   return (parts[0][0] + (parts[1]?.[0] ?? "")).toUpperCase();
 }
+
+/** Current hour in the browser's timezone. */
+export const localHour = () => new Date().getHours();

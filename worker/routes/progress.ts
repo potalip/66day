@@ -56,7 +56,7 @@ progress.post("/onboarding", async (c) => {
     goalNote: cleanText(b.goalNote, 280),
     name: cleanText(b.name, 40),
     timezone: isValidTimeZone(b.timezone) ? b.timezone : null,
-  }, !profileOf(before));
+  }, !before.profile); // first full onboarding → onboarding.completed (game dedupes per user anyway)
   const ctx = await loadCtx(c.env, c.get("userId"));
   const body: OnboardingResult = { awards, overview: await overview(ctx, lang) };
   return c.json(body);

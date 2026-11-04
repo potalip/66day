@@ -78,3 +78,29 @@ no console errors. Also checked:
 - Once other branches merge: screenshot every app page in the Shell and file follow-ups for spacing/title consistency.
 - An OG/social image (1200×630) in the leaf + path-map style, plus an app icon set (PNG 192/512) for a PWA manifest.
 - A tiny celebration component (gold ring burst) shared by learn and game for day completion.
+
+---
+
+## Round 2 — cross-app design QA (on main @ d30deba)
+- **Walkthrough:** I onboarded through the real UI in each language, then screenshotted 12 routes (landing, start, today,
+  day/1, path, library, resource, leaderboard, me, admin, studio, ui) × EN/RU × light/dark × 390/1280 — 96 shots — plus the
+  fresh onboarding steps. No horizontal overflow anywhere. The only console errors are blocked YouTube thumbnails (sandbox
+  network); the library's fallback art covers them well.
+- **Fixed in design-owned files:**
+  - Shell wraps `<Outlet>` in `<Suspense fallback={<RouteFallback/>}>`, so routes can be lazy-loaded.
+  - The `theme-color` meta follows a manually forced theme.
+  - Removed the runtime favicon injection (index.html serves it now).
+  - Landing mocks now quote real content: Day 2 "Ship it: your page goes live" with its real tasks, and three real seeded
+    library items per language. Phase copy matches program.json. "Day 12: try both tracks and pick" added.
+  - RU copy: «За 66 дней работа с ИИ станет привычкой» (was an awkward infinitive subject), footer tagline grammar,
+    tag labels «Для практиков / Для рассказчиков».
+  - Added `web/public/og.png` (1200×630, leaf + path map).
+- **Code-splitting:** measured locally. Lazy routes take the entry chunk from 621 → 398 kB (gzip 190 → 126). The exact
+  App.tsx diff and an optional vendor chunk are in `docs/requests/design-to-orchestrator.md`.
+- **Requests:**
+  - learn: curriculum mismatches ("days 1–10 shared" → 1–14 with the pick on day 12; "about an hour" → 1–2 h),
+    RU gendered «(а)» rephrasing, kit migration.
+  - library: ambiguous duration (video length vs lesson time), «coding-агент» terminology, fade on the chip scroller,
+    kit migration.
+  - game: heatmap legend says "darker" (wrong in dark mode), emoji badges → lucide medallions, sparse leaderboard nudge,
+    kit migration.

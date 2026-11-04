@@ -8,8 +8,6 @@ import {
   setMaterial, getMaterials, newId,
 } from "./repo";
 
-/** Optional bindings for the external media worker (AWS: download + Whisper). Not yet in worker/env.ts — see docs/agents/library-REPORT.md. */
-export type LibEnv = Env & { MEDIA_WORKER_URL?: string; MEDIA_WORKER_TOKEN?: string; PUBLIC_BASE_URL?: string };
 
 /** R2 key of an uploaded source video/audio. */
 export const uploadKey = (id: string) => `lib/uploads/${id}/source`;
@@ -44,6 +42,7 @@ export const libraryJobHandlers = {
 
 export interface CreateOptions {
   tracks?: string[]; topics?: string[]; level?: string; audience?: LibLang[]; adminNotes?: string | null; createdBy?: string | null;
+  suggestedDays?: { day: number; track: string; reason?: string }[];
 }
 
 /** Create a resource from a parsed URL. Returns existing id when the URL is already in the library. */
@@ -52,11 +51,12 @@ export async function createFromUrl(env: Env, p: ParsedUrl, o: CreateOptions = {
   if (existing) return { id: existing.id, duplicate: true };
   const id = newId();
   await env.DB.prepare(
-    `INSERT INTO lib_resources (id, source_type, url, canonical_url, external_id, title, tracks, topics, level, audience, status, admin_notes, created_by)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'processing', ?, ?)`,
+    `INSERT INTO lib_resources (id, source_type, url, canonical_url, external_id, title, tracks, topics, level, audience, suggested_days, status, admin_notes, created_by)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 'processing', ?, ?)`,
   ).bind(
     id, p.sourceType, p.url, p.canonicalUrl, p.externalId, "", JSON.stringify(o.tracks ?? []), JSON.stringify(o.topics ?? []),
-    o.level ?? "beginner", JSON.stringify(o.audience?.length ? o.audience : ["ru", "en"]), o.adminNotes ?? null, o.createdBy ?? null,
+    o.level ?? "beginner", JSON.stringify(o.audience?.length ? o.audience : ["ru", "en"]),
+    JSON.stringify((o.suggestedDays ?? []).map((d) => ({ day: d.day, track: d.track, reason: d.reason ?? "" }))), o.adminNotes ?? null, o.createdBy ?? null,
   ).run();
   await logEvent(env, id, "created", "info", `${p.sourceType}${p.kind ? ` (${p.kind})` : ""}: ${p.url}`);
   return { id, duplicate: false };
@@ -107,7 +107,7 @@ export async function ingest(env: Env, id: string) {
         : p.sourceType === "youtube" ? "captions not reachable — paste the transcript or upload a .srt/.vtt/.txt file"
         : "no readable page text — paste the key text";
       await logEvent(env, id, "transcript", "warn", why);
-      await requestMediaWorker(env as LibEnv, id).catch(() => {});
+      await requestMediaWorker(env, id).catch(() => {});
     }
   }
   await startBuild(env, id);
@@ -152,7 +152,7 @@ export async function buildLesson(env: Env, id: string, lang: LibLang) {
   await setMaterial(env, id, lang, { state: "generating" });
   await updateResource(env, id, { ai_state: "generating" });
   const t = await getTranscript(env, id);
-  const res = await generateMaterial(env, r, lang, t?.text ?? null);
+  const res = await generateMaterial(env, r, lang, t?.text ?? null, undefined, await curriculumOutline(lang));
   if (res.ok) {
     await setMaterial(env, id, lang, { state: "ready", data: res.data, origin: "ai", model: res.model, edited: false, error: null });
     await logEvent(env, id, `build_lesson:${lang}`, "ok", `generated${res.attempts > 1 ? " after 1 retry" : ""}${t ? "" : " without transcript (metadata only)"}`);
@@ -192,7 +192,7 @@ async function settle(env: Env, id: string) {
  * Seam for the external media worker (AWS: yt-dlp/download + Whisper). Contract in worker/lib/library/MEDIA-WORKER.md.
  * No-op unless MEDIA_WORKER_URL is configured.
  */
-export async function requestMediaWorker(env: LibEnv, id: string) {
+export async function requestMediaWorker(env: Env, id: string) {
   if (!env.MEDIA_WORKER_URL) return false;
   const row = await getResourceRow(env, id);
   if (!row) return false;
@@ -211,4 +211,21 @@ export async function requestMediaWorker(env: LibEnv, id: string) {
   });
   await logEvent(env, id, "media_worker", res.ok ? "info" : "warn", res.ok ? "transcription requested" : `media worker HTTP ${res.status}`);
   return res.ok;
+}
+
+/**
+ * Real day titles from the learn area's compiled curriculum, so Claude suggests days that exist.
+ * Loaded lazily and optional: falls back to the generic program outline in generate.ts.
+ */
+async function curriculumOutline(lang: LibLang): Promise<string | undefined> {
+  try {
+    const { summarize, TOTAL } = await import("../learn/content");
+    const lines: string[] = [];
+    for (let d = 1; d <= TOTAL; d++) {
+      const a = summarize(lang, "apps", d), v = summarize(lang, "video", d);
+      if (a.track === "common" || a.title === v.title) lines.push(`Day ${d} (common): ${a.title}`);
+      else lines.push(`Day ${d} (apps): ${a.title} | (video): ${v.title}`);
+    }
+    return lines.join("\n");
+  } catch { return undefined; }
 }

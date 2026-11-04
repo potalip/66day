@@ -1,17 +1,17 @@
 // OWNER: game agent. Read models for /api/game/*. Every query is an indexed lookup or an index-ordered LIMIT scan.
 import type { Track } from "../../../shared/types";
 import { CATALOG } from "./badges";
-import { CURRICULUM } from "./curriculum";
+import { bossTitle, CURRICULUM, isBossDay } from "./curriculum";
 import { levelProgress, rankFor } from "./levels";
 import { loadStats, type StatsRow } from "./store";
 import { MAX_FREEZES, viewStreak } from "./streak";
 import { addDays, daysBetween, isoWeek, localDay, safeTz, weekResetsAt } from "./time";
-import type { ActivityCell, BadgeInfo, EarnedBadge, GameMe, LeaderboardResponse, LeaderRow, LevelInfo, PublicProfile, ShippedItem, StreakInfo } from "./types";
+import type { ActivityCell, BadgeInfo, EarnedBadge, GameMe, LeaderboardResponse, LeaderRow, LevelInfo, PublicProfile, ShippedItem, StreakInfo, WeeklyRecap } from "./types";
 
 interface UserRow { id: string; display_name: string | null; track: Track | null; timezone: string | null; started_at: number | null; created_at: number }
 
 export const badgeCatalog = (): BadgeInfo[] =>
-  CATALOG.map(({ id, icon, title, description, group }) => ({ id, icon, title, description, group }));
+  CATALOG.map(({ id, icon, title, description, group, secret }) => ({ id, icon, title, description, group, secret: !!secret }));
 
 function levelInfo(xp: number): LevelInfo {
   const p = levelProgress(xp);
@@ -72,6 +72,7 @@ export async function getMe(db: D1Database, userId: string, now = new Date()): P
     weekXp,
     ranks: { all: allRank ? allRank.n + 1 : null, week: weekRank ? weekRank.n + 1 : null },
     activity: await activityOf(db, u, tz, today),
+    recap: await weeklyRecap(db, userId, today, now),
   };
 }
 
@@ -91,7 +92,8 @@ export async function getProfile(db: D1Database, userId: string, viewerId: strin
     streak: streakInfo(s, today),
     badges: await badgesOf(db, userId),
     activity: await activityOf(db, u, tz, today),
-    shipped: await shippedOf(db, userId),
+    shipped: await shippedOf(db, userId, u.track ?? ((s?.track as Track | null) || null)),
+    recap: userId === viewerId ? await weeklyRecap(db, userId, today, now) : null,
   };
 }
 
@@ -105,26 +107,76 @@ const safeUrl = (v: unknown): string | null => {
   }
 };
 
-/** Shipped work = completed boss days + "ship" tasks (+ any event that carried a proof URL). */
-async function shippedOf(db: D1Database, userId: string): Promise<ShippedItem[]> {
+/**
+ * Shipped work = completed boss days + completed "ship" tasks. Proof links come from the event payload
+ * (`proofUrl`) or, if the learn area's submissions table exists, the latest link submitted for that task.
+ */
+async function shippedOf(db: D1Database, userId: string, track: Track | null): Promise<ShippedItem[]> {
   const r = await db
     .prepare("SELECT event_key, type, payload, created_at FROM game_events WHERE user_id = ? AND type IN ('task.completed','day.completed') ORDER BY created_at DESC LIMIT 400")
     .bind(userId)
     .all<{ event_key: string; type: string; payload: string | null; created_at: number }>();
+  const links = await proofLinks(db, userId);
   const out: ShippedItem[] = [];
   for (const e of r.results) {
     let p: Record<string, unknown> = {};
     try { p = JSON.parse(e.payload ?? "{}"); } catch { /* ignore */ }
     const day = typeof p.day === "number" ? p.day : null;
-    const url = safeUrl(p.proofUrl ?? p.url);
-    if (e.type === "day.completed" && day && CURRICULUM.bossDays.has(day)) {
-      const t = CURRICULUM.titles.get(`day:${day}:common`) ?? CURRICULUM.titles.get(`day:${day}:apps`) ?? CURRICULUM.titles.get(`day:${day}:video`) ?? {};
-      out.push({ kind: "boss", key: e.event_key, day, title: t, url, at: e.created_at });
-    } else if (e.type === "task.completed" && (CURRICULUM.shipTasks.has(String(p.taskId)) || (url && p.ship === true))) {
-      out.push({ kind: "ship", key: e.event_key, day, title: CURRICULUM.titles.get(`task:${p.taskId}`) ?? {}, url, at: e.created_at });
+    if (e.type === "day.completed" && day && isBossDay(CURRICULUM, day, track)) {
+      out.push({ kind: "boss", key: e.event_key, day, title: bossTitle(CURRICULUM, day, track), url: safeUrl(p.proofUrl) ?? links.day.get(day) ?? null, at: e.created_at });
+    } else if (e.type === "task.completed" && CURRICULUM.taskType.get(String(p.taskId)) === "ship") {
+      out.push({ kind: "ship", key: e.event_key, day, title: CURRICULUM.titles.get(`task:${p.taskId}`) ?? {}, url: safeUrl(p.proofUrl) ?? links.task.get(String(p.taskId)) ?? null, at: e.created_at });
     }
   }
   return out.slice(0, 30);
+}
+
+/** Read-only peek at learn's submissions (if that table exists) for public proof links. */
+async function proofLinks(db: D1Database, userId: string) {
+  const task = new Map<string, string>();
+  const day = new Map<number, string>();
+  try {
+    const r = await db
+      .prepare("SELECT task_id, day, url_value FROM learn_submissions WHERE user_id = ? AND url_value IS NOT NULL ORDER BY created_at ASC LIMIT 500")
+      .bind(userId)
+      .all<{ task_id: string; day: number; url_value: string }>();
+    for (const x of r.results) {
+      const u = safeUrl(x.url_value);
+      if (!u) continue;
+      task.set(x.task_id, u);
+      day.set(x.day, u);
+    }
+  } catch { /* learn tables not present */ }
+  return { task, day };
+}
+
+/** Last 7 local days (incl. today) vs the 7 before. */
+export async function weeklyRecap(db: D1Database, userId: string, today: string, now = new Date()): Promise<WeeklyRecap> {
+  const from = addDays(today, -6);
+  const prevFrom = addDays(today, -13);
+  const [act, tasks, badges] = await db.batch([
+    db.prepare("SELECT day, xp FROM game_activity WHERE user_id = ? AND day BETWEEN ? AND ?").bind(userId, prevFrom, today),
+    db.prepare("SELECT COUNT(*) n FROM game_events WHERE user_id = ? AND type = 'task.completed' AND local_day BETWEEN ? AND ?").bind(userId, from, today),
+    db.prepare("SELECT badge_id FROM game_badges WHERE user_id = ? AND awarded_at >= ? ORDER BY awarded_at").bind(userId, Math.floor(now.getTime() / 1000) - 7 * 86400),
+  ]);
+  const rows = act.results as { day: string; xp: number }[];
+  const cur = rows.filter((r) => r.day >= from);
+  const prev = rows.filter((r) => r.day < from);
+  const best = cur.reduce<{ day: string; xp: number } | null>((b, r) => (!b || r.xp > b.xp ? r : b), null);
+  return {
+    from,
+    to: today,
+    xp: cur.reduce((n, r) => n + r.xp, 0),
+    prevXp: prev.reduce((n, r) => n + r.xp, 0),
+    activeDays: cur.filter((r) => r.xp > 0).length,
+    tasks: (tasks.results[0] as { n: number }).n,
+    badges: (badges.results as { badge_id: string }[]).map((b) => b.badge_id),
+    bestDay: best && best.xp > 0 ? best : null,
+    days: Array.from({ length: 7 }, (_, i) => {
+      const d = addDays(from, i);
+      return { day: d, xp: cur.find((r) => r.day === d)?.xp ?? 0 };
+    }),
+  };
 }
 
 export type Period = "week" | "all";

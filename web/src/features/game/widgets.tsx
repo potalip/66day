@@ -1,95 +1,75 @@
 // OWNER: game agent. Reusable game widgets — import from "@web/features/game/widgets".
-//   <XpBar />        level + progress to next level (fetches /api/game/me itself, or pass `me`)
-//   <StreakChip />   flame + current streak, freezes; status-aware
-//   <AwardToast />   presentational card for Award[]; or call showAwards(awards) from anywhere
-//   <LevelRing />, <BadgeMedal />, <Avatar />  — building blocks used by the profile & leaderboard
-import { useEffect, useRef, useState, useSyncExternalStore } from "react";
+//   <XpBar />          level + progress (fetches /api/game/me itself, or pass `me`)
+//   <StreakChip />     flame + current streak + freezes; status-aware
+//   <StreakNudge />    calm card shown only when today's action keeps/restarts the streak (put it on Today)
+//   showAwards(awards) reward toast + level-up moment + refresh of every game widget. Safe with [] / undefined.
+//   <GameLayer />      the host for toasts/level-up (game widgets include it automatically; mounting it once in the
+//                      Shell guarantees level-ups are celebrated on every page)
+//   <AwardToast />, <LevelRing />, <BadgeMedal />, <Avatar />  — building blocks
+import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
+import { Link } from "react-router";
+import { Flame, Snowflake, Sparkles } from "lucide-react";
 import type { Award } from "@shared/types";
 import { LangContext, useLang, useStrings, type Lang } from "@web/i18n";
+import { Avatar as UiAvatar, Button, ButtonLink, Card, Dialog, ProgressBar, ProgressRing, Skeleton, ToastProvider, cn, useFormat, useToast } from "@web/ui";
 import { notifyGameChanged, useBadgeCatalog, useGameMe, type BadgeInfo, type GameMe, type StreakInfo } from "./api";
-import { fmtNum, handleOf, initials } from "./format";
+import { handleOf, localHour } from "./format";
 import { GameIcon } from "./icons";
 import { strings, type GameStrings } from "./strings";
+import type { RankKey } from "../../../../worker/lib/game/levels";
 
 export { notifyGameChanged } from "./api";
 
-const cx = (...c: (string | false | null | undefined)[]) => c.filter(Boolean).join(" ");
-const reducedMotion = () => typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+const reducedMotion = () => typeof window !== "undefined" && !!window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
 
 export function displayName(name: string | null | undefined, userId: string, s: GameStrings) {
   return name?.trim() || s.profile.anon(handleOf(userId));
 }
 
-// ---------------------------------------------------------------------------------------------
-export function Avatar({ name, size = 36, highlight }: { name: string; size?: number; highlight?: boolean }) {
-  return (
-    <span
-      aria-hidden
-      className={cx(
-        "inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold",
-        highlight ? "bg-accent text-accent-fg" : "bg-surface-2 text-muted",
-      )}
-      style={{ width: size, height: size, fontSize: Math.round(size * 0.38) }}
-    >
-      {initials(name)}
-    </span>
-  );
+export function Avatar({ name, size = 36, ring }: { name: string; size?: number; ring?: "accent" | "gold" }) {
+  // "Leaf #4057" → initials "L4" instead of "L#"
+  return <UiAvatar name={name.replace(/#/g, "")} size={size} ring={ring} />;
 }
 
 // ---------------------------------------------------------------------------------------------
-/** Circular level indicator: gold arc = progress inside the level. */
+/** Circular level indicator: gold arc = progress inside the current level. */
 export function LevelRing({ level, progress, size = 112, label }: { level: number; progress: number; size?: number; label?: string }) {
   const s = useStrings(strings);
-  const stroke = Math.max(4, Math.round(size / 18));
-  const r = (size - stroke) / 2;
-  const c = 2 * Math.PI * r;
-  const p = Math.min(1, Math.max(0, progress));
   return (
-    <div className="relative inline-flex shrink-0 items-center justify-center" style={{ width: size, height: size }}
-      role="img" aria-label={`${s.level} ${level}${label ? ` · ${label}` : ""} — ${Math.round(p * 100)}%`}>
-      <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--gold-soft)" strokeWidth={stroke} />
-        <circle cx={size / 2} cy={size / 2} r={r} fill="none" stroke="var(--gold)" strokeWidth={stroke} strokeLinecap="round"
-          strokeDasharray={c} strokeDashoffset={c * (1 - p)} style={{ transition: reducedMotion() ? undefined : "stroke-dashoffset 700ms ease" }} />
-      </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center leading-none">
-        <span className="text-[10px] font-medium uppercase tracking-[0.12em] text-muted" style={{ fontSize: Math.max(9, size / 11) }}>{s.level}</span>
-        <span className="mt-1 font-semibold tabular-nums text-fg" style={{ fontSize: size * 0.32 }}>{level}</span>
-      </div>
-    </div>
+    <ProgressRing value={Math.round(Math.min(1, Math.max(0, progress)) * 100)} size={size} stroke={Math.max(5, Math.round(size / 16))} tone="gold"
+      label={`${s.level} ${level}${label ? ` · ${label}` : ""}`}>
+      <span className="flex flex-col items-center leading-none">
+        <span className="font-medium uppercase tracking-[0.12em] text-muted" style={{ fontSize: Math.max(9, size / 11) }}>{s.level}</span>
+        <span className="mt-1 font-semibold text-fg" style={{ fontSize: size * 0.32 }}>{level}</span>
+      </span>
+    </ProgressRing>
   );
 }
 
 // ---------------------------------------------------------------------------------------------
 type XpData = Pick<GameMe, "level" | "rank" | "xp" | "levelStartXp" | "nextLevelXp" | "progress">;
 
-/** Level + progress bar. Self-fetching unless `me` is passed. `compact` = single slim line for headers. */
+/** Level + progress bar. Self-fetching unless `me` is passed. `compact` = slim line for headers/cards. */
 export function XpBar({ me, compact, className }: { me?: XpData | null; compact?: boolean; className?: string }) {
   const own = useGameMe(me === undefined);
   const d = me ?? (me === undefined ? own.data : null);
   const s = useStrings(strings);
-  const lang = useLang();
-  if (!d) return <div className={cx("h-10 animate-pulse rounded-xl bg-surface-2", compact && "h-6", className)} aria-hidden />;
+  const f = useFormat();
+  if (!d) return <Skeleton className={cn(compact ? "h-6" : "h-12", "w-full", className)} />;
   const inLevel = d.xp - d.levelStartXp;
   const need = d.nextLevelXp - d.levelStartXp;
-  const pct = Math.max(2, Math.min(100, d.progress * 100));
   return (
-    <div className={cx("w-full", className)}>
-      <div className={cx("flex items-baseline justify-between gap-3", compact ? "text-xs" : "text-sm")}>
+    <div className={cn("w-full", className)}>
+      {me === undefined && <GameLayer />}
+      <div className={cn("mb-1.5 flex items-baseline justify-between gap-3", compact ? "text-xs" : "text-sm")}>
         <span className="font-medium text-fg">
           {s.level} {d.level} <span className="text-muted">· {s.ranks[d.rank]}</span>
         </span>
-        <span className="tabular-nums text-muted">
-          {fmtNum(inLevel, lang)} / {fmtNum(need, lang)} XP
-        </span>
+        <span className="tabular text-muted">{f.number(inLevel)} / {f.number(need)} XP</span>
       </div>
-      <div className={cx("mt-1.5 overflow-hidden rounded-full bg-gold-soft", compact ? "h-1.5" : "h-2.5")}
-        role="progressbar" aria-valuemin={0} aria-valuemax={need} aria-valuenow={inLevel}
-        aria-label={s.xpToNext(fmtNum(d.nextLevelXp - d.xp, lang))}>
-        <div className="h-full rounded-full bg-gold" style={{ width: `${pct}%`, transition: reducedMotion() ? undefined : "width 600ms ease" }} />
-      </div>
-      {!compact && <p className="mt-1.5 text-xs text-muted">{s.xpToNext(fmtNum(d.nextLevelXp - d.xp, lang))}</p>}
+      <ProgressBar value={Math.max(need * 0.02, inLevel)} max={need} tone="gold" size={compact ? "sm" : "md"} label={s.xpToNext(f.number(d.nextLevelXp - d.xp))} />
+      {!compact && <p className="mt-1.5 text-xs text-muted">{s.xpToNext(f.number(d.nextLevelXp - d.xp))}</p>}
     </div>
   );
 }
@@ -105,170 +85,283 @@ export function streakMessage(st: StreakInfo, s: GameStrings) {
   }
 }
 
-/** Flame + streak count. Gold when today is done, outlined when the streak still needs today's action. */
+/** Flame + streak count. Gold when today is done; quiet outline while today's action is still open. */
 export function StreakChip({ streak, showFreezes = true, className }: { streak?: StreakInfo | null; showFreezes?: boolean; className?: string }) {
   const own = useGameMe(streak === undefined);
   const st = streak ?? (streak === undefined ? own.data?.streak : null);
   const s = useStrings(strings);
-  if (!st) return <span className={cx("inline-block h-8 w-20 animate-pulse rounded-full bg-surface-2", className)} aria-hidden />;
+  if (!st) return <Skeleton className={cn("inline-block h-8 w-20 rounded-full", className)} />;
   const lit = st.status === "done";
-  const frozen = st.status === "frozen";
+  const Icon = st.status === "frozen" ? Snowflake : Flame;
   const title = `${st.current ? s.streak.chip(st.current) : s.streak.none}. ${streakMessage(st, s)}`;
   return (
-    <span title={title} aria-label={title}
-      className={cx(
-        "inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-sm font-medium tabular-nums",
-        lit ? "border-transparent bg-gold-soft text-gold" : "border-line bg-surface text-muted",
+    <span title={title} role="img" aria-label={title}
+      className={cn(
+        "inline-flex h-8 items-center gap-1.5 rounded-full border px-3 text-sm font-medium tabular",
+        lit ? "border-gold-bright/40 bg-gold-soft text-gold-ink" : "border-line bg-surface text-muted",
         className,
       )}>
-      <GameIcon name={frozen ? "snowflake" : "flame"} size={16} fill={lit ? "currentColor" : "none"} fillOpacity={lit ? 0.25 : 0} />
+      {streak === undefined && <GameLayer />}
+      <Icon aria-hidden className={cn("size-4", lit ? "fill-gold-bright/30 text-gold-bright" : st.status === "frozen" && "text-info")} />
       <span className={lit ? "text-fg" : undefined}>{st.current}</span>
       {showFreezes && st.freezes > 0 && (
         <span className="ml-0.5 inline-flex items-center gap-0.5 border-l border-line pl-1.5 text-xs text-muted">
-          <GameIcon name="snowflake" size={12} />{st.freezes}
+          <Snowflake aria-hidden className="size-3" />{st.freezes}
         </span>
       )}
     </span>
   );
 }
 
-// ---------------------------------------------------------------------------------------------
-/** A badge medallion: gold ring when earned, quiet dashed silhouette when locked. */
-export function BadgeMedal({ badge, earned, size = 56 }: { badge: Pick<BadgeInfo, "icon">; earned: boolean; size?: number }) {
+/**
+ * A calm nudge that appears only when it matters: the streak is at risk today, frozen days are about to be covered,
+ * or a streak just ended. Renders nothing otherwise. `href` = where the CTA goes (omit on the Today page itself).
+ */
+export function StreakNudge({ streak, href, className }: { streak?: StreakInfo | null; href?: string; className?: string }) {
+  const own = useGameMe(streak === undefined);
+  const st = streak ?? (streak === undefined ? own.data?.streak : null);
+  const s = useStrings(strings);
+  if (!st || !["at_risk", "frozen", "lost"].includes(st.status)) return streak === undefined ? <GameLayer /> : null;
+  const evening = localHour() >= 18;
+  const [title, body] =
+    st.status === "at_risk" ? [s.nudge.atRiskTitle(st.current), `${s.nudge.atRiskBody}${evening ? ` ${s.nudge.evening}` : ""}`]
+      : st.status === "frozen" ? [s.nudge.frozenTitle, s.nudge.frozenBody(st.freezesPending)]
+      : [s.nudge.lostTitle, s.nudge.lostBody(st.best)];
+  const Icon = st.status === "frozen" ? Snowflake : Flame;
   return (
-    <span
-      aria-hidden
-      className={cx(
-        "inline-flex shrink-0 items-center justify-center rounded-full",
-        earned ? "bg-gold-soft text-gold ring-2 ring-gold/70 ring-offset-2 ring-offset-surface" : "border border-dashed border-line bg-surface-2 text-muted opacity-60",
+    <Card tone={st.status === "lost" ? "muted" : "gold"} padding="sm" className={cn("flex items-center gap-3.5", className)} role="status">
+      {streak === undefined && <GameLayer />}
+      <span className="grid size-10 shrink-0 place-items-center rounded-full bg-surface text-gold-bright">
+        <Icon aria-hidden className={cn("size-5", st.status === "frozen" && "text-info")} />
+      </span>
+      <div className="min-w-0 flex-1">
+        <p className="font-semibold leading-snug text-fg">{title}</p>
+        <p className="mt-0.5 text-sm text-muted">{body}</p>
+        {href && <Link to={href} className="mt-1.5 inline-block text-sm font-medium text-accent-ink hover:underline sm:hidden">{s.nudge.cta} →</Link>}
+      </div>
+      {href && <span className="hidden shrink-0 sm:block"><ButtonLink to={href} size="sm" variant="primary">{s.nudge.cta}</ButtonLink></span>}
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------------------------
+const isEmoji = (s: string) => /\p{Extended_Pictographic}/u.test(s);
+
+/** Badge medallion: gold ring when earned, quiet dashed silhouette when locked, "?" for unearned secrets. */
+export function BadgeMedal({ badge, earned, size = 56, hidden }: { badge: Pick<BadgeInfo, "icon">; earned: boolean; size?: number; hidden?: boolean }) {
+  return (
+    <span aria-hidden
+      className={cn(
+        "relative inline-grid shrink-0 place-items-center rounded-full",
+        earned ? "bg-gold-soft text-gold-ink ring-2 ring-gold-bright/70 ring-offset-2 ring-offset-surface"
+          : "border border-dashed border-line-strong bg-surface-2 text-muted",
       )}
-      style={{ width: size, height: size }}
-    >
-      <GameIcon name={badge.icon} size={Math.round(size * 0.46)} />
+      style={{ width: size, height: size }}>
+      {hidden ? (
+        <span className="font-semibold text-muted" style={{ fontSize: size * 0.4 }}>?</span>
+      ) : isEmoji(badge.icon) ? (
+        <span className={cn(!earned && "opacity-45 grayscale")} style={{ fontSize: size * 0.44, lineHeight: 1 }}>{badge.icon}</span>
+      ) : (
+        <GameIcon name={badge.icon} size={Math.round(size * 0.46)} className={cn(!earned && "opacity-70")} />
+      )}
     </span>
   );
 }
 
 // ---------------------------------------------------------------------------------------------
-interface AwardLine { key: string; icon: string; title: string; sub?: string; tone: "gold" | "accent" | "muted" }
+interface AwardLine { key: string; icon: ReactNode; text: string }
 
-function describeAwards(awards: Award[], s: GameStrings, lang: Lang, catalog: BadgeInfo[] | null) {
+export function describeAwards(awards: Award[], s: GameStrings, lang: Lang, catalog: BadgeInfo[] | null) {
   let xp = 0;
+  let level: { n: number; rank: RankKey } | null = null;
   const lines: AwardLine[] = [];
   for (const a of awards) {
     if (a.kind === "xp") xp += a.amount ?? 0;
     else if (a.kind === "level") {
-      const rank = (a.id && (s.ranks as Record<string, string>)[a.id]) || "";
-      lines.push({ key: `lvl${a.amount}`, icon: "star", title: s.awards.levelUp, sub: s.awards.level(a.amount ?? 0, rank), tone: "gold" });
+      level = { n: a.amount ?? 1, rank: (a.id as RankKey) ?? "seed" };
+      lines.push({ key: `l${a.amount}`, icon: "⭐", text: s.awards.level(a.amount ?? 0, s.ranks[(a.id as RankKey) ?? "seed"] ?? "") });
     } else if (a.kind === "badge") {
       const b = catalog?.find((x) => x.id === a.id);
-      lines.push({ key: `b${a.id}`, icon: b?.icon ?? "medal", title: s.awards.badge, sub: b?.title[lang] ?? a.label ?? a.id, tone: "gold" });
+      lines.push({ key: `b${a.id}`, icon: b ? <BadgeMedal badge={b} earned size={22} /> : "🏅", text: `${s.awards.badge}: ${b?.title[lang] ?? a.label ?? a.id}` });
     } else if (a.kind === "streak") {
-      if (a.id === "freeze-earned") lines.push({ key: "fe", icon: "snowflake", title: s.awards.freezeEarned, tone: "accent" });
-      else if (a.id === "freeze-used") lines.push({ key: "fu", icon: "snowflake", title: s.awards.freezeUsed(a.amount ?? 1), tone: "accent" });
-      else lines.push({ key: "st", icon: "flame", title: s.awards.streak(a.amount ?? 1), tone: "muted" });
+      if (a.id === "freeze-earned") lines.push({ key: "fe", icon: "❄️", text: s.awards.freezeEarned });
+      else if (a.id === "freeze-used") lines.push({ key: "fu", icon: "❄️", text: s.awards.freezeUsed(a.amount ?? 1) });
+      else if ((a.amount ?? 0) > 1) lines.push({ key: "st", icon: "🔥", text: s.awards.streak(a.amount ?? 1) });
     }
   }
-  return { xp, lines };
+  return { xp, level, lines };
 }
 
-/** Presentational award card. Renders nothing for an empty list. */
-export function AwardToast({ awards, onDismiss, className }: { awards: Award[]; onDismiss?: () => void; className?: string }) {
+/** Presentational award card (used by the toast; also usable inline). Renders nothing for an empty list. */
+export function AwardToast({ awards, className }: { awards: Award[]; className?: string }) {
   const s = useStrings(strings);
   const lang = useLang();
   const catalog = useBadgeCatalog();
   const { xp, lines } = describeAwards(awards, s, lang, catalog);
   if (!xp && !lines.length) return null;
   return (
-    <div role="status" aria-live="polite"
-      className={cx("w-[min(22rem,calc(100vw-2rem))] rounded-[var(--radius)] border border-line bg-surface p-4 shadow-lg shadow-black/5", className)}>
-      <div className="flex items-start gap-3">
-        {xp > 0 && (
-          <div className="flex h-11 min-w-11 shrink-0 items-center justify-center rounded-xl bg-gold-soft px-2 text-sm font-semibold tabular-nums text-gold">
-            {s.awards.xp(xp)}
-          </div>
-        )}
-        <ul className="min-w-0 flex-1 space-y-2">
-          {lines.map((l) => (
-            <li key={l.key} className="flex items-center gap-2.5">
-              <span className={cx("inline-flex h-7 w-7 shrink-0 items-center justify-center rounded-full",
-                l.tone === "gold" ? "bg-gold-soft text-gold" : l.tone === "accent" ? "bg-accent-soft text-accent" : "bg-surface-2 text-muted")}>
-                <GameIcon name={l.icon} size={15} />
-              </span>
-              <span className="min-w-0 text-sm leading-tight">
-                <span className="block font-medium text-fg">{l.title}</span>
-                {l.sub && <span className="block truncate text-muted">{l.sub}</span>}
-              </span>
-            </li>
-          ))}
-          {!lines.length && <li className="pt-2.5 text-sm text-muted">{s.awards.nice}</li>}
-        </ul>
-        {onDismiss && (
-          <button type="button" onClick={onDismiss} aria-label={s.awards.dismiss}
-            className="-m-1 rounded-lg p-1 text-muted hover:bg-surface-2 hover:text-fg focus-visible:outline-2 focus-visible:outline-accent">
-            <GameIcon name="x" size={16} />
-          </button>
-        )}
-      </div>
-    </div>
+    <Card tone="gold" padding="sm" className={cn("flex items-start gap-3", className)}>
+      {xp > 0 && <span className="grid h-10 min-w-10 shrink-0 place-items-center rounded-xl bg-surface px-2 text-sm font-semibold tabular text-gold-ink">{s.awards.xp(xp)}</span>}
+      <AwardLines lines={lines} fallback={s.awards.nice} />
+    </Card>
   );
 }
 
-// ---- toast queue -----------------------------------------------------------------------------
-type Toast = { id: number; awards: Award[] };
-let toasts: Toast[] = [];
-let nextId = 1;
+function AwardLines({ lines, fallback }: { lines: AwardLine[]; fallback?: string }) {
+  if (!lines.length) return fallback ? <p className="pt-2 text-sm text-muted">{fallback}</p> : null;
+  return (
+    <ul className="min-w-0 flex-1 space-y-1.5">
+      {lines.map((l) => (
+        <li key={l.key} className="flex items-center gap-2 text-sm text-fg">
+          <span aria-hidden className="grid size-6 shrink-0 place-items-center text-base leading-none">{l.icon}</span>
+          <span className="min-w-0">{l.text}</span>
+        </li>
+      ))}
+    </ul>
+  );
+}
+
+/** Inline variant for the kit toast (its description is rendered inside a <p>). */
+function ToastLines({ lines }: { lines: AwardLine[] }) {
+  return <>{lines.map((l) => <span key={l.key} className="mt-1 flex items-center gap-1.5 text-fg"><span aria-hidden className="inline-grid size-5 place-items-center leading-none">{l.icon}</span>{l.text}</span>)}</>;
+}
+
+// ---- award bus + GameLayer -------------------------------------------------------------------
+type Batch = { id: number; awards: Award[]; toast: boolean };
+let queue: Batch[] = [];
+let seq = 0;
 const subs = new Set<() => void>();
 const emit = () => subs.forEach((f) => f());
-const dismiss = (id: number) => { toasts = toasts.filter((t) => t.id !== id); emit(); };
-let hostMounted = 0;
-let autoHost: HTMLElement | null = null;
+let primary: symbol | null = null;
+const primarySubs = new Set<() => void>();
+let fallbackHost: HTMLElement | null = null;
 
 /**
- * Show awards returned by any API (e.g. task completion). Safe to call with [] or undefined.
- * Mounts a toaster automatically if the app hasn't rendered <AwardToaster/>.
+ * Show awards returned by any API (task/day completion, renders…). Refreshes every game widget.
+ * opts.toast=false: skip the toast (e.g. when your screen already shows the awards) but still celebrate level-ups.
  */
-export function showAwards(awards: Award[] | undefined | null) {
+export function showAwards(awards: Award[] | undefined | null, opts: { toast?: boolean } = {}) {
   notifyGameChanged();
   if (!awards?.length) return;
-  toasts = [...toasts.slice(-2), { id: nextId++, awards }];
+  queue = [...queue, { id: ++seq, awards, toast: opts.toast !== false }];
   emit();
-  if (!hostMounted && !autoHost && typeof document !== "undefined") {
-    autoHost = document.createElement("div");
-    document.body.appendChild(autoHost);
-    const m = location.pathname.match(/^\/(ru|en)(\/|$)/);
-    const lang = (m?.[1] ?? "en") as Lang;
-    createRoot(autoHost).render(<LangContext.Provider value={lang}><AwardToaster /></LangContext.Provider>);
+  if (!primary && !fallbackHost && typeof document !== "undefined") {
+    // Nothing on the page hosts the game layer: mount a private one (outside the app's toast provider).
+    fallbackHost = document.createElement("div");
+    document.body.appendChild(fallbackHost);
+    const lang = (location.pathname.match(/^\/(ru|en)(\/|$)/)?.[1] ?? "en") as Lang;
+    createRoot(fallbackHost).render(<LangContext.Provider value={lang}><ToastProvider><GameLayer /></ToastProvider></LangContext.Provider>);
   }
 }
 
-function ToastItem({ t }: { t: Toast }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const [hover, setHover] = useState(false);
+const SEEN_KEY = "fl-game-seen-level";
+const readSeen = () => { try { return Number(localStorage.getItem(SEEN_KEY)) || 0; } catch { return 0; } };
+const writeSeen = (n: number) => { try { localStorage.setItem(SEEN_KEY, String(n)); } catch { /* ignore */ } };
+
+/**
+ * Hosts reward toasts and the level-up moment. Any number may be mounted; exactly one is active.
+ * Also notices level-ups that happened elsewhere (e.g. a task completed on another screen) the next time
+ * game data loads, so the moment is never missed.
+ */
+export function GameLayer() {
+  const me = useRef(Symbol("layer"));
+  const isPrimary = useSyncExternalStore(
+    (f) => { primarySubs.add(f); return () => primarySubs.delete(f); },
+    () => primary === me.current, () => false,
+  );
   useEffect(() => {
-    if (!reducedMotion()) ref.current?.animate([{ opacity: 0, transform: "translateY(12px) scale(.98)" }, { opacity: 1, transform: "none" }], { duration: 260, easing: "cubic-bezier(.2,.8,.2,1)" });
+    const id = me.current;
+    if (!primary) { primary = id; primarySubs.forEach((f) => f()); }
+    return () => {
+      if (primary === id) { primary = null; primarySubs.forEach((f) => f()); }
+    };
   }, []);
+  // If the active layer unmounts, let a remaining one take over.
   useEffect(() => {
-    if (hover) return;
-    const h = setTimeout(() => dismiss(t.id), 6000);
-    return () => clearTimeout(h);
-  }, [hover, t.id]);
+    if (!isPrimary && !primary) { primary = me.current; primarySubs.forEach((f) => f()); }
+  });
+  return isPrimary ? <ActiveLayer /> : null;
+}
+/** Alias kept for round-1 callers. */
+export const AwardToaster = GameLayer;
+
+function ActiveLayer() {
+  const s = useStrings(strings);
+  const lang = useLang();
+  const catalog = useBadgeCatalog();
+  const { toast } = useToast();
+  const meData = useGameMe();
+  const [levelUp, setLevelUp] = useState<number | null>(null);
+
+  const list = useSyncExternalStore((f) => { subs.add(f); return () => subs.delete(f); }, () => queue, () => queue);
+  useEffect(() => {
+    if (!list.length) return;
+    const batches = list;
+    queue = [];
+    for (const b of batches) {
+      const d = describeAwards(b.awards, s, lang, catalog);
+      if (d.level) {
+        setLevelUp(d.level.n);
+        writeSeen(Math.max(readSeen(), d.level.n));
+      }
+      if (!b.toast || (!d.xp && !d.lines.length)) continue;
+      const rest = d.lines.filter((l) => !l.key.startsWith("l"));
+      toast({
+        tone: "reward",
+        title: d.xp ? s.awards.xp(d.xp) : rest[0]?.text ?? s.awards.nice,
+        description: <ToastLines lines={d.xp ? rest : rest.slice(1)} />,
+        duration: 5500,
+      });
+    }
+  }, [list]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Level-ups that happened while no layer was listening.
+  const level = meData.data?.level;
+  useEffect(() => {
+    if (!level) return;
+    const seen = readSeen();
+    if (!seen) writeSeen(level); // first visit: remember, don't celebrate retroactively
+    else if (level > seen) {
+      writeSeen(level);
+      setLevelUp(level);
+    }
+  }, [level]);
+
+  return <LevelUpDialog level={levelUp} me={meData.data} onClose={() => setLevelUp(null)} />;
+}
+
+/** The level-up moment: calm, centred, one button. */
+export function LevelUpDialog({ level, me, onClose }: { level: number | null; me?: GameMe | null; onClose: () => void }) {
+  const s = useStrings(strings);
+  const f = useFormat();
+  const [shown, setShown] = useState(0);
+  const rank = (me && me.level === level ? me.rank : null) ?? rankOf(level ?? 1);
+  useEffect(() => {
+    if (!level) return;
+    setShown(0);
+    // The ring fills all the way: the level was just completed.
+    const t = setTimeout(() => setShown(1), reducedMotion() ? 0 : 250);
+    return () => clearTimeout(t);
+  }, [level]);
   return (
-    <div ref={ref} onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} onFocus={() => setHover(true)} onBlur={() => setHover(false)}>
-      <AwardToast awards={t.awards} onDismiss={() => dismiss(t.id)} />
-    </div>
+    <Dialog open={!!level} onClose={onClose} side="center" size="sm" hideTitle title={s.levelUp.title(level ?? 1)}
+      footer={<Button variant="primary" block onClick={onClose}>{s.levelUp.cta}</Button>}>
+      <div className="flex flex-col items-center pb-2 pt-1 text-center">
+        <p className="mb-4 inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-[0.1em] text-gold-ink">
+          <Sparkles aria-hidden className="size-3.5 text-gold-bright" />{s.levelUp.eyebrow}
+        </p>
+        <div className={cn("rounded-full", !reducedMotion() && "animate-pop")}>
+          <LevelRing level={level ?? 1} progress={shown} size={132} label={s.ranks[rank]} />
+        </div>
+        <h2 className="mt-5 text-2xl font-semibold tracking-tight">{s.levelUp.title(level ?? 1)} · {s.ranks[rank]}</h2>
+        <p className="mt-2 max-w-[34ch] text-muted">{s.rankBlurb[rank]}</p>
+        {me && me.level === level && (
+          <p className="mt-4 text-xs text-muted">{s.levelUp.next(level + 1, f.number(me.nextLevelXp - me.xp))}</p>
+        )}
+      </div>
+    </Dialog>
   );
 }
 
-/** Fixed toast stack (bottom-center on phones, bottom-right on desktop). Mount once, anywhere. */
-export function AwardToaster() {
-  const list = useSyncExternalStore((f) => { subs.add(f); return () => subs.delete(f); }, () => toasts, () => toasts);
-  useEffect(() => { hostMounted++; return () => { hostMounted--; }; }, []);
-  return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 flex flex-col items-center gap-2 px-4 sm:inset-x-auto sm:right-6 sm:bottom-6 sm:items-end">
-      {list.map((t) => (
-        <div key={t.id} className="pointer-events-auto"><ToastItem t={t} /></div>
-      ))}
-    </div>
-  );
-}
+const RANK_FROM: [number, RankKey][] = [[26, "forest"], [21, "tree"], [16, "grove"], [11, "branch"], [7, "sapling"], [4, "leaf"], [2, "sprout"], [1, "seed"]];
+const rankOf = (level: number): RankKey => RANK_FROM.find(([from]) => level >= from)?.[1] ?? "seed";

@@ -6,7 +6,7 @@ import { LANGS, type LibLang, lessonMaterialSchema, resourcePatchSchema } from "
 import {
   toResource, getResourceRow, getMaterials, getEvents, getTranscript, setMaterial, updateResource, logEvent,
 } from "../lib/library/repo";
-import { aiConfigured, uploadKey } from "../lib/library/pipeline";
+import { aiConfigured, uploadKey, startBuild } from "../lib/library/pipeline";
 
 // OWNER: library agent (docs/OWNERSHIP.md). Founder admin: session + review/edit/publish.
 export const admin = new Hono<AppEnv>();
@@ -67,7 +67,16 @@ admin.get("/resources/:id", async (c) => {
   const row = await getResourceRow(c.env, c.req.param("id"));
   if (!row) return c.json({ error: "not found" }, 404);
   const t = await getTranscript(c.env, row.id);
+  // Review queue neighbours, so the founder can go through "needs review" one after another.
+  const { results: queue } = await c.env.DB.prepare("SELECT id FROM lib_resources WHERE status = 'review' ORDER BY created_at ASC, id").all<{ id: string }>();
+  const pos = queue.findIndex((q) => q.id === row.id);
+  const others = queue.filter((q) => q.id !== row.id);
   return c.json({
+    queue: {
+      total: queue.length, position: pos >= 0 ? pos + 1 : null,
+      next: pos >= 0 ? (queue[pos + 1]?.id ?? queue[0]?.id ?? null) : (others[0]?.id ?? null),
+      prev: pos > 0 ? queue[pos - 1].id : null,
+    },
     resource: toResource(row),
     materials: await getMaterials(c.env, row.id),
     transcript: t ? { source: t.source, lang: t.lang, chars: t.chars, text: t.text.slice(0, 20_000), truncated: t.chars > 20_000, createdAt: t.created_at } : null,
@@ -131,13 +140,46 @@ admin.post("/resources/:id/unpublish", async (c) => {
   return c.json({ ok: true });
 });
 
+/** POST /api/admin/bulk { ids, action: "publish" | "unpublish" | "rebuild" | "delete" } — board multi-select. */
+admin.use("/bulk", requireAdmin);
+admin.post("/bulk", async (c) => {
+  const { ids = [], action } = await c.req.json<{ ids?: string[]; action?: string }>().catch(() => ({} as { ids?: string[]; action?: string }));
+  const list = ids.filter((x) => typeof x === "string").slice(0, 100);
+  if (!["publish", "unpublish", "rebuild", "delete"].includes(action ?? "")) return c.json({ error: "bad action" }, 400);
+  const done: string[] = [], skipped: string[] = [];
+  for (const id of list) {
+    const row = await getResourceRow(c.env, id);
+    if (!row) { skipped.push(id); continue; }
+    if (action === "publish") {
+      if (!row.title.trim() || row.status === "processing") { skipped.push(id); continue; }
+      await updateResource(c.env, id, { status: "published", published_at: row.published_at ?? Math.floor(Date.now() / 1000), last_error: null });
+      await logEvent(c.env, id, "publish", "ok", "published (bulk)");
+    } else if (action === "unpublish") {
+      if (row.status !== "published") { skipped.push(id); continue; }
+      await updateResource(c.env, id, { status: "review" });
+      await logEvent(c.env, id, "unpublish", "info", "moved back to review (bulk)");
+    } else if (action === "rebuild") {
+      await logEvent(c.env, id, "build_lesson", "info", "rebuild requested (bulk)");
+      await startBuild(c.env, id);
+    } else {
+      await deleteResource(c.env, row);
+    }
+    done.push(id);
+  }
+  return c.json({ ok: true, done, skipped });
+});
+
+async function deleteResource(env: AppEnv["Bindings"], row: { id: string; source_type: string }) {
+  if (row.source_type === "upload") await env.MEDIA.delete(uploadKey(row.id)).catch(() => {});
+  for (const t of ["lib_events", "lib_materials", "lib_transcripts", "lib_collection_items", "lib_user_items"]) {
+    await env.DB.prepare(`DELETE FROM ${t} WHERE resource_id = ?`).bind(row.id).run();
+  }
+  await env.DB.prepare("DELETE FROM lib_resources WHERE id = ?").bind(row.id).run();
+}
+
 admin.delete("/resources/:id", async (c) => {
   const row = await getResourceRow(c.env, c.req.param("id"));
   if (!row) return c.json({ error: "not found" }, 404);
-  if (row.source_type === "upload") await c.env.MEDIA.delete(uploadKey(row.id)).catch(() => {});
-  for (const t of ["lib_events", "lib_materials", "lib_transcripts", "lib_collection_items", "lib_user_items"]) {
-    await c.env.DB.prepare(`DELETE FROM ${t} WHERE resource_id = ?`).bind(row.id).run();
-  }
-  await c.env.DB.prepare("DELETE FROM lib_resources WHERE id = ?").bind(row.id).run();
+  await deleteResource(c.env, row);
   return c.json({ ok: true });
 });

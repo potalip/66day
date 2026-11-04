@@ -12,14 +12,14 @@ export const landing = {
     ctaHow: "See how a day works",
     trust: ["No coding experience needed", "1–2 hours a day", "Free to start"],
     map: { label: "Your 66-day path", today: "Today", done: "Done", boss: "Boss day", rest: "Rest day", day: "Day" },
-    float: { task: "Day 12 · Ship your first bot", xp: "+40 XP", streak: "9-day streak" },
+    float: { task: "Day 2 · Your page is live", xp: "+60 XP", streak: "11-day streak" },
 
     whyTitle: "Why 66?",
     whyBody: "Habit research puts the average time for a behaviour to become automatic at about 66 days. Not 21. We built the whole program around that number: a short, clear session every day until opening your editor and talking to an agent feels as normal as checking messages.",
 
     pathsEyebrow: "Two paths",
     pathsTitle: "Pick what you want to make. Switch any time.",
-    pathsSub: "The first two weeks are shared — tools, prompting, your first deploy. Then the tracks split.",
+    pathsSub: "The first two weeks are shared: tools, prompting, APIs, your first deploy. On day 12 you try both and pick your road.",
     apps: {
       name: "Apps",
       lead: "Solve real problems with web apps, tools and bots — built with Claude Code and other coding agents, powered by the newest AI models through their APIs.",
@@ -42,7 +42,7 @@ export const landing = {
       { t: "Show the proof", d: "A link, a screenshot or a file. Your work stays reviewable and lands in your portfolio.", m: "2 min" },
       { t: "Earn and reflect", d: "XP, streaks and badges. Every seventh day is lighter: rest, review, look back.", m: "5 min" },
     ],
-    todayCard: { label: "Today", title: "Day 12 · Your first bot", meta: "Apps · about 70 min", tasks: ["Read: what a bot actually is", "Ask the agent to scaffold a Telegram bot", "Make it answer one real question", "Paste the bot link as proof"], xp: "+120 XP" },
+    todayCard: { label: "Today", title: "Day 2 · Ship it: your page goes live", meta: "Foundation · about 90 min", tasks: ["See how a page travels from a folder to a URL", "Create a GitHub repo and push your page with the agent", "Turn on GitHub Pages and open your live URL", "Send the link to one person"], xp: "+120 XP" },
 
     gameEyebrow: "The game layer",
     gameTitle: "Progress you can feel, every single day.",
@@ -67,9 +67,9 @@ export const landing = {
     libTitle: "The best of the internet, turned into lessons.",
     libSub: "Curated videos, reels and articles about building with AI. Each one comes with a summary, key steps, an exercise and a quiz — written separately for each language, not machine-translated.",
     libItems: [
-      { kind: "YouTube", t: "Building a full app with Claude Code in one sitting", meta: "Apps · 18 min" },
-      { kind: "Reel", t: "3 prompts that make your agent write cleaner code", meta: "Apps · 1 min" },
-      { kind: "Article", t: "Motion design basics for people who code", meta: "Video · 9 min read" },
+      { kind: "YouTube", t: "Introducing Claude Code: a 4-minute first look", meta: "Anthropic · 4 min" },
+      { kind: "YouTube", t: "This video was made with code. But how?", meta: "Fireship · 9 min" },
+      { kind: "Docs", t: "Claude Code overview: what it is and how to install it", meta: "Anthropic · 5 min read" },
     ],
     libMore: "Summary · Steps · Exercise · Quiz",
 
@@ -98,9 +98,9 @@ export const landing = {
   },
 
   ru: {
-    meta: "FlowLeaf 66 — 66 дней создавай с ИИ каждый день",
+    meta: "FlowLeaf 66 — 66 дней практики с ИИ-агентами",
     eyebrow: "Программа на 66 дней · на русском и английском",
-    heroA: "За 66 дней создавать с ИИ",
+    heroA: "За 66 дней работа с ИИ",
     heroB: "станет",
     heroEm: "привычкой",
     heroEnd: ".",
@@ -109,37 +109,37 @@ export const landing = {
     ctaHow: "Как устроен день",
     trust: ["Опыт в коде не нужен", "1–2 часа в день", "Начать — бесплатно"],
     map: { label: "Твой путь на 66 дней", today: "Сегодня", done: "Пройдено", boss: "Босс-день", rest: "День отдыха", day: "День" },
-    float: { task: "День 12 · Первый бот готов", xp: "+40 XP", streak: "9 дней подряд" },
+    float: { task: "День 2 · Страница в сети", xp: "+60 XP", streak: "11 дней подряд" },
 
     whyTitle: "Почему 66?",
     whyBody: "Исследования привычек говорят: чтобы действие стало автоматическим, в среднем нужно около 66 дней. Не 21. Вся программа построена вокруг этого числа — короткое понятное занятие каждый день, пока открыть редактор и поговорить с агентом не станет так же естественно, как проверить сообщения.",
 
     pathsEyebrow: "Два пути",
     pathsTitle: "Выбери, что хочешь создавать. Сменить можно в любой момент.",
-    pathsSub: "Первые две недели — общие: инструменты, промпты, первый деплой. Дальше треки расходятся.",
+    pathsSub: "Первые две недели — общие: инструменты, промпты, API, первый деплой. На 12-й день пробуешь оба трека и выбираешь свой.",
     apps: {
       name: "Приложения",
       lead: "Решай реальные задачи веб-приложениями, сервисами и ботами — с помощью Claude Code и других ИИ-агентов, на свежих моделях через API.",
       items: ["Личный сайт и лендинги, которые реально работают в сети", "Telegram-боты, которые хорошо делают одну полезную вещь", "Инструменты для работы: парсеры, дашборды, ИИ-помощники", "Итоговое приложение с живыми пользователями и публичным запуском"],
-      tag: "Для тех, кто строит",
+      tag: "Для практиков",
     },
     video: {
       name: "Видео",
       lead: "Делай разные видео с помощью кода и ИИ: моушн-графику, анимированные объяснялки, кинетическую типографику, видео на данных и шортсы — через пайплайны, которые соберёшь сам.",
       items: ["Кинетическая типографика и моушн, отрисованные кодом", "Объясняющие ролики и видео на данных со сценарием от ИИ", "ИИ-клипы, смонтированные в рилсы и шортсы для YouTube и VK", "Свой повторяемый видео-пайплайн — как наша Студия"],
-      tag: "Для тех, кто рассказывает",
+      tag: "Для рассказчиков",
     },
     noNoCode: "Никаких конструкторов и автоматизаций «мышкой». Только ИИ-агенты, API и ты — навыки, которые останутся с тобой.",
 
     dayEyebrow: "Как устроен день",
-    dayTitle: "Достаточно мало, чтобы начать. Достаточно много, чтобы был толк.",
+    dayTitle: "Достаточно мало, чтобы начать. Достаточно, чтобы был толк.",
     steps: [
       { t: "Прочитай урок", d: "Десять минут, одна идея — ровно под сегодняшнюю задачу. Без часовых лекций.", m: "10 мин" },
       { t: "Собери с агентом", d: "Ты описываешь, агент пишет код, ты направляешь. Каждый день заканчивается тем, что работает.", m: "45–90 мин" },
       { t: "Покажи результат", d: "Ссылка, скриншот или файл. Работа сохраняется и попадает в портфолио.", m: "2 мин" },
       { t: "Получи XP и оглянись", d: "Опыт, серии и бейджи. Каждый седьмой день — полегче: отдых, повторение, рефлексия.", m: "5 мин" },
     ],
-    todayCard: { label: "Сегодня", title: "День 12 · Первый бот", meta: "Приложения · около 70 мин", tasks: ["Прочитай: что такое бот на самом деле", "Попроси агента создать Telegram-бота", "Научи его отвечать на один реальный вопрос", "Вставь ссылку на бота как результат"], xp: "+120 XP" },
+    todayCard: { label: "Сегодня", title: "День 2 · Страница уходит в интернет", meta: "Фундамент · около 90 мин", tasks: ["Разберись, как страница попадает из папки по ссылке", "Создай репозиторий на GitHub и запушь страницу с агентом", "Включи GitHub Pages и открой живую ссылку", "Отправь ссылку одному человеку"], xp: "+120 XP" },
 
     gameEyebrow: "Игровой слой",
     gameTitle: "Прогресс, который чувствуешь каждый день.",
@@ -164,9 +164,9 @@ export const landing = {
     libTitle: "Лучшее из интернета — в виде уроков.",
     libSub: "Отобранные видео, рилсы и статьи о создании с ИИ. К каждому — конспект, ключевые шаги, упражнение и квиз. Для каждого языка — свои, а не машинный перевод.",
     libItems: [
-      { kind: "YouTube", t: "Целое приложение на Claude Code за один вечер", meta: "Приложения · 18 мин" },
-      { kind: "Рилс", t: "3 промпта, после которых агент пишет чище", meta: "Приложения · 1 мин" },
-      { kind: "Telegram", t: "Основы моушн-дизайна для тех, кто пишет код", meta: "Видео · 9 мин чтения" },
+      { kind: "YouTube", t: "Claude Code за четыре минуты: как выглядит работа с агентом", meta: "Anthropic · 4 мин" },
+      { kind: "YouTube", t: "Видео из кода: как Fireship делает ролики на Remotion", meta: "Fireship · 9 мин" },
+      { kind: "Документация", t: "Claude Code: официальный обзор и установка", meta: "Anthropic · 5 мин чтения" },
     ],
     libMore: "Конспект · Шаги · Упражнение · Квиз",
 

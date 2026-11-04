@@ -14,8 +14,8 @@ const app = new Hono<AppEnv>().basePath("/api");
 
 app.get("/health", (c) => c.json({ ok: true, env: c.env.APP_ENV }));
 // Server-to-server callbacks carry their own bearer auth and must not mint anonymous users.
-const NO_USER = new Set(["/api/studio/render-callback", "/api/pipeline/media-worker/callback"]);
-app.use("*", (c, next) => (NO_USER.has(c.req.path) ? next() : anonUser(c, next)));
+const NO_USER = [/^\/api\/studio\/render-callback$/, /^\/api\/pipeline\/media-worker\//];
+app.use("*", (c, next) => (NO_USER.some((r) => r.test(c.req.path)) ? next() : anonUser(c, next)));
 app.get("/me", async (c) => {
   const u = await c.env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(c.get("userId")).first();
   return c.json(u);
