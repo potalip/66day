@@ -64,7 +64,7 @@ cd render-server && RENDER_SERVER_TOKEN=devtoken FLR_ALLOW_PRIVATE_FETCH=1 uvico
 # repo root: .dev.vars → RENDER_SERVER_URL=http://localhost:8080  RENDER_SERVER_TOKEN=devtoken
 npm run db:migrate:local && npm run dev        # open /ru/studio or /en/studio
 cd render-server && pytest -q                  # 8 tests: schema, every template × format draws, render smoke, API lifecycle, SSRF
-npx vitest run --config worker/lib/studio/vitest.config.ts   # 9 tests: validation, AI plan parsing/prompt, assets
+npm test   # root runs every area; Studio: 10 tests (validation, AI plan parsing/prompt, assets, recap prefill)
 python -m flowleaf_render.cli render listicle --fmt 16x9 --lang ru   # → data/out/renders/…/video.mp4 + contact.png
 ```
 Without the render server: Studio shows "render server not connected", everything except Render works.
@@ -73,8 +73,8 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
 ## Known gaps
 - **Not verified live**: Claude planning (no API key in this container — prompt/parse/repair are unit-tested) and
   ElevenLabs voice (reference code path kept; synth fallback verified). Docker image not built here (no Docker daemon).
-- `npm test` at the root can't start because of the Cloudflare vite plugin — see `docs/requests/studio-to-orchestrator.md`
-  (plus: skip `anonUser` on the callback route; first-visit cookie race in `anonUser`).
+- First-visit cookie race in `anonUser` (parallel first requests mint different users) — the Studio sequences its
+  first request; a shared fix is requested in `docs/requests/studio-to-orchestrator.md`.
 - In-browser preview is a sketch (icons are simplified, fonts are the web fonts); the rendered video is the truth.
 - Jobs queue in-process on the render server: scale vertically or run one service per URL; SQS is the next step.
 - Day-recap doesn't auto-fill from the student's real progress yet (game/learn APIs weren't merged).
