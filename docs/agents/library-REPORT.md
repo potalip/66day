@@ -56,6 +56,7 @@ npx vitest run --config worker/lib/library/vitest.config.ts   # 30 tests (whole 
 - The media worker's queue is in memory (a restart loses in-flight jobs; the founder can re-fetch). Move to SQS if volume
   grows.
 - The live Claude path still hasn't run in the sandbox (no key). It's covered by the injected-call tests.
+- Game: "Mark as done" now emits `resource.viewed` via `onGameEvent` (first time only) and the client shows the reward toast via `showAwards` (per `docs/requests/game-to-library.md`).
 - `GET /api/pipeline/media-worker/source/:id` still passes through `anonUser` (see `docs/requests/library-to-orchestrator.md`).
 
 ---
@@ -177,7 +178,7 @@ with an injected model call, but it has not been run against the live API from t
 - **Instagram** metadata is best effort. Expect title "Instagram reel <code>" until the founder edits it.
 - Shelves: the founder can put a resource on existing shelves (review screen). Creating, renaming or reordering shelves is
   still done in SQL / seed JSON.
-- `resource.viewed` isn't sent to the game layer yet (no ingestion API; see `docs/requests/library-to-game.md`).
+- (resolved in round 2) `resource.viewed` is sent on "Mark as done".
 - Uploaded videos have no thumbnail unless the founder sets one, and files over 500 MB need the media worker. The upload
   form reads the whole file into the Worker request (fine for reels, not for hour-long raw footage). Next step: R2 presigned
   multipart upload.
