@@ -33,7 +33,7 @@ describe("toItem", () => {
   it("maps a ship task with curriculum context", () => {
     expect(ship).not.toBeNull();
     const it = toItem({ ...base, task_id: ship!.t.id }, "en", "u1")!;
-    expect(it).toMatchObject({ kind: "ship", visibility: "public", day: ship!.d.day, title: ship!.t.title, dayTitle: ship!.d.title, url: "https://x.dev" });
+    expect(it).toMatchObject({ kind: "ship", visibility: "public", day: ship!.d.day, title: ship!.d.title, defaultTitle: ship!.d.title, taskTitle: ship!.t.title, url: "https://x.dev" });
   });
   it("uses the student's title/description overrides and visibility", () => {
     const it = toItem({ ...base, task_id: ship!.t.id, title: "My app", description: "Does X", visibility: "private" }, "en", "u1")!;
