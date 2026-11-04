@@ -1,6 +1,7 @@
 // Regenerates migrations/0301_library_seed.sql from resources.json + materials.{en,ru}.json + collections.json.
 // Usage: node --experimental-strip-types worker/lib/library/seed/build-seed-sql.mjs
-// (Run validate.mjs first.) The migration only inserts rows that don't exist yet, so founder edits are never overwritten.
+// (Run validate.mjs first.) The migration only inserts rows that don't exist yet, so founder edits are never overwritten;
+// if the founder already added the same URL, that seed row (and its materials) is skipped instead of failing.
 import { readFileSync, writeFileSync } from "node:fs";
 import { parseResourceUrl, youtubeThumb } from "../url.ts";
 
@@ -24,14 +25,14 @@ resources.forEach((r, i) => {
   for (const lang of r.audience) {
     const m = mats[lang][r.id];
     if (!m) throw new Error(`missing ${lang} material for ${r.id}`);
-    out.push(`INSERT OR IGNORE INTO lib_materials (resource_id, lang, state, data, origin, model) VALUES (${[r.id, lang, "ready", JSON.stringify(m), "fixture", null].map(q).join(", ")});`);
+    out.push(`INSERT OR IGNORE INTO lib_materials (resource_id, lang, state, data, origin, model) SELECT ${[r.id, lang, "ready", JSON.stringify(m), "fixture", null].map(q).join(", ")} WHERE EXISTS (SELECT 1 FROM lib_resources WHERE id = ${q(r.id)});`);
   }
-  out.push(`INSERT INTO lib_events (resource_id, step, status, message) SELECT ${q(r.id)}, 'seed', 'info', 'seeded with hand-written materials' WHERE NOT EXISTS (SELECT 1 FROM lib_events WHERE resource_id = ${q(r.id)});`);
+  out.push(`INSERT INTO lib_events (resource_id, step, status, message) SELECT ${q(r.id)}, 'seed', 'info', 'seeded with hand-written materials' WHERE EXISTS (SELECT 1 FROM lib_resources WHERE id = ${q(r.id)}) AND NOT EXISTS (SELECT 1 FROM lib_events WHERE resource_id = ${q(r.id)});`);
   out.push("");
 });
 for (const c of collections) {
   out.push(`INSERT OR IGNORE INTO lib_collections (id, title_en, title_ru, description_en, description_ru, sort) VALUES (${[c.id, c.title_en, c.title_ru, c.description_en, c.description_ru, c.sort].map(q).join(", ")});`);
-  c.items.forEach((rid, i) => out.push(`INSERT OR IGNORE INTO lib_collection_items (collection_id, resource_id, position) VALUES (${[c.id, rid, i].map(q).join(", ")});`));
+  c.items.forEach((rid, i) => out.push(`INSERT OR IGNORE INTO lib_collection_items (collection_id, resource_id, position) SELECT ${[c.id, rid, i].map(q).join(", ")} WHERE EXISTS (SELECT 1 FROM lib_resources WHERE id = ${q(rid)});`));
 }
 writeFileSync(new URL("../../../../migrations/0301_library_seed.sql", dir), out.join("\n") + "\n");
 console.log(`wrote ${resources.length} resources, ${collections.length} collections`);
