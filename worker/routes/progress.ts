@@ -9,6 +9,7 @@ import {
   reviewSubmission, saveOnboarding, submitTask, uncheckTask, updateProfile, type ProofInput,
 } from "../lib/learn/store";
 import { requireAdmin } from "../lib/user";
+import { getPortfolio, getPublicFile, updateItem, type ItemPatch } from "../lib/learn/portfolio";
 
 // OWNER: learn. Student progress: onboarding, overview (today + path), day pages, task proofs, day completion.
 export const progress = new Hono<AppEnv>();
@@ -180,4 +181,44 @@ progress.post("/dev/reset", async (c) => {
     c.env.DB.prepare("UPDATE users SET track = NULL, started_at = NULL WHERE id = ?").bind(id),
   ]);
   return c.json({ ok: true });
+});
+
+// ---- public portfolio (no login needed to read) ---------------------------------------------------------------------
+/** GET /api/progress/portfolio/:userId?lang= — public items only, unless it's your own (then private ones too). `me` = you. */
+progress.get("/portfolio/:userId", async (c) => {
+  const raw = c.req.param("userId");
+  const userId = raw === "me" ? c.get("userId") : raw;
+  if (!/^[\w-]{1,64}$/.test(userId)) return c.json({ error: "not_found" }, 404);
+  const p = await getPortfolio(c.env, userId, c.get("userId"), langOf(c));
+  if (!p) return c.json({ error: "not_found" }, 404);
+  c.header("cache-control", p.isMe ? "private, no-store" : "public, max-age=60");
+  return c.json(p);
+});
+
+/** GET /api/progress/portfolio/:userId/files/:submissionId — served only while the item is public (or to its owner). */
+progress.get("/portfolio/:userId/files/:id", async (c) => {
+  const f = await getPublicFile(c.env, c.req.param("userId"), c.req.param("id"), c.get("userId"));
+  if (!f) return c.json({ error: "not_found" }, 404);
+  const inline = /^(image\/(png|jpeg|gif|webp|avif)|video\/[\w.+-]+|audio\/[\w.+-]+|application\/pdf)$/.test(f.type);
+  return new Response(f.obj.body, {
+    headers: {
+      "content-type": f.type,
+      "content-disposition": `${inline ? "inline" : "attachment"}; filename*=UTF-8''${encodeURIComponent(f.name)}`,
+      "cache-control": "public, max-age=300",
+      "x-content-type-options": "nosniff",
+      "content-security-policy": "sandbox; default-src 'none'; img-src 'self'; media-src 'self'",
+    },
+  });
+});
+
+/** PATCH /api/progress/portfolio/items/:taskId { visibility?, title?, description? } — your own items only. */
+progress.patch("/portfolio/items/:taskId", async (c) => {
+  const b = await c.req.json<Record<string, unknown>>().catch(() => ({}) as Record<string, unknown>);
+  const patch: ItemPatch = {};
+  if (b.visibility === "public" || b.visibility === "private") patch.visibility = b.visibility;
+  if (typeof b.title === "string" || b.title === null) patch.title = b.title as string | null;
+  if (typeof b.description === "string" || b.description === null) patch.description = b.description as string | null;
+  const ok = await updateItem(c.env, c.get("userId"), c.req.param("taskId"), patch);
+  if (!ok) return c.json({ error: "not_found" }, 404);
+  return c.json(await getPortfolio(c.env, c.get("userId"), c.get("userId"), langOf(c)));
 });

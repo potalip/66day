@@ -423,6 +423,12 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
               </li>
             ))}
           </ul>
+          {day.boss && (
+            <div className="mt-6 flex flex-col items-center gap-2 rounded-[var(--radius-sm)] border border-gold-bright/40 bg-gold-soft p-4 text-sm">
+              <p className="text-gold-ink">{s.bossInPortfolio}</p>
+              <Button size="sm" variant="gold" icon={<Icon.crown />} onClick={() => { onClose(); nav(`/${lang}/portfolio/me`); }}>{s.openPortfolio}</Button>
+            </div>
+          )}
           {next && next.available && (
             <div className="mt-6 rounded-[var(--radius-sm)] border border-line bg-bg p-4 text-left">
               <p className="text-xs font-semibold tracking-wide text-muted uppercase">{openNow ? s.nextOpen : `${s.tomorrow} · ${s.dayN(next.day)}`}</p>
