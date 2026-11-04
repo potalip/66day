@@ -10,6 +10,8 @@ import { Player } from "./Player";
 import { ResourceCardView } from "./ResourceCardView";
 import { ArrowIcon, Button, Card, CheckIcon, ClockIcon, Empty, Pill, Skeleton, TypeIcon, hostOf } from "./ui";
 import MyList from "./MyList";
+import { showAwards } from "@web/features/game/widgets";
+import type { Award } from "@shared/types";
 
 export default function ResourcePage() {
   const { id = "" } = useParams();
@@ -63,7 +65,8 @@ function Resource({ id }: { id: string }) {
     setBusy(true);
     const done = !d.saved?.doneAt;
     try {
-      await api(`/library/${r.id}/done`, { method: "POST", json: { done } });
+      const res = await api<{ awards?: Award[] }>(`/library/${r.id}/done`, { method: "POST", json: { done } });
+      showAwards(res.awards);
       setD({ ...d, saved: { forDate: d.saved?.forDate ?? null, isToday: d.saved?.isToday ?? false, doneAt: done ? Date.now() / 1000 : null } });
     } finally { setBusy(false); }
   };
