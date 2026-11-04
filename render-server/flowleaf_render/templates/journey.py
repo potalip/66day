@@ -62,7 +62,7 @@ def draw_timeline(f: Frame, sc, bc: BuildCtx):
             yy = py - 130 * s - block if up else py + 120 * s
             paragraph(ctx, ll, px, yy, ls, "Bold", P.fg, a, lh=1.15)
     else:
-        top, bottom = y0 + th + 20 * s, y1 - 20 * s
+        top, bottom = y0 + th + 20 * s, y1 - f.pick(150, 70, 0) * s
         lx = x0 + 40 * s
         gap = (bottom - top) / max(1, n - 1) if n > 1 else 0
         gap = min(gap, f.pick(300, 160, 0) * s)
