@@ -13,6 +13,7 @@ A *storyboard* is the JSON the Studio (or Claude) fills and the render server re
       ],
       "music": "calm",            # calm | uplift | drive | focus | none
       "voiceover": true,          # ElevenLabs if the server has a key; otherwise captions only
+      "voice": "",                # optional ElevenLabs voice id (GET /v1/voices); default voice when empty
       "captions": true,
       "transition": "wipe"        # wipe | fade | cut
     }
@@ -220,6 +221,8 @@ def validate(sb: dict, templates: dict[str, Template], strict=True) -> tuple[dic
     out["music"] = sb.get("music") if sb.get("music") in MUSIC else T.music
     out["transition"] = sb.get("transition") if sb.get("transition") in TRANSITIONS else T.transition
     out["voiceover"] = bool(sb.get("voiceover", True))
+    v = sb.get("voice") or ""
+    out["voice"] = v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,64}", v) else ""
     out["captions"] = bool(sb.get("captions", True))
     gf = sb.get("fields") or {}
     if not isinstance(gf, dict): gf = {}; errs.append({"path": "fields", "code": "type", "message": "expected object"})

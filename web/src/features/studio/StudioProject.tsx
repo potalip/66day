@@ -2,7 +2,7 @@ import { useCallback, useEffect, useId, useMemo, useRef, useState } from "react"
 import { Link, useNavigate, useParams } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { blankScene, totalDuration, validateStoryboard } from "../../../../worker/lib/studio/storyboard";
-import { type Catalog, type Format, type Lang, type ProjectDetail, type Render, type SbError, type Storyboard, type TemplateDef, errorCode, loadCatalog, studioApi } from "./api";
+import { type Catalog, type Voice, type Format, type Lang, type ProjectDetail, type Render, type SbError, type Storyboard, type TemplateDef, errorCode, loadCatalog, studioApi } from "./api";
 import { PreviewPlayer } from "./Preview";
 import { type ProofTarget, loadProofTargets, submitProof } from "./proof";
 import { FieldInput, ProjectIdCtx, SceneCard } from "./SceneEditor";
@@ -33,6 +33,8 @@ export default function StudioProject() {
   latest.current = { sb, title, brief };
   const isDirty = () => gen.current > savedGen.current;
   const [tick, setTick] = useState(0);
+  const [voices, setVoices] = useState<{ available: boolean; voices: Voice[] } | null>(null);
+  useEffect(() => { studioApi.voices().then(setVoices).catch(() => setVoices(null)); }, []);
   const briefId = useId(), titleId = useId();
 
   const load = useCallback(async (initial = false) => {
@@ -251,7 +253,12 @@ export default function StudioProject() {
                 <SelectInput aria-label={s.transition} value={sb.transition} onChange={(m) => edit((p) => ({ ...p, transition: m as Storyboard["transition"] }))}
                   options={Object.entries(s.transitions).map(([value, label]) => ({ value, label }))} />
               </div>
-              <Toggle checked={sb.voiceover} onChange={(v) => edit((p) => ({ ...p, voiceover: v }))} label={s.voiceover} hint={s.voiceoverHint} />
+              <div className="space-y-3">
+                <Toggle checked={sb.voiceover} onChange={(v) => edit((p) => ({ ...p, voiceover: v }))} label={s.voiceover} hint={voices?.available ? s.voiceOnHint : s.voiceoverHint} />
+                {voices?.available && sb.voiceover && voices.voices.length > 0 && (
+                  <VoicePicker voices={voices.voices} value={sb.voice ?? ""} onChange={(v) => edit((p) => ({ ...p, voice: v }))} />
+                )}
+              </div>
               <Toggle checked={sb.captions} onChange={(v) => edit((p) => ({ ...p, captions: v }))} label={s.captions} />
             </div>
             {T.fields.length > 0 && (
@@ -436,6 +443,32 @@ function ProofAttach({ url }: { url: string }) {
           {state === "error" && <p className="text-xs text-danger" role="alert">{s.loadError}</p>}
         </>
       )}
+    </div>
+  );
+}
+
+/** ElevenLabs voice choice (only when the render server has a key), with the provider's sample when available. */
+function VoicePicker({ voices, value, onChange }: { voices: Voice[]; value: string; onChange: (v: string) => void }) {
+  const s = useStrings(strings);
+  const id = useId();
+  const audio = useRef<HTMLAudioElement | null>(null);
+  const current = voices.find((v) => v.id === value);
+  const play = () => {
+    if (!current?.preview_url) return;
+    audio.current?.pause();
+    audio.current = new Audio(current.preview_url);
+    audio.current.play().catch(() => undefined);
+  };
+  const lang = useLang();
+  const g = (x: string) => (x === "male" ? s.voiceMale : x === "female" ? s.voiceFemale : "");
+  return (
+    <div>
+      <Label htmlFor={id} hint={s.voiceHint}>{s.voice}</Label>
+      <div className="flex gap-2">
+        <SelectInput id={id} value={value} onChange={onChange} className="min-w-0 flex-1"
+          options={[{ value: "", label: s.voiceDefault }, ...voices.map((v) => ({ value: v.id, label: [v.name, g(v.gender), lang === "en" ? v.style : ""].filter(Boolean).join(" · ") }))]} />
+        {current?.preview_url && <Button size="sm" className="h-11" onClick={play} aria-label={s.voiceSample}><Icon name="play" /></Button>}
+      </div>
     </div>
   );
 }

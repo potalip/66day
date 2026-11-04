@@ -64,6 +64,8 @@ export interface Storyboard {
   scenes: Scene[];
   music: Music;
   voiceover: boolean;
+  /** Optional ElevenLabs voice id (from /api/studio/voices); empty = the render server's default voice. */
+  voice?: string;
   captions: boolean;
   transition: Transition;
 }
@@ -176,6 +178,7 @@ export function validateStoryboard(input: unknown): { storyboard: Storyboard | n
     music: MUSIC.includes(sb.music) ? sb.music : T.defaults.music,
     transition: TRANSITIONS.includes(sb.transition) ? sb.transition : T.defaults.transition,
     voiceover: sb.voiceover === undefined ? true : !!sb.voiceover,
+    voice: typeof sb.voice === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(sb.voice) ? sb.voice : "",
     captions: sb.captions === undefined ? true : !!sb.captions,
     fields: Object.fromEntries(T.fields.map((f) => [f.key, normalizeField(f, gf[f.key] ?? f.default, `fields.${f.key}`, errs)])),
     scenes: [],

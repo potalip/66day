@@ -97,6 +97,19 @@ export async function renderServerHealth(env: Env): Promise<{ ok: boolean; eleve
   }
 }
 
+export interface Voice { id: string; name: string; gender: string; style: string; preview_url: string | null }
+let voicesCache: { at: number; data: { available: boolean; voices: Voice[] } } | null = null;
+
+/** Voices offered by the render server (ElevenLabs). Cached per isolate for 10 minutes. */
+export async function listVoices(env: Env): Promise<{ available: boolean; voices: Voice[] }> {
+  if (!rendererConfigured(env)) return { available: false, voices: [] };
+  if (voicesCache && Date.now() - voicesCache.at < 600_000) return voicesCache.data;
+  const res = await rs(env, "/v1/voices").catch(() => null);
+  const data = res?.ok && res.json ? { available: !!res.json.available, voices: (res.json.voices ?? []) as Voice[] } : { available: false, voices: [] };
+  if (res?.ok) voicesCache = { at: Date.now(), data };
+  return data;
+}
+
 /** Queue handler: send the render to the render server. */
 export async function submitRender(env: Env, projectId: string) {
   const p = await getProject(env, projectId);

@@ -113,7 +113,7 @@ def audio_spec(sb: dict) -> dict:
             if "start" in sc["fields"]:
                 clips.append((o, src, float(sc["fields"].get("start") or 0), sc["duration"], -2))
     music = None if sb["music"] == "none" else {"mood": sb["music"], "gain": -10 if (vo or clips) else -7}
-    return {"vo": vo, "sfx": sfx, "music": music, "clips": clips}
+    return {"vo": vo, "sfx": sfx, "music": music, "clips": clips, "voice": sb.get("voice") or None}
 
 
 def fit_to_voiceover(sb: dict, log=print) -> dict:
@@ -122,7 +122,7 @@ def fit_to_voiceover(sb: dict, log=print) -> dict:
     for sc in sb["scenes"]:
         if not sc["voiceover"]: continue
         try:
-            x = A.voiceover(sc["voiceover"])
+            x = A.voiceover(sc["voiceover"], voice=sb.get("voice") or None)
         except Exception as e:  # noqa: BLE001
             log(f"  [vo] ElevenLabs failed: {e} -> captions only"); return sb
         if x is not None:

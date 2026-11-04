@@ -2,7 +2,7 @@ import { Hono, type Context } from "hono";
 import type { AppEnv, Env, JobMessage } from "../env";
 import {
   ACTIVE, type ProjectRow, type RenderRow, applyJob, getProject, getRender, newId, renderServerHealth, renderView,
-  rendererConfigured, runPlan, startRender, submitRender, syncRender, unstickPlan,
+  listVoices, rendererConfigured, runPlan, startRender, submitRender, syncRender, unstickPlan,
 } from "../lib/studio/service";
 import { FORMATS, type Format, type Lang, catalog, exampleStoryboard, getTemplate, validateStoryboard } from "../lib/studio/storyboard";
 
@@ -28,6 +28,8 @@ studio.get("/catalog", (c) => {
   c.header("cache-control", "public, max-age=300");
   return c.json({ ...catalog, capabilities: caps(c.env) });
 });
+
+studio.get("/voices", async (c) => c.json(await listVoices(c.env)));
 
 studio.get("/status", async (c) => c.json({ ...caps(c.env), rendererHealth: await renderServerHealth(c.env) }));
 

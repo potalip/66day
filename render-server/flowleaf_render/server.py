@@ -82,6 +82,13 @@ def health():
             "storage": store.storage.kind, "jobs": store.stats(), "auth": bool(TOKEN)}
 
 
+@app.get("/v1/voices", dependencies=[Depends(auth)])
+def voices():
+    """Voices for the Studio picker. available=false when no ELEVENLABS_API_KEY (captions-only renders)."""
+    v = audio.list_voices()
+    return {"available": audio.have_eleven(), "voices": v}
+
+
 @app.get("/v1/templates")
 def templates():
     return catalog()
