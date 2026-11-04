@@ -98,3 +98,15 @@ See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
 4. Re-verify the fast-moving items in REVIEW.md every quarter. Tool commands and model names will drift.
 5. Later: AI review of submissions against each day's "you're done when…" checklist; the content is already
    structured for it.
+
+## Round 2 (after merge)
+- **Checked in the running app:** screenshots of both themes, both languages, 390 and 1280 px.
+  - Quiz answers moved to callouts, because the renderer doesn't support `<details>`.
+  - 734 hard-wrapped prompt lines reflowed.
+- **Badges reconciled with the game's built-in rules:** `hello-agent`, `curious`, `saved-by-freeze`.
+- **XP calibration** sent to the game agent: about 105 XP per day.
+- **Library:** 23 seed resources mapped to days by canonical URL (learn doesn't render `lib:` ids yet).
+- **Analytics:** first-party `events` table added on apps day 34.
+- **Second language pass:** RU and EN, 189 files edited. Russian address is now gender-neutral and terms are unified.
+- **Requests updated:** `curriculum-to-learn.md` (collapsible answers, resolve resources), `curriculum-to-game.md`,
+  `curriculum-to-library.md`.
