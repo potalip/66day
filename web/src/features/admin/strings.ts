@@ -117,7 +117,7 @@ export const strings = {
       publishedNoLesson: (langs: string) => `Published. No approved lesson for: ${langs} — students see a plain link there.`,
       fields: {
         title: "Title", author: "Author", thumbnail: "Thumbnail URL", duration: "Duration (min)", tracks: "Tracks", topics: "Topics",
-        level: "Level", origLang: "Original language", audience: "Visible to", featured: "Featured", notes: "Notes for Claude", days: "Curriculum days (e.g. 3, 15:apps)",
+        level: "Level", origLang: "Original language", audience: "Visible to", featured: "Featured", notes: "Notes for Claude", days: "Curriculum days",
       },
       transcript: "Transcript",
       transcriptNone: "No transcript yet.",
@@ -268,7 +268,7 @@ export const strings = {
       publishedNoLesson: (langs: string) => `Опубликовано. Нет одобренного урока для: ${langs} — там ученики увидят просто ссылку.`,
       fields: {
         title: "Название", author: "Автор", thumbnail: "Ссылка на обложку", duration: "Длительность (мин)", tracks: "Треки", topics: "Темы",
-        level: "Уровень", origLang: "Язык оригинала", audience: "Кому показывать", featured: "В подборку", notes: "Заметки для Claude", days: "Дни программы (напр. 3, 15:apps)",
+        level: "Уровень", origLang: "Язык оригинала", audience: "Кому показывать", featured: "В подборку", notes: "Заметки для Claude", days: "Дни программы",
       },
       transcript: "Расшифровка",
       transcriptNone: "Расшифровки пока нет.",
