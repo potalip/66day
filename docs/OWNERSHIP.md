@@ -8,7 +8,7 @@ else's file, write it in `docs/requests/<your-agent>-to-<owner>.md` and work aro
 | **curriculum** (`agent/curriculum`) | `content/curriculum/**`, `content/badges.json`, `docs/curriculum/**` |
 | **learn** (`agent/learn`) | `web/src/features/{onboarding,learn}/**`, `worker/routes/{curriculum,progress}.ts`, `worker/lib/learn/**`, `scripts/build-content.mjs`, `shared/curriculum.generated.*`, migrations `01xx_*.sql` |
 | **game** (`agent/game`) | `web/src/features/game/**`, `worker/routes/game.ts`, `worker/lib/game.ts`, `worker/lib/game/**`, migrations `02xx_*.sql` |
-| **library** (`agent/library`) | `web/src/features/{library,admin}/**`, `worker/routes/{library,pipeline,admin}.ts`, `worker/lib/library/**`, migrations `03xx_*.sql` |
+| **library** (`agent/library`) | `web/src/features/{library,admin}/**`, `worker/routes/{library,pipeline,admin}.ts`, `worker/lib/library/**`, `media-worker/**`, migrations `03xx_*.sql` |
 | **studio** (`agent/studio`) | `web/src/features/studio/**`, `worker/routes/studio.ts`, `worker/lib/studio/**`, `render-server/**`, migrations `04xx_*.sql` |
 | **design** (`agent/design`) | `web/src/styles.css`, `web/src/ui/**`, `web/src/Shell.tsx`, `web/src/features/landing/**`, `web/public/**`, `docs/DESIGN.md` |
 | **orchestrator** (main) | everything else: `worker/index.ts`, `worker/env.ts`, `worker/queue.ts`, `worker/lib/{user,claude}.ts`, `web/src/App.tsx`, `web/src/i18n/**`, `shared/types.ts`, `wrangler.jsonc`, `package.json`, `migrations/0001_core.sql`, `CLAUDE.md`, `docs/SPEC.md` |
