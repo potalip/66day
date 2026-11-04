@@ -15,7 +15,7 @@ export const landing = {
     float: { task: "Day 2 · Your page is live", xp: "+60 XP", streak: "11-day streak" },
 
     whyTitle: "Why 66?",
-    whyBody: "Habit research puts the average time for a behaviour to become automatic at about 66 days. Not 21. We built the whole program around that number: a short, clear session every day until opening your editor and talking to an agent feels as normal as checking messages.",
+    whyBody: "Habit research found that a new behaviour takes a median of about 66 days to become automatic — not 21, and it varies a lot from person to person. We built the whole program around that number: a short, clear session every day until opening your editor and talking to an agent feels as normal as checking messages.",
 
     pathsEyebrow: "Two paths",
     pathsTitle: "Pick what you want to make. Switch any time.",
@@ -23,7 +23,7 @@ export const landing = {
     apps: {
       name: "Apps",
       lead: "Solve real problems with web apps, tools and bots — built with Claude Code and other coding agents, powered by the newest AI models through their APIs.",
-      items: ["A personal site and landing pages that are actually live", "Telegram and Discord bots that do one useful thing well", "Small tools for your job: parsers, dashboards, AI helpers", "A capstone app with real users and a public launch"],
+      items: ["A personal site and landing pages that are actually live", "Telegram bots and mini apps that do one useful thing well", "Small tools for your job: parsers, dashboards, AI helpers", "A capstone app with real users and a public launch"],
       tag: "For builders",
     },
     video: {
@@ -50,10 +50,10 @@ export const landing = {
     gameItems: [
       { t: "XP and levels", d: "Every task and finished day adds up. Boss days are worth more." },
       { t: "Streaks with freezes", d: "Missed a day? A freeze saves your streak — life happens." },
-      { t: "Badges", d: "First deploy, first user, first 1,000 views. Earned, not given." },
+      { t: "Badges", d: "Your first deploy, your first boss day, your public launch. Earned, not given." },
       { t: "Leaderboards", d: "Weekly and all-time, global and by track." },
     ],
-    profile: { name: "Maya Chen", track: "Apps · Level 4", streak: "days", xp: "XP", rank: "this week", badges: ["First deploy", "Bot whisperer", "7-day streak"] },
+    profile: { name: "Maya Chen", track: "Apps · Level 4", streak: "days", xp: "XP", rank: "this week", badges: ["It's Alive", "Bot Builder", "7-Day Streak"] },
 
     studioEyebrow: "Studio",
     studioTitle: "Describe a video. Get a video.",
@@ -76,7 +76,7 @@ export const landing = {
     phasesEyebrow: "The 66 days",
     phasesTitle: "From your first prompt to a public launch.",
     phases: [
-      { t: "Foundation", d: "A live page by day 2, directing an agent, APIs, your first real user." },
+      { t: "Foundation", d: "A live page by day 2, directing an agent, APIs, and one real person helped on day 13." },
       { t: "Build", d: "The core craft of your track, with boss days as milestones." },
       { t: "Ship", d: "Real users and real clients: launch, listen, iterate." },
       { t: "Portfolio & Earn", d: "A public capstone launch, a portfolio that sells, your first pitches." },
@@ -88,11 +88,11 @@ export const landing = {
       { q: "I've never written code. Is this for me?", a: "Yes — that's who it's for. You'll work with AI coding agents from day one. You learn to read code, steer the agent and debug calmly, not to memorise syntax." },
       { q: "How much time do I need?", a: "One to two hours a day. Every day shows an estimate up front, and every seventh day is lighter." },
       { q: "What if I miss a day?", a: "Nothing breaks. Streak freezes cover the occasional miss, and you can always catch up at your own pace." },
-      { q: "What does it cost?", a: "Starting is free. You'll need access to an AI coding agent; we show the cheapest ways to get going." },
+      { q: "What does it cost?", a: "Starting is free. You'll need an AI coding agent — usually a paid plan or API credits; day 1 walks you through the options, including cheaper ones." },
       { q: "English or Russian?", a: "Both, as equals. Each language has its own program with examples, platforms and resources picked for that audience. You can switch any time." },
     ],
 
-    finalTitle: "Day 1 takes about an hour.",
+    finalTitle: "Day 1 takes about 75 minutes.",
     finalSub: "Pick a path, set your daily time, and ship something small today.",
     finalNote: "Free to start · No credit card",
   },
@@ -112,7 +112,7 @@ export const landing = {
     float: { task: "День 2 · Страница в сети", xp: "+60 XP", streak: "11 дней подряд" },
 
     whyTitle: "Почему 66?",
-    whyBody: "Исследования привычек говорят: чтобы действие стало автоматическим, в среднем нужно около 66 дней. Не 21. Вся программа построена вокруг этого числа — короткое понятное занятие каждый день, пока открыть редактор и поговорить с агентом не станет так же естественно, как проверить сообщения.",
+    whyBody: "Исследование привычек показало: новое действие становится автоматическим в среднем (по медиане) примерно за 66 дней — не за 21, и у всех по-разному. Вся программа построена вокруг этого числа — короткое понятное занятие каждый день, пока открыть редактор и поговорить с агентом не станет так же естественно, как проверить сообщения.",
 
     pathsEyebrow: "Два пути",
     pathsTitle: "Выбери, что хочешь создавать. Сменить можно в любой момент.",
@@ -125,38 +125,38 @@ export const landing = {
     },
     video: {
       name: "Видео",
-      lead: "Делай разные видео с помощью кода и ИИ: моушн-графику, анимированные объяснялки, кинетическую типографику, видео на данных и шортсы — через пайплайны, которые соберёшь сам.",
+      lead: "Делай разные видео с помощью кода и ИИ: моушн-графику, анимированные эксплейнеры, кинетическую типографику, видео на данных и шортсы — через пайплайны, которые соберёшь сам.",
       items: ["Кинетическая типографика и моушн, отрисованные кодом", "Объясняющие ролики и видео на данных со сценарием от ИИ", "ИИ-клипы, смонтированные в рилсы и шортсы для YouTube и VK", "Свой повторяемый видео-пайплайн — как наша Студия"],
       tag: "Для рассказчиков",
     },
     noNoCode: "Никаких конструкторов и автоматизаций «мышкой». Только ИИ-агенты, API и ты — навыки, которые останутся с тобой.",
 
     dayEyebrow: "Как устроен день",
-    dayTitle: "Достаточно мало, чтобы начать. Достаточно, чтобы был толк.",
+    dayTitle: "Начать легко. Результат — настоящий.",
     steps: [
       { t: "Прочитай урок", d: "Десять минут, одна идея — ровно под сегодняшнюю задачу. Без часовых лекций.", m: "10 мин" },
       { t: "Собери с агентом", d: "Ты описываешь, агент пишет код, ты направляешь. Каждый день заканчивается тем, что работает.", m: "45–90 мин" },
       { t: "Покажи результат", d: "Ссылка, скриншот или файл. Работа сохраняется и попадает в портфолио.", m: "2 мин" },
-      { t: "Получи XP и оглянись", d: "Опыт, серии и бейджи. Каждый седьмой день — полегче: отдых, повторение, рефлексия.", m: "5 мин" },
+      { t: "Получи XP и оглянись", d: "Опыт, серии и значки. Каждый седьмой день — полегче: отдых, повторение, рефлексия.", m: "5 мин" },
     ],
     todayCard: { label: "Сегодня", title: "День 2 · Страница уходит в интернет", meta: "Фундамент · около 90 мин", tasks: ["Разберись, как страница попадает из папки по ссылке", "Создай репозиторий на GitHub и запушь страницу с агентом", "Включи GitHub Pages и открой живую ссылку", "Отправь ссылку одному человеку"], xp: "+120 XP" },
 
     gameEyebrow: "Игровой слой",
     gameTitle: "Прогресс, который чувствуешь каждый день.",
-    gameSub: "Серии возвращают тебя завтра. Бейджи отмечают настоящие этапы, а не клики. Недельный рейтинг обнуляется — подняться никогда не поздно.",
+    gameSub: "Серии возвращают тебя завтра. Значки отмечают настоящие этапы, а не клики. Недельный рейтинг обнуляется — подняться никогда не поздно.",
     gameItems: [
       { t: "XP и уровни", d: "Каждая задача и каждый день идут в копилку. Босс-дни ценнее." },
-      { t: "Серии с заморозкой", d: "Пропустил день? Заморозка сохранит серию — жизнь бывает разной." },
-      { t: "Бейджи", d: "Первый деплой, первый пользователь, первая тысяча просмотров. Только за дело." },
+      { t: "Серии с заморозкой", d: "Пропуск? Заморозка сохранит серию — жизнь бывает разной." },
+      { t: "Значки", d: "Первый деплой, первый босс-день, публичный запуск. Только за дело." },
       { t: "Рейтинги", d: "За неделю и за всё время, общий и по трекам." },
     ],
-    profile: { name: "Аня Смирнова", track: "Приложения · Уровень 4", streak: "дней", xp: "XP", rank: "за неделю", badges: ["Первый деплой", "Заклинатель ботов", "Серия 7 дней"] },
+    profile: { name: "Аня Смирнова", track: "Приложения · Уровень 4", streak: "дней", xp: "XP", rank: "за неделю", badges: ["Оно живое!", "Ботодел", "Неделя без пропусков"] },
 
     studioEyebrow: "Студия",
     studioTitle: "Опиши видео — получи видео.",
     studioSub: "Выбери тип и стиль, напиши короткий бриф. Claude продумает сценарий и раскадровку, рендер-сервер соберёт готовый файл — прямо внутри платформы.",
-    studioTypes: ["Кинетический текст", "Объяснялка", "История на данных", "Промо продукта", "Шортс / рилс"],
-    studioBrief: "Объяснялка на 30 секунд: почему сон важен для учёбы. Спокойно, минималистично, зелёные акценты.",
+    studioTypes: ["Кинетический текст", "Эксплейнер", "История на данных", "Промо продукта", "Шортс / рилс"],
+    studioBrief: "Эксплейнер на 30 секунд: почему сон важен для учёбы. Спокойно, минималистично, зелёные акценты.",
     studioScenes: ["Крючок", "Проблема", "Идея", "Доказательство", "Призыв"],
     studioStatus: "Рендер · сцена 3 из 5",
 
@@ -173,7 +173,7 @@ export const landing = {
     phasesEyebrow: "66 дней",
     phasesTitle: "От первого промпта до публичного запуска.",
     phases: [
-      { t: "Фундамент", d: "Своя страница в сети уже на второй день, задачи для агента, API, первый живой пользователь." },
+      { t: "Фундамент", d: "Своя страница в сети уже на второй день, задачи для агента, API и помощь одному живому человеку на 13-й день." },
       { t: "Сборка", d: "Ремесло своего трека каждый день, босс-дни как контрольные точки." },
       { t: "Запуск", d: "Живые пользователи и первые заказчики: запускайся, слушай, улучшай." },
       { t: "Портфолио и заработок", d: "Публичный запуск финального проекта, портфолио, которое продаёт, первые отклики." },
@@ -185,11 +185,11 @@ export const landing = {
       { q: "Я никогда не писал код. Мне подойдёт?", a: "Да — программа именно для этого. С первого дня ты работаешь с ИИ-агентами. Учишься читать код, направлять агента и спокойно разбираться с ошибками, а не зубрить синтаксис." },
       { q: "Сколько нужно времени?", a: "Час-два в день. У каждого дня заранее указано, сколько он займёт, а каждый седьмой — полегче." },
       { q: "А если пропущу день?", a: "Ничего не сломается. Заморозка серии прикроет редкий пропуск, а догнать программу можно в своём темпе." },
-      { q: "Сколько это стоит?", a: "Начать — бесплатно. Понадобится доступ к ИИ-агенту; покажем самые недорогие способы, в том числе из России." },
+      { q: "Сколько это стоит?", a: "Начать — бесплатно. Нужен доступ к ИИ-агенту — обычно это платная подписка или оплата API. В первый день честно разбираем варианты, в том числе доступные в разных странах." },
       { q: "На русском или на английском?", a: "На обоих, на равных. У каждого языка своя программа: примеры, платформы и материалы подобраны под свою аудиторию. Переключиться можно в любой момент." },
     ],
 
-    finalTitle: "Первый день — примерно час.",
+    finalTitle: "Первый день — около полутора часов.",
     finalSub: "Выбери путь, назначь время на каждый день и опубликуй что-то маленькое уже сегодня.",
     finalNote: "Бесплатно · Без карты",
   },

@@ -141,3 +141,7 @@ no console errors. Also checked:
   that the finished video is hidden below the fold on desktop, because the sticky right column is taller than the
   viewport. The project page also has no `<h1>`, and the project title is the brief cut mid-word. No design-file changes
   were needed.
+- **Landing copy aligned with the curriculum.** I applied all 10 items in `curriculum-to-design.md`: no Discord; "median",
+  not "average", with an honest range; only badges that exist; the profile mock shows real badges with matching icons;
+  an honest cost FAQ, with no "from Russia" promise; Day 1 ≈ 75 min; RU «эксплейнер» and «значки»; a new RU day-section
+  title; the day-13 real person. I also removed the gendered RU verbs in my own copy («Пропустил день?», showcase samples).

@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
   ArrowRight, BookOpen, Check, ChevronDown, Clapperboard, Code2, Crown, Flame, Hammer, Library, Medal, Moon,
-  PlayCircle, Send, Sparkles, Trophy, Upload, Video, Zap, FileText, Film,
+  PlayCircle, Rocket, Bot, Sparkles, Trophy, Upload, Video, Zap, FileText, Film,
 } from "lucide-react";
 import { useLang, useStrings } from "@web/i18n";
 import { Avatar, Badge, ButtonLink, Card, cn, ProgressBar, ProgressRing, LeafMark } from "@web/ui";
@@ -310,7 +310,7 @@ function Game({ t }: { t: LandingStrings }) {
               {p.badges.map((b, i) => (
                 <span key={b} className="inline-flex items-center gap-1.5 rounded-full border border-gold-bright/40 bg-gold-soft py-1 pl-1 pr-3 text-xs font-medium text-gold-ink">
                   <span className="grid size-5 place-items-center rounded-full bg-gold-bright text-white dark:text-bg">
-                    {[<Send key="a" className="size-3" />, <Sparkles key="b" className="size-3" />, <Flame key="c" className="size-3" />][i]}
+                    {[<Rocket key="a" className="size-3" />, <Bot key="b" className="size-3" />, <Flame key="c" className="size-3" />][i]}
                   </span>{b}
                 </span>
               ))}
