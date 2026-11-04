@@ -6,10 +6,11 @@ title: "ИИ как функция: структурированный отве�
 summary: "Вставляешь сумбурное сообщение — получаешь проверенные поля в приложении, и ничего не ломается, если ИИ подвёл."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://platform.openai.com/docs"
   - "https://ai.google.dev/gemini-api/docs"
   - "https://www.json.org/json-ru.html"
+  - "https://github.com/anthropics/courses"
 tasks:
   - id: d18-apps-t1
     type: read

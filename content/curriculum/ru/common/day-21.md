@@ -7,6 +7,7 @@ summary: "Считаешь, сколько всего сделал за три �
 estMinutes: 30
 rest: true
 resources:
+  - "https://www.youtube.com/watch?v=7xTGNNLPyMI"
   - "https://vc.ru/"
 tasks:
   - id: d21-t1

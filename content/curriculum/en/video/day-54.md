@@ -6,7 +6,7 @@ title: "Test audience: find where they drop"
 summary: "Five real viewers watch your capstone; you find the exact second they drift away and fix it in a v2."
 estMinutes: 90
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
   - "https://developers.cloudflare.com/workers/"
   - "https://ffmpeg.org/documentation.html"
 tasks:

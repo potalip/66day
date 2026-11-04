@@ -6,7 +6,7 @@ title: "Языковая модель как сценарист"
 summary: "Превращаешь любую тему в проверенную раскадровку в JSON — сцены, текст, визуал, тайминги — и выбираешь хук по критериям, а не на глаз."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://docs.anthropic.com/en/api/getting-started"
   - "https://www.json.org/json-ru.html"
 tasks:

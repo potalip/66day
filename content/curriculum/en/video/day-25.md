@@ -6,7 +6,8 @@ title: "Animated explainers"
 summary: "Storyboard one idea in six frames, then animate a 30-second explainer in Manim or Motion Canvas, timed to your voice."
 estMinutes: 120
 resources:
-  - "https://docs.manim.community/"
+  - "https://www.youtube.com/watch?v=rbu7Zu5X1zI"
+  - "https://docs.manim.community/en/stable/"
   - "https://motioncanvas.io/docs/"
   - "https://platform.openai.com/docs/guides/text-to-speech"
 tasks:

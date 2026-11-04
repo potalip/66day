@@ -9,7 +9,7 @@ resources:
   - "https://choosealicense.com/"
   - "https://docs.github.com/en/get-started/start-your-journey/hello-world"
   - "https://www.remotion.dev/docs/"
-  - "https://docs.manim.community/"
+  - "https://docs.manim.community/en/stable/"
 tasks:
   - id: d48-video-t1
     type: read

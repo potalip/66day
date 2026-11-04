@@ -6,8 +6,8 @@ title: "Эвалы: докажи, что ИИ-функция работает"
 summary: "Собираешь 20 проверочных случаев для ИИ-функции, оцениваешь их кодом и ИИ-судьёй, меняешь промпт и сравниваешь."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://vitest.dev/"
 tasks:
   - id: d47-apps-t1

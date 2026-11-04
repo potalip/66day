@@ -6,7 +6,8 @@ title: "Анимированные эксплейнеры"
 summary: "Раскладываешь одну идею на шесть кадров и анимируешь 30-секундный эксплейнер в Manim или Motion Canvas под свой голос."
 estMinutes: 120
 resources:
-  - "https://docs.manim.community/"
+  - "https://www.youtube.com/watch?v=rbu7Zu5X1zI"
+  - "https://docs.manim.community/en/stable/"
   - "https://motioncanvas.io/docs/"
   - "https://yandex.cloud/ru/docs/speechkit/"
 tasks:

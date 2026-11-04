@@ -6,7 +6,7 @@ title: "Capstone build 1: the core loop, end to end"
 summary: "Make your capstone's one core flow work from first click to saved result — ugly is fine, fake is not."
 estMinutes: 120
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://playwright.dev/"
 tasks:
   - id: d51-apps-t1

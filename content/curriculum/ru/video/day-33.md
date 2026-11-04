@@ -7,7 +7,7 @@ summary: "Собираешь всё сделанное в make-video \"тема\
 estMinutes: 150
 badges: [pipeline-architect]
 resources:
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://www.remotion.dev/docs/"
   - "https://ffmpeg.org/documentation.html"
   - "https://12factor.net/ru/"

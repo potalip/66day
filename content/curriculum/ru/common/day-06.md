@@ -6,6 +6,7 @@ title: "Git — твоя машина времени"
 summary: "Пускаешь агента в смелый редизайн на отдельной ветке, ломаешь страницу нарочно и убеждаешься: с git ничего не теряется."
 estMinutes: 75
 resources:
+  - "https://www.youtube.com/watch?v=bkNCylkzFRk"
   - "https://learngitbranching.js.org/"
   - "https://git-scm.com/book/ru/v2"
 tasks:

@@ -7,7 +7,8 @@ summary: "Семь дней позади. Записываешь, чему на�
 estMinutes: 30
 rest: true
 badges: [week-1]
-resources: []
+resources:
+  - "https://www.youtube.com/watch?v=wjZofJX0v4M"
 tasks:
   - id: d07-t1
     type: reflect

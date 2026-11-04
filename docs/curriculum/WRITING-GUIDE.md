@@ -61,6 +61,9 @@ Use this skeleton, with native headings:
 
 ## Voice
 
+  If a resource exists in the library seed (`worker/lib/library/seed/resources.json`), use its exact `url`, so
+  `/api/library/resolve` can match it to the library card. `lib:<id>` is valid too, but use it only once the learn UI
+  resolves ids (see `docs/requests/curriculum-to-learn.md`).
 - **RU**: на «ты», живо и по-человечески, как сильный старший товарищ. No calques ("давай погрузимся", "в этом уроке
   мы будем"). Natural tech slang where devs use it (задеплоить, коммит, репозиторий, промпт). Local realities where they
   matter: Telegram, VK, Rutube, Дзен, Habr, VC.ru, Kwork/FL.ru/Хабр Фриланс, ЮKassa/CloudPayments/Telegram Stars,

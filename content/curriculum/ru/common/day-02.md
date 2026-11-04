@@ -7,8 +7,10 @@ summary: "Кладёшь страницу-обещание на GitHub и вкл
 estMinutes: 90
 badges: [first-ship]
 resources:
+  - "https://www.youtube.com/watch?v=bkNCylkzFRk"
   - "https://docs.github.com/en/pages/getting-started-with-github-pages"
   - "https://git-scm.com/book/ru/v2"
+  - "https://docs.github.com/en/get-started/start-your-journey/hello-world"
 tasks:
   - id: d02-t1
     type: read

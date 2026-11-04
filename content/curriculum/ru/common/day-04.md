@@ -6,8 +6,10 @@ title: "Промпты для агента: как ставить задачу �
 summary: "Осваиваешь промпт из четырёх частей, даёшь проекту память и видишь, как чёткое ТЗ обыгрывает размытую просьбу."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://www.youtube.com/watch?v=6eBSHbLKuN0"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://code.claude.com/docs/en/best-practices"
 tasks:
   - id: d04-t1
     type: read

@@ -6,7 +6,7 @@ title: "Read the code your agent wrote"
 summary: "Open the hood of your page: see HTML, CSS and JS, play in DevTools, and make your first change by hand."
 estMinutes: 75
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
 tasks:
   - id: d05-t1
     type: read

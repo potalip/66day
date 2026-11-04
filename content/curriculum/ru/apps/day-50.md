@@ -6,7 +6,7 @@ title: "Финальный проект: выбери, распиши, объя�
 summary: "Выбираешь проект для запуска на 65-й день, пишешь спецификацию с планом по дням и критериями остановки, объявляешь."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://vc.ru/"
   - "https://habr.com/"
 tasks:

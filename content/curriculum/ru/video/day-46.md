@@ -8,7 +8,7 @@ estMinutes: 120
 resources:
   - "https://github.com/SYSTRAN/faster-whisper"
   - "https://trac.ffmpeg.org/wiki"
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
 tasks:
   - id: d46-video-t1
     type: read

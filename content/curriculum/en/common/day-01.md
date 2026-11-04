@@ -7,8 +7,9 @@ summary: "Install a coding agent and have it build your personal 66-day promise 
 estMinutes: 75
 badges: [hello-agent]
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://www.youtube.com/watch?v=AJpK3YTTKZ4"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
 tasks:
   - id: d01-t1
     type: read

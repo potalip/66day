@@ -6,7 +6,7 @@ title: "Сборка 1: основной сценарий от начала до
 summary: "Доводишь главный сценарий финального проекта до рабочего состояния от первого клика до сохранённого результата."
 estMinutes: 120
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://playwright.dev/"
 tasks:
   - id: d51-apps-t1

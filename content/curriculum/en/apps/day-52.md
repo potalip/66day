@@ -8,7 +8,7 @@ estMinutes: 120
 badges: [phase-3]
 resources:
   - "https://docs.anthropic.com/en/api/getting-started"
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://openrouter.ai/docs"
 tasks:
   - id: d52-apps-t1

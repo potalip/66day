@@ -6,7 +6,7 @@ title: "The LLM as your screenwriter"
 summary: "Turn any topic into a validated storyboard JSON — scenes, voiceover, visuals, timings — and pick the hook with a rubric, not a vibe."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://docs.anthropic.com/en/api/getting-started"
   - "https://www.json.org/json-en.html"
 tasks:

@@ -8,7 +8,7 @@ estMinutes: 75
 resources:
   - "https://missing.csail.mit.edu/2020/debugging-profiling/"
   - "https://git-scm.com/book/en/v2"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
 tasks:
   - id: d10-t1
     type: read

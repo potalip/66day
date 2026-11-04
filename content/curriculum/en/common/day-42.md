@@ -8,7 +8,7 @@ estMinutes: 30
 rest: true
 badges: [helper]
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
   - "https://learngitbranching.js.org/"
 tasks:
   - id: d42-t1

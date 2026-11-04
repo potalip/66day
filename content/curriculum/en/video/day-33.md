@@ -7,7 +7,7 @@ summary: "Wire everything you've built into make-video \"topic\": storyboard, vo
 estMinutes: 150
 badges: [pipeline-architect]
 resources:
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://www.remotion.dev/docs/"
   - "https://ffmpeg.org/documentation.html"
   - "https://12factor.net/"

@@ -7,9 +7,10 @@ summary: "Рисуешь 90 кадров на Python, склеиваешь их 
 estMinutes: 75
 badges: [first-render]
 resources:
-  - "https://ffmpeg.org/documentation.html"
+  - "https://www.youtube.com/watch?v=deg8bOoziaE"
   - "https://trac.ffmpeg.org/wiki"
   - "https://docs.python.org/3/tutorial/"
+  - "https://ffmpeg.org/ffmpeg.html"
 tasks:
   - id: d15-video-t1
     type: read

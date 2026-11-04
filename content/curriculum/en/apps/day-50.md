@@ -6,7 +6,7 @@ title: "Capstone: pick it, spec it, say it out loud"
 summary: "Choose the capstone you'll launch on day 65, write a spec with daily milestones and kill criteria, and announce it."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://www.producthunt.com/"
   - "https://news.ycombinator.com/showhn.html"
 tasks:

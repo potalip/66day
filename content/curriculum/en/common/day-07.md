@@ -7,7 +7,8 @@ summary: "Seven days in. Write down what this week taught you, then tell the wor
 estMinutes: 30
 rest: true
 badges: [week-1]
-resources: []
+resources:
+  - "https://www.youtube.com/watch?v=wjZofJX0v4M"
 tasks:
   - id: d07-t1
     type: reflect

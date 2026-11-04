@@ -6,7 +6,7 @@ title: "Сначала проблема: от «бесит» до специфи
 summary: "Выбираешь настоящую проблему для главного приложения, пишешь с агентом спецификацию на страницу и заводишь репозиторий."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://vite.dev/guide/"
   - "https://tailwindcss.com/docs"
   - "https://ru.react.dev/learn"

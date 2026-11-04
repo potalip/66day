@@ -8,7 +8,7 @@ estMinutes: 90
 resources:
   - "https://docs.github.com/en/issues"
   - "https://cli.github.com/manual/"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
 tasks:
   - id: d37-apps-t1
     type: read

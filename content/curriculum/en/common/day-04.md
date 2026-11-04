@@ -6,8 +6,10 @@ title: "Prompting a coding agent like a pro"
 summary: "Learn the four-part prompt, give your project a memory file, and watch a vague request lose to a clear spec."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://www.youtube.com/watch?v=6eBSHbLKuN0"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://code.claude.com/docs/en/best-practices"
 tasks:
   - id: d04-t1
     type: read

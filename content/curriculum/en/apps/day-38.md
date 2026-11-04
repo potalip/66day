@@ -7,8 +7,8 @@ summary: "Two agents fix two issues in parallel, each in its own worktree, and y
 estMinutes: 90
 resources:
   - "https://git-scm.com/docs/git-worktree"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://www.anthropic.com/research/building-effective-agents"
 tasks:
   - id: d38-apps-t1
     type: read

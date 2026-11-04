@@ -9,6 +9,7 @@ resources:
   - "https://www.remotion.dev/docs/"
   - "https://ru.react.dev/learn"
   - "https://nodejs.org/en/learn"
+  - "https://www.remotion.dev/docs/the-fundamentals"
 tasks:
   - id: d18-video-t1
     type: read

@@ -9,6 +9,7 @@ resources:
   - "https://developers.cloudflare.com/workers/"
   - "https://vercel.com/docs"
   - "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+  - "https://developers.cloudflare.com/workers/get-started/guide/"
 tasks:
   - id: d11-t1
     type: read

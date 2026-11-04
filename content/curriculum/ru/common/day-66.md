@@ -7,7 +7,7 @@ summary: "Смотришь, какой путь прошёл, ставишь ф�
 estMinutes: 60
 badges: [graduate]
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://missing.csail.mit.edu/"
 tasks:
   - id: d66-t1

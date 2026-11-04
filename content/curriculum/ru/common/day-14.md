@@ -8,7 +8,8 @@ estMinutes: 40
 rest: true
 badges: [phase-1]
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://www.youtube.com/watch?v=LCEmiRjPEtQ"
+  - "https://code.claude.com/docs/en/overview"
   - "https://git-scm.com/book/ru/v2"
 tasks:
   - id: d14-t1

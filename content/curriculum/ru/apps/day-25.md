@@ -8,7 +8,7 @@ estMinutes: 120
 resources:
   - "https://developers.cloudflare.com/d1/"
   - "https://www.sqlite.org/fts5.html"
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://supabase.com/docs"
 tasks:
   - id: d25-apps-t1

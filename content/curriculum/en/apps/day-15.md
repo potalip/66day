@@ -6,7 +6,7 @@ title: "Problem first: from annoyance to spec"
 summary: "Pick the one real problem your main app will solve, write a one-page spec with your agent, and scaffold the repo."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://vite.dev/guide/"
   - "https://tailwindcss.com/docs"
   - "https://react.dev/learn"

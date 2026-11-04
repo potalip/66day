@@ -7,6 +7,7 @@ summary: "Get an API key with a spend limit, keep it out of git, and make two AI
 estMinutes: 90
 badges: [first-ai-call]
 resources:
+  - "https://www.youtube.com/watch?v=zjkBMFhNj_g"
   - "https://docs.anthropic.com/en/api/getting-started"
   - "https://openrouter.ai/docs"
   - "https://12factor.net/config"

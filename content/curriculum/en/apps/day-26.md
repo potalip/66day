@@ -7,7 +7,7 @@ summary: "Give your app's AI two real functions to call over your data, with a c
 estMinutes: 90
 resources:
   - "https://docs.anthropic.com/en/docs/build-with-claude/tool-use"
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
 tasks:
   - id: d26-apps-t1

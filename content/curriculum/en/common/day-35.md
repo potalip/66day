@@ -8,7 +8,7 @@ estMinutes: 40
 rest: true
 badges: [phase-2]
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
 tasks:
   - id: d35-t1
     type: reflect

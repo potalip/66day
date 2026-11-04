@@ -9,7 +9,7 @@ boss: true
 badges: [boss-build]
 resources:
   - "https://www.remotion.dev/docs/"
-  - "https://docs.manim.community/"
+  - "https://docs.manim.community/en/stable/"
   - "https://github.com/SYSTRAN/faster-whisper"
   - "https://yandex.cloud/ru/docs/speechkit/"
 tasks:

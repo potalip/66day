@@ -6,8 +6,8 @@ title: "Evals: prove your AI feature works"
 summary: "Build a 20-case test set for your AI feature, score it with code and an AI judge, then change the prompt and compare."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://vitest.dev/"
 tasks:
   - id: d47-apps-t1

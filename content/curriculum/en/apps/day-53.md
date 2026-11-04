@@ -6,9 +6,9 @@ title: "The first two minutes decide everything"
 summary: "A stranger opens your capstone and gets real value in under two minutes, on a phone, with every state looking deliberate."
 estMinutes: 120
 resources:
-  - https://playwright.dev/
-  - https://developer.mozilla.org/en-US/docs/Learn
-  - https://tailwindcss.com/docs
+  - "https://playwright.dev/"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
+  - "https://tailwindcss.com/docs"
 tasks:
   - id: d53-apps-t1
     type: build

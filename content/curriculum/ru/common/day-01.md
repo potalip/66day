@@ -7,7 +7,8 @@ summary: "Ставишь ИИ-агента для кода и вместе с н
 estMinutes: 75
 badges: [hello-agent]
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://www.youtube.com/watch?v=AJpK3YTTKZ4"
+  - "https://code.claude.com/docs/en/overview"
   - "https://developer.mozilla.org/ru/docs/Learn"
 tasks:
   - id: d01-t1

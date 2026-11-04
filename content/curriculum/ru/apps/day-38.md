@@ -8,7 +8,7 @@ estMinutes: 90
 resources:
   - "https://git-scm.com/book/ru/v2"
   - "https://git-scm.com/docs/git-worktree"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
 tasks:
   - id: d38-apps-t1
     type: read
