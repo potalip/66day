@@ -248,3 +248,20 @@ Fixes:
    "Level" only to the owner, and visitors get "Started <date>". Owners still see everything.
 5. The 404 page now offers "Start your 66 days" / «Начать свои 66 дней».
 6. At 390px the 56px avatar sits inline next to the name, and the 72px avatar shows from `sm:` up.
+
+**Round 4b: game items 6–7 + curriculum round-3 copy (`curriculum-to-learn.md`)**
+- `<WeeklyQuests />` sits on Today below the day content. It loads on its own, so placing it there can't shift the lesson.
+  Quest awards come back as extra `xp` awards with `label`s, and the celebration already shows them.
+- Certificate: the portfolio header links to `/:lang/certificate/:userId` (verified).
+- Onboarding copy:
+  - "Days 1–14 are shared; on day 12 you try both tracks…" (both languages).
+  - "Most days take 1–2 hours; every 7th day is a short rest day."
+  - The 30-min option now says some days take two or three sittings.
+  - 90 min is labelled "Recommended" and is the default.
+  - The finish screen says "Find about 75 minutes today" / «около полутора часов».
+- Text and link proof inputs show "Never paste passwords or API keys." / «Никогда не вставляй пароли и API-ключи.»
+- RU uses «Босс-день» everywhere in learn.
+- The day 12 celebration asks "Day 12 is your track decision — staying on X?" with two buttons: "Keep my track" and
+  "Switch track: Y" (`PATCH /api/progress/profile`).
+- `> **Answers:**` / `> **Ответы:**` callouts collapse like `<details>`, so answers aren't spoiled (test added).
+- Item 11: only day 65 shows "spread over the day". The curriculum confirms it's the only day that truly spans 24 hours.
