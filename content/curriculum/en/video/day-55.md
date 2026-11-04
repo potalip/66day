@@ -37,8 +37,10 @@ in the wild, with real thumbnails competing for real attention.
 
 - **Series:** episode 1 public, episode 2 scheduled for later this week, and a vertical short cut from episode 1 to
   bring people in.
-- **Tool:** the tool is open to the public (with limits), with a small gallery of 3 outputs it made, and a short demo.
-- **Showreel:** the reel is public on a platform plus a page or post where a potential client can contact you.
+- **Tool:** the tool is open to the public with hard limits (a few renders per person per day, a spend cap set on
+  every API key it uses), plus a small gallery of 3 outputs it made and a short demo.
+- **Showreel:** your finished pieces (3+) are public as a playlist or a simple page, with a way for a potential client
+  to contact you. The 60–90-second reel itself gets cut on day 58 and leads the launch on day 65.
 
 Two numbers matter most at this stage. **Views** tell you if the packaging (title + thumbnail + first seconds) works.
 **Retention** — average percentage viewed, or how many people are still watching at 30 seconds — tells you if the
@@ -74,7 +76,8 @@ Make:
    one contrast frame from the best moment. Text max 4 words, readable at phone size.
 3. A 20–30 s vertical (1080x1920) short cut of the strongest moment, with captions in the safe zone and the hook in
    the first 2 s, ending with "full episode on my channel".
-Done when: files are in out/premiere/, QC is clean on every video, and you show me the titles side by side.
+Done when: the chosen title and description sit in runs/<capstone>/01/metadata.json, thumbnails in its thumbs/,
+the short in runs/<capstone>/premiere/, QC is clean on every video, and you show me the titles side by side.
 ```
 
 Pick the title and thumbnail you'd click on a tired evening — then check the thumbnail at phone size (shrink it to
@@ -82,11 +85,16 @@ Pick the title and thumbnail you'd click on a tired evening — then check the t
 
 ### 1:05 — Publish
 
-Use the upload script from day 36 — this time `public`, not `unlisted`:
+Use the upload script from day 36. This time set `"privacy": "public"` in the output's metadata.json instead of
+unlisted:
 
 ```bash
-python upload.py out/premiere/episode-01.mp4 --meta out/premiere/episode-01.json --privacy public
+python upload_youtube.py runs/<capstone>/01 --dry-run
+python upload_youtube.py runs/<capstone>/01
 ```
+
+Remember the day 36 gotcha: if your Google Cloud project is still unverified, the API locks uploads to private. Then
+upload the premiere by hand in YouTube Studio today; the audit takes longer than one evening.
 
 Schedule episode 2 for later in the week. Upload the short natively on Shorts, Reels or TikTok — platforms prefer
 native uploads to links. **Proof for task 1:** the public link to your main output.

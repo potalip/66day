@@ -54,7 +54,7 @@ A good capstone, whichever shape:
   with rest days and the earning block (days 56–60) in between. Scope for 70% of your energy; the last 30% goes to polish and things breaking.
 - **Shows range.** It should use at least three things from days 29–47 (AI clips, dubbing, clipping, QC, publishing API).
 
-Examples: a 6-episode explainer series "Money basics in 60 seconds" in English and Spanish; a Telegram bot that turns
+Examples: a 5-episode explainer series "Money basics in 60 seconds" in English and Spanish; a Telegram bot that turns
 a podcast episode into three captioned shorts; a reel for three local businesses (gym promo, café menu loop,
 dentist explainer).
 

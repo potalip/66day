@@ -67,9 +67,15 @@ it's where you park every shiny idea (payments, teams, a mobile app) so v1 actua
 
 ### 1. Write the spec with your agent (25 min)
 
-Your app lives in `~/66/apps/main-app`, the empty folder you set up on day 14 (no folder yet? create it now). Every
-apps lesson from here on says "your repo" and means this folder. Open your coding agent there (Claude Code or any other
-agent — Codex CLI, Gemini CLI, Cursor all work), and make it interview you instead of guessing.
+Your app lives in `~/66/apps/main-app`, the folder from day 14; today it becomes its own repo. Every apps lesson from
+here on says "your repo" and means this folder:
+
+```bash
+mkdir -p ~/66/apps/main-app && cd ~/66/apps/main-app
+```
+
+Open your coding agent there (Claude Code or any other agent — Codex CLI, Gemini CLI, Cursor all work), and make it
+interview you instead of guessing.
 
 ```text
 Goal: help me write a one-page spec for a small web app. Do NOT write any code today.
@@ -110,8 +116,7 @@ Constraints:
   how to run it, and our working rules: "explain your plan before coding and wait for OK; small commits;
   after every change run the app and tell me exactly how you verified it".
 - .gitignore must include node_modules, dist, .env and .dev.vars.
-- This folder is its own git repository: run git init here if needed. If the parent ~/66/apps is also a git repo,
-  add main-app/ to the parent's .gitignore so the two don't get tangled.
+- This folder is its own git repository: run git init here if it isn't one yet.
 
 Before you run anything, list the commands you plan to run and the files you will create, then wait for my OK.
 When done: run the build, start the dev server, tell me the local URL, and show me `git status` and `git log --oneline`.
@@ -128,7 +133,8 @@ gh repo create jobjar --public --source=. --remote=origin --push
 
 `--private` is fine too if you'd rather not show the code yet.
 
-> **If you're stuck:** if `npm run dev` fails, paste the *whole* error into the agent with "Reproduce this, explain the
+> **If you're stuck:** on Windows, if PowerShell refuses to run `npm`/`npx` scripts, fix the execution policy as on
+> day 11. If `npm run dev` fails, paste the *whole* error into the agent with "Reproduce this, explain the
 > cause in one sentence, then fix it". If Tailwind classes do nothing, the agent probably used an outdated setup —
 > ask it to compare with the current Tailwind docs for Vite.
 

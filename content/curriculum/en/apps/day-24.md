@@ -101,6 +101,7 @@ Now try to break in. Use two separate browser profiles (or one normal and one pr
    Cookies) into a terminal variable — it's a password, so don't paste it anywhere else — and run:
 
 ```bash
+read -rs B_COOKIE   # paste name=value of the session cookie, press Enter (input stays hidden)
 curl -i https://<your-app>/api/jobs/37 -H "Cookie: $B_COOKIE"
 curl -i -X PATCH https://<your-app>/api/jobs/37 -H "Cookie: $B_COOKIE" \
   -H "Content-Type: application/json" -d '{"title":"hacked"}'
@@ -118,7 +119,7 @@ Explain the root cause first, then fix it everywhere the same pattern appears, a
 reproduces it, and re-run my two-account test commands to prove it's fixed.
 ```
 
-> **Safety:** a session cookie is as good as a password. Delete the terminal variable afterwards and never post
+> **Safety:** a session cookie is as good as a password. Delete the terminal variable afterwards (`unset B_COOKIE`) and never post
 > cookies in screenshots or chats.
 
 ## Quiz: authentication or authorization?

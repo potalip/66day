@@ -34,7 +34,9 @@ tasks:
 
 Your app has three real users now. That changes everything: from today, a bug isn't your problem, it's *their* problem.
 And your agent changes dozens of lines per request, so "I clicked around and it seemed fine" doesn't scale anymore.
-Today you get a safety net that runs by itself on every push.
+You already have a few Vitest tests from days 18, 24 and 26 (the schema, the fallback parser, the two-account leak,
+the confirm step). Today you check that they can actually fail, add the ones that are missing, and get a safety net
+that runs by itself on every push.
 
 ## What a test actually is
 
@@ -64,7 +66,8 @@ Open your app's code with the agent and ask what's risky:
 
 ```text
 Goal: find the 3–5 functions in this repo most worth unit-testing.
-Context: this is my main app (React + Vite front end, API, database, AI feature with structured output).
+Context: this is my main app (React + Vite front end, API on Cloudflare Workers + D1, AI feature with structured
+output). Some Vitest tests already exist; list them first and say which ones could never fail.
 Constraints: prefer pure functions with business rules, validation and parsing. Ignore UI styling.
 Done when: you list each function with file path, why a bug there would hurt users, and 2–3 cases to test
 (including one edge case and one invalid input). Don't write any code yet.
@@ -74,14 +77,15 @@ Read the list. Cross out anything that's really testing a library. Keep three.
 
 ### 2. Let the agent write the tests (30 min)
 
-If your project is JavaScript/TypeScript, use **Vitest** (it shares config with Vite). If your backend is Python, use **pytest**.
+Your app is TypeScript, so it's **Vitest** (it shares config with Vite). If you built the bot in Python with aiogram,
+its tests use **pytest**.
 
 ```text
 Goal: add unit tests for the 3 functions we agreed on.
-Context: use Vitest (already a Vite project) — or pytest for the Python part.
+Context: Vitest, already set up in this Vite project (pytest only for a Python bot).
 Constraints:
 - No mocking of the function under test. Mock only network and the AI API.
-- Each test name says the rule in plain words, e.g. "rejects a booking that ends before it starts".
+- Each test name says the rule in plain words, e.g. "rejects a deadline that is before the posting date".
 - At least one edge case and one invalid input per function.
 - Add an "npm test" script that runs once and exits (vitest run), not watch mode.
 Done when: npm test passes locally and you show me the output.
@@ -126,7 +130,7 @@ No secrets needed: tests must use fixtures, not real API keys.
 Done when: the workflow file is committed and you explain each step in one line.
 ```
 
-It will look roughly like this:
+It will look roughly like this (the agent may pick newer major versions of the actions; that's fine):
 
 ```yaml
 name: CI

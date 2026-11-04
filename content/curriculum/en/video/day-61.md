@@ -80,7 +80,7 @@ your three tiers with price, turnaround and what's included, plus one line on ho
 
 ```text
 Goal: a one-page [service page / template pack sales page] for my video pipeline, deployed as a static site.
-Context: my pipeline README, out/ (finished videos), my day 52 time/cost numbers, and these tiers: [paste].
+Context: my pipeline README, runs/<capstone>/ and runs/ (finished videos), my day 52 time/cost numbers, and these tiers: [paste].
 Sections, in order:
 1. Hero: who it's for + the outcome in one line + one autoplaying muted 10-s loop of my best output.
 2. Examples: 3 videos (embed or mp4 with poster frames, lazy-loaded), each with one line of context.

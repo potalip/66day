@@ -77,12 +77,15 @@ they're the default here. Check contrast: `fg` on `bg` should be easy to read on
 
 ### 1. Build the kit
 
-Use whatever you rendered your day-27 explainer with. Remotion is the smoothest fit (components are literally React
-components), but the same structure works in Python with pycairo.
+Start from the name, colours and font you wrote down on day 18. The config lives in `pipeline/brand/brand.json`, the
+single source every renderer reads; the components live wherever you rendered your day-27 explainer. Remotion is the
+smoothest fit (components are literally React components, and they can import the JSON), but the same structure works in
+Python with pycairo.
 
 ```text
 Goal: a brand kit in my video project: brand/brand.json + three reusable components + a sample sheet.
-Context: my video workspace (Remotion project | Python + pycairo renderer). Paste of my brand.json below.
+Context: ~/66/video/pipeline/ and my renderer (Remotion project in ~/66/video/remotion | Python + pycairo).
+Paste of my brand.json below.
 Build:
 - A typed loader for brand.json (zod or TypeScript type in Remotion; dataclass in Python) that fails loudly on a missing key.
 - Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — all colours, fonts, sizes,
@@ -110,7 +113,7 @@ changing config values, not component code. Upload the sample sheet.
 ### 2. Re-skin an old video
 
 Pick your day-27 explainer or yesterday's edit. First, let the agent swap its hard-coded titles and colours for your new
-components (a one-time refactor). Then create a second config, `brand/brand-alt.json`: a completely different palette,
+components (a one-time refactor) and commit that. Then create a second config, `brand/brand-alt.json`: a completely different palette,
 another font pair, a snappier `enter` preset. Render the same video with it:
 
 ```text
@@ -118,7 +121,7 @@ Add a --brand flag (or BRAND env var) to my render command so I can render any c
 brand/brand-alt.json. Then render my explainer with brand-alt.json to out/explainer-alt.mp4. Do not change any component.
 ```
 
-Run `git diff --stat` before rendering: only the JSON file should be new. Upload `explainer-alt.mp4`.
+Run `git status` before rendering: since the refactor is committed, the only new file should be the JSON. Upload `explainer-alt.mp4`.
 
 > **Tip:** a second config is also your first product. "Here's your explainer in your brand colours" is something
 > small businesses happily pay for. You'll see that on day 39.

@@ -56,10 +56,12 @@ Steps:
 2. Make my pipeline accept --format formats/<capstone>.json and use it for every stage.
 3. Run the whole pipeline for output #1 (topic/input: <...>). Do not hand-edit the render; if something
    is wrong, fix the stage or the format file and re-run.
-4. Run the QC stage on the result; save the report next to the video.
-5. Log every manual intervention I make (what, which stage, minutes) to out/<capstone>/01/manual.log.
-Done when: out/<capstone>/01/ has the mp4 (all formats in the spec), the QC report and manual.log.
+4. Run the QC stage (qc.py from day 47) on the result; its report lands next to the video.
+5. Log every manual intervention I make (what, which stage, minutes) to runs/<capstone>/01/manual.log.
+Done when: runs/<capstone>/01/ has the mp4 (all formats in the spec), the QC report and manual.log.
 ```
+
+Everything lands in the same `runs/` folder your pipeline has used since day 33, one subfolder per output.
 
 For a **tool** capstone, "output #1" is the tool producing a video from a real user's input, through its real
 interface (form, bot or CLI), not from your test fixture. For a **showreel**, it's the first piece finished at client

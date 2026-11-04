@@ -59,7 +59,7 @@ capstone-v1.0/
 
 ```text
 Goal: final masters and delivery files for every launch video, in a clean folder structure.
-Context: the pipeline config, out/ (current renders), the day 62 trailer, my channel plan.
+Context: formats/<capstone>.json, runs/<capstone>/ (current renders), the day 62 trailer, my channel plan.
 Do:
 1. Re-render every launch video from the pipeline at master quality (ProRes 422 HQ .mov, or H.264 at CRF 16 if
    ProRes is impractical), with the exact final config. Name them <slug>_master.<ext>.

@@ -38,6 +38,10 @@ For eighteen days you've built parts: TTS on day 22, captions on 23, a screenwri
 they become a machine. You type `make-video "why cats knock things off tables"` and, a few minutes later, a finished,
 branded, captioned, scored video appears. This is what our Studio does — and by tonight you'll have your own.
 
+You've built a small version before: `day27/make.py` chained your scripts for one hand-written `plan.json`. Call that
+**v0**. Today it grows up into **v1**: a real command named `make-video` that lives in `~/66/video/pipeline/`, takes
+any topic, writes its own storyboard and caches every stage. Same idea, fewer hard-wired paths.
+
 ## Stages, caching, failure
 
 A **pipeline** is a chain of stages where each one reads files and writes files:
@@ -76,7 +80,8 @@ Don't ask the agent for all eight stages in one go. First the skeleton with fake
 ```text
 Goal: a CLI `make-video "topic"` that runs an 8-stage video pipeline (brief, storyboard, voice, visuals, edit,
 captions, music, render) and writes everything to runs/<slug>/.
-Context: my video workspace already has: storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23),
+Context: ~/66/video/pipeline/ (and the dayNN/ folders next to it) already has: day27/make.py (v0 of this — reuse its
+stage logic), storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23),
 edit.py with EDL (day 30), brand kit components (day 32), gen_clips.py (day 29), music mixing (day 20). Read them first
 and list what each one's inputs and outputs are before writing code.
 Step 1 only: build the orchestrator with each stage as a function stub that writes a placeholder file.
@@ -96,8 +101,8 @@ small verified steps.
 > timestamp, a temp path, a random seed. Ask the agent to print the key's ingredients. If a stage never reruns after you
 > changed it, bump its `STAGE_VERSION`.
 
-> **No API key?** Every stage needs a fallback: fixture storyboard, a local TTS like Piper or a pre-recorded VO, template
-> visuals instead of AI clips. The pipeline must finish end to end with zero keys. Print "AI not configured" and carry on.
+> **No API key?** Every stage needs a fallback: a fixture storyboard, the offline voice from your day-22 `tts.py`
+> (`say`, `espeak-ng`) or a pre-recorded VO, template visuals instead of AI clips. The pipeline must finish end to end with zero keys. Print "AI not configured" and carry on.
 
 ### 2. The real run
 

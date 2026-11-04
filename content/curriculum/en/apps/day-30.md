@@ -73,7 +73,8 @@ small separate project. Either way:
 
 ```text
 Goal: an internal dashboard page at /tools/orders.
-Context: data/orders.csv (columns listed in the header). Our stack: React + Vite, our existing API and database.
+Context: data/orders.csv (columns listed in the header). Our stack: React + Vite front end, API on Cloudflare Workers + D1;
+the new table comes as a migration, like on day 17.
 Constraints:
 - Upload CSV in the browser; parse it (Papa Parse is fine); show a preview of the first 10 rows and a list of
   problems found (bad dates, non-numeric prices, duplicates) before importing.

@@ -59,12 +59,9 @@ yesterday's prompt; send "what's due this week?" and it answers. Today we keep i
 
 1. In Telegram, open **@BotFather** (check the blue verified tick), send `/newbot`, pick a display name and a
    username ending in `bot` (e.g. `jobjar_helper_bot`).
-2. Copy the token straight into a `.env` file in a new `bot/` folder of your repo — not into any chat:
-
-```bash
-mkdir bot && cd bot
-echo "BOT_TOKEN=paste-here" > .env
-```
+2. In your repo (`main-app`), create a `bot/` folder and inside it a file named `.env` — in your code editor, not in a
+   chat. Paste the token as one line: `BOT_TOKEN=123456:ABC...`, no quotes, no spaces. (Creating the file in an
+   editor rather than with `echo` also avoids a Windows PowerShell quirk that saves it in an encoding Node can't read.)
 
 3. Make sure `.env` is in your `.gitignore` (`git status` must not show it). Then ask the agent:
 

@@ -34,8 +34,7 @@ tasks:
 ---
 
 Right now only one person on Earth can use your pipeline: you, in a terminal. Tomorrow a client might want to type a topic
-and get a video without ever seeing a command line. Today you build the front door. This is exactly how our own Studio
-works: a request becomes a job, a worker renders it, the result comes back.
+and get a video without ever seeing a command line. Today you build the front door — the way our own Studio works.
 
 ## Jobs, queues, progress
 
@@ -46,7 +45,7 @@ the request. Instead:
    asked, topic, options, `status = queued`. It answers immediately: "Got it, you're #2 in line."
 2. **The queue** is just that table, ordered by time. No special software needed at this scale — SQLite is plenty.
 3. **A worker** — a separate process — takes the oldest queued job, marks it `running`, runs `make-video`, and updates
-   the job's `stage` and `progress` as it goes (your pipeline already writes `run.json` per stage; the worker reads it).
+   the job's `stage` and `progress` from your pipeline's `run.json`.
 4. When it finishes, the job becomes `done` with a path to the file, or `failed` with an error. The front door delivers
    the video or a human-readable apology.
 
@@ -65,9 +64,19 @@ Three rules that save you from real pain:
 
 ### 1. Pick your front door
 
-A **web form** (FastAPI or a small Node server with a plain HTML page) is the most client-friendly: a link anyone opens.
-A **Telegram bot** (grammY in TypeScript or aiogram in Python; create it with @BotFather in two minutes) is the fastest to build,
-because sending a video back is one API call. Choose one; the queue and worker are the same either way.
+**Default: a web form.** One small FastAPI app (Python, like your pipeline) serving one HTML page: a link anyone can
+open. The agent writes one server file and one template.
+
+**Option: a Telegram bot**, if your clients live in Telegram. You haven't built one on this track, so:
+
+1. In Telegram, message @BotFather, send `/newbot`, pick a name and a username ending in `bot`. You get a token like
+   `123456789:AA…`. It's the bot's password: put it in `.env` as `TELEGRAM_BOT_TOKEN`, never in code or a chat.
+2. Use **aiogram** or **python-telegram-bot**, so the bot shares Python and the jobs database with your worker.
+3. Run it with **long polling**: the bot keeps asking Telegram for new messages, so it works from your laptop with no
+   public URL or webhook.
+4. Make `/start` reply before you add anything else.
+
+The queue and worker are the same either way.
 
 ### 2. Build it
 
@@ -77,7 +86,7 @@ Context: pipeline from days 33-34 (make-video CLI, writes runs/<slug>/run.json p
 Build:
 - jobs table: id (random, unguessable), requester, topic, options JSON, status (queued|running|done|failed),
   stage, progress 0-100, error, attempts, created_at, started_at, finished_at, result_path.
-- Front door: a form with topic, length (30/45/60 s), format (16:9 / 9:16), brand (my brand files) — or bot commands
+- Front door (bot: aiogram or python-telegram-bot, long polling, token from .env): a form with topic, length (30/45/60 s), format (16:9 / 9:16), brand (my brand files) — or bot commands
   /new <topic>, /status, /cancel. Validate input; reject topics over 120 chars. Reply instantly with the job id and queue position.
 - worker.py: separate process, claims the oldest queued job atomically (UPDATE ... WHERE status='queued' ... RETURNING),
   runs make-video as a subprocess with a 20-minute timeout, updates stage/progress from run.json every few seconds.

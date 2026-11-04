@@ -105,7 +105,7 @@ worst thing you notice — only one — and re-render; the cache makes it fast. 
 > and make a 50-second video. A finished 50 seconds beats an unfinished 60.
 
 > **Tip:** run `python day27/make.py` once more after everything works, in a clean terminal. If it runs start to
-> finish without you touching anything, you've built a pipeline, not just a video.
+> finish without you touching anything, you've built a pipeline, not just a video. Keep `make.py`: on day 33 it grows into a proper `make-video` command.
 
 ## Step 3 — publish (20 min)
 
