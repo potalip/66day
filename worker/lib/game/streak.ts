@@ -38,15 +38,17 @@ export function applyActivity(s: StreakState, day: string): StreakChange {
     const missed = daysBetween(s.lastDay, day) - 1;
     if (missed === 0) streak = s.streak + 1;
     else if (missed <= freezes) {
+      // Frozen days count as kept days (curriculum rule for streak badges).
       freezesUsed = missed;
       freezes -= missed;
-      streak = s.streak + 1;
+      streak = s.streak + missed + 1;
     } else {
       restarted = s.streak > 0;
     }
   }
   let freezeEarned = false;
-  if (streak % FREEZE_EVERY === 0 && freezes < MAX_FREEZES) {
+  const prevStreak = streak === 1 ? 0 : s.streak;
+  if (Math.floor(streak / FREEZE_EVERY) > Math.floor(prevStreak / FREEZE_EVERY) && freezes < MAX_FREEZES) {
     freezes++;
     freezeEarned = true;
   }

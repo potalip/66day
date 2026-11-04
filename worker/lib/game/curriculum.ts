@@ -1,6 +1,6 @@
-// OWNER: game agent. Read-only view of the generated curriculum (owned by the learn agent).
-// The file may not exist yet — import.meta.glob returns {} then, and every lookup degrades gracefully.
-import type { CurriculumDay } from "../../../shared/types";
+// OWNER: game agent. Read-only view of the generated curriculum (owned by the learn agent; built on predev/prebuild/pretest).
+// If the file doesn't exist, import.meta.glob returns {} and every lookup degrades gracefully.
+import type { CurriculumDay, DayTrack, TaskType, Track } from "../../../shared/types";
 
 const files = import.meta.glob("../../../shared/curriculum.generated.json", { eager: true, import: "default" }) as Record<string, unknown>;
 
@@ -21,36 +21,59 @@ export function extractDays(root: unknown): CurriculumDay[] {
 }
 
 export interface CurriculumIndex {
-  /** day numbers that are boss days (any track/lang) */
-  bossDays: Set<number>;
-  /** task ids whose type is "ship" */
-  shipTasks: Set<string>;
-  /** badges listed per day (union over tracks/langs) */
-  dayBadges: Map<number, string[]>;
-  /** titles for boss days / ship tasks, per lang */
+  /** "<track>:<day>" (track = common|apps|video) for boss days */
+  boss: Set<string>;
+  /** "<track>:<day>" for rest days */
+  rest: Set<string>;
+  /** task id → type (ids are language-independent) */
+  taskType: Map<string, TaskType>;
+  /** "<track>:<day>" → badge ids listed on that day file */
+  dayBadges: Map<string, string[]>;
+  /** titles for boss days ("day:<n>:<track>") and ship tasks ("task:<id>"), per lang */
   titles: Map<string, { en?: string; ru?: string }>;
-  /** total XP of all non-optional tasks for one track (apps) — used to sanity-check the level curve */
-  totalTaskXp: number;
+  /** total XP of all required tasks per track (en) — used to calibrate/check the level curve */
+  totalTaskXp: Partial<Record<Track, number>>;
 }
 
 export function buildIndex(days: CurriculumDay[]): CurriculumIndex {
-  const idx: CurriculumIndex = { bossDays: new Set(), shipTasks: new Set(), dayBadges: new Map(), titles: new Map(), totalTaskXp: 0 };
+  const idx: CurriculumIndex = { boss: new Set(), rest: new Set(), taskType: new Map(), dayBadges: new Map(), titles: new Map(), totalTaskXp: {} };
   for (const d of days) {
+    const k = `${d.track}:${d.day}`;
     if (d.boss) {
-      idx.bossDays.add(d.day);
-      const k = `day:${d.day}:${d.track}`;
-      idx.titles.set(k, { ...idx.titles.get(k), [d.lang]: d.title });
+      idx.boss.add(k);
+      idx.titles.set(`day:${d.day}:${d.track}`, { ...idx.titles.get(`day:${d.day}:${d.track}`), [d.lang]: d.title });
     }
-    if (d.badges?.length) idx.dayBadges.set(d.day, [...new Set([...(idx.dayBadges.get(d.day) ?? []), ...d.badges])]);
+    if (d.rest) idx.rest.add(k);
+    if (d.badges?.length) idx.dayBadges.set(k, [...new Set([...(idx.dayBadges.get(k) ?? []), ...d.badges])]);
     for (const t of d.tasks ?? []) {
-      if (t.type === "ship") {
-        idx.shipTasks.add(t.id);
-        idx.titles.set(`task:${t.id}`, { ...idx.titles.get(`task:${t.id}`), [d.lang]: t.title });
+      idx.taskType.set(t.id, t.type);
+      if (t.type === "ship") idx.titles.set(`task:${t.id}`, { ...idx.titles.get(`task:${t.id}`), [d.lang]: t.title });
+      if (d.lang === "en" && !t.optional) {
+        for (const tr of d.track === "common" ? (["apps", "video"] as const) : [d.track]) idx.totalTaskXp[tr] = (idx.totalTaskXp[tr] ?? 0) + (t.xp ?? 0);
       }
-      if (d.lang === "en" && d.track !== "video" && !t.optional) idx.totalTaskXp += t.xp ?? 0;
     }
   }
   return idx;
+}
+
+/** Day lookup for a student: the common day if it exists, else the one for their track. */
+export function dayKeyFor(idx: CurriculumIndex, day: number, track: Track | null): string[] {
+  const keys: string[] = [`common:${day}`];
+  if (track) keys.push(`${track}:${day}`);
+  else keys.push(`apps:${day}`, `video:${day}`);
+  return keys;
+}
+
+export const isBossDay = (idx: CurriculumIndex, day: number, track: Track | null) => dayKeyFor(idx, day, track).some((k) => idx.boss.has(k));
+export const isRestDay = (idx: CurriculumIndex, day: number, track: Track | null) => dayKeyFor(idx, day, track).some((k) => idx.rest.has(k));
+export const badgesForDay = (idx: CurriculumIndex, day: number, track: Track | null) =>
+  track ? [...new Set(dayKeyFor(idx, day, track).flatMap((k) => idx.dayBadges.get(k) ?? []))] : idx.dayBadges.get(`common:${day}`) ?? [];
+export function bossTitle(idx: CurriculumIndex, day: number, track: Track | null) {
+  for (const t of ["common", track, "apps", "video"] as (DayTrack | null)[]) {
+    const v = t && idx.titles.get(`day:${day}:${t}`);
+    if (v) return v;
+  }
+  return {};
 }
 
 export const CURRICULUM: CurriculumIndex = buildIndex(extractDays(Object.values(files)[0]));

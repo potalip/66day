@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../env";
 import type { GameEvent } from "../../shared/types";
-import { onGameEvent } from "../lib/game";
+import { onGameEvent, onLessonViewed } from "../lib/game";
 import { badgeCatalog, getLeaderboard, getMe, getProfile, type Period, type TrackFilter } from "../lib/game/queries";
 import { syncTrack, loadStats } from "../lib/game/store";
 import { seedDemo, clearDemo } from "../lib/game/seed";
@@ -58,12 +58,44 @@ game.put("/timezone", async (c) => {
   return c.json({ ok: true, tz });
 });
 
+/**
+ * The client reports which lesson language was opened (zero XP; powers the secret "polyglot" badge).
+ * Prefer calling `onLessonViewed()` server-side where the lesson is served; this endpoint is the client fallback.
+ */
+game.post("/lesson-viewed", async (c) => {
+  const body = await c.req.json<{ day?: number; lang?: string }>().catch(() => ({}) as { day?: number; lang?: string });
+  const day = Number(body.day);
+  if (!Number.isInteger(day) || day < 1 || day > 66 || (body.lang !== "en" && body.lang !== "ru")) return c.json({ error: "invalid" }, 400);
+  return c.json({ awards: await onLessonViewed(c.env, c.get("userId"), day, body.lang) });
+});
+
 // ---- dev only -------------------------------------------------------------------------------
 /** Fire a game event for the current user (dev only — in prod, events come from the learn/library/studio routes). */
 game.post("/dev/event", async (c) => {
   if (!isDev(c.env)) return c.json({ error: "not_found" }, 404);
   const ev = await c.req.json<GameEvent>();
   return c.json({ awards: await onGameEvent(c.env, c.get("userId"), ev) });
+});
+
+/**
+ * Move the current user's game history N days into the past (pair with POST /api/progress/dev/time-travel)
+ * so the next action happens on a "new day" — for demoing streaks, freezes and recaps.
+ */
+game.post("/dev/time-travel", async (c) => {
+  if (!isDev(c.env)) return c.json({ error: "not_found" }, 404);
+  const b = await c.req.json<{ days?: number }>().catch(() => ({}) as { days?: number });
+  const days = Math.max(1, Math.min(66, Math.round(Number(b.days) || 1)));
+  const id = c.get("userId");
+  const shift = `-${days} days`;
+  const db = c.env.DB;
+  await db.batch([
+    db.prepare("UPDATE game_events SET created_at = created_at - ?, local_day = date(local_day, ?) WHERE user_id = ?").bind(days * 86400, shift, id),
+    db.prepare("UPDATE game_activity SET day = 'x' || day WHERE user_id = ?").bind(id),
+    db.prepare("UPDATE game_activity SET day = date(substr(day, 2), ?) WHERE user_id = ?").bind(shift, id),
+    db.prepare("UPDATE game_stats SET streak_last_day = date(streak_last_day, ?) WHERE user_id = ? AND streak_last_day IS NOT NULL").bind(shift, id),
+    db.prepare("UPDATE game_badges SET awarded_at = awarded_at - ? WHERE user_id = ?").bind(days * 86400, id),
+  ]);
+  return c.json(await getMe(db, id));
 });
 
 game.post("/dev/seed", async (c) => {

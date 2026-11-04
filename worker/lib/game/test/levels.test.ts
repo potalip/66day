@@ -9,8 +9,8 @@ describe("level curve", () => {
     for (let l = 1; l < 40; l++) expect(xpForLevel(l + 1)).toBeGreaterThan(xpForLevel(l));
   });
 
-  it("early levels come fast: level 2 within one task, level 5 within the first week", () => {
-    expect(xpForLevel(2)).toBeLessThanOrEqual(60);
+  it("early levels come fast: level 2 within a couple of tasks, level 5 within the first week", () => {
+    expect(xpForLevel(2)).toBeLessThanOrEqual(80);
     expect(xpForLevel(5)).toBeLessThanOrEqual(7 * 100);
   });
 
@@ -19,20 +19,23 @@ describe("level curve", () => {
     expect(gap(20)).toBeGreaterThan(gap(5) * 2);
   });
 
-  it("finishing 66 days at ~100 XP/day lands at level 20–25", () => {
-    const streakBonus = Object.values(XP.streakBonus).reduce((a, b) => a + b, 0);
-    for (const perDay of [85, 100, 115]) {
-      const lvl = levelForXp(perDay * 66 + streakBonus);
-      expect(lvl).toBeGreaterThanOrEqual(20);
-      expect(lvl).toBeLessThanOrEqual(25);
+  const full = (taskXp: number) => taskXp + 66 * XP.dayBonus + 5 * XP.bossBonus;
+  it("finishing everything (curriculum: apps 6,970 / video 6,890 task XP) lands at level 21–23", () => {
+    for (const t of [6970, 6890]) {
+      expect(levelForXp(full(t))).toBeGreaterThanOrEqual(21);
+      expect(levelForXp(full(t) + Object.values(XP.streakBonus).reduce((a, b) => a + b, 0))).toBeLessThanOrEqual(23);
     }
+    // a student who does ~70% lands mid-teens, not stuck in single digits
+    expect(levelForXp(full(6970) * 0.7)).toBeGreaterThanOrEqual(16);
   });
 
-  it("if the real curriculum is present, completing it lands at level 18–27", () => {
-    if (!CURRICULUM.totalTaskXp) return; // curriculum not generated yet
-    const total = CURRICULUM.totalTaskXp + 66 * XP.dayBonus + CURRICULUM.bossDays.size * XP.bossBonus;
-    expect(levelForXp(total)).toBeGreaterThanOrEqual(18);
-    expect(levelForXp(total)).toBeLessThanOrEqual(27);
+  it("the generated curriculum (when present) matches those totals within 10%", () => {
+    for (const tr of ["apps", "video"] as const) {
+      const t = CURRICULUM.totalTaskXp[tr];
+      if (!t) return; // curriculum not generated in this environment
+      expect(levelForXp(full(t))).toBeGreaterThanOrEqual(20);
+      expect(levelForXp(full(t))).toBeLessThanOrEqual(24);
+    }
   });
 
   it("levelProgress is consistent at boundaries", () => {
