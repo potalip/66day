@@ -19,6 +19,7 @@ const en = {
 
   // Today
   todayTitle: "Today",
+  changeTrack: "change",
   hello: (name: string | null) => (name ? `Hi, ${name}` : "Hi there"),
   progressLabel: (done: number, total: number) => `${done} of ${total} days done`,
   xpEarned: "XP from tasks",
@@ -139,6 +140,7 @@ const ru: Strings = {
   track: { common: "Для всех", apps: "Приложения", video: "Видео" },
 
   todayTitle: "Сегодня",
+  changeTrack: "сменить",
   hello: (name) => (name ? `Привет, ${name}` : "Привет"),
   progressLabel: (done, total) => `Пройдено ${done} из ${total} дней`,
   xpEarned: "XP за задания",

@@ -1,5 +1,5 @@
 // OWNER: learn. Today: the day you should work on now, or a calm "done for today" / "finished" state.
-import { Navigate } from "react-router";
+import { Link, Navigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { useDay, useOverview, type Overview } from "./data";
 import { DayView, LearnKeyframes } from "./DayView";
@@ -23,7 +23,7 @@ export default function Today() {
 
   return (
     <div className="mx-auto max-w-6xl">
-      <TodayHeader s={s} o={o} />
+      <TodayHeader s={s} o={o} lang={lang} />
       {o.status === "finished" ? (
         <Finished s={s} lang={lang} />
       ) : o.status === "waiting" ? (
@@ -47,13 +47,16 @@ export default function Today() {
   );
 }
 
-function TodayHeader({ s, o }: { s: LearnStrings; o: Overview }) {
+function TodayHeader({ s, o, lang }: { s: LearnStrings; o: Overview; lang: "ru" | "en" }) {
   const phase = o.program.phases.find((p) => o.nextDay && o.nextDay >= p.days[0] && o.nextDay <= p.days[1]);
   return (
     <section className="mb-8 border-b border-line pb-6" aria-label={s.todayTitle}>
       <div className="flex flex-wrap items-end justify-between gap-4">
         <div>
-          <p className="text-sm text-muted">{s.hello(o.profile?.name ?? null)}</p>
+          <p className="text-sm text-muted">
+            {s.hello(o.profile?.name ?? null)}
+            {o.profile && <> · <Link to={`/${lang}/start`} className="hover:text-fg hover:underline">{s.track[o.profile.track]} · {s.changeTrack}</Link></>}
+          </p>
           <p className="mt-0.5 text-lg font-semibold tracking-tight">
             {o.nextDay ? s.dayOf(o.nextDay, o.totalDays) : s.dayOf(o.totalDays, o.totalDays)}
             {phase && <span className="font-normal text-muted"> · {phase.title}</span>}
@@ -76,7 +79,7 @@ function TodayHeader({ s, o }: { s: LearnStrings; o: Overview }) {
 function DoneForToday({ s, lang, o, lastDone }: { s: LearnStrings; lang: "ru" | "en"; o: Overview; lastDone: number }) {
   const next = o.nextDay ? o.cells[o.nextDay - 1] : null;
   return (
-    <div className="mx-auto grid max-w-3xl gap-4">
+    <div className="mx-auto grid max-w-3xl grid-cols-1 gap-4">
       <Card className="p-6 sm:p-8">
         <div className="mb-4 grid size-12 place-items-center rounded-full bg-accent-soft text-accent"><Icon.check size={24} strokeWidth={3} /></div>
         <h1 className="text-2xl font-semibold tracking-tight">{s.doneForToday}</h1>
@@ -101,7 +104,7 @@ function DoneForToday({ s, lang, o, lastDone }: { s: LearnStrings; lang: "ru" | 
           </p>
         </Card>
       )}
-      <div className="grid gap-3 sm:grid-cols-2">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <p className="sr-only">{s.meanwhile}</p>
         <ButtonLink to={`/${lang}/library`} variant="secondary" className="!h-auto justify-start py-4"><Icon.book size={18} />{s.meanwhileLibrary}</ButtonLink>
         <ButtonLink to={`/${lang}/studio`} variant="secondary" className="!h-auto justify-start py-4"><Icon.play size={18} />{s.meanwhileStudio}</ButtonLink>

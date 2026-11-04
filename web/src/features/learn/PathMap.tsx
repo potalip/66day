@@ -49,7 +49,7 @@ export default function PathMap() {
         </Card>
       )}
 
-      <div className="grid gap-10">
+      <div className="grid grid-cols-1 gap-10">
         {o.program.phases.map((p) => {
           const cells = o.cells.filter((c) => c.day >= p.days[0] && c.day <= p.days[1]);
           const done = cells.filter((c) => c.access === "done").length;

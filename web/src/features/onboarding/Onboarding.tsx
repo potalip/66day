@@ -186,7 +186,7 @@ function Welcome({ s, headingRef }: { s: OnboardingStrings; headingRef: React.Re
       <p className="mb-4 inline-flex items-center gap-2 rounded-full bg-accent-soft px-3 py-1 text-sm font-medium text-accent"><Icon.leaf size={15} />{s.welcome.kicker}</p>
       <h1 ref={headingRef} tabIndex={-1} className="max-w-[18ch] text-[clamp(2rem,6vw,3.25rem)] leading-[1.05] font-semibold tracking-tight text-balance outline-none">{s.welcome.title}</h1>
       <p className="mt-4 max-w-[52ch] text-lg text-muted text-pretty">{s.welcome.body}</p>
-      <ul className="mt-8 grid gap-3 sm:grid-cols-3">
+      <ul className="mt-8 grid grid-cols-1 gap-3 sm:grid-cols-3">
         {s.welcome.points.map(([t, b], i) => (
           <li key={t} className="rounded-[var(--radius)] border border-line bg-surface p-4">
             <span className="mb-3 grid size-8 place-items-center rounded-lg bg-surface-2 text-sm font-semibold text-accent">{i + 1}</span>
@@ -203,7 +203,7 @@ function TrackStep({ s, headingRef, track, setTrack }: { s: OnboardingStrings; h
   return (
     <fieldset>
       <legend className="contents"><StepTitle headingRef={headingRef} title={s.track.title} body={s.track.body} /></legend>
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
         {(["apps", "video"] as const).map((t) => {
           const d = s.track[t];
           const on = track === t;
@@ -222,7 +222,7 @@ function TrackStep({ s, headingRef, track, setTrack }: { s: OnboardingStrings; h
               <span className="text-xl font-semibold">{d.name}</span>
               <span className="mt-1 text-muted">{d.tagline}</span>
               <span className="mt-4 mb-2 text-xs font-semibold tracking-wide text-muted uppercase">{s.track.youBuild}</span>
-              <ul className="grid gap-1.5 text-sm">
+              <ul className="grid grid-cols-1 gap-1.5 text-sm">
                 {d.builds.map((b) => <li key={b} className="flex gap-2"><Icon.check size={15} className="mt-0.5 shrink-0 text-accent" />{b}</li>)}
               </ul>
               <span className="mt-4 border-t border-line pt-3 text-sm text-muted">{d.honest}</span>
@@ -240,7 +240,7 @@ function TimeStep({ s, headingRef, minutes, setMinutes, goal, setGoal, goalNote,
 }) {
   const opt = "flex cursor-pointer rounded-xl border-2 bg-surface p-4 transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-accent";
   return (
-    <div className="grid gap-10">
+    <div className="grid grid-cols-1 gap-10">
       <fieldset>
         <legend className="contents"><StepTitle headingRef={headingRef} title={s.time.title} body={s.time.body} /></legend>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
@@ -255,7 +255,7 @@ function TimeStep({ s, headingRef, minutes, setMinutes, goal, setGoal, goalNote,
       </fieldset>
       <fieldset>
         <legend className="mb-4 text-xl font-semibold tracking-tight">{s.time.goalTitle}</legend>
-        <div className="grid gap-2 sm:grid-cols-2">
+        <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
           {GOALS.map((g) => (
             <label key={g} className={cx(opt, "items-center gap-3 py-3", goal === g ? "border-accent" : "border-line hover:border-muted/40")}>
               <input type="radio" name="goal" value={g} checked={goal === g} onChange={() => setGoal(g)} className="sr-only" />

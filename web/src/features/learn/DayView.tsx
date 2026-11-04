@@ -97,7 +97,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
         {day.resources.length > 0 && (
           <section className="mt-10 max-w-[70ch]" aria-labelledby="res-h">
             <h2 id="res-h" className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">{s.resources}</h2>
-            <ul className="grid gap-2">
+            <ul className="grid grid-cols-1 gap-2">
               {day.resources.map((r) => (
                 <li key={r}>
                   {/^https?:/.test(r) ? (
@@ -121,7 +121,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
             <h2 id="tasks-h" className="scroll-mt-24 text-lg font-semibold">{s.tasks}</h2>
             <span className="text-sm text-muted" aria-live="polite">{s.tasksProgress(doneCount, day.tasks.length)}</span>
           </div>
-          <ol className="grid gap-3">
+          <ol className="grid grid-cols-1 gap-3">
             {day.tasks.map((t) => (
               <TaskItem key={t.id} s={s} lang={lang} day={day.day} task={t} state={tasks[t.id]} dayDone={dayDone}
                 onSubmitted={onSubmitted} onUnchecked={onUnchecked} onError={(m) => showToast(m)} />
@@ -306,7 +306,7 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   const field = "w-full rounded-lg border border-line bg-bg px-3 py-2 text-[15px] placeholder:text-muted/70 focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20";
 
   return (
-    <form onSubmit={onFormSubmit} className="mt-2 grid gap-2" noValidate>
+    <form onSubmit={onFormSubmit} className="mt-2 grid grid-cols-1 gap-2" noValidate>
       <label htmlFor={id} className="text-xs text-muted">{s.proofHint[task.proof]}</label>
       {task.proof === "text" && (
         <textarea id={id} value={text} onChange={(e) => setText(e.target.value)} rows={3} maxLength={5000} placeholder={s.textPlaceholder}
