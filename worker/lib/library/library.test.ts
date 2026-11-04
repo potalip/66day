@@ -209,4 +209,8 @@ describe("pipelineSteps / attentionReason", () => {
     const f = pipelineSteps({ ...base, status: "failed" }, {}, new Set(["created"]));
     expect(attentionReason(f)).toBe("failed");
   });
+  it("seeded published resources (no ingest events) count as fetched, not spinning", () => {
+    const seeded = pipelineSteps({ ...base, status: "published", transcriptState: "not_applicable" }, { ru: "ready", en: "ready" }, new Set(["seed"]));
+    expect(st(seeded)).toMatchObject({ fetch: "done", transcript: "skip", publish: "done" });
+  });
 });

@@ -7,7 +7,8 @@ export interface PipelineStep { key: "fetch" | "transcript" | `lesson_${LibLang}
 
 export function pipelineSteps(r: Pick<Resource, "status" | "sourceType" | "transcriptState" | "aiState" | "audience">,
   materials: Partial<Record<LibLang, MaterialState>>, seenSteps: Set<string>): PipelineStep[] {
-  const fetched = r.sourceType === "upload" || seenSteps.has("metadata");
+  // Seeded/hand-made resources never ran ingest; anything already in review or published has its metadata.
+  const fetched = r.sourceType === "upload" || seenSteps.has("metadata") || r.status === "review" || r.status === "published";
   const fetch: StepState = r.status === "failed" && !fetched ? "error" : fetched ? "done" : "active";
 
   const transcript: StepState =

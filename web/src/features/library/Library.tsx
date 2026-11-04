@@ -73,7 +73,7 @@ export default function Library() {
             className="h-12 w-full rounded-[var(--radius)] border border-line-strong bg-surface pl-11 pr-4 text-base text-fg placeholder:text-muted/80 transition-[border-color,box-shadow] focus:border-accent focus:outline-none focus:ring-3 focus:ring-accent/20"
           />
         </label>
-        <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 sm:mx-0 sm:flex-wrap sm:px-0" role="group" aria-label={s.filters.track}>
+        <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1 [mask-image:linear-gradient(to_right,black_85%,transparent)] sm:mx-0 sm:flex-wrap sm:px-0 sm:[mask-image:none]" role="group" aria-label={s.filters.track}>
           <Chip active={!f.track} onClick={() => set("track", "")}>{s.all}</Chip>
           {TRACKS.map((t) => <Chip key={t} active={f.track === t} onClick={() => set("track", f.track === t ? "" : t)}>{s.track[t]}</Chip>)}
           <span className="mx-1 w-px shrink-0 self-stretch bg-line" aria-hidden />
@@ -106,7 +106,7 @@ export default function Library() {
                       {c.description && <p className="mt-0.5 text-sm text-muted">{c.description}</p>}
                     </div>
                   </div>
-                  <div className="-mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 sm:mx-0 sm:px-0">
+                  <div className="no-scrollbar -mx-4 flex snap-x gap-4 overflow-x-auto px-4 pb-2 [mask-image:linear-gradient(to_right,black_88%,transparent)] sm:mx-0 sm:px-0">
                     {c.items.map((r) => <div key={r.id} className="w-[72%] shrink-0 snap-start sm:w-64"><ResourceCardView r={r} compact /></div>)}
                   </div>
                 </section>

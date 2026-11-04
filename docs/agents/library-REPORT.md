@@ -1,5 +1,67 @@
 # Library + smart resource pipeline — report
 
+## Round 2 (founder intake, media worker, kit)
+
+### Founder's daily flow (`/:lang/admin`)
+1. **Add resources**: paste any text with links. A server-side preview (`POST /api/pipeline/check`, the same parser as
+   intake) lists every link with its type and marks ones **already in the library** (with a link to them); ✕ skips one.
+   Batch settings apply to all links: tracks, level, lesson languages, **curriculum days**, and a note for Claude.
+2. **Live batch tracker** next to the paste box (`GET /api/pipeline/batch?ids=`). Each resource shows five steps,
+   Fetch → Transcript → RU lesson → EN lesson → Publish, each one done / in progress / needs you / failed / skipped /
+   "your turn", plus a one-line instruction when the founder must act ("needs a transcript…", "starter draft only…").
+   Step logic is in `worker/lib/library/progress.ts`, with tests. The batch is remembered in localStorage.
+3. **Pipeline board**: status filters with counts, a compact stepper per row, the attention line, live refresh while
+   anything runs, and **multi-select bulk actions** (publish / unpublish / rebuild / delete) via `POST /api/admin/bulk`.
+4. **Review**: RU | EN editors side by side as before, plus a **review queue** ("2 of 5 in review", previous / next,
+   **Publish & next**) and a **curriculum-aware day picker**. It shows real day titles from the learn area's
+   `/api/curriculum/program`, with Common / Apps / Video tabs, and falls back to a number input if that's unavailable.
+5. **Guide** tab: a short how-to in EN and RU (the four moves, what to do when something needs you, a 2-minute lesson
+   checklist, tips).
+6. Claude now also gets the **real curriculum day titles** (lazy import of learn's compiled content), so suggested days
+   match actual lessons. RU prompt terminology is aligned with the program («ИИ-агент», not «coding-агент»).
+
+### Media worker (`media-worker/`, Python)
+FastAPI service: `POST /v1/transcribe` (bearer, 202 + in-memory queue). Each job:
+- downloads the uploaded file from the Worker, or audio only via yt-dlp for platforms in `YTDLP_SOURCES` (default `youtube`;
+  Instagram is off because of the login wall and its terms);
+- converts with ffmpeg to 16 kHz mono mp3 in 20-min parts;
+- transcribes with the OpenAI API, faster-whisper or the `fake` backend;
+- joins segments into paragraphs and calls back with retries, always (ok or a readable error).
+
+Includes a Dockerfile, README (local run, AWS App Runner/ECS deploy, costs), and 11 pytest tests (real ffmpeg, fake
+backend). **Verified end to end locally**: upload without transcript → Worker → media worker → source download → callback
+→ transcript saved → lessons queued.
+**Not verified**: `docker build`, because the sandbox has no Docker daemon. The Dockerfile is standard python-slim + ffmpeg.
+
+### Design QA (`docs/requests/design-to-library.md`), all addressed
+- Cards and resource page show **video length** (▶ 4 min) separately from **lesson time** ("Lesson 25 min").
+- RU copy uses «ИИ-агент». Seed JSON fixed, and **`0302_library_seed_refresh.sql`** re-syncs untouched fixtures in
+  existing DBs (only rows with `origin='fixture' AND edited=0`). Generator: `seed/build-refresh-sql.mjs`.
+- Fade mask on horizontal scrollers on mobile.
+- Library and admin now use `@web/ui` (Button, Chip, Badge, Card, Field / Input / Select, EmptyState, Skeleton, Spinner,
+  PageHeader, AiNotice, Segmented, Toast, Checkbox) and lucide icons. `Thumb` stays local.
+
+### How to test round 2
+```bash
+npm run db:migrate:local && npm run dev
+# /en/admin (token dev-admin) → Add resources → paste a mixed batch (YouTube + reel + article + one already in the library)
+# watch "This batch"; open a row → Review → day picker, Publish & next; Pipeline tab → select several → Publish
+cd media-worker && python3 -m venv .venv && .venv/bin/pip install -r requirements-dev.txt && .venv/bin/pytest -q
+MEDIA_WORKER_TOKEN=devtoken TRANSCRIBE_BACKEND=fake .venv/bin/uvicorn app.main:app --port 8790
+# + MEDIA_WORKER_URL / MEDIA_WORKER_TOKEN / PUBLIC_BASE_URL in .dev.vars (see media-worker/README.md), restart dev, upload a video
+npx vitest run --config worker/lib/library/vitest.config.ts   # 30 tests (whole repo: npm test)
+```
+
+### Still open
+- The media worker's queue is in memory (a restart loses in-flight jobs; the founder can re-fetch). Move to SQS if volume
+  grows.
+- The live Claude path still hasn't run in the sandbox (no key). It's covered by the injected-call tests.
+- `GET /api/pipeline/media-worker/source/:id` still passes through `anonUser` (see `docs/requests/library-to-orchestrator.md`).
+
+---
+
+## Round 1
+
 Branch `agent/library` · PR #4. Everything in this report runs locally with no `ANTHROPIC_API_KEY`.
 
 ## What's built
