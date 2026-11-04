@@ -50,8 +50,8 @@ function useResource<T>(key: string | null, fetcher: () => Promise<T>) {
   return { data, error, loading, reload: load, setData };
 }
 
-export function useOverview(lang: Lang) {
-  return useResource(`ov:${lang}`, () => call<Overview>(`/progress?lang=${lang}`));
+export function useOverview(lang: Lang, withDay = false) {
+  return useResource(`ov:${lang}:${withDay}`, () => call<Overview>(`/progress?lang=${lang}${withDay ? "&withDay=1" : ""}`));
 }
 
 export function useDay(lang: Lang, day: number | null) {
