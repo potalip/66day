@@ -31,5 +31,5 @@ hides the other track's badges, and the new built-ins `public-builder` and `poly
 `worker/lib/game/badges.ts` and `quests.json`:
 1. **`polyglot` RU:** «Прочитал один и тот же урок на двух языках.» is masculine. Make it «Один и тот же урок — на двух языках.»
 2. **`tasks-50` RU:** «…— это уже портфолио.» over-claims; a portfolio is days 57–58. Make it «Пятьдесят закрытых заданий — это уже солидный багаж.», which matches EN "a body of work".
-3. **`q-apps-helper` RU description** in `quests.json`: «…чему научился сам.» is masculine. Make it «Помоги новичку и расскажи, что понял за это время.» (I updated quests.md to match.)
+3. **`q-apps-helper` RU description** in `quests.json`: «…чему научился сам.» is masculine. Make it «Помоги новичку: объяснять — лучший способ понять.» (I updated quests.md to match.)
 4. **Legacy badge ids:** a dev user who earned `first-day` / `boss-1` before they left the catalog sees the raw ids as badge titles on the profile. If any real user could hold them, keep them as hidden legacy entries with copy, or skip unknown ids when rendering.
