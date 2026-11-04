@@ -110,12 +110,11 @@ export function reduce(prev: GameState, ev: AnyGameEvent, ctx: EventCtx): Outcom
       xp = Number.isFinite(raw) ? Math.max(0, Math.min(XP.taskMax, Math.round(raw))) : 0;
       c.tasks++;
       const type = cur.taskType.get(ev.taskId);
-      if (type === "ship") {
-        c.ships++;
-        if (hour < 4) c.nightShips++;
-      }
+      if (type === "ship") c.ships++;
+      // Night shift (secret): any task after midnight, before 05:00 local. (Counter name kept for stored state.)
+      if (hour < 5) c.nightShips++;
       if (type === "share") c.shares++;
-      if (hour >= 4 && hour < 7) c.earlyBird++;
+      if (hour >= 5 && hour < 7) c.earlyBird++;
       break;
     }
     case "day.completed": {

@@ -55,6 +55,9 @@ const B = (
  * night-owl, polyglot) are fallbacks only — content copy wins when the file is present.
  */
 export const BUILTIN_BADGES: BadgeDef[] = [
+  B("first-step", "craft", 199, "seed", ["First Step", "Chose a path and showed up."], ["Первый шаг", "Путь выбран, первый шаг сделан."]),
+  B("first-ship", "craft", 204, "rocket", ["It's Alive", "Shipped something real."], ["Оно живое!", "Что-то настоящее вышло в мир."]),
+  B("first-render", "craft", 205, "play", ["First Render", "Rendered your first video."], ["Первый рендер", "Первое видео отрендерено."]),
   B("first-task", "craft", 200, "check", ["First Task", "Finished your very first task."], ["Первое задание", "Самое первое задание закрыто."]),
   B("tasks-50", "craft", 201, "stack", ["Fifty Tasks", "Fifty finished tasks. That's a body of work."], ["Пятьдесят заданий", "Пятьдесят закрытых заданий — это уже портфолио."]),
   B("public-builder", "craft", 202, "📢", ["Building in Public", "Ten public posts about your work."], ["Строю публично", "Десять публичных постов о своей работе."]),
@@ -70,7 +73,7 @@ export const BUILTIN_BADGES: BadgeDef[] = [
   B("level-5", "level", 500, "star", ["Level 5", "Reached level 5."], ["Уровень 5", "Пятый уровень взят."]),
   B("level-10", "level", 501, "star", ["Level 10", "Reached level 10."], ["Уровень 10", "Десятый уровень взят."]),
   B("level-20", "level", 502, "star", ["Level 20", "Reached level 20."], ["Уровень 20", "Двадцатый уровень взят."]),
-  B("night-owl", "secret", 600, "🦉", ["Night Shift", "Shipped something in the dead of night. Now go to sleep."], ["Ночная смена", "Задеплоил что-то глубокой ночью. А теперь — спать."], true),
+  B("night-owl", "secret", 600, "🦉", ["Night Shift", "Finished a task after midnight. Now go to sleep."], ["Ночная смена", "Задание закрыто после полуночи. А теперь — спать."], true),
   B("polyglot", "secret", 601, "🗣️", ["Polyglot", "Read the same lesson in both languages."], ["Полиглот", "Прочитал один и тот же урок на двух языках."], true),
   B("early-bird", "secret", 602, "sunrise", ["Early Bird", "Finished a task before 7 a.m. The quiet hours are yours."], ["Жаворонок", "Задание закрыто до семи утра. Тихие часы — твои."], true),
   B("well-rested", "secret", 603, "moon", ["Well Rested", "Took three rest days seriously. Recovery is part of the work."], ["Восстановление", "Три дня отдыха — честно и всерьёз. Отдых — тоже часть работы."], true),
@@ -78,6 +81,9 @@ export const BUILTIN_BADGES: BadgeDef[] = [
 
 /** Rule-based badges: id → predicate. Content day badges have no entry here (they come with day.completed). */
 export const BADGE_RULES: Record<string, (x: RuleCtx) => boolean> = {
+  "first-step": (x) => !!x.c.onboarded,
+  "first-ship": (x) => x.c.ships >= 1, // also awarded by the day-2 file
+  "first-render": (x) => x.c.renders >= 1, // also awarded by the video day-15 file
   "first-task": (x) => x.c.tasks >= 1,
   "tasks-50": (x) => x.c.tasks >= 50,
   "public-builder": (x) => x.c.shares >= 10,
@@ -92,7 +98,7 @@ export const BADGE_RULES: Record<string, (x: RuleCtx) => boolean> = {
   "level-5": (x) => x.level >= 5,
   "level-10": (x) => x.level >= 10,
   "level-20": (x) => x.level >= 20,
-  "night-owl": (x) => x.c.nightShips >= 1,
+  "night-owl": (x) => x.c.nightShips >= 1, // any task 00:00–04:59 local (content rule)
   polyglot: (x) => x.c.polyglot >= 1,
   "early-bird": (x) => x.c.earlyBird >= 1,
   "well-rested": (x) => x.c.rests >= 3,
@@ -110,7 +116,7 @@ interface ContentBadge {
   secret?: boolean;
 }
 
-const SECRET_PREFIX = /^\s*secret[.:]?/i;
+const SECRET_RE = /\bsecret\b/i;
 /** Content descriptions of secret badges start with "Secret badge: …" — the grid already says it's secret. */
 const stripSecret = (s: string) => s.replace(/^(secret badge|секретный значок)\s*:\s*/i, "").replace(/^./, (c) => c.toUpperCase());
 
@@ -121,7 +127,7 @@ export function mergeCatalog(content: unknown): BadgeDef[] {
   list.forEach((cb, i) => {
     if (!cb || typeof cb.id !== "string" || !BADGE_ID.test(cb.id)) return;
     const prev = byId.get(cb.id);
-    const secret = !!(cb.secret ?? (cb.rule && SECRET_PREFIX.test(cb.rule))) || !!prev?.secret;
+    const secret = !!(cb.secret ?? (cb.rule && SECRET_RE.test(cb.rule))) || !!prev?.secret;
     const desc = (l: Lang) => cb.description?.[l] ?? (l === "ru" ? cb.description?.en : undefined) ?? prev?.description[l] ?? "";
     const dayMatch = cb.rule?.match(/day\s+(\d{1,2})/i);
     byId.set(cb.id, {
