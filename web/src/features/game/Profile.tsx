@@ -110,7 +110,7 @@ function ProfileView({ p, today }: { p: PublicProfile; today: string }) {
         <Heatmap cells={p.activity} today={today} />
       </Card>
 
-      <BadgeGrid catalog={catalog} earned={p.badges} />
+      <BadgeGrid catalog={catalog} earned={p.badges} track={p.track} />
 
       <Card padding="lg" as="section" aria-labelledby="g-shipped">
         <SectionTitle title={<span id="g-shipped">{P.shipped}</span>} className="mb-2" />
@@ -214,20 +214,21 @@ function NameLine({ p, name }: { p: PublicProfile; name: string }) {
   );
 }
 
-function BadgeGrid({ catalog, earned }: { catalog: BadgeInfo[] | null; earned: EarnedBadge[] }) {
+function BadgeGrid({ catalog, earned, track }: { catalog: BadgeInfo[] | null; earned: EarnedBadge[]; track: PublicProfile["track"] }) {
   const s = useStrings(strings);
   const P = s.profile;
   const lang = useLang();
   const got = useMemo(() => new Map(earned.map((b) => [b.id, b.awardedAt])), [earned]);
   const groups = useMemo(() => {
     if (!catalog) return [];
-    const all = [...catalog];
+    // Hide the other track's badges unless already earned (e.g. before a track switch).
+    const all = catalog.filter((b) => !track || !b.tracks?.length || b.tracks.includes(track) || got.has(b.id));
     for (const b of earned) if (!all.some((c) => c.id === b.id)) all.push({ id: b.id, icon: "medal", title: { en: b.id, ru: b.id }, description: { en: "", ru: "" }, group: "program", secret: false });
     const order = ["program", "streak", "craft", "rhythm", "level", "secret"];
     const m = new Map<string, BadgeInfo[]>();
     for (const b of all) m.set(b.group, [...(m.get(b.group) ?? []), b]);
     return [...m.entries()].sort((a, b) => order.indexOf(a[0]) - order.indexOf(b[0]));
-  }, [catalog, earned]);
+  }, [catalog, earned, track, got]);
   const total = groups.reduce((n, [, l]) => n + l.length, 0);
   const [sel, setSel] = useState<string | null>(null);
 
