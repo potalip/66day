@@ -5,8 +5,8 @@ import { cn } from "./cn";
  * Hover/focus tooltip for short hints. The trigger gets aria-describedby. Esc hides it.
  * Don't put essential info only in a tooltip (touch users rarely see it).
  */
-export function Tooltip({ content, children, side = "top", className }: {
-  content: ReactNode; children: ReactElement<Record<string, unknown>>; side?: "top" | "bottom"; className?: string;
+export function Tooltip({ content, children, side = "top", align = "center", className }: {
+  content: ReactNode; children: ReactElement<Record<string, unknown>>; side?: "top" | "bottom"; align?: "start" | "center" | "end"; className?: string;
 }) {
   const [open, setOpen] = useState(false);
   const id = useId();
@@ -18,9 +18,10 @@ export function Tooltip({ content, children, side = "top", className }: {
       onKeyDown={(e) => { if (e.key === "Escape") hide(); }}>
       {cloneElement(children, { "aria-describedby": id })}
       <span role="tooltip" id={id} className={cn(
-        "pointer-events-none absolute left-1/2 z-50 w-max max-w-[240px] -translate-x-1/2 rounded-lg bg-fg px-2.5 py-1.5 text-xs font-medium leading-snug text-bg shadow-card transition-[opacity,transform] duration-150",
+        "pointer-events-none absolute z-50 w-max max-w-[240px] rounded-lg bg-fg px-2.5 py-1.5 text-xs font-medium leading-snug text-bg shadow-card ",
         side === "top" ? "bottom-full mb-2" : "top-full mt-2",
-        open ? "opacity-100" : cn("opacity-0", side === "top" ? "translate-y-1" : "-translate-y-1"),
+        align === "center" ? "left-1/2 -translate-x-1/2" : align === "start" ? "left-0" : "right-0",
+        open ? "animate-fade-in" : "hidden", // hidden content still feeds aria-describedby
         className,
       )}>{content}</span>
     </span>
