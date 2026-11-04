@@ -48,8 +48,9 @@ A **Progressive Web App** is your normal website plus three things:
 The browser sees a valid manifest and HTTPS and offers "Install app"; the service worker makes offline work.
 
 > **Important — iOS is different.** On iPhone there's no automatic install prompt. The user opens the Share menu and
-> taps **Add to Home Screen**. Push notifications work on iOS only for apps that were added this way (iOS 16.4+), and
-> Safari can clear a PWA's cached data if it isn't used for a while. Design for this: show a small "How to install on
+> taps **Add to Home Screen**. Push notifications work on iOS only for apps that were added this way (iOS 16.4+).
+> Storage is fragile too: Safari can wipe a plain website's stored data after about a week without a visit, and
+> even a home-screen app can lose its cache when the phone runs low on space. Design for this: show a small "How to install on
 > iPhone" hint, and never treat the offline cache as the only copy of anything important.
 
 ## What "basic offline" means today
@@ -102,8 +103,8 @@ activated). Go to the **Network** tab, set throttling to **Offline**, reload. Th
 
 > **If you're stuck:** "Service worker not registering" almost always means you're on plain `http://` on a device
 > other than localhost, or the worker file is served from a subfolder and can't control `/`. Paste the exact
-> DevTools error to your agent. If an old version keeps showing up, tick **Update on reload** in the Service workers
-> panel — and remember your users don't have that checkbox, which is why step 5 matters.
+> DevTools error to your agent. Old version keeps showing up? Tick **Update on reload** in the Service workers
+> panel — your users don't have that checkbox, which is why step 5 matters.
 
 ### 3. Install it on a real phone (10 min)
 
@@ -135,9 +136,8 @@ Screenshot your home screen with the icon visible — that's your proof. Bonus: 
 ## Reflect: app store, PWA or bot?
 
 You now have three ways to reach a phone: a PWA, your Telegram bot, and (in theory) a native app. In 4–6 sentences:
-for **your** users, which one would they actually open every day, and why? Think about who they are: a nurse
-checking a schedule between shifts wants an icon; a group of friends splitting bills already lives in a chat; a
-fitness tracker that needs step counts in the background really does need native.
+for **your** users, which one would they actually open every day, and why? A nurse checking shifts wants an icon; friends
+splitting bills already live in a chat; a step counter running in the background really does need native.
 
 ## You're done when…
 

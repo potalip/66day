@@ -112,6 +112,9 @@ Write down every moment they pause, scroll back, or ask "wait, what do I…?". T
 will collect this week. **Proof for task 3:** where they hesitated, how long the first run took, and the one change
 you'd make first.
 
+> **Build log:** add a `## Day 53` entry to `docs/BUILDLOG.md` — first-run time before → after, and the
+> hesitation you saw. Two lines keep the thread you started on day 51 unbroken.
+
 ## You're done when…
 
 - [ ] A stopwatch first run on a phone takes under 2 minutes; the commit link is pasted.

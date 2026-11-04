@@ -96,7 +96,8 @@ cp .env.example .dev.vars    # or .env, depending on your stack
 npm install && npm run db:migrate:local && npm run dev
 ```
 
-Then ask the agent to rename the app, change the demo form to fit the new idea, and deploy. Stop the timer when the
+No `gh` CLI? Click **Use this template** on GitHub instead and clone the new repo as on day 2. On Windows, run
+these in Git Bash (or PowerShell 7, which understands `&&`). Then ask the agent to rename the app, change the demo form to fit the new idea, and deploy. Stop the timer when the
 new project is **live on a URL** with sign-in working. Under 15 minutes? Excellent. Over? Write down exactly which
 step ate the time — that's the next thing to automate (often a `setup` script that asks 3 questions and fills in names).
 

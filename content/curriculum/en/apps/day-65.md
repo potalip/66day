@@ -116,7 +116,7 @@ Hotfix during launch. Bug: [what the user said + steps]. Make the smallest possi
 before and passes after, run all tests, then stop and show me the diff. No refactors, no other changes.
 ```
 
-Then `git tag -a v1.0.1 -m "Hotfix: …"` and deploy.
+Then `git tag -a v1.0.1 -m "Hotfix: …"`, `git push origin v1.0.1`, and deploy.
 
 > **If you're stuck:** the app is down and you don't know why? Roll back to `v1.0.0` first, post "Back up — I'm
 > looking into what happened", then investigate calmly. A 5-minute outage with an honest note is forgiven. A 2-hour
@@ -138,7 +138,8 @@ List what broke and how it was fixed. Format: a markdown table + bullets. Don't 
 ```
 
 Check every number yourself — agents can misread a query. Add one line comparing it to your day 64 success
-definition. **Proof for task 2:** the report.
+definition, and one comparing the real AI cost with your `docs/COSTS.md` estimate from day 52. Paste the report
+into `docs/BUILDLOG.md` as its final entry — it's the raw material for your case study on day 66. **Proof for task 2:** the report.
 
 Finally, the thank-you post: *thanks* (name helpers who are happy to be named), *numbers* (honest, small is fine),
 *what I learned* (three lessons), *what's next* (v1.1 or "I'm taking projects like this"). **Proof for task 3:** the link.

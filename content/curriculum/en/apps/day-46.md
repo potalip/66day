@@ -78,7 +78,8 @@ Start with **push-to-talk** (hold a button to speak). It sidesteps silence detec
 
 ```text
 Goal: a voice page /voice in my app for one job: <your one-sentence job>.
-Flow: hold-to-talk button records the mic with MediaRecorder (webm/opus) -> POST to /api/voice ->
+Flow: hold-to-talk button records the mic with MediaRecorder (pick a supported type with
+MediaRecorder.isTypeSupported: webm/opus in Chrome, mp4/AAC in iPhone Safari) -> POST to /api/voice ->
 server: STT (<provider or faster-whisper>) -> LLM with this system prompt: <paste> and the last 6 turns ->
 TTS (<provider>) -> stream audio back and play it immediately.
 Requirements:
@@ -96,8 +97,8 @@ Test it on your phone, then record a 30–60 second screen recording **with soun
 
 > **If you're stuck:** no microphone on the phone? You're on `http://` — the browser only allows the mic on HTTPS
 > or localhost. iPhone Safari won't play the reply? Audio playback must start from a user gesture; let the agent
-> "unlock" an audio element on the first button press. Garbled transcripts usually mean the wrong audio format —
-> ask the agent to log the file type the STT API received.
+> "unlock" an audio element on the first button press. Garbled transcripts or a 400 from STT usually mean the wrong audio
+> format — iPhones record mp4, not webm. Ask the agent to log the file type the STT API received.
 
 ### 3. Measure and speed it up (30 min)
 

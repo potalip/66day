@@ -48,12 +48,12 @@ for you on launch morning. One folder (or one page in your repo, `launch/`), con
 
 ### 1. Let the agent build the kit from what exists (45 min)
 
-Your README, spec and beta notes already contain the story. Point the agent at them:
+Your README, `docs/CAPSTONE.md` and `docs/BUILDLOG.md` already contain the story. Point the agent at them:
 
 ```text
 Goal: create a launch kit in ./launch for my capstone.
-Context: read README.md, docs (spec from day 50), CHANGELOG or git log, and launch/beta-notes.md (my beta table
-and quotes). The live URL is [url].
+Context: read README.md, docs/CAPSTONE.md (spec from day 50), docs/BUILDLOG.md (my beta table, quotes and day-55
+metrics) and the git log. The live URL is [url].
 Make:
 1. launch/copy.md — name, tagline (max 60 chars, 5 options), 2-sentence description, 150-word maker story in first
    person, 3 social variants (X/Threads, LinkedIn, a community post). Plain words, no hype, no invented numbers:
@@ -87,9 +87,9 @@ morning. A quick map:
 
 | Channel | Best for | Rules to respect |
 |---|---|---|
-| Product Hunt | consumer and maker tools | The day runs on Pacific time; launching early in that day gives you the full 24 h. Don't ask for upvotes — ask for feedback. |
-| Show HN | things people can try right now | Title starts with "Show HN:". No sign-up wall if you can avoid it; be in the comments, answer technical questions plainly. Read the Show HN guidelines. |
-| Reddit | niche communities where your users are | Each subreddit has its own self-promotion rules — many need you to be an active member first. Read the sidebar; when in doubt, message the mods. |
+| Product Hunt | consumer and maker tools | The day runs on Pacific time; launching early in that day gives you the full 24 h. Create your account and draft the listing today, not on launch morning. Don't ask for upvotes — ask for feedback. |
+| Show HN | things people can try right now | Title starts with "Show HN:". No sign-up wall if you can avoid it; be in the comments, answer technical questions plainly. Never ask friends to upvote or comment — HN penalises voting rings. Post from an account that has joined discussions before, not one made that morning. Read the Show HN guidelines. |
+| Reddit | niche communities where your users are | Each subreddit has its own self-promotion rules — many need you to be an active member first. Read the sidebar; when in doubt, message the mods. Asking for upvotes breaks Reddit's site-wide rules. |
 | X / Threads / LinkedIn | your own audience and network | A thread with the story and the GIF; tag no one who didn't help. |
 | YouTube | a 2–3 min walkthrough | Works long after launch day; link it everywhere. |
 

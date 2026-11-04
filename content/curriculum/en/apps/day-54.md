@@ -76,13 +76,15 @@ Done when: I trigger all 4 events myself on the deployed app and see them in the
 
 ### 3. Log who did what (20 min, spread across the day)
 
-As testers come in, keep a simple table in your notes:
+As testers come in, keep a simple table under a `## Day 54` heading in `docs/BUILDLOG.md` (you'll reuse it
+for the launch kit on day 62):
 
 | Tester | Got to value? | Time | Where they stuck | Quote |
 |---|---|---|---|---|
 | Sam | yes | 1:40 | didn't find "save" | "I'd use this on Sundays" |
 
-**Proof for task 1:** paste the table (first names or initials only — no private data).
+**Proof for task 1:** paste the table (first names or initials only — no private data). Then reread your day-50
+kill criteria in `docs/CAPSTONE.md`: if one has fired, today is the day to cut, as you promised yourself.
 
 > **If you're stuck:** two testers by evening and the rest silent? Send one polite nudge ("no pressure — even 3
 > minutes helps"). Still short? Ask in a community you're part of, or in the program chat — other students are
@@ -110,7 +112,7 @@ who see their feedback land become your loudest supporters on launch day. **Proo
 ### 5. Write the "not now" list (5 min)
 
 Some feedback is real and still shouldn't be fixed before launch: a feature only one person wants, a redesign, a
-"could it also do X". Write them down, with a reason each. This isn't laziness — it's scope control, and it protects
+"could it also do X". Add them to `docs/LATER.md`, with a reason each. This isn't laziness — it's scope control, and it protects
 launch day. **Proof for task 3:** your list plus the one item it hurts most to postpone.
 
 ## You're done when…

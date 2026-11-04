@@ -114,13 +114,13 @@ Paste it.
 ### 5. Reflect: what did you cut? (10 min)
 
 In 3–5 sentences: what did you want to build today and didn't, and why was cutting it right (or wrong)? Cutting
-isn't failure; it's the core skill of shipping in 15 days. Add the cut items to `LATER.md` so they stop nagging you.
+isn't failure; it's the core skill of shipping in 15 days. Add the cut items to `docs/LATER.md` so they stop nagging you.
 
 ## You're done when…
 
 - [ ] The core loop works on the deployed app from first click to a saved result; e2e test green; you pasted the
       commit link.
 - [ ] `docs/BUILDLOG.md` has a Day 51 entry with done / next / blocked; you pasted it.
-- [ ] You wrote what you cut and why, and parked it in `LATER.md`.
+- [ ] You wrote what you cut and why, and parked it in `docs/LATER.md`.
 
 **Tomorrow:** the AI that makes it worth using — with an eval and a price tag.

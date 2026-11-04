@@ -46,7 +46,7 @@ Take the three ideas from yesterday's shortlist and score each 1–5 on four que
 | **Real users** | Can you name 5 people who have this problem and who'd try it next week? | No testers on day 54 = no beta on day 55. |
 | **AI at the core** | If you removed the AI, would the product stop making sense? | A to-do app with a "summarise" button isn't an AI product. |
 | **You care** | Will you still want to work on it on day 60, tired? | Motivation is a resource; spend it on a problem you like. |
-| **Doable** | Could the core loop work by tomorrow evening with your current stack? | 15 days include a rest day, four earning days and a launch. |
+| **Doable** | Could the core loop work by tomorrow evening with your current stack? | 15 days include two rest days, four earning days and a launch. |
 
 Highest total wins. Ties go to "real users".
 
@@ -87,7 +87,8 @@ Read it critically. If the core loop has more than six steps or the IN list has 
 the spec.
 
 > **If you're stuck:** can't decide between two ideas? Pick the one where you can name the 5 users. The other goes
-> into a `LATER.md` — it's not dead, it's parked.
+> into `docs/LATER.md` — it's not dead, it's parked. You'll keep that file (and `docs/BUILDLOG.md`, from
+> tomorrow) all the way to launch.
 
 ### 3. Risks and kill criteria (20 min)
 

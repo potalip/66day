@@ -43,7 +43,7 @@ feature next month is `v1.1.0`.
 
 ### 1. The last five fixes (35 min)
 
-Open your "not now" list from day 54, your checklist from day 62 and any new feedback. Pick **exactly five** items,
+Open your "not now" list from day 54 (`docs/LATER.md`), your checklist from day 62 and any new feedback. Pick **exactly five** items,
 each small enough for 5–10 minutes: a typo in the hero, a missing OG image, a confusing button label, a slow first
 load, a forgotten dark-mode colour. Not features. Then:
 
@@ -61,6 +61,7 @@ Edit the changelog until it reads like a story a user cares about ("You can now 
 not a commit dump. Then tag and publish:
 
 ```bash
+# after the five fixes are merged into main
 git checkout main && git pull
 git tag -a v1.0.0 -m "v1.0.0 — public launch"
 git push origin v1.0.0
@@ -91,8 +92,9 @@ biggest — and leave the rest for v1.0.1. Rehearsals are for finding problems, 
 **Proof for task 2:** your notes, including the time and their three answers.
 
 > **Tip:** ask the agent to run your Playwright first-run test against production every 10 minutes during launch day
-> and send you a Telegram message if it fails. Ten lines of code, and you'll know about an outage before your users
-> tell you.
+> and send you a Telegram message if it fails — a scheduled GitHub Actions workflow or a Cloudflare Cron Trigger both
+> work (GitHub may start scheduled runs a few minutes late). A few dozen lines, and you'll know about an outage before
+> your users tell you.
 
 ### 3. What does success mean? (15 min)
 
@@ -103,7 +105,8 @@ three lines:
 - **A number you hope for:** "50 visitors, 10 sign-ups, 3 people using it on day two."
 - **A feeling:** "I'm proud to send this link to a potential client."
 
-The first one is the only one guaranteed. The last one is the one that matters on day 66. **Proof for task 3:** your
+Compare the middle line with the launch target you wrote in `docs/CAPSTONE.md` on day 50 — adjust it honestly if the
+beta taught you otherwise. The first one is the only one guaranteed. The last one is the one that matters on day 66. **Proof for task 3:** your
 three lines.
 
 ## You're done when…

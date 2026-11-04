@@ -98,7 +98,7 @@ users hang out (read its self-promotion rules first). Let the agent draft from y
 voice:
 
 ```text
-Read README.md and docs/spec (day 50). Draft a 120-word beta announcement for [X / LinkedIn / a community].
+Read README.md, docs/CAPSTONE.md and docs/BUILDLOG.md. Draft a 120-word beta announcement for [X / LinkedIn / a community].
 Structure: one line on the problem in the user's words; what the app does in one sentence; one detail that shows
 it's real (a tester quote or a number from the beta); "it's a beta, here's what I want to learn"; the link.
 No hype words ("revolutionary", "game-changer"), no emoji walls. Give me two versions: plain and playful.
@@ -121,7 +121,8 @@ Run your query from yesterday and write down:
 - **One quote:** a real sentence from a real user, with permission if you'll publish it.
 
 **Proof for task 2:** those three lines. Small numbers are completely fine — "9 visitors, 4 activated (44%), and Ana
-said 'I finally get my week'" is a great first report.
+said 'I finally get my week'" is a great first report. Put the same lines in `docs/BUILDLOG.md` next to the beta
+target you set in `docs/CAPSTONE.md` on day 50 — the gap between them is your to-do list for the next ten days.
 
 ## You're done when…
 

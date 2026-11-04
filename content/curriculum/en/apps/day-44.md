@@ -69,8 +69,9 @@ Telegram requires HTTPS. Use your deployed app (a preview deploy on Cloudflare o
 Goal: make my main app work as a Telegram Mini App without breaking the normal web version.
 Context: deployed at <URL>; frontend <framework>; backend <Workers/Node/Python> with existing user accounts.
 Do this:
-1. Load https://telegram.org/js/telegram-web-app.js only when running inside Telegram
-   (detect window.Telegram?.WebApp?.initData being non-empty). Call WebApp.ready() and WebApp.expand().
+1. Load the official script https://telegram.org/js/telegram-web-app.js in <head> before our own code
+   (it's harmless in a normal browser). Treat the app as "inside Telegram" only when WebApp.initData is
+   non-empty; only then call WebApp.ready() and WebApp.expand() and switch on the Telegram-specific UI.
 2. Map Telegram theme params to our design tokens (bg, text, hint, link, button, button text) so the app follows
    Telegram light/dark automatically. Listen to the themeChanged event.
 3. Use Telegram's BackButton for in-app navigation and the main bottom button for our primary action.
@@ -85,7 +86,8 @@ Done when: opening the t.me link shows my app in Telegram's colours, and the nor
 The algorithm, straight from Telegram's docs:
 
 1. Parse `initData` as URL query parameters. Take out `hash`.
-2. Sort the remaining `key=value` pairs alphabetically by key and join them with `\n` → the **data-check-string**.
+2. Sort **all** the remaining `key=value` pairs alphabetically by key (newer clients also send a `signature` field —
+   it stays in) and join them with `\n` → the **data-check-string**.
 3. `secret_key = HMAC_SHA256(key = "WebAppData", message = bot_token)`.
 4. `expected = hex(HMAC_SHA256(key = secret_key, message = data_check_string))`.
 5. Compare `expected` with `hash` in constant time. Also reject if `auth_date` is older than, say, 24 hours.
@@ -112,7 +114,8 @@ curl -i -X POST https://<your-app>/api/telegram/auth \
   -d '{"initData":"<the tampered string>"}'
 ```
 
-You want `401`. If you get `200`, your validation isn't validating.
+You want `401`. If you get `200`, your validation isn't validating. (On Windows, run this in Git Bash — PowerShell
+handles the quotes and line breaks differently — or simply ask the agent to send the request for you.)
 
 > **If you're stuck:** the most common bug is building the data-check-string from already-decoded JSON in a different
 > order, or including `hash` in it. Second most common: using the bot token directly as the HMAC key instead of the
