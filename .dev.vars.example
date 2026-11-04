@@ -1,3 +1,6 @@
 ANTHROPIC_API_KEY=
 ADMIN_TOKEN=dev-admin
 RENDER_SERVER_TOKEN=
+# library: optional external media worker (download + Whisper). See docs/library/MEDIA-WORKER.md
+MEDIA_WORKER_URL=
+MEDIA_WORKER_TOKEN=
