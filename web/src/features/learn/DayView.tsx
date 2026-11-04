@@ -163,7 +163,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
       </aside>
 
       {toast && (
-        <div role="status" className="fixed inset-x-0 bottom-20 z-40 mx-auto w-fit rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-gold shadow-lg sm:bottom-8 fl-learn-pop">
+        <div role="status" className="fixed inset-x-0 bottom-24 z-50 mx-auto w-fit rounded-full border border-line bg-surface px-4 py-2 text-sm font-semibold text-gold shadow-lg sm:bottom-8 fl-learn-pop">
           {toast}
         </div>
       )}
