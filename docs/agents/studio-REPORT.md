@@ -110,8 +110,8 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
 
 ## Next steps
 0. Design QA (`docs/requests/design-to-studio.md`, not done because of the budget stop):
-   P1 — at 1280×800 keep the finished video visible without scrolling (shorter sticky right column / result first);
-   add an `h1` on the project page (title is a textarea now); trim auto-titles from the brief at a word boundary.
+   P1 — ✅ done on main by the orchestrator (finished video shown first in a viewport-height scrollable column,
+   sr-only `h1`, auto-titles trimmed at a word boundary).
    P2 — gallery button hierarchy, accessible name for the preview play button, mobile preview height, quiz preview
    crop, RU copy pass, Share action surfaced for finished renders.
 1. A small public share *page* (`/:lang/v/:slug` with title, player, "made in FlowLeaf 66") — needs a route in App.tsx.
