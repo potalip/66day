@@ -75,6 +75,7 @@ export async function getMe(db: D1Database, userId: string, now = new Date()): P
     ranks: { all: allRank ? allRank.n + 1 : null, week: weekRank ? weekRank.n + 1 : null },
     activity: await activityOf(db, u, tz, today),
     recap: await weeklyRecap(db, userId, today, now),
+    completedDays: (await daysOf(db, userId)).completedDays,
   };
 }
 
@@ -96,7 +97,7 @@ export async function getProfile(db: D1Database, userId: string, viewerId: strin
     activity: await activityOf(db, u, tz, today),
     shipped: await shippedOf(db, userId, u.track ?? ((s?.track as Track | null) || null)),
     recap: userId === viewerId ? await weeklyRecap(db, userId, today, now) : null,
-    daysDone: Math.min(66, ((await db.prepare("SELECT COUNT(*) n FROM game_events WHERE user_id = ? AND type = 'day.completed'").bind(userId).first<{ n: number }>())?.n ?? 0)),
+    ...(await daysOf(db, userId)),
   };
 }
 
@@ -308,6 +309,7 @@ export async function getCertificate(db: D1Database, userId: string): Promise<Ce
     }),
     badgeCount: earned.length,
     shippedCount: (shipped.results[0] as { n: number }).n,
+    completedDays: (await daysOf(db, userId)).completedDays,
   };
 }
 
@@ -316,4 +318,11 @@ function bossKeys() {
   const days = new Set([...CURRICULUM.boss].map((k) => Number(k.split(":")[1])));
   const list = days.size ? [...days] : [13, 27, 41, 55, 65];
   return list.map((d) => `'day:${Math.trunc(d)}'`).join(",");
+}
+
+/** Completed program days from the ledger ("day:<n>" keys). */
+async function daysOf(db: D1Database, userId: string) {
+  const r = await db.prepare("SELECT event_key FROM game_events WHERE user_id = ? AND type = 'day.completed'").bind(userId).all<{ event_key: string }>();
+  const completedDays = r.results.map((x) => Number(x.event_key.slice(4))).filter((n) => n >= 1 && n <= 66).sort((a, b) => a - b);
+  return { daysDone: completedDays.length, completedDays };
 }

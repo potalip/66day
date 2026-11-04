@@ -1,7 +1,7 @@
 // OWNER: game agent. Profile: own (/:lang/me) or public (/:lang/u/:userId; legacy /:lang/me?u=<id>).
 import { useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
-import { ArrowLeft, ArrowRight, ExternalLink, ScrollText, Flag, Flame, Pencil, Rocket, Snowflake, TrendingDown, TrendingUp, UserRoundX } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, ScrollText, Share2, Flag, Flame, Pencil, Rocket, Snowflake, TrendingDown, TrendingUp, UserRoundX } from "lucide-react";
 import { api } from "@web/api";
 import { useLang, useStrings } from "@web/i18n";
 import { Button, ButtonLink, Card, EmptyState, Input, SectionTitle, Skeleton, Stat, cn, useFormat } from "@web/ui";
@@ -11,6 +11,7 @@ import { Heatmap } from "./Heatmap";
 import { strings } from "./strings";
 import { Avatar, BadgeMedal, displayName, GameLayer, LevelRing, streakMessage, WeeklyQuests, XpBar } from "./widgets";
 import type { WeeklyRecap } from "../../../../worker/lib/game/types";
+import { GameShareDialog, streakShareData } from "./share";
 
 export default function Profile() {
   const params = useParams();
@@ -49,6 +50,8 @@ function ProfileView({ p, today }: { p: PublicProfile; today: string }) {
   const catalog = useBadgeCatalog();
   const name = displayName(p.name, p.userId, s);
   const lit = p.streak.status === "done";
+  const [shareOpen, setShareOpen] = useState(false);
+  const shareData = p.isMe ? streakShareData({ lang, streak: p.streak.current, xp: p.xp, name: p.name, track: p.track, completedDays: p.completedDays }) : null;
   return (
     <div className="mx-auto max-w-3xl space-y-5">
       <GameLayer />
@@ -89,11 +92,13 @@ function ProfileView({ p, today }: { p: PublicProfile; today: string }) {
           ))}
         </dl>
         {p.isMe && (
-          <p className={cn("mt-4 rounded-[var(--radius-sm)] px-4 py-3 text-sm",
+          <div className={cn("mt-4 flex flex-wrap items-center justify-between gap-2 rounded-[var(--radius-sm)] px-4 py-2.5 text-sm",
             lit ? "bg-gold-soft text-fg" : p.streak.status === "at_risk" || p.streak.status === "frozen" ? "bg-accent-soft text-fg" : "bg-surface-2 text-muted")}>
-            {streakMessage(p.streak, s)}
-          </p>
+            <p className="py-0.5">{streakMessage(p.streak, s)}</p>
+            {shareData && <Button variant="ghost" size="sm" icon={<Share2 />} onClick={() => setShareOpen(true)} className="-mr-2">{s.share.streak}</Button>}
+          </div>
         )}
+        <GameShareDialog open={shareOpen} onClose={() => setShareOpen(false)} data={shareData} />
       </Card>
 
       {p.isMe && p.recap && <RecapCard r={p.recap} catalog={catalog} />}

@@ -10,6 +10,7 @@ export function plural(n: number, one: string, few: string, many: string) {
 const ruDays = (n: number) => `${n} ${plural(n, "день", "дня", "дней")}`;
 
 const en = {
+  share: { streak: "Share streak", action: "Share", certificate: "Share" },
   quests: {
     title: "Weekly quests",
     subtitle: "Bonus XP for keeping a rhythm. New quests every Monday.",
@@ -181,6 +182,7 @@ const en = {
 export type GameStrings = typeof en;
 
 const ru: GameStrings = {
+  share: { streak: "Поделиться серией", action: "Поделиться", certificate: "Поделиться" },
   quests: {
     title: "Квесты недели",
     subtitle: "Бонусные XP за ритм. Новые квесты — каждый понедельник.",

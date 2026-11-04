@@ -17,6 +17,9 @@
     triggering response and a localised label; 3 completed quests earn "Quest Keeper".
   - `GET /api/game/quests`; widget `<WeeklyQuests/>` (on your own profile; learn has a one-line request to place it on Today).
   - Verified live through learn's API: a third consecutive build day completed "Build three days in a row" (+60 XP).
+- **Sharing:** design's ShareCard (`@web/ui/ShareCard`, lazy-loaded, not restyled) in three places:
+  "Share streak" on your own profile (only from a 3-day streak), a share action on 7/14/30/66 streak-milestone reward
+  toasts, and "Share" on the certificate page. `completedDays` was added to `/me`, the profile and the certificate APIs for the card's grid.
 - The seed now includes a graduate (`seed-01`, all 66 days → level 22, a complete certificate).
 
 ## Round 2 (after the first merge)

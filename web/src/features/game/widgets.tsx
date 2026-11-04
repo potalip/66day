@@ -18,6 +18,7 @@ import { fmtRelative } from "./format";
 import { handleOf, localHour } from "./format";
 import { GameIcon } from "./icons";
 import { strings, type GameStrings } from "./strings";
+import { GameShareDialog, SHARE_MILESTONES, streakShareData } from "./share";
 import type { RankKey } from "../../../../worker/lib/game/levels";
 
 export { notifyGameChanged } from "./api";
@@ -350,6 +351,7 @@ function ActiveLayer() {
   const { toast } = useToast();
   const meData = useGameMe();
   const [levelUp, setLevelUp] = useState<number | null>(null);
+  const [shareStreak, setShareStreak] = useState<number | null>(null);
 
   const list = useSyncExternalStore((f) => { subs.add(f); return () => subs.delete(f); }, () => queue, () => queue);
   useEffect(() => {
@@ -364,11 +366,13 @@ function ActiveLayer() {
       }
       if (!b.toast || (!d.xp && !d.lines.length)) continue;
       const rest = d.lines.filter((l) => !l.key.startsWith("l"));
+      const milestone = b.awards.find((a) => a.kind === "streak" && a.id === "streak" && SHARE_MILESTONES.has(a.amount ?? 0))?.amount;
       toast({
         tone: "reward",
         title: d.xp ? s.awards.xp(d.xp) : rest[0]?.text ?? s.awards.nice,
         description: <ToastLines lines={d.xp ? rest : rest.slice(1)} />,
-        duration: 5500,
+        duration: milestone ? 9000 : 5500,
+        action: milestone ? { label: s.share.streak, onClick: () => setShareStreak(milestone) } : undefined,
       });
     }
   }, [list]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -385,7 +389,16 @@ function ActiveLayer() {
     }
   }, [level]);
 
-  return <LevelUpDialog level={levelUp} me={meData.data} onClose={() => setLevelUp(null)} />;
+  const m = meData.data;
+  const shareData = shareStreak && m
+    ? streakShareData({ lang, streak: Math.max(shareStreak, m.streak.current), xp: m.xp, name: m.name, track: m.track, completedDays: m.completedDays })
+    : null;
+  return (
+    <>
+      <LevelUpDialog level={levelUp} me={meData.data} onClose={() => setLevelUp(null)} />
+      <GameShareDialog open={!!shareData} onClose={() => setShareStreak(null)} data={shareData} />
+    </>
+  );
 }
 
 /** The level-up moment: calm, centred, one button. */

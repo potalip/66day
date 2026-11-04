@@ -45,6 +45,8 @@ export interface GameMe extends LevelInfo {
   ranks: { week: number | null; all: number | null };
   activity: ActivityCell[];
   recap: WeeklyRecap;
+  /** program days completed (for share cards) */
+  completedDays: number[];
 }
 
 export interface PublicProfile extends LevelInfo {
@@ -59,6 +61,7 @@ export interface PublicProfile extends LevelInfo {
   shipped: ShippedItem[];
   /** program days completed (0..66) */
   daysDone: number;
+  completedDays: number[];
   /** only for your own profile */
   recap: WeeklyRecap | null;
 }
@@ -106,4 +109,5 @@ export interface CertificateResponse {
   badges: { id: string; icon: string; title: Record<Lang, string>; awardedAt: number }[];
   badgeCount: number;
   shippedCount: number;
+  completedDays: number[];
 }

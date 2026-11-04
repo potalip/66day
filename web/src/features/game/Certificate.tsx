@@ -2,7 +2,8 @@
 // Shows "in progress" before day 66. Print-friendly (A4 landscape) — "Print or save as PDF".
 import { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { Award as AwardIcon, Copy, FileText, Printer, UserRound } from "lucide-react";
+import { Award as AwardIcon, Copy, FileText, Printer, Share2, UserRound } from "lucide-react";
+import { GameShareDialog } from "./share";
 import { useLang, useStrings } from "@web/i18n";
 import { Badge, Button, ButtonLink, EmptyState, LeafMark, Logo, ProgressBar, Skeleton, cn, useFormat, useToast } from "@web/ui";
 import { useApiData, useGameMe, type CertificateResponse } from "./api";
@@ -75,6 +76,12 @@ function Actions({ cert, isMe }: { cert: CertificateResponse; isMe: boolean }) {
   const lang = useLang();
   const { toast } = useToast();
   const [copied, setCopied] = useState(false);
+  const [shareOpen, setShareOpen] = useState(false);
+  const last = cert.completedDays.length ? cert.completedDays[cert.completedDays.length - 1] : 0;
+  const shareData = last ? {
+    kind: "day" as const, lang, day: last, track: cert.track, xp: cert.xp, name: cert.name, completed: cert.completedDays,
+    title: cert.status === "complete" ? C.eyebrow : C.eyebrowProgress,
+  } : null;
   const copy = async () => {
     try {
       await navigator.clipboard.writeText(location.href);
@@ -90,7 +97,9 @@ function Actions({ cert, isMe }: { cert: CertificateResponse; isMe: boolean }) {
         <ButtonLink variant="ghost" size="sm" icon={<AwardIcon />} to={`/${lang}/portfolio/${encodeURIComponent(cert.userId)}`}>{C.portfolio}</ButtonLink>
       </div>
       <div className="flex flex-wrap gap-2">
+        {shareData && <Button variant="soft" size="sm" icon={<Share2 />} onClick={() => setShareOpen(true)}>{s.share.certificate}</Button>}
         <Button variant="outline" size="sm" icon={<Copy />} onClick={copy}>{copied ? C.copied : C.copy}</Button>
+        <GameShareDialog open={shareOpen} onClose={() => setShareOpen(false)} data={shareData} />
         <Button variant="primary" size="sm" icon={<Printer />} onClick={() => window.print()}>{C.print}</Button>
       </div>
     </div>
