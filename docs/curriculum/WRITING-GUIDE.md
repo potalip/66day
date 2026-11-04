@@ -47,18 +47,23 @@ Use this skeleton, with native headings:
 1. **Hook** — 2–4 sentences: why today matters, tied to the student's running project. No fluff, no "In this lesson we will".
 2. **Concept** (`## …`) — the minimum theory, in plain words with one concrete analogy or example. Short paragraphs.
 3. **Step by step** (`## …`) — numbered steps matching the tasks. Each build/ship step includes **a copy-pasteable
-   prompt for the coding agent** in a fenced block (```text). Prompts follow goal → context → constraints → done-when.
+   prompt for the coding agent** in a fenced block (```text). Prompts follow goal → context → constraints → done-when. Don't hard-wrap prompt lines: one bullet = one line (the
+   code block wraps softly, and agents get clean input on paste).
    Show real commands in ```bash blocks where useful.
 4. Callouts as blockquotes: `> **Tip:** …`, `> **Важно:** …`, `> **If you're stuck:** …`, `> **Безопасность:** …`.
    At least one "if you're stuck" callout on build days.
-5. For quiz tasks: a short `## Quiz` / `## Мини-тест` section with 3–4 questions and answers hidden in a
-   `<details><summary>Answers</summary>…</details>` block.
+5. For quiz tasks: a short `## Quiz` / `## Мини-тест` section with 3–4 questions, followed by the answers in a
+   callout: `> **Answers:**` / `> **Ответы:**` (every line prefixed with `>`). **No raw HTML** — the lesson renderer
+   shows HTML as text, so `<details>` doesn't work.
 6. **You're done when…** (`## You're done when…` / `## Готово, когда…`) — a checklist (`- [ ]`) mapping to the tasks and
    their proof ("you pasted the live link").
 7. Optional one-line **Tomorrow** teaser (story continuity).
 
 ## Voice
 
+  If a resource exists in the library seed (`worker/lib/library/seed/resources.json`), use its exact `url`, so
+  `/api/library/resolve` can match it to the library card. `lib:<id>` is valid too, but use it only once the learn UI
+  resolves ids (see `docs/requests/curriculum-to-learn.md`).
 - **RU**: на «ты», живо и по-человечески, как сильный старший товарищ. No calques ("давай погрузимся", "в этом уроке
   мы будем"). Natural tech slang where devs use it (задеплоить, коммит, репозиторий, промпт). Local realities where they
   matter: Telegram, VK, Rutube, Дзен, Habr, VC.ru, Kwork/FL.ru/Хабр Фриланс, ЮKassa/CloudPayments/Telegram Stars,

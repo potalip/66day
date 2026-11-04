@@ -7,7 +7,8 @@ summary: "Seven days in. Write down what this week taught you, then tell the wor
 estMinutes: 30
 rest: true
 badges: [week-1]
-resources: []
+resources:
+  - "https://www.youtube.com/watch?v=wjZofJX0v4M"
 tasks:
   - id: d07-t1
     type: reflect
@@ -27,7 +28,7 @@ break from it. Close the laptop when you're done.
 
 ## Look back (15 min)
 
-Write five sentences, one for each prompt. Honest beats polished.
+Write five sentences, one for each prompt. Aim for honest, not polished.
 
 1. What **surprised** you this week?
 2. What was **hard** — the moment you almost gave up?

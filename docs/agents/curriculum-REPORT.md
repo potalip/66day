@@ -10,7 +10,7 @@
 | Validator | `docs/curriculum/tools/validate.mjs` | Done. Zero dependencies. Checks every file against OUTLINE and CONTENT-FORMAT, and prints XP totals. |
 | Programs | `content/curriculum/{ru,en}/program.json` | Done. 4 phases: Foundation 1–14, Build 15–35, Ship 36–52, Portfolio & Earn 53–66. |
 | Day files | `content/curriculum/{ru,en}/{common,apps,video}/day-NN.md` | **All 66 days in both languages.** 106 files per language: 26 common, 40 apps, 40 video. About 94k words in EN and 85k in RU. |
-| Badges | `content/badges.json` | 30 badges. 23 are awarded on finishing a day (milestones, phases, bosses, track skills). 7 are game rules: streak-7, streak-30, streak-66, comeback, public-builder, and the secret night-owl and polyglot. |
+| Badges | `content/badges.json` | 30 badges. 23 are awarded on finishing a day (milestones, phases, bosses, track skills). 7 reuse the game's built-in rules with our copy: streak-7, streak-30, streak-66, comeback, curious, saved-by-freeze, and the secret night-owl. |
 | Self-review | `docs/curriculum/REVIEW.md` | Done. Five slice reviews (student + editor), fixes applied, outline changes, known gaps, and a quarterly list of facts to re-verify. |
 
 ### Program at a glance
@@ -76,7 +76,6 @@ The learn agent's parser (`origin/agent/learn:scripts/build-content.mjs`) alread
 
 ## Known gaps
 See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
-- Apps day 45 asks for activation numbers before event logging is taught.
 - Testers and clients need lead time; days 52 and 40 now warn about it.
 - Day 65's 150 minutes are spread over 24 hours.
 - No founder media is linked yet.
@@ -95,7 +94,19 @@ See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
 ## Next steps
 1. Founder pass: add own YouTube/Instagram material per day via the library pipeline.
 2. Pilot with 5–10 learners per language on days 1–14. Collect real time-on-task and adjust `estMinutes`.
-3. Add event logging to apps days 36–37 (see gap above).
+3. ~~Add event logging~~ — done: a first-party `events` table on apps day 34, used on days 36, 45, 54 and 65.
 4. Re-verify the fast-moving items in REVIEW.md every quarter. Tool commands and model names will drift.
 5. Later: AI review of submissions against each day's "you're done when…" checklist; the content is already
    structured for it.
+
+## Round 2 (after merge)
+- **Checked in the running app:** screenshots of both themes, both languages, 390 and 1280 px.
+  - Quiz answers moved to callouts, because the renderer doesn't support `<details>`.
+  - 734 hard-wrapped prompt lines reflowed.
+- **Badges reconciled with the game's built-in rules:** `hello-agent`, `curious`, `saved-by-freeze`.
+- **XP calibration** sent to the game agent: about 105 XP per day.
+- **Library:** 23 seed resources mapped to days by canonical URL (learn doesn't render `lib:` ids yet).
+- **Analytics:** first-party `events` table added on apps day 34.
+- **Second language pass:** RU and EN, 189 files edited. Russian address is now gender-neutral and terms are unified.
+- **Requests updated:** `curriculum-to-learn.md` (collapsible answers, resolve resources), `curriculum-to-game.md`,
+  `curriculum-to-library.md`.

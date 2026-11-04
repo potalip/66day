@@ -1,13 +1,14 @@
 import { Hono } from "hono";
-import type { AppEnv } from "../env";
+import type { AppEnv, Env } from "../env";
 import { requireAdmin } from "../lib/user";
 import { LANGS, type LibLang, LEVELS, TRACKS, safeJson } from "../lib/library/schema";
 import { extractUrls } from "../lib/library/url";
 import { subtitleFileToText, guessLang } from "../lib/library/metadata";
 import {
-  type LibEnv, aiConfigured, createFromUrl, enqueue, startBuild, uploadKey, requestMediaWorker,
+  aiConfigured, createFromUrl, enqueue, startBuild, uploadKey, requestMediaWorker,
 } from "../lib/library/pipeline";
-import { type ResourceRow, toResource, getResourceRow, logEvent, saveTranscript, updateResource, newId } from "../lib/library/repo";
+import { type ResourceRow, type MaterialState, toResource, getResourceRow, logEvent, saveTranscript, updateResource, newId } from "../lib/library/repo";
+import { pipelineSteps, attentionReason } from "../lib/library/progress";
 
 // OWNER: library agent (docs/OWNERSHIP.md). Intake + job control for the smart resource pipeline.
 export const pipeline = new Hono<AppEnv>();
@@ -27,15 +28,63 @@ const wait = (c: { executionCtx: { waitUntil(p: Promise<unknown>): void } }) => 
 const pickTracks = (v: unknown) => (Array.isArray(v) ? v.filter((t) => (TRACKS as readonly string[]).includes(t)) : []);
 const pickAudience = (v: unknown): LibLang[] => (Array.isArray(v) ? v.filter((t): t is LibLang => (LANGS as readonly string[]).includes(t)) : []);
 
+const pickDays = (v: unknown) => (Array.isArray(v) ? v : [])
+  .filter((d): d is { day: number; track: string } => !!d && Number.isInteger(d.day) && d.day >= 1 && d.day <= 66 && (TRACKS as readonly string[]).includes(d.track))
+  .slice(0, 6);
+
+/**
+ * POST /api/pipeline/check { text } — preview a paste before submitting: every link found, its type, and whether it is
+ * already in the library. Same parser as intake, so what the founder sees is what will be created.
+ */
+pipeline.post("/check", async (c) => {
+  const { text = "" } = await c.req.json<{ text?: string }>().catch(() => ({ text: "" }));
+  const parsed = extractUrls(text.slice(0, 50_000)).slice(0, 50);
+  const existing = new Map<string, { id: string; status: string; title: string }>();
+  if (parsed.length) {
+    const { results } = await c.env.DB.prepare(`SELECT id, status, title, canonical_url FROM lib_resources WHERE canonical_url IN (${parsed.map(() => "?").join(",")})`)
+      .bind(...parsed.map((p) => p.canonicalUrl)).all<{ id: string; status: string; title: string; canonical_url: string }>();
+    for (const r of results) existing.set(r.canonical_url, { id: r.id, status: r.status, title: r.title });
+  }
+  return c.json({ links: parsed.map((p) => ({ ...p, existing: existing.get(p.canonicalUrl) ?? null })) });
+});
+
+/** GET /api/pipeline/batch?ids=a,b,c — live progress for the founder's latest batch (steps per resource). */
+pipeline.get("/batch", async (c) => {
+  const ids = (c.req.query("ids") ?? "").split(",").map((s) => s.trim()).filter(Boolean).slice(0, 60);
+  if (!ids.length) return c.json({ items: [] });
+  const q = ids.map(() => "?").join(",");
+  const { results } = await c.env.DB.prepare(
+    `SELECT r.*,
+       (SELECT json_group_object(m.lang, m.state) FROM lib_materials m WHERE m.resource_id = r.id) AS m_states,
+       (SELECT json_group_array(DISTINCT e.step) FROM lib_events e WHERE e.resource_id = r.id) AS steps,
+       (SELECT e.message FROM lib_events e WHERE e.resource_id = r.id ORDER BY e.id DESC LIMIT 1) AS last_event,
+       (SELECT e.status FROM lib_events e WHERE e.resource_id = r.id ORDER BY e.id DESC LIMIT 1) AS last_event_status
+     FROM lib_resources r WHERE r.id IN (${q})`,
+  ).bind(...ids).all<ResourceRow & { m_states: string | null; steps: string | null; last_event: string | null; last_event_status: string | null }>();
+  const byId = new Map(results.map((r) => [r.id, r]));
+  return c.json({
+    items: ids.map((id) => byId.get(id)).filter((r): r is NonNullable<typeof r> => !!r).map((row) => {
+      const r = toResource(row);
+      const materials = safeJson<Record<string, MaterialState>>(row.m_states, {});
+      const steps = pipelineSteps(r, materials, new Set(safeJson<string[]>(row.steps, [])));
+      return {
+        id: r.id, title: r.title, url: r.url, sourceType: r.sourceType, thumbnailUrl: r.thumbnailUrl, status: r.status,
+        transcriptState: r.transcriptState, aiState: r.aiState, audience: r.audience, materials, steps,
+        attention: attentionReason(steps), lastEvent: row.last_event ? { message: row.last_event, status: row.last_event_status } : null,
+      };
+    }),
+  });
+});
+
 /** GET /api/pipeline/status — what is configured. */
 pipeline.get("/status", (c) => {
-  const env = c.env as LibEnv;
+  const env = c.env;
   return c.json({ ai: aiConfigured(env), model: env.CLAUDE_MODEL, queue: !!env.JOBS, mediaWorker: !!env.MEDIA_WORKER_URL });
 });
 
 /** POST /api/pipeline/resources { text: "urls…", tracks?, topics?, level?, audience?, notes? } — bulk paste. */
 pipeline.post("/resources", async (c) => {
-  const body = await c.req.json<{ text?: string; urls?: string[]; tracks?: string[]; topics?: string[]; level?: string; audience?: string[]; notes?: string }>().catch(() => null);
+  const body = await c.req.json<{ text?: string; urls?: string[]; tracks?: string[]; topics?: string[]; level?: string; audience?: string[]; notes?: string; days?: { day: number; track: string }[] }>().catch(() => null);
   if (!body) return c.json({ error: "invalid JSON" }, 400);
   const text = [body.text ?? "", ...(body.urls ?? [])].join("\n");
   const parsed = extractUrls(text).slice(0, 50);
@@ -44,6 +93,7 @@ pipeline.post("/resources", async (c) => {
     tracks: pickTracks(body.tracks), topics: (body.topics ?? []).slice(0, 8),
     level: (LEVELS as readonly string[]).includes(body.level ?? "") ? body.level : undefined,
     audience: pickAudience(body.audience), adminNotes: body.notes?.slice(0, 4000) || null, createdBy: c.get("userId"),
+    suggestedDays: pickDays(body.days),
   };
   const created: { id: string; url: string; sourceType: string }[] = [];
   const duplicates: { id: string; url: string }[] = [];
@@ -96,7 +146,7 @@ pipeline.post("/upload", async (c) => {
     await logEvent(c.env, id, "transcript", "ok", `${tFile instanceof File ? "uploaded file" : "pasted"}: ${text.length} chars`);
   } else {
     await updateResource(c.env, id, { transcript_state: "needed" });
-    const sent = await requestMediaWorker(c.env as LibEnv, id).catch(() => false);
+    const sent = await requestMediaWorker(c.env, id).catch(() => false);
     if (!sent) await logEvent(c.env, id, "transcript", "warn", "needs transcript — paste text or upload .srt/.vtt/.txt (media worker not configured)");
   }
   await startBuild(c.env, id, undefined, wait(c));
@@ -164,25 +214,27 @@ pipeline.get("/board", async (c) => {
     `SELECT r.*,
        (SELECT json_group_object(m.lang, m.state) FROM lib_materials m WHERE m.resource_id = r.id) AS m_states,
        (SELECT e.message FROM lib_events e WHERE e.resource_id = r.id ORDER BY e.id DESC LIMIT 1) AS last_event,
-       (SELECT e.status FROM lib_events e WHERE e.resource_id = r.id ORDER BY e.id DESC LIMIT 1) AS last_event_status
+       (SELECT e.status FROM lib_events e WHERE e.resource_id = r.id ORDER BY e.id DESC LIMIT 1) AS last_event_status,
+       (SELECT json_group_array(DISTINCT e.step) FROM lib_events e WHERE e.resource_id = r.id) AS steps
      FROM lib_resources r ORDER BY r.updated_at DESC, r.created_at DESC LIMIT 500`,
-  ).all<ResourceRow & { m_states: string | null; last_event: string | null; last_event_status: string | null }>();
+  ).all<ResourceRow & { m_states: string | null; last_event: string | null; last_event_status: string | null; steps: string | null }>();
   const counts: Record<string, number> = { draft: 0, processing: 0, review: 0, published: 0, failed: 0 };
   for (const r of results) counts[r.status] = (counts[r.status] ?? 0) + 1;
   const items = results
     .filter((r) => !status || r.status === status)
     .filter((r) => !q || `${r.title} ${r.author ?? ""} ${r.url ?? ""}`.toLowerCase().includes(q))
-    .map((r) => ({
-      ...toResource(r),
-      materials: safeJson<Record<string, string>>(r.m_states, {}),
-      lastEvent: r.last_event ? { message: r.last_event, status: r.last_event_status } : null,
-    }));
+    .map((row) => {
+      const r = toResource(row);
+      const materials = safeJson<Record<string, MaterialState>>(row.m_states, {});
+      const steps = pipelineSteps(r, materials, new Set(safeJson<string[]>(row.steps, [])));
+      return { ...r, materials, steps, attention: attentionReason(steps), lastEvent: row.last_event ? { message: row.last_event, status: row.last_event_status } : null };
+    });
   return c.json({ counts, total: results.length, items });
 });
 
 // ---------------- Media worker seam (worker/lib/library/MEDIA-WORKER.md) ----------------
 
-const mediaAuth = (c: { env: LibEnv; req: { header: (k: string) => string | undefined } }) => {
+const mediaAuth = (c: { env: Env; req: { header: (k: string) => string | undefined } }) => {
   const tok = c.env.MEDIA_WORKER_TOKEN;
   return !!tok && c.req.header("authorization") === `Bearer ${tok}`;
 };

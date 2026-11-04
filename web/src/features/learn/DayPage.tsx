@@ -2,9 +2,10 @@
 import { Link, useParams } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { useDay } from "./data";
-import { DayHero, DayView, LearnKeyframes } from "./DayView";
+import { DayHero, DayView } from "./DayView";
 import { strings } from "./strings";
-import { ButtonLink, Card, ErrorState, Icon, PageSkeleton } from "./ui";
+import { ButtonLink, Card, EmptyState } from "@web/ui";
+import { ErrorState, Icon, PageSkeleton } from "./ui";
 
 export default function DayPage() {
   const lang = useLang();
@@ -24,34 +25,27 @@ export default function DayPage() {
   let body;
   if (!valid) {
     body = (
-      <Card className="mx-auto max-w-lg p-8 text-center">
-        <h1 className="text-xl font-semibold">{s.notFound}</h1>
-        <p className="mt-2 text-muted">{s.notFoundBody}</p>
-        <ButtonLink to={`/${lang}/path`} variant="secondary" className="mt-5"><Icon.map size={16} />{s.backToPath}</ButtonLink>
-      </Card>
+      <EmptyState icon={<Icon.map />} title={s.notFound} description={s.notFoundBody}
+        action={<ButtonLink to={`/${lang}/path`} variant="outline" icon={<Icon.map />}>{s.backToPath}</ButtonLink>} />
     );
   } else if (day.loading && !d) body = <PageSkeleton />;
   else if (day.error || !d) body = <ErrorState title={s.errorTitle} body={s.errorBody} retry={s.retry} onRetry={() => day.reload()} />;
   else if (!d.summary.available) {
     body = (
-      <Card className="mx-auto max-w-2xl p-8 text-center">
-        <div className="mx-auto mb-3 grid size-12 place-items-center rounded-full bg-surface-2 text-muted"><Icon.pen /></div>
-        <h1 className="text-xl font-semibold">{s.unwrittenTitle(n)}</h1>
-        <p className="mx-auto mt-2 max-w-md text-muted">{s.unwrittenBody}</p>
-      </Card>
+      <EmptyState icon={<Icon.pen />} title={s.unwrittenTitle(n)} description={s.unwrittenBody} />
     );
   } else if (d.access === "locked" || d.access === "waiting" || !d.day) {
     const firstOpen = d.access === "locked";
     body = (
       <div className="mx-auto max-w-3xl">
-        <DayHero s={s} summary={d.summary} lang={lang} />
-        <Card className="flex flex-col items-start gap-4 p-6 sm:flex-row sm:items-center">
+        <DayHero s={s} summary={d.summary} />
+        <Card className="flex flex-col items-start gap-4 sm:flex-row sm:items-center">
           <div className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-2 text-muted"><Icon.lock size={22} /></div>
           <div className="flex-1">
             <h2 className="font-semibold">{firstOpen ? s.lockedTitle : s.waitingTitle}</h2>
             <p className="mt-1 text-sm text-muted">{firstOpen ? s.lockedBody(n - 1) : s.waitingBody}</p>
           </div>
-          <ButtonLink to={`/${lang}/today`} variant="secondary">{s.todayTitle}<Icon.arrowRight size={16} /></ButtonLink>
+          <ButtonLink to={`/${lang}/today`} variant="outline" iconRight={<Icon.arrowRight />}>{s.todayTitle}</ButtonLink>
         </Card>
       </div>
     );
@@ -64,7 +58,6 @@ export default function DayPage() {
       <Link to={`/${lang}/path`} className="mb-6 inline-flex items-center gap-1.5 text-sm text-muted hover:text-fg"><Icon.arrowLeft size={16} />{s.backToPath}</Link>
       {body}
       {nav}
-      <LearnKeyframes />
     </div>
   );
 }

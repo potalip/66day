@@ -100,3 +100,52 @@ and the learn pages render correctly inside the design shell, including the mobi
   show "needs work" plus feedback, which the UI already supports.
 - Reminders (email/Telegram) at the student's chosen time; a weekly recap on rest days.
 - Use the game streak and XP in the Today header once the game API lands.
+
+---
+
+## Round 2 (after the first integration merge)
+
+Branch `agent/learn` was rebased onto `main`. Requests in `docs/requests/*-to-learn.md` are resolved as follows.
+
+**Design (`design-to-learn.md`)**
+- The learn screens now use the kit: `Button`/`ButtonLink` (with `loading`, `icon`), `Card`, `Badge`, `Field` + `Input`/`Textarea`,
+  `Dialog` for the celebration (it becomes a bottom sheet on phones automatically), `ProgressBar`/`ProgressRing`, `Stat`, `EmptyState`,
+  `Skeleton`, `Container size="narrow"` for onboarding, `useToast` for errors and lucide icons. `features/learn/ui.tsx` is now a thin
+  adapter (icon map + page skeleton + error state).
+- Path cells follow the landing's visual language: done is `bg-accent`; today is `ring-2 ring-accent ring-offset-2`;
+  boss days use `bg-gold-soft` + `border-gold-bright/70` + Crown; rest days have a dashed `border-line-strong` + Moon; locked days use `bg-surface-2`.
+- **Decision:** lessons still use learn's own markdown renderer, not `@web/ui <Markdown>`. The real curriculum needs GFM tables
+  (32 of them), nested lists and `- [ ]` checklists, `<details>` answers (88), copyable prompts (500+ code blocks) and
+  `**Label:**` callouts, none of which the kit parser supports. The renderer copies the `.prose-fl` values (68ch, 1.0625rem/1.7,
+  heading weights, `accent-ink` links, inline-code style) and the kit callout palette, and it now also supports `> [!TIP]/[!NOTE]/[!WARNING]`.
+- On phones, onboarding uses large full-width buttons.
+
+**Curriculum (`curriculum-to-learn.md`)**
+- Time is shown as an estimate ("~90 min" / "~90 мин", with a tooltip). Day 65 shows "~150 min, spread over the day"
+  (`SPREAD_DAYS` in `DayView.tsx`; there is no frontmatter flag for it, so it's a one-line list).
+- `<details><summary>…</summary>…</details>` blocks render as native, collapsed `<details>` with styling. They work with the summary on the same or the next line, and nesting is safe.
+- `- [ ]` lines render as a visual checklist (no XP, not interactive).
+- Tables scroll horizontally inside a focusable region (`min-width: 28rem`). Verified at 390px: no page overflow.
+
+**Game (`game-to-learn.md`)**
+- The Today header shows `StreakChip` + `XpBar compact`.
+- Single-task completions call `showAwards(res.awards)` (falling back to a reward toast when the game returns none). Day completion
+  shows the awards in the celebration: XP is merged into one chip, then badges, level and streak. The content day badge is added when the game didn't return it.
+- `task.completed` now includes `proofUrl` for link proofs. Notes for game are in `learn-to-game.md` (unlocalized badge `label`).
+
+**Library (`library-to-learn.md`)**
+- Day pages resolve curriculum `resources:` through `GET /api/library/resolve`. Known URLs and `lib:<id>` become `ResourceCardView` cards,
+  and unknown URLs stay link rows. Up to 4 extra picks from `GET /api/library/by-day/:day?track=` follow (deduplicated).
+  The day response now includes `userTrack` for this.
+
+**Orchestrator brief item 5 (users who only `PATCH /api/me {track}`)**
+- Such users count as onboarded: a track is all `/today` and `/path` need. Daily time defaults to 60 min and goal to none.
+  The `learn_profiles` row is created lazily on the first task, day or profile write, and `started_at` is set if missing.
+  `onboarding.completed` is emitted the first time the full onboarding is saved. Verified with curl (overview shows `onboarded: true` → task submit works → `PATCH /progress/profile` saves).
+
+**Verification**
+- Full real journey in Playwright with the real 66-day curriculum: landing CTA → /start → welcome → track → time+goal → name →
+  "you're in" → Day 1 (every task done through the UI: mark-done, text, file, link) → celebration → done for today → Path →
+  (time-travel +1 day) Day 2 → Day 1 review → Day 13 locked. Covered in EN light 1280, EN dark 390, RU light 1280 and RU dark 390.
+  No page errors and no horizontal overflow. The only console noise is a blocked external font/thumbnail request in this sandbox.
+- `npm test`: 181 tests pass (learn: 58).

@@ -79,17 +79,11 @@ Goal: a craft pass on runs/<capstone>/02/, with every fix made in the pipeline s
 Context: read the pipeline README, formats/<capstone>.json and runs/<capstone>/02/qc-before.md.
 The project renders with [Remotion / pycairo + ffmpeg / MoviePy].
 Fix, in this order:
-1. Sound: two-pass loudnorm to -14 LUFS integrated, true peak <= -1 dBTP; duck music under voice by ~12 dB with
-   sidechain compression (or volume automation from the VO timestamps); remove clicks at cut points with 10 ms fades.
-2. Pacing: use the word timestamps from faster-whisper to trim any silence over 0.6 s inside the VO (keep 0.15 s
-   padding), and make sure the first spoken word starts before 0.5 s.
-3. Captions: max 2 lines, max 38 characters per line, break at phrase boundaries, never orphan a single word;
-   keep them inside a configurable safe zone (for 9:16: not in the bottom 20% or the right 12%).
-Make each fix a separate, named option in formats/<capstone>.json (or the pipeline config) with a sensible
-default. Re-render output 02 with make-video --format formats/<capstone>.json, run qc.py again and save the report
-as qc-after.md.
-Done when: qc-after.md shows loudness within ±1 LU of target, no unintended silence or black frames, and you
-show me a short diff of the config.
+1. Sound: two-pass loudnorm to -14 LUFS integrated, true peak <= -1 dBTP; duck music under voice by ~12 dB with sidechain compression (or volume automation from the VO timestamps); remove clicks at cut points with 10 ms fades.
+2. Pacing: use the word timestamps from faster-whisper to trim any silence over 0.6 s inside the VO (keep 0.15 s padding), and make sure the first spoken word starts before 0.5 s.
+3. Captions: max 2 lines, max 38 characters per line, break at phrase boundaries, never orphan a single word; keep them inside a configurable safe zone (for 9:16: not in the bottom 20% or the right 12%).
+Make each fix a separate, named option in formats/<capstone>.json (or the pipeline config) with a sensible default. Re-render output 02 with make-video --format formats/<capstone>.json, run qc.py again and save the report as qc-after.md.
+Done when: qc-after.md shows loudness within ±1 LU of target, no unintended silence or black frames, and you show me a short diff of the config.
 ```
 
 Then **watch** the result on your phone, at normal volume, with headphones and without. Note anything that still
@@ -107,7 +101,7 @@ Anything you still fix by hand goes into that output's `manual.log`, as on day 5
 > **Tip:** if your capstone is a **tool** rather than a series, do the craft pass on the tool's *default* output —
 > the one a new user gets on their first try. That render is your product's first impression.
 
-### 3. Two strange viewings (20 min)
+### 3. Two odd viewings (20 min)
 
 Now the old editor's trick. Watch the new version twice:
 

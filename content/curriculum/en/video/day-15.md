@@ -7,9 +7,10 @@ summary: "Draw 90 frames with Python, glue them into a 3-second mp4, and keep th
 estMinutes: 75
 badges: [first-render]
 resources:
-  - "https://ffmpeg.org/documentation.html"
+  - "https://www.youtube.com/watch?v=deg8bOoziaE"
   - "https://trac.ffmpeg.org/wiki"
   - "https://docs.python.org/3/tutorial/"
+  - "https://ffmpeg.org/ffmpeg.html"
 tasks:
   - id: d15-video-t1
     type: read
@@ -33,8 +34,8 @@ tasks:
     proof: none
 ---
 
-On day 12 you made a 5-second title and it felt a bit like magic. Today we take the magic apart. Every video you
-will make in the next 50 days — kinetic type, Remotion explainers, data videos, AI clips — ends the same way: a pile
+On day 12 you made a 5-second title, and it felt a bit like magic. Today you take the magic apart. Every video you
+make in the next 50 days — kinetic type, Remotion explainers, data videos, AI clips — ends the same way: a pile
 of pictures becomes an mp4. Once you understand that one step, nothing in this track is mysterious.
 
 ## A video is a flipbook with a lunchbox
@@ -48,13 +49,13 @@ of pictures becomes an mp4. Once you understand that one step, nothing in this t
   are smaller but less universal.
 - **Container** — the box that holds the compressed video, the audio and the metadata: `.mp4`, `.mov`, `.webm`.
 
-Analogy: the container is the lunchbox, the codec is how the sandwich got vacuum-packed to fit. An `.mp4` can hold
+Think of the container as the lunchbox and the codec as the way the sandwich was vacuum-packed to fit inside. An `.mp4` can hold
 H.264 or AV1 — same box, different packing. That's why "it's an mp4" doesn't guarantee it plays on your aunt's TV.
 
 Two more words you'll see in every command: **CRF** (quality for H.264: 18 looks great, 23 is the default, higher =
 smaller and blurrier) and **pixel format** `yuv420p` (the colour layout every phone and browser understands).
 
-## Step 1 — draw 90 frames, glue them together
+## Step 1 — draw 90 frames and glue them together
 
 Open your phase-2 video workshop from day 14 (`~/66/video`) and make a `day15/` folder there. Until day 27, every path
 in this track is relative to `~/66/video`. First give the workshop one Python environment for the whole track — the same
@@ -73,8 +74,7 @@ into this venv. Then give your agent this:
 
 ```text
 Goal: a Python script that draws 90 PNG frames for a 3-second animation.
-Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are installed
-in ~/66/video/.venv (activated).
+Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are installed in ~/66/video/.venv (activated).
 Constraints:
 - 1920x1080, dark background, a bright circle that moves from the left edge to the right edge over 90 frames.
 - Draw the frame number in the top-left corner in large text so I can see individual frames.
@@ -83,14 +83,14 @@ Constraints:
 Done when: running `python day15/make_frames.py` creates exactly 90 PNGs and prints how many it wrote.
 ```
 
-Run it, open two or three PNGs to see they differ, then build the video yourself:
+Run it, open two or three PNGs to check they differ, then build the video yourself:
 
 ```bash
 ffmpeg -framerate 30 -i day15/frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 day15/ball.mp4
 ```
 
 `-framerate 30` says how fast to read the pictures, `%04d` means "four-digit number", `-pix_fmt yuv420p` makes it
-play everywhere. Now prove what you made:
+play everywhere. Now check what you made:
 
 ```bash
 ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames,pix_fmt -show_entries format=duration -of default=noprint_wrappers=1 day15/ball.mp4
@@ -144,14 +144,12 @@ Paste the four commands as proof.
 3. You play the same 90 frames at 60 fps. What changes?
 4. In a 30 fps video, at what time does frame 45 appear (counting from frame 0)?
 
-<details><summary>Answers</summary>
-
-1. 3 seconds (90 ÷ 30).
-2. 288 frames (12 × 24).
-3. It lasts 1.5 seconds and the motion looks twice as fast — same frames, less time.
-4. At 1.5 seconds (45 ÷ 30). Frame 0 is at 0.0 s.
-
-</details>
+> **Answers:**
+>
+> 1. 3 seconds (90 ÷ 30).
+> 2. 288 frames (12 × 24).
+> 3. It lasts 1.5 seconds and the motion looks twice as fast — same frames, less time.
+> 4. At 1.5 seconds (45 ÷ 30). Frame 0 is at 0.0 s.
 
 ## You're done when…
 

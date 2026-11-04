@@ -72,18 +72,13 @@ rows), is a candidate. Write down how long it takes now.
 
 ```text
 Goal: move <slow feature, e.g. "summarise uploaded document"> to a background job with visible progress.
-Context: Cloudflare Workers + D1 (use Cloudflare Queues if available on our plan, otherwise a jobs table + a
-cron trigger every minute). Existing feature code is in <file>.
+Context: Cloudflare Workers + D1 (use Cloudflare Queues if available on our plan, otherwise a jobs table + a cron trigger every minute). Existing feature code is in <file>.
 Constraints:
-- jobs table: id, user_id, type, status (queued/running/done/failed/dead), progress 0–100, attempts,
-  input (JSON), result (JSON), error, created_at, updated_at, run_after.
-- POST /api/jobs creates a job for the signed-in user and returns 202 + job id. Reject a duplicate:
-  same user + same input while one is still queued/running returns the existing job.
-- Worker: claims a job atomically (UPDATE … WHERE status='queued' so two workers can't take the same job),
-  sets running, reports progress at real milestones (extracted, chunked, summarised), saves the result.
+- jobs table: id, user_id, type, status (queued/running/done/failed/dead), progress 0–100, attempts, input (JSON), result (JSON), error, created_at, updated_at, run_after.
+- POST /api/jobs creates a job for the signed-in user and returns 202 + job id. Reject a duplicate: same user + same input while one is still queued/running returns the existing job.
+- Worker: claims a job atomically (UPDATE … WHERE status='queued' so two workers can't take the same job), sets running, reports progress at real milestones (extracted, chunked, summarised), saves the result.
 - GET /api/jobs/:id returns status/progress/result, only to the job's owner.
-- UI: progress bar with a human label per stage, "you can leave this page" note, result when done,
-  friendly error with a "try again" button when failed. Disable the start button while a job runs.
+- UI: progress bar with a human label per stage, "you can leave this page" note, result when done, friendly error with a "try again" button when failed. Disable the start button while a job runs.
 - No API key: the job uses the no-AI fallback and still completes.
 Done when: I start a job, see progress move, reload the page mid-way and still see it finish.
 ```
@@ -101,10 +96,8 @@ finished result) for task 2.
 ```text
 Goal: make failures safe.
 Constraints:
-- On error: attempts += 1; if attempts < 3, set status back to queued with run_after = now + 30 s × 2^attempts
-  (exponential backoff). With Cloudflare Queues use message.retry() with a delay and max_retries = 3.
-- After 3 failures: status = dead (or send to the dead-letter queue), keep the error message,
-  and send me one Telegram alert with job id and error.
+- On error: attempts += 1; if attempts < 3, set status back to queued with run_after = now + 30 s × 2^attempts (exponential backoff). With Cloudflare Queues use message.retry() with a delay and max_retries = 3.
+- After 3 failures: status = dead (or send to the dead-letter queue), keep the error message, and send me one Telegram alert with job id and error.
 - Jobs stuck in "running" for more than 10 minutes (crashed worker) go back to queued.
 - The job must be safe to run twice: write the result with the job id as key, never append.
 - A tiny owner-only /admin/jobs page: list dead jobs with a "retry" button.
@@ -122,14 +115,12 @@ your retry schedule, what makes a job "dead", how you get alerted, and how you'd
 3. Sending a welcome email after sign-up: sync or async?
 4. Why must a background job be safe to run twice?
 
-<details><summary>Answers</summary>
-
-1. Sync. It's fast and the user needs the answer now.
-2. Async. It's slow and can fail; show progress and deliver when done.
-3. Async. Sign-up shouldn't fail or wait because the email provider is slow.
-4. Retries, crashed workers and duplicate messages mean the same job can run again. Idempotent jobs make that harmless.
-
-</details>
+> **Answers:**
+>
+> 1. Sync. It's fast and the user needs the answer now.
+> 2. Async. It's slow and can fail; show progress and deliver when done.
+> 3. Async. Sign-up shouldn't fail or wait because the email provider is slow.
+> 4. Retries, crashed workers and duplicate messages mean the same job can run again. Idempotent jobs make that harmless.
 
 ## You're done when…
 

@@ -1,10 +1,14 @@
 # learn → game
 
-- learn calls `onGameEvent` for `onboarding.completed`, `task.completed` (once per task, first completion only — re-submitting
-  proof does not re-emit), and `day.completed` (with `badges` from the day file). Failures in `onGameEvent` are caught and
-  logged; learning progress never depends on them.
-- Awards are shown in the day-complete celebration. If your awards include `kind: "xp"`, learn shows those; otherwise it
-  shows the sum of task XP as a fallback. Please give badge awards a `label` (localized title) — learn shows `label` when present.
-- Rest days are normal completions (`day.completed`) — they should count for the streak.
-- Useful for you: `learn_day_progress(user_id, day, completed_at, local_date)` stores the local date of every completion.
-- When `web/src/features/game/widgets.tsx` lands, learn will use `<AwardToast/>` / `<XpBar/>` on Today.
+Round 1 notes (still valid):
+- learn emits `onboarding.completed` (first full onboarding), `task.completed` (first completion of each task; now with
+  optional `proofUrl` for link proofs), and `day.completed` (with the day's `badges`). Failures are caught and logged.
+- Rest days are normal completions and should count for the streak.
+
+Round 2:
+- **Badge award labels aren't localized.** In the RU UI the day-1 celebration shows "Day one, done" (from your award
+  `label`). Please return `label` in the user's language (`users.lang`), or omit `label` for badges that exist in
+  `content/badges.json` — learn then renders the content title + icon in the current UI language.
+- learn now calls `showAwards(res.awards)` for single-task completions and renders day-completion awards inside its own
+  celebration dialog (so the day moment isn't split across a dialog and toasts). Earlier task toasts can still be on
+  screen when the dialog opens; if you'd like, expose a `clearAwards()` so learn can dismiss them first.

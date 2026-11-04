@@ -39,7 +39,7 @@ heard. That last part is on you, not the model.
 
 ## Writing for the ear
 
-Reading and listening are different skills. A sentence that works on a page can collapse when spoken. Rules:
+Reading and listening are different skills. A sentence that works on the page can fall apart when spoken. The rules:
 
 - **One idea per sentence.** Aim for under 15 words. Listeners can't scroll back.
 - **Say numbers the way people say them.** "About two thirds", not "64.7%". "Nineteen sixty-nine", not "1969" if the
@@ -87,16 +87,11 @@ Read it aloud twice with a timer, fix every place you stumbled, and save it as `
 
 ```text
 Goal: generate a TTS voiceover and build a video around its timing.
-Context: day22/script.txt. API keys in .env (OPENAI_API_KEY and/or ELEVENLABS_API_KEY). My Remotion project is in
-remotion/, my mixing script is day20/mix.py.
+Context: day22/script.txt. API keys in .env (OPENAI_API_KEY and/or ELEVENLABS_API_KEY). My Remotion project is in remotion/, my mixing script is day20/mix.py.
 Constraints:
-- day22/tts.py --provider openai|elevenlabs|say: reads the script, writes day22/voice.mp3.
-  Cache by a hash of (text + voice + provider) so re-running never pays twice. If the key is missing, print a
-  clear message and fall back to the offline voice — never crash.
+- day22/tts.py --provider openai|elevenlabs|say: reads the script, writes day22/voice.mp3. Cache by a hash of (text + voice + provider) so re-running never pays twice. If the key is missing, print a clear message and fall back to the offline voice — never crash.
 - Print the voice duration with ffprobe.
-- Make a Remotion composition "Voiced" (1080x1920, 30 fps) whose duration comes from the audio length
-  (calculateMetadata), with one visual beat per script line: big keyword text for each line, timed proportionally
-  to the line's word count. Include the voice with <Audio>.
+- Make a Remotion composition "Voiced" (1080x1920, 30 fps) whose duration comes from the audio length (calculateMetadata), with one visual beat per script line: big keyword text for each line, timed proportionally to the line's word count. Include the voice with <Audio>.
 - After rendering, run day20/mix.py to add music ducked under the voice and normalize to -14 LUFS.
 Done when: day22/voiced.mp4 has voice, ducked music, visuals that change roughly with each line.
 ```

@@ -67,17 +67,12 @@ footage disclosure the platform requires.
 
 ```text
 Goal: platform-ready packaging for the premiere.
-Context: read the storyboard JSON and transcript for episode-01 (or the tool's demo / the reel), and my day 36
-metadata script.
+Context: read the storyboard JSON and transcript for episode-01 (or the tool's demo / the reel), and my day 36 metadata script.
 Make:
-1. 5 title options (max 60 characters; the promise, not the topic), and a description with chapters from the
-   transcript, one link to the [series page / tool / contact], and the AI-disclosure line if needed.
-2. 3 thumbnail variants at 1280x720 from the pipeline's thumbnail generator: one face/subject close-up, one big-text,
-   one contrast frame from the best moment. Text max 4 words, readable at phone size.
-3. A 20–30 s vertical (1080x1920) short cut of the strongest moment, with captions in the safe zone and the hook in
-   the first 2 s, ending with "full episode on my channel".
-Done when: the chosen title and description sit in runs/<capstone>/01/metadata.json, thumbnails in its thumbs/,
-the short in runs/<capstone>/premiere/, QC is clean on every video, and you show me the titles side by side.
+1. 5 title options (max 60 characters; the promise, not the topic), and a description with chapters from the transcript, one link to the [series page / tool / contact], and the AI-disclosure line if needed.
+2. 3 thumbnail variants at 1280x720 from the pipeline's thumbnail generator: one face/subject close-up, one big-text, one contrast frame from the best moment. Text max 4 words, readable at phone size.
+3. A 20–30 s vertical (1080x1920) short cut of the strongest moment, with captions in the safe zone and the hook in the first 2 s, ending with "full episode on my channel".
+Done when: the chosen title and description sit in runs/<capstone>/01/metadata.json, thumbnails in its thumbs/, the short in runs/<capstone>/premiere/, QC is clean on every video, and you show me the titles side by side.
 ```
 
 Pick the title and thumbnail you'd click on a tired evening — then check the thumbnail at phone size (shrink it to
@@ -109,9 +104,7 @@ Post where your people already are — where you announced the capstone on day 5
 audience gathers (read its self-promotion rules first). Draft with the agent, rewrite in your voice:
 
 ```text
-Draft a 100-word premiere post for [X / LinkedIn / a community]. Hook from the episode's best line;
-what the series/tool/reel is in one sentence; one detail that shows care (e.g. "every chart is drawn by code from
-real data"); the link; one question to the viewer. No hype words. Two versions: plain and playful.
+Draft a 100-word premiere post for [X / LinkedIn / a community]. Hook from the episode's best line; what the series/tool/reel is in one sentence; one detail that shows care (e.g. "every chart is drawn by code from real data"); the link; one question to the viewer. No hype words. Two versions: plain and playful.
 ```
 
 Attach the vertical cut — video posts beat link posts on most feeds. **Proof for task 3:** the post link.

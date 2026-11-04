@@ -76,13 +76,10 @@ Context: our schema is in shared/schema.ts, the prompt in server/prompts/extract
 
 Constraints:
 - A CLI script arena/run.ts (run with `npm run arena`) — not part of the public app.
-- Models come from arena/models.json: [{ id, provider, inputPricePerM, outputPricePerM }]. I will fill in the prices
-  myself from the pricing pages; leave them as 0 with a TODO comment.
+- Models come from arena/models.json: [{ id, provider, inputPricePerM, outputPricePerM }]. I will fill in the prices myself from the pricing pages; leave them as 0 with a TODO comment.
 - Inputs: arena/inputs/*.txt — I'll add 5 real messy examples.
-- For each model x input: send the SAME prompt and schema; record latency (ms), input/output tokens from the
-  response usage, cost in USD, whether the output passes the Zod schema, and any error.
-- Output: a table in the terminal plus arena/results.md with per-model averages (pass rate, median latency,
-  average cost, errors). Keys from .env only.
+- For each model x input: send the SAME prompt and schema; record latency (ms), input/output tokens from the response usage, cost in USD, whether the output passes the Zod schema, and any error.
+- Output: a table in the terminal plus arena/results.md with per-model averages (pass rate, median latency, average cost, errors). Keys from .env only.
 
 Explain the plan first: how you'll call each provider (SDK or plain fetch), and how you compute cost. Wait for my OK.
 At the end, run it with my 5 inputs, show the results table, and point out anything that looks suspicious.
@@ -119,14 +116,12 @@ $3 and $15.
 3. Three users each make 20 calls a day for 30 days. Monthly cost on A vs B?
 4. You add a 2,000-token conversation history to every call. New per-call cost on A?
 
-<details><summary>Answers</summary>
-
-1. 1,500 / 1,000,000 × $1 = $0.0015, plus 300 / 1,000,000 × $5 = $0.0015. Total **$0.003**.
-2. $0.0045 + $0.0045 = **$0.009** — three times more.
-3. 3 × 20 × 30 = 1,800 calls. A: 1,800 × $0.003 = **$5.40**. B: 1,800 × $0.009 = **$16.20**.
-4. Input becomes 3,500 tokens: $0.0035 + $0.0015 = **$0.005**. History is often the hidden cost driver.
-
-</details>
+> **Answers:**
+>
+> 1. 1,500 / 1,000,000 × $1 = $0.0015, plus 300 / 1,000,000 × $5 = $0.0015. Total **$0.003**.
+> 2. $0.0045 + $0.0045 = **$0.009** — three times more.
+> 3. 3 × 20 × 30 = 1,800 calls. A: 1,800 × $0.003 = **$5.40**. B: 1,800 × $0.009 = **$16.20**.
+> 4. Input becomes 3,500 tokens: $0.0035 + $0.0015 = **$0.005**. History is often the hidden cost driver.
 
 ## You're done when…
 

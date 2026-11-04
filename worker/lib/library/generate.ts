@@ -19,10 +19,11 @@ Examples and platforms that fit them: X, YouTube, TikTok, Product Hunt, Stripe, 
   ru: `Аудитория: русскоязычные новички (Россия, СНГ, диаспора). Пиши сразу по-русски, живым языком, обращайся на «ты».
 Это адаптация, а не перевод: свои примеры и реалии — Telegram, VK, YouTube, Хабр, оплата и хостинг, доступные из РФ/СНГ, где это важно.
 Технические термины (prompt, commit, deploy) можно оставлять как в индустрии, коротко поясняя при первом упоминании.
+Терминология программы: «ИИ-агент» или «агент для кода» (не «coding-агент»), «нейросеть»/«модель» для LLM.
 Если оригинал на английском — честно скажи, что видео/статья на английском, и подскажи, как смотреть (субтитры, автоперевод).`,
 };
 
-export function buildPrompt(r: Resource, lang: LibLang, sourceText: string | null): { system: string; prompt: string } {
+export function buildPrompt(r: Resource, lang: LibLang, sourceText: string | null, outline?: string): { system: string; prompt: string } {
   const system = `You are the lesson designer for FlowLeaf 66, a 66-day program that turns complete beginners into people who ship real apps and videos with AI coding agents.
 You turn one external resource (a video, reel or article) into a short, practical lesson for ONE audience.
 ${AUDIENCE[lang]}
@@ -65,7 +66,7 @@ Rules:
   const text = sourceText ? clip(sourceText, 60_000) : null;
   const prompt = `Program outline (for suggestedDays):
 ${PROGRAM_OUTLINE}
-
+${outline ? `\nActual day titles (pick suggestedDays from these):\n${outline}\n` : ""}
 Resource:
 ${facts}
 
@@ -89,9 +90,9 @@ export type GenerateResult =
   | { ok: false; reason: "invalid" | "error"; error: string; attempts: number };
 
 /** Generate one language's material. Validates with zod; one retry with the validation errors fed back. */
-export async function generateMaterial(env: Env, r: Resource, lang: LibLang, sourceText: string | null, call = claude): Promise<GenerateResult> {
+export async function generateMaterial(env: Env, r: Resource, lang: LibLang, sourceText: string | null, call = claude, outline?: string): Promise<GenerateResult> {
   if (!env.ANTHROPIC_API_KEY) return { ok: false, reason: "not_configured" };
-  const { system, prompt } = buildPrompt(r, lang, sourceText);
+  const { system, prompt } = buildPrompt(r, lang, sourceText, outline);
   let lastError = "";
   let reply: string | null = null;
   for (let attempt = 1; attempt <= 2; attempt++) {

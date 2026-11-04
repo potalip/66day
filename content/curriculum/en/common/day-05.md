@@ -6,7 +6,7 @@ title: "Read the code your agent wrote"
 summary: "Open the hood of your page: see HTML, CSS and JS, play in DevTools, and make your first change by hand."
 estMinutes: 75
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
 tasks:
   - id: d05-t1
     type: read
@@ -52,8 +52,7 @@ any text editor works.
 Then ask your agent for a guided tour:
 
 ```text
-Explain index.html to me section by section, like I'm a beginner. For each section give
-the line numbers, what it does in one sentence, and one thing I could safely change there.
+Explain index.html to me section by section, like I'm a beginner. For each section give the line numbers, what it does in one sentence, and one thing I could safely change there.
 Don't edit anything.
 ```
 
@@ -89,11 +88,9 @@ refresh the local page, check it.
 ```text
 Goal: add a small footer that says "Day 5: I read my own code." in a muted color.
 
-Constraints: footer only, keep everything else as it is. After the change, tell me exactly
-which lines you added so I can find them in my editor.
+Constraints: footer only, keep everything else as it is. After the change, tell me exactly which lines you added so I can find them in my editor.
 
-Done when: both my manual change and your footer are committed together with the message
-"day 5: hand edit + footer" and pushed. Print the GitHub link to the commit.
+Done when: both my manual change and your footer are committed together with the message "day 5: hand edit + footer" and pushed. Print the GitHub link to the commit.
 ```
 
 Find the agent's lines in your editor. Reading what it did is the whole point.
@@ -122,14 +119,12 @@ Find the agent's lines in your editor. Reading what it did is the whole point.
 3. Which line works out what day it is?
 4. Is the headline text HTML, CSS or JS? And the words " Day 7" after it?
 
-<details><summary>Answers</summary>
-
-1. `:root { --accent: #2f7d4f; }` — a CSS variable; every place that uses `var(--accent)` follows it.
-2. `grid-template-columns: repeat(11, 1fr)` — 11 columns, so 6 rows for 66 squares.
-3. `const n = Math.floor(...) + 1;` — milliseconds since the start, divided by the milliseconds in a day.
-4. The headline is HTML; " Day 7" is added by JavaScript when the page loads.
-
-</details>
+> **Answers:**
+>
+> 1. `:root { --accent: #2f7d4f; }` — a CSS variable; every place that uses `var(--accent)` follows it.
+> 2. `grid-template-columns: repeat(11, 1fr)` — 11 columns, so 6 rows for 66 squares.
+> 3. `const n = Math.floor(...) + 1;` — milliseconds since the start, divided by the milliseconds in a day.
+> 4. The headline is HTML; " Day 7" is added by JavaScript when the page loads.
 
 ## You're done when…
 

@@ -97,7 +97,7 @@ By day 66 a graduate can:
 **Story.** The program is framed as a journey: the student plants a leaf on day 1 (the "66-day promise" page) and the
 path map grows into a tree. Each phase has a "boss" guarding the gate. The tone is a calm, witty mentor — not a
 hype coach. Small surprises are scattered through rest days (a ritual, a challenge, a tiny game) and the game layer
-holds secret badges (night shift, polyglot).
+holds a secret badge (night shift).
 
 ### Why the tracks split on day 15
 

@@ -60,7 +60,7 @@ times segment duration.
 - **Voice cloning only with consent.** Your own voice: fine. Anyone else's: written permission, saying what it's used
   for. Most TTS providers require you to confirm consent, and some verify it. Never clone a celebrity or a client's
   voice "just to test".
-- **Lip-sync is the hard limit.** Motion graphics and voiceover-over-B-roll dub perfectly. A talking head will look
+- **Lip-sync is the hard limit.** Motion graphics and voiceover over B-roll dub perfectly. A talking head will look
   off when lips don't match. Lip-sync models exist but often look uncanny; for faces, prefer cutting away to visuals
   during dubbed lines, or keep the original with subtitles.
 - **Say it's a dub.** One line in the description ("AI-dubbed from English, voice: my own clone") keeps viewers'
@@ -80,14 +80,10 @@ timestamps), the music track, and the original VO duration per scene.
 Goal: a dub stage in my pipeline: input video project + target language, output a dubbed mp4 with captions.
 Context: my pipeline keeps storyboard JSON, VO, music and captions separately (see README).
 Steps:
-1. For each scene, take its original line and duration. Ask the LLM (smart tier) to ADAPT, not translate:
-   native phrasing, local examples, same meaning, and at most duration * chars_per_second characters.
-   Return JSON {scene, text, chars, notes} where notes lists what was changed and why.
+1. For each scene, take its original line and duration. Ask the LLM (smart tier) to ADAPT, not translate: native phrasing, local examples, same meaning, and at most duration * chars_per_second characters. Return JSON {scene, text, chars, notes} where notes lists what was changed and why.
 2. TTS each line in the target language (provider set in config; my own voice or a stock voice only).
-3. Measure each clip with ffprobe. If it's up to 12% too long, speed it up with ffmpeg atempo.
-   If longer, send it back to the LLM to shorten, max 2 retries. If shorter, pad with silence.
-4. Mix: new VO + original music with the same ducking as before. New captions from the adapted text and the
-   real TTS timings. Render through the normal render stage.
+3. Measure each clip with ffprobe. If it's up to 12% too long, speed it up with ffmpeg atempo. If longer, send it back to the LLM to shorten, max 2 retries. If shorter, pad with silence.
+4. Mix: new VO + original music with the same ducking as before. New captions from the adapted text and the real TTS timings. Render through the normal render stage.
 5. Save a report: per scene original vs adapted text, durations, tempo factor used.
 Constraints: never exceed atempo 1.15; voice cloning disabled unless config says consent=true.
 Done when: out/dub-<lang>.mp4 plays in sync, captions match the speech, the report is in out/.
@@ -116,16 +112,14 @@ overflow, an example that means nothing in that culture. Write what you (or the 
 3. A client asks you to clone their CEO's voice from a keynote recording "to save time". What do you need first?
 4. Why generate new captions from the adapted text instead of translating the old SRT?
 
-<details><summary>Answers</summary>
-
-1. No. Above about 1.15 speech sounds rushed and robotic. Shorten the text instead.
-2. The explainer and the screen tutorial. The podcast needs lip-sync or cutaways; that's where dubbing shows.
-3. Written consent from the CEO for that use, plus checking the TTS provider's consent rules. The client's word alone
-   is not consent.
-4. Captions must match what is actually said. The adapted line differs from a translation, and timings come from the
-   new audio.
-
-</details>
+> **Answers:**
+>
+> 1. No. Above about 1.15 speech sounds rushed and robotic. Shorten the text instead.
+> 2. The explainer and the screen tutorial. The podcast needs lip-sync or cutaways; that's where dubbing shows.
+> 3. Written consent from the CEO for that use, plus checking the TTS provider's consent rules. The client's word alone
+>    is not consent.
+> 4. Captions must match what is actually said. The adapted line differs from a translation, and timings come from the
+>    new audio.
 
 ## You're done when…
 
@@ -134,4 +128,4 @@ overflow, an example that means nothing in that culture. Write what you (or the 
 - [ ] Your note on what literal translation broke is written.
 - [ ] Quiz done.
 
-Tomorrow: you'll turn one long video into three shorts with a script and a rubric.
+**Tomorrow:** you'll turn one long video into three shorts with a script and a rubric.

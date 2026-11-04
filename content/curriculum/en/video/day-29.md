@@ -38,10 +38,10 @@ clips that look like three different films and a surprise bill.
 
 ## What video models are (and aren't) good at
 
-You send text (and optionally an image), wait 30 seconds to a few minutes, and get back a short clip, usually 4–10 seconds.
-The main families in late 2026: **Google Veo** (via the Gemini API), **Runway**, **Luma**, **Kling**, and open-weight
-models like **Wan**. Aggregators such as **Replicate** and **fal** give
-you one key and one bill for dozens of them. Names change every few months: check the provider's current model list.
+You send text (and optionally an image), wait from 30 seconds to a few minutes, and get back a short clip, usually
+4–10 seconds long. The main families in late 2026: **Google Veo** (via the Gemini API), **Runway**, **Luma**, **Kling**,
+and open-weight models like **Wan**. Aggregators such as **Replicate** and **fal** give you one key and one bill for
+dozens of them. Names change every few months: check the provider's current model list.
 
 **Good at:** atmosphere, nature, slow camera moves, abstract textures, establishing shots, product-on-table moods.
 **Bad at:** readable text, hands doing precise things, the same face across clips, exact counts ("five birds"), anything
@@ -80,8 +80,8 @@ anyway, in the description.
 
 Open your explainer's script and choose three moments that would feel richer with real-looking footage: an opening
 mood shot, a metaphor, a closing image. Write one line per shot. Generate them in 16:9 even though day 27 was vertical:
-a horizontal master can be cropped to 9:16 later (day 34), never the other way round. Generate (or draw in code) one **reference still** for
-the look: a single frame with the palette and light you want.
+a horizontal master can be cropped to 9:16 later (day 34), never the other way round. Generate (or draw in code) one
+**reference still** for the look: a single frame with the palette and light you want.
 
 ### 2. Build the generator
 
@@ -100,8 +100,9 @@ Done when: python gen_clips.py --dry-run shows 3 prompts and a cost, and a real 
 
 Run `--dry-run` first: would a cinematographer know what to shoot from these prompts?
 
-> **If you're stuck:** jobs that "never finish" are usually a polling bug. Ask the agent to print the raw status response every poll. A "safety" rejection usually means a word in the
-> prompt sounds like a real person or brand — rephrase it.
+> **If you're stuck:** jobs that "never finish" are usually a polling bug. Ask the agent to print the raw status
+> response on every poll. A "safety" rejection usually means a word in the prompt sounds like a real person or brand —
+> rephrase it.
 
 > **No key or budget?** Use `--fixture` with three free stock clips (Pexels or Pixabay videos, check each licence).
 > Everything else works the same; swap in AI clips later.
@@ -127,15 +128,13 @@ Upload the three keepers (or `compare.mp4`). For the prompt log, paste 3–5 lin
 3. Can you put a generated clip in a paid client ad?
 4. Which part of a "how compound interest works" video should *not* be AI-generated?
 
-<details><summary>Answers</summary>
-
-1. 3 clips × 3 attempts × 6 s × P = 54 × P. Write that number down before you press Enter.
-2. Reuse the exact style suffix and reference image; mention the palette and light explicitly; regenerate only that shot.
-3. Only if the provider's terms on your plan allow commercial use, the clip shows no real people, brands or protected
-   characters, and the client knows it's AI footage.
-4. The numbers, formulas and charts — anything that must be correct. Render those in code.
-
-</details>
+> **Answers:**
+>
+> 1. 3 clips × 3 attempts × 6 s × P = 54 × P. Write that number down before you press Enter.
+> 2. Reuse the exact style suffix and reference image; mention the palette and light explicitly; regenerate only that shot.
+> 3. Only if the provider's terms on your plan allow commercial use, the clip shows no real people, brands or protected
+>    characters, and the client knows it's AI footage.
+> 4. The numbers, formulas and charts — anything that must be correct. Render those in code.
 
 ## You're done when…
 
@@ -144,4 +143,4 @@ Upload the three keepers (or `compare.mp4`). For the prompt log, paste 3–5 lin
 - [ ] Your prompt log (3–5 lines: change → effect) is pasted.
 - [ ] You answered the quiz without peeking.
 
-Tomorrow: you cut these clips and your voiceover together — from a JSON file, not a timeline.
+**Tomorrow:** you cut these clips and your voiceover together — from a JSON file, not a timeline.

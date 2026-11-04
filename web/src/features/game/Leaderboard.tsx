@@ -1,14 +1,14 @@
 // OWNER: game agent. Weekly / all-time leaderboard with track filter and a pinned "you" row.
 import { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router";
+import { Flame, Trophy } from "lucide-react";
 import { api } from "@web/api";
 import { useLang, useStrings } from "@web/i18n";
-import { notifyGameChanged, useApiData, type LeaderboardResponse, type LeaderRow } from "./api";
-import { fmtNum, fmtRelative } from "./format";
-import { GameIcon } from "./icons";
+import { Badge, Button, ButtonLink, Card, EmptyState, PageHeader, Segmented, Skeleton, cn, useFormat } from "@web/ui";
+import { notifyGameChanged, useApiData, useGameMe, type LeaderboardResponse, type LeaderRow } from "./api";
+import { fmtRelative } from "./format";
 import { strings } from "./strings";
-import { Button, Card, cx, Segmented, Skeleton } from "./ui";
-import { Avatar, displayName } from "./widgets";
+import { Avatar, displayName, GameLayer, StreakNudge } from "./widgets";
 
 type Period = "week" | "all";
 type TrackF = "all" | "apps" | "video";
@@ -19,103 +19,101 @@ export default function Leaderboard() {
   const lang = useLang();
   const [sp, setSp] = useSearchParams();
   const period: Period = sp.get("period") === "all" ? "all" : "week";
-  const track: TrackF = sp.get("track") === "apps" || sp.get("track") === "video" ? (sp.get("track") as TrackF) : "all";
+  const t = sp.get("track");
+  const track: TrackF = t === "apps" || t === "video" ? t : "all";
   const set = (k: string, v: string, def: string) => {
     const n = new URLSearchParams(sp);
     if (v === def) n.delete(k); else n.set(k, v);
     setSp(n, { replace: true });
   };
   const { data, error, loading, reload } = useApiData<LeaderboardResponse>(`/game/leaderboard?period=${period}&track=${track}&limit=50`);
+  const me = useGameMe();
   const fresh = data && data.period === period && data.track === track ? data : null;
 
   return (
     <div className="mx-auto max-w-3xl">
-      <header className="mb-6">
-        <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">{L.title}</h1>
-        <p className="mt-1.5 max-w-[60ch] text-muted">{L.subtitle}</p>
-      </header>
+      <GameLayer />
+      <PageHeader eyebrow={L.eyebrow} title={L.title} description={L.subtitle} />
+
+      {me.data && <StreakNudge streak={me.data.streak} href={`/${lang}/today`} className="mb-5" />}
 
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
-        <Segmented label={L.title} value={period} onChange={(v) => set("period", v, "week")}
+        <Segmented label={L.period} value={period} onChange={(v) => set("period", v, "week")}
           options={[{ value: "week", label: L.week }, { value: "all", label: L.all }]} />
-        <Segmented label={L.tracks.all} size="sm" value={track} onChange={(v) => set("track", v, "all")}
+        <Segmented label={L.track} size="sm" value={track} onChange={(v) => set("track", v, "all")}
           options={(["all", "apps", "video"] as const).map((v) => ({ value: v, label: L.tracks[v] }))} />
       </div>
 
-      <Card className="overflow-hidden">
-        <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5 text-xs text-muted sm:px-5">
-          <span>{fresh && fresh.total > 0 ? L.students(fresh.total) : " "}</span>
-          {period === "week" && fresh && <span>{L.resets(fmtRelative(fresh.resetsAt, lang))}</span>}
-        </div>
-
-        {error && !fresh ? (
-          <div className="p-8 text-center">
-            <p className="text-muted">{L.error}</p>
-            <Button variant="outline" className="mt-4" onClick={reload}>{L.retry}</Button>
+      {error && !fresh ? (
+        <EmptyState tone="danger" icon={<Trophy />} title={L.error} action={<Button variant="outline" onClick={reload}>{L.retry}</Button>} />
+      ) : !fresh ? (
+        <Card padding="none" role="status" aria-busy="true">
+          <span className="sr-only">…</span>
+          {Array.from({ length: 8 }, (_, i) => (
+            <div key={i} className="flex items-center gap-3 border-b border-line px-4 py-3.5 last:border-0 sm:px-5">
+              <Skeleton className="h-4 w-6" /><Skeleton circle className="size-9" /><Skeleton className="h-4 flex-1" /><Skeleton className="h-4 w-14" />
+            </div>
+          ))}
+        </Card>
+      ) : fresh.rows.length === 0 ? (
+        <EmptyBoard period={period} onSeeded={reload} />
+      ) : (
+        <Card padding="none" className="overflow-hidden">
+          <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5 text-xs text-muted sm:px-5">
+            <span>{L.students(fresh.total)}</span>
+            {period === "week" && <span>{L.resets(fmtRelative(fresh.resetsAt, lang))}</span>}
           </div>
-        ) : !fresh ? (
-          <ul aria-busy="true" aria-label={L.title}>
-            {Array.from({ length: 8 }, (_, i) => (
-              <li key={i} className="flex items-center gap-3 border-b border-line px-4 py-3 last:border-0 sm:px-5">
-                <Skeleton className="h-4 w-6" /><Skeleton className="h-9 w-9 rounded-full" /><Skeleton className="h-4 flex-1" /><Skeleton className="h-4 w-14" />
-              </li>
-            ))}
-          </ul>
-        ) : fresh.rows.length === 0 ? (
-          <EmptyBoard period={period} onSeeded={reload} />
-        ) : (
-          <ol aria-label={L.title} className={cx(loading && "opacity-70 transition-opacity")}>
-            {fresh.rows.map((r) => <Row key={r.userId} r={r} period={period} />)}
+          <ol aria-label={L.title} className={cn(loading && "opacity-70 transition-opacity")}>
+            {fresh.rows.map((r) => <Row key={r.userId} r={r} />)}
           </ol>
-        )}
-
-        {fresh && fresh.rows.length > 0 && (
-          fresh.me && !fresh.rows.some((r) => r.isMe) ? (
+          {fresh.me && !fresh.rows.some((r) => r.isMe) ? (
             <div className="sticky bottom-0 border-t border-line bg-surface">
-              <p className="px-4 pt-2 text-[11px] font-medium uppercase tracking-[0.1em] text-muted sm:px-5">{L.yourPlace}</p>
-              <ol><Row r={fresh.me} period={period} pinned /></ol>
+              <p className="px-4 pt-2 text-[11px] font-semibold uppercase tracking-[0.1em] text-muted sm:px-5">{L.yourPlace}</p>
+              <ol><Row r={fresh.me} pinned /></ol>
             </div>
           ) : !fresh.me ? (
             <p className="border-t border-line px-4 py-3 text-sm text-muted sm:px-5">{L.notRanked}</p>
-          ) : null
-        )}
-      </Card>
+          ) : null}
+        </Card>
+      )}
     </div>
   );
 }
 
-function Row({ r, period, pinned }: { r: LeaderRow; period: Period; pinned?: boolean }) {
+function Row({ r, pinned }: { r: LeaderRow; pinned?: boolean }) {
   const s = useStrings(strings);
   const L = s.leaderboard;
   const lang = useLang();
+  const f = useFormat();
   const name = displayName(r.name, r.userId, s);
   const top = r.rank <= 3;
   return (
-    <li className={cx("border-b border-line last:border-0", r.isMe && "bg-accent-soft/60")}>
-      <Link to={r.isMe ? `/${lang}/me` : `/${lang}/me?u=${encodeURIComponent(r.userId)}`}
-        className={cx("flex items-center gap-3 px-4 py-3 hover:bg-surface-2/70 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent sm:gap-4 sm:px-5", pinned && "pt-1.5")}>
-        <span className={cx("w-7 shrink-0 text-center text-sm font-semibold tabular-nums", top ? "text-gold" : "text-muted")}
-          aria-label={`${L.rank} ${r.rank}`}>
-          {top ? <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-gold-soft">{r.rank}</span> : r.rank}
+    <li className={cn("border-b border-line last:border-0", r.isMe && "bg-accent-soft/60")}>
+      <Link to={r.isMe ? `/${lang}/me` : `/${lang}/u/${encodeURIComponent(r.userId)}`}
+        className={cn("flex items-center gap-3 px-4 py-3 transition-colors hover:bg-surface-2/70 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring sm:gap-4 sm:px-5", pinned && "pt-1.5")}>
+        <span className={cn("w-7 shrink-0 text-center text-sm font-semibold tabular", top ? "text-gold-ink" : "text-muted")}>
+          <span className="sr-only">{L.rank} </span>
+          {top ? <span className="inline-grid size-7 place-items-center rounded-full bg-gold-soft">{r.rank}</span> : r.rank}
         </span>
-        <Avatar name={name} highlight={r.isMe} />
+        <Avatar name={name} ring={r.isMe ? "accent" : top ? "gold" : undefined} />
         <span className="min-w-0 flex-1">
           <span className="flex items-center gap-2">
             <span className="truncate font-medium text-fg">{name}</span>
-            {r.isMe && <span className="shrink-0 rounded-full bg-accent px-2 py-0.5 text-[11px] font-semibold text-accent-fg">{L.you}</span>}
+            {r.isMe && <Badge tone="accent" size="sm">{L.you}</Badge>}
           </span>
           <span className="mt-0.5 flex items-center gap-2 overflow-hidden whitespace-nowrap text-xs text-muted">
             <span>{L.level}&nbsp;{r.level}</span>
             {r.track && <><span aria-hidden>·</span><span>{L.tracks[r.track]}</span></>}
             {r.streak > 0 && (
-              <><span aria-hidden>·</span><span className="inline-flex items-center gap-0.5" title={L.streakTitle(r.streak)}>
-                <GameIcon name="flame" size={12} className="text-gold" />{r.streak}
-              </span></>
+              <><span aria-hidden>·</span>
+                <span className="inline-flex items-center gap-0.5" title={L.streakTitle(r.streak)}>
+                  <Flame aria-hidden className="size-3 text-gold-bright" />{r.streak}<span className="sr-only"> {L.streakTitle(r.streak)}</span>
+                </span></>
             )}
           </span>
         </span>
         <span className="shrink-0 text-right">
-          <span className="block font-semibold tabular-nums text-fg">{fmtNum(r.xp, lang)}</span>
+          <span className="block font-semibold tabular text-fg">{f.number(r.xp)}</span>
           <span className="block text-[11px] uppercase tracking-wider text-muted">XP</span>
         </span>
       </Link>
@@ -131,21 +129,15 @@ function EmptyBoard({ period, onSeeded }: { period: Period; onSeeded: () => void
   const [busy, setBusy] = useState(false);
   useEffect(() => { api<{ dev?: boolean }>("/game/health").then((h) => setDev(!!h.dev)).catch(() => {}); }, []);
   return (
-    <div className="px-6 py-12 text-center">
-      <span className="mx-auto mb-4 inline-flex h-12 w-12 items-center justify-center rounded-full bg-gold-soft text-gold"><GameIcon name="trophy" size={24} /></span>
-      <h2 className="font-semibold">{L.emptyTitle}</h2>
-      <p className="mx-auto mt-1.5 max-w-[46ch] text-sm text-muted">{period === "week" ? L.emptyWeek : L.emptyAll}</p>
-      <div className="mt-5 flex flex-wrap justify-center gap-2">
-        <Link to={`/${lang}/today`} className="inline-flex items-center rounded-xl bg-accent px-4 py-2 text-sm font-medium text-accent-fg hover:opacity-90">
-          {L.goToday}
-        </Link>
+    <EmptyState tone="gold" icon={<Trophy />} title={L.emptyTitle} description={period === "week" ? L.emptyWeek : L.emptyAll}
+      action={<>
+        <ButtonLink to={`/${lang}/today`}>{L.goToday}</ButtonLink>
         {dev && (
-          <Button variant="outline" disabled={busy} onClick={async () => {
+          <Button variant="outline" loading={busy} onClick={async () => {
             setBusy(true);
             try { await api("/game/dev/seed", { method: "POST" }); notifyGameChanged(); onSeeded(); } finally { setBusy(false); }
-          }}>{busy ? L.seeding : L.seed}</Button>
+          }}>{L.seed}</Button>
         )}
-      </div>
-    </div>
+      </>} />
   );
 }

@@ -5,6 +5,7 @@ import { loadPublished, applyFilters, facets, related, forDay } from "../lib/lib
 import { getResourceRow, toResource, STUDENT_VISIBLE_MATERIAL } from "../lib/library/repo";
 import { youtubeEmbedUrl, instagramEmbedUrl, parseResourceUrl } from "../lib/library/url";
 import { uploadKey } from "../lib/library/pipeline";
+import { onGameEvent } from "../lib/game";
 
 // OWNER: library agent (docs/OWNERSHIP.md). Public student-facing library API.
 export const library = new Hono<AppEnv>();
@@ -105,11 +106,14 @@ library.delete("/:id/today", async (c) => {
 library.post("/:id/done", async (c) => {
   const { done = true } = await c.req.json<{ done?: boolean }>().catch(() => ({ done: true }));
   const id = c.req.param("id");
+  const before = await c.env.DB.prepare("SELECT done_at FROM lib_user_items WHERE user_id = ? AND resource_id = ?").bind(c.get("userId"), id).first<{ done_at: number | null }>();
   await c.env.DB.prepare(
     `INSERT INTO lib_user_items (user_id, resource_id, done_at) VALUES (?1, ?2, CASE WHEN ?3 THEN unixepoch() END)
      ON CONFLICT (user_id, resource_id) DO UPDATE SET done_at = CASE WHEN ?3 THEN unixepoch() END`,
   ).bind(c.get("userId"), id, done ? 1 : 0).run();
-  return c.json({ ok: true, done });
+  // Game layer: +XP / badges. Idempotent per (user, resource) and never throws (worker/lib/game.ts).
+  const awards = done && !before?.done_at ? await onGameEvent(c.env, c.get("userId"), { type: "resource.viewed", resourceId: id }) : [];
+  return c.json({ ok: true, done, awards });
 });
 
 /** GET /api/library/media/:id — stream an uploaded video from R2 (published uploads only). */

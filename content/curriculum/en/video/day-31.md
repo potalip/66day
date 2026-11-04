@@ -6,7 +6,7 @@ title: "The LLM as your screenwriter"
 summary: "Turn any topic into a validated storyboard JSON — scenes, voiceover, visuals, timings — and pick the hook with a rubric, not a vibe."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://docs.anthropic.com/en/api/getting-started"
   - "https://www.json.org/json-en.html"
 tasks:
@@ -51,8 +51,8 @@ understandable with the sound off (that's what on-screen text is for).
 
 **Why a schema?** A model asked for "a script" returns prose you have to chop up by hand. A model given a **JSON
 schema** returns data your pipeline can use directly: each scene has a duration, a voiceover line and a visual
-instruction your renderer understands. And you can check it with code — e.g. voiceover speed. English narration runs
-at roughly 2.5 words per second; a 4-second scene with 18 words will sound like an auctioneer.
+instruction your renderer understands. You can also check it with code, for example voiceover speed. English narration runs
+at roughly 2.5 words per second, so a 4-second scene with 18 words will sound like an auctioneer.
 
 ## Step by step
 
@@ -60,17 +60,14 @@ at roughly 2.5 words per second; a 4-second scene with 18 words will sound like 
 
 ```text
 Goal: a script storyboard.py that turns a topic into storyboard.json, validated against a schema.
-Context: my pipeline/ folder. Claude API key in .env as ANTHROPIC_API_KEY; model from env CLAUDE_MODEL,
-default claude-sonnet-5-5. My renderers can do these visual kinds: "template" (title, lower_third, list),
-"chart" (data file + chart type), "diagram" (Manim/Remotion scene name), "ai_clip" (prompt for gen_clips.py).
+Context: my pipeline/ folder. Claude API key in .env as ANTHROPIC_API_KEY; model from env CLAUDE_MODEL, default claude-sonnet-5-5. My renderers can do these visual kinds: "template" (title, lower_third, list), "chart" (data file + chart type), "diagram" (Manim/Remotion scene name), "ai_clip" (prompt for gen_clips.py).
 Schema (write it as schema/storyboard.schema.json and as a pydantic model):
   title, audience, duration_s, aspect ("16:9" | "9:16"),
   hooks: 5 strings,
   scenes: [{ id, duration_s, vo, on_screen_text (<= 6 words), visual: { kind, ... } , sfx? }]
 Constraints:
 - Use the API's structured output / tool-use feature so the reply must match the schema; still validate locally.
-- Code checks after validation: scene durations sum to duration_s (±2 s); each vo has <= 2.7 words per second
-  of its scene; no scene longer than 6 s. On failure, send the errors back to the model once and retry.
+- Code checks after validation: scene durations sum to duration_s (±2 s); each vo has <= 2.7 words per second of its scene; no scene longer than 6 s. On failure, send the errors back to the model once and retry.
 - If ANTHROPIC_API_KEY is missing, print "AI not configured" and copy fixtures/storyboard.example.json instead.
 - Save the prompt you sent next to the output (storyboard.prompt.txt) so I can diff prompts later.
 Done when: python storyboard.py "how your phone finds you without GPS" --seconds 45 writes a valid storyboard.json.
@@ -118,4 +115,4 @@ is the most important skill of the day: the model drafts, you direct.
 - [ ] Your hook table (5 hooks, model score vs your score) is pasted.
 - [ ] You wrote what you overruled and why.
 
-Tomorrow: you stop picking colours and fonts by hand — your brand becomes a config file.
+**Tomorrow:** you stop picking colours and fonts by hand — your brand becomes a config file.

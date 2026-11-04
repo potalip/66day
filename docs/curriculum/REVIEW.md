@@ -117,8 +117,11 @@ technical bugs that would have stopped students cold. All of these are fixed.
 
 ## Known gaps (not fixed, deliberately or out of scope)
 
-- **Apps 45:** asks for activation numbers before day 54 adds event logging. Students get approximate answers.
-  - *Next:* add simple event logging around apps 36–37.
+- ~~**Apps 45:** asks for activation numbers before event logging exists.~~ **Fixed after review:** apps day 34 now
+  builds a first-party `events` table in D1 with a `track()` helper (session_started, signup_completed,
+  core_action_done, ai_called, upgrade_clicked; anonymous id linked on sign-up; no personal data). Day 36 adds
+  `cta_clicked`, day 45 queries the table, day 54 adds the beta events to it, and day 65's report reads it.
+  Plausible/PostHog are now an optional mirror.
 - **Apps 29:** the optional Playwright test in CI would need a local D1 migration step. It is described only in
   prose.
 - **Apps 53–54 and video 54:** need outside testers with a 24–48-hour lead time. Day 52 already tells students to
@@ -169,3 +172,49 @@ technical bugs that would have stopped students cold. All of these are fixed.
 node docs/curriculum/tools/validate.mjs          # skeleton + format, both languages
 npm run content:build -- --strict                # learn's parser (once merged on main)
 ```
+
+---
+
+## Round 2 (after the merge to main)
+
+**Checked in the real app.** I ran `npm run dev`, onboarded through the API and completed days with the dev
+time-travel, then took Playwright screenshots of lesson pages: light and dark, 390 px and 1280 px, EN/apps and
+RU/video.
+- Tables, callouts, checklists, code blocks with copy buttons, and resources render well.
+- **Fixed: quiz answers.** The renderer shows raw HTML as text, so the `<details>` answers appeared as literal tags.
+  All 90 quizzes now use a `> **Answers:**` / `> **Ответы:**` callout. Learn is asked to collapse these.
+- **Fixed: agent prompts.** Prompts were hard-wrapped at ~118 characters, so code blocks wrapped them twice and the
+  lines came out ragged. 734 hard-wrapped lines were rejoined into one line per bullet. Worksheets, trees and tables
+  were left as they were.
+
+**Badges aligned with the game's built-in rules.**
+- The day-1 badge is now `hello-agent`; `first-step` stays the game's onboarding badge.
+- `public-builder` and `polyglot` had no rule in code and could never be awarded. They are replaced by `curious` and
+  `saved-by-freeze`.
+- Seven of the 30 entries now supply our copy for built-in rules: streak-7/30/66, comeback, night-owl, curious and
+  saved-by-freeze.
+- XP calibration: content averages about 105 task XP per day, against the 70–90 the game assumed. The game agent has
+  been told.
+
+**Library mapping.** 23 of the 24 seeded resources are referenced from 82 day files by their canonical URL, which
+`/api/library/resolve` maps to cards. I didn't use `lib:<id>` because the learn UI still shows it as a raw id;
+learn has been asked to resolve resources. The outdated Claude 3.7 video is not used. The mapping table is in
+`docs/requests/curriculum-to-library.md`.
+
+**Event logging gap closed.** Apps day 34 builds a first-party `events` table with a `track()` helper. Days 36, 45,
+54 and 65 use it.
+
+**Second language pass.** Five editors worked in parallel: RU common, RU apps, RU video, EN common+apps and EN video.
+Together they edited 189 of 212 files. Main fixes:
+- **RU, address and calques.** Masculine forms aimed at the reader were made gender-neutral: checklists became
+  «Ссылка вставлена» instead of «Ты вставил». Calques and bureaucratese were removed.
+- **RU, one term per concept.** «тестер», «лендинг (посадочная страница)», «продакшен», «влить PR», «шоурил»,
+  «расшифровка», «кэш», «дневник сборки», «эксплейнер», «крючок (хук)».
+- **EN.** Non-global idioms, hype words and repeated stock patterns ("X beats Y") were cut. Teaser formatting was
+  unified ("**Tomorrow:**"), and "we" became "you".
+- **Maths.** The video-26 truncated-axis example now uses an axis start of 94, so "twice as big" is correct.
+
+**Kept on purpose.**
+- The RU callout label «Если застрял:» is masculine, but the renderer keys its "stuck" style on that phrase.
+  Changing it would need a renderer change first.
+- First-person templates and prompts in the student's voice keep a gendered form, and students adapt them.

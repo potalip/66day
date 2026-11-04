@@ -51,11 +51,9 @@ Every later output will be judged against this file, so changes go there, not in
 ```text
 Goal: the first full output of my capstone (see CAPSTONE.md), made by my pipeline, in the final format.
 Steps:
-1. Create formats/<capstone>.json from CAPSTONE.md: structure with seconds per part, aspect ratios,
-   template, brand config, voice, caption style, music rules, QC spec. Validate it with a schema.
+1. Create formats/<capstone>.json from CAPSTONE.md: structure with seconds per part, aspect ratios, template, brand config, voice, caption style, music rules, QC spec. Validate it with a schema.
 2. Make my pipeline accept --format formats/<capstone>.json and use it for every stage.
-3. Run the whole pipeline for output #1 (topic/input: <...>). Do not hand-edit the render; if something
-   is wrong, fix the stage or the format file and re-run.
+3. Run the whole pipeline for output #1 (topic/input: <...>). Do not hand-edit the render; if something is wrong, fix the stage or the format file and re-run.
 4. Run the QC stage (qc.py from day 47) on the result; its report lands next to the video.
 5. Log every manual intervention I make (what, which stage, minutes) to runs/<capstone>/01/manual.log.
 Done when: runs/<capstone>/01/ has the mp4 (all formats in the spec), the QC report and manual.log.
@@ -99,4 +97,4 @@ judgement.
 - [ ] A done / next / blocked build log is pasted.
 - [ ] Every cut has a verdict: gone, day 53, or after launch.
 
-Tomorrow: outputs 2 and 3, and the honest numbers on time and money per video.
+**Tomorrow:** outputs 2 and 3, and the honest numbers on time and money per video.

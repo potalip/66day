@@ -58,8 +58,7 @@ Best: a real export from someone you know (a friend's Etsy orders, a club's memb
 permission and remove names, emails and phones first. No real one? Ask the agent for a realistic one:
 
 ```text
-Generate a realistic CSV of 600 rows for a small online plant shop: order_id, date (last 6 months),
-product, category, quantity, unit_price, country, channel (web/instagram/market), status (paid/refunded).
+Generate a realistic CSV of 600 rows for a small online plant shop: order_id, date (last 6 months), product, category, quantity, unit_price, country, channel (web/instagram/market), status (paid/refunded).
 Include realistic mess: a few empty cells, prices with a currency symbol, two date formats, one duplicate row.
 Save it as data/orders.csv.
 ```
@@ -73,11 +72,9 @@ small separate project. Either way:
 
 ```text
 Goal: an internal dashboard page at /tools/orders.
-Context: data/orders.csv (columns listed in the header). Our stack: React + Vite front end, API on Cloudflare Workers + D1;
-the new table comes as a migration, like on day 17.
+Context: data/orders.csv (columns listed in the header). Our stack: React + Vite front end, API on Cloudflare Workers + D1; the new table comes as a migration, like on day 17.
 Constraints:
-- Upload CSV in the browser; parse it (Papa Parse is fine); show a preview of the first 10 rows and a list of
-  problems found (bad dates, non-numeric prices, duplicates) before importing.
+- Upload CSV in the browser; parse it (Papa Parse is fine); show a preview of the first 10 rows and a list of problems found (bad dates, non-numeric prices, duplicates) before importing.
 - Store clean rows in a database table "orders" with proper types.
 - Table view: sortable columns, filters for date range, category and status, a total at the bottom.
 - One chart: revenue per week, paid orders only. Use a small chart library.
@@ -111,9 +108,7 @@ that your code validates and turns into a query:
 Goal: add an "Ask your data" box to /tools/orders.
 Context: orders table (list its columns). We already call the AI with structured outputs (day 18).
 Constraints:
-- The model returns ONLY a query spec JSON matching a schema: metric from an allowlist
-  (count, sum_revenue, avg_order_value), groupBy from an allowlist of columns, filters only on known columns,
-  limit max 50.
+- The model returns ONLY a query spec JSON matching a schema: metric from an allowlist (count, sum_revenue, avg_order_value), groupBy from an allowlist of columns, filters only on known columns, limit max 50.
 - Validate the spec in code; reject anything outside the allowlist with a friendly message.
 - Build the query in code with parameters (never string concatenation). Read-only: no writes are possible.
 - Show the answer as a small table plus one sentence, and show the spec under a "How I got this" toggle.
@@ -125,7 +120,7 @@ Now attack it. Try: "drop the table", "show me all columns from users", "ignore 
 to 100000". Screenshot one good answer with its "How I got this" spec visible. That's task 3.
 
 > **Security:** if you later let the model write raw SQL, still run it on a read-only connection, allow a single
-> `SELECT` only, allowlist tables, force a `LIMIT` and a timeout. Belt and braces.
+> `SELECT` only, allowlist tables, force a `LIMIT` and a timeout. Every layer catches what the one before it misses.
 
 ### 4. Reflect (10 min)
 

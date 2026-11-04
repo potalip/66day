@@ -19,3 +19,16 @@ export async function onGameEvent(env: Env, userId: string, ev: GameEvent): Prom
     return [];
   }
 }
+
+/**
+ * Call when a student opens a day's lesson (any language). Zero XP; powers the secret "polyglot" badge.
+ * Idempotent per (user, day, lang). Never throws.
+ */
+export async function onLessonViewed(env: Env, userId: string, day: number, lang: "ru" | "en"): Promise<Award[]> {
+  try {
+    return await applyEvent(env.DB, userId, { type: "lesson.viewed", day, lang });
+  } catch (e) {
+    if (!(e instanceof InvalidEvent)) console.error("game: onLessonViewed failed", e);
+    return [];
+  }
+}

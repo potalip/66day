@@ -67,7 +67,7 @@ Per video, for a client:
   = floor price per video   ___
 ```
 
-Then package it. Three tiers is the classic shape, because people like choosing the middle one:
+Then package it. Three tiers are the classic shape, because people like choosing the middle one:
 
 - **Starter:** 1 video, one format, 1 revision.
 - **Standard:** 4 videos a month, 16:9 + 9:16 (your day 34 variants), captions, 2 revisions each.
@@ -88,11 +88,9 @@ Sections, in order:
 4. How it works: 4 steps (brief → script approval → render → delivery), with a sample brief form from day 39.
 5. FAQ: 6 honest answers (rights and licences, AI disclosure, revisions, file formats, languages, payment).
 6. Call to action: [contact form that emails me / link to a Stripe Payment Link / a "buy" link for the template pack].
-Constraints: fast on mobile (no heavy autoplay above 2 MB, poster images for every video), light and dark theme,
-no invented testimonials — only real quotes from my day 41 client and day 55 premiere, with names only if I confirm.
+Constraints: fast on mobile (no heavy autoplay above 2 MB, poster images for every video), light and dark theme, no invented testimonials — only real quotes from my day 41 client and day 55 premiere, with names only if I confirm.
 Deploy on GitHub Pages or Cloudflare Pages.
-Done when: it's live, Lighthouse mobile performance is reasonable, and you've listed every asset whose licence I
-should double-check.
+Done when: it's live, Lighthouse mobile performance is reasonable, and you've listed every asset whose licence I should double-check.
 ```
 
 Open it on your phone. Could a stranger buy from you in 60 seconds without writing to you first? If not, the call to

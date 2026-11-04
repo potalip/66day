@@ -1,11 +1,12 @@
 // OWNER: game agent. Level curve tuned for a 66-day program.
 //
 // Cumulative XP to reach level L:  A * (L-1)^P, rounded to 10.
-// With A=54, P=1.6: L2=50, L3=160, L5=490, L10=1820, L15=3740, L20=6100, L22=7020, L25=8730.
-// A student who does every task (~70–90 XP/day) plus day bonuses and streak bonuses lands around
-// 6,500–8,000 XP after 66 days → level ~21–24. Early levels come within the first few days.
+// With A=65, P=1.6: L2=70, L3=200, L5=600, L10=2190, L15=4500, L20=7340, L22=8450, L23=9130.
+// The real curriculum has ~6,970 (apps) / 6,890 (video) task XP; + 66×20 day bonus + 5×100 boss bonus
+// ≈ 8,700–8,800 XP for completing everything → level 22 (23 with a perfect streak).
+// Early levels come fast: level 2 after the first couple of tasks, level 5 within the first week.
 
-export const LEVEL_A = 54;
+export const LEVEL_A = 65;
 export const LEVEL_P = 1.6;
 
 /** Total XP needed to *reach* `level` (level 1 = 0). */

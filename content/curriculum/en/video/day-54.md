@@ -6,7 +6,7 @@ title: "Test audience: find where they drop"
 summary: "Five real viewers watch your capstone; you find the exact second they drift away and fix it in a v2."
 estMinutes: 90
 resources:
-  - "https://developer.mozilla.org/en-US/docs/Learn"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
   - "https://developers.cloudflare.com/workers/"
   - "https://ffmpeg.org/documentation.html"
 tasks:
@@ -48,8 +48,8 @@ Each signal gets a timestamp. Five viewers, five timestamps (or "watched to the 
 
 ### 1. Pick five and set the scene (15 min, plus waiting)
 
-Five people who match the audience in your day 50 spec. If your capstone is a **series**, show the episode you craft-passed yesterday. If it's a
-**tool**, have them *use* it to make one video and then watch the result. If it's a **showreel**, show it to people
+Five people who match the audience in your day 50 spec. If your capstone is a **series**, show the episode you
+craft-passed yesterday. If it's a **tool**, have them *use* it to make one video and then watch the result. If it's a **showreel**, show it to people
 who hire — a small-business owner, a marketer, a creator you know.
 
 Ask, don't beg:
@@ -65,12 +65,8 @@ Can't watch everyone live? Let the agent build a tiny watch page:
 
 ```text
 Goal: a private watch page that tells me where each test viewer stopped watching.
-Build a single static page with an HTML <video> element for [video url], a "name" field, and one big button:
-"I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp,
-and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1
-(or KV), and give me a /report page listing each viewer's events in order.
-Constraints: no third-party trackers; nothing stored beyond name + timestamps; one line on the page says exactly
-what is logged; the URL is unlisted.
+Build a single static page with an HTML <video> element for [video url], a "name" field, and one big button: "I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp, and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1 (or KV), and give me a /report page listing each viewer's events in order.
+Constraints: no third-party trackers; nothing stored beyond name + timestamps; one line on the page says exactly what is logged; the URL is unlisted.
 Done when: I watch it myself, press the button at 0:12, and see that row on /report.
 ```
 
@@ -102,15 +98,13 @@ Pick **one** — the biggest cluster. Typical causes and fixes:
 ```text
 Goal: fix the main retention problem in runs/<capstone>/<nn>/ (the output I tested) and render v2.
 Evidence: 3 of 5 viewers drifted between 0:38 and 0:45 (table attached). Viewers said: [quotes].
-Propose 2 options for fixing that stretch in the storyboard/EDL (with the new durations), wait for my choice,
-then apply it in the pipeline (not as a manual edit), re-render into the same folder
-with a -v2 suffix (e.g. final-9x16-v2.mp4), and run qc.py on it.
+Propose 2 options for fixing that stretch in the storyboard/EDL (with the new durations), wait for my choice, then apply it in the pipeline (not as a manual edit), re-render into the same folder with a -v2 suffix (e.g. final-9x16-v2.mp4), and run qc.py on it.
 Done when: v2 is rendered, QC is clean, and the total runtime change is reported.
 ```
 
 If you can, show v2 to one of the people who dropped. Did they get past the spot? **Proof for task 2:** attach v2.
 
-> **Tip:** resist fixing the second and third issue today. One fix you can measure teaches you more than three you
+> **Tip:** resist fixing the second and third issues today. One fix you can measure teaches you more than three you
 > can't tell apart.
 
 ### 5. The "not now" list (10 min)

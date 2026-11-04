@@ -1,15 +1,10 @@
-# library → orchestrator
+# library → orchestrator (round 2)
 
-1. **`worker/env.ts`** — please add the optional vars the library pipeline already reads (typed locally as `LibEnv` in
-   `worker/lib/library/pipeline.ts`):
-   ```ts
-   MEDIA_WORKER_URL?: string;   // external transcription service (worker/lib/library/MEDIA-WORKER.md)
-   MEDIA_WORKER_TOKEN?: string;
-   PUBLIC_BASE_URL?: string;    // public origin, used for callback URLs
-   ```
-   They're already appended to `.dev.vars.example`. Once they're in `Env`, the `LibEnv` cast can go.
-2. **Tests** — the root `vite.config.ts` loads the Cloudflare plugin, and `vitest` then fails with "There is already a server
-   associated with the config". Library tests run with `npx vitest run --config worker/lib/library/vitest.config.ts`.
-   Suggestion: a root `vitest.config.ts` without the cloudflare plugin (`include: ["worker/**/*.test.ts", "web/**/*.test.ts"]`),
-   so `npm test` covers every area.
-3. **Admin entry point** — `/:lang/admin` is reachable only by URL. That's fine for now, since only the founder uses it.
+Done from round 1, thank you: env vars, root vitest config, and NO_USER for the media-worker callback.
+
+1. **`worker/index.ts` NO_USER**: please also skip `anonUser` for `GET /api/pipeline/media-worker/source/:id`. The media worker
+   downloads uploads through it, and each call currently creates an anonymous `users` row. It's a prefix route, so for example:
+   `const NO_USER_PREFIX = ["/api/pipeline/media-worker/"];` → `NO_USER.has(p) || NO_USER_PREFIX.some((x) => p.startsWith(x))`.
+2. **New top-level folder `media-worker/`** (library-owned per your round-2 message). Please add it to `docs/OWNERSHIP.md`.
+   It's a Python service with its own README, Dockerfile and pytest suite. It's not part of `npm run build`.
+3. **Optional `.gitignore`**: `media-worker/` has its own `.gitignore` for `__pycache__` / `.venv`. Root-level isn't needed.

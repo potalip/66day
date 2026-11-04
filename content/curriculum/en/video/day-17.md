@@ -31,9 +31,9 @@ tasks:
     proof: link
 ---
 
-Half the videos in your feed are text on a background, and the good ones are still impossible to scroll past. The
-secret isn't fancy effects — it's that every word lands at the exact moment you hear it. Today you combine yesterday's
-easing with timing, and make words feel spoken.
+Half the videos in your feed are text on a background, yet the good ones are still impossible to scroll past. The
+secret isn't fancy effects. Every word lands at the exact moment you hear it. Today you add timing to yesterday's
+easing and make words feel spoken.
 
 ## Type that moves: four rules
 
@@ -58,7 +58,7 @@ for elegant. Put the `.ttf` files in `assets/fonts/`.
 
 ## Step 1 — pick 15 seconds of words and record them
 
-Choose 30–40 words. Your own line from your build log is perfect. Or pick something in the public domain — for
+Choose 30–40 words. A line from your own build log is perfect. Or pick something in the public domain — for
 example Thoreau, *Walden* (1854): "I went to the woods because I wished to live deliberately, to front only the
 essential facts of life, and see if I could not learn what it had to teach." Avoid modern authors and song lyrics:
 those are copyrighted.
@@ -74,10 +74,8 @@ Context: folder day17/. I have day17/quote.txt (the words) and day17/voice.wav. 
 Constraints:
 - `python day17/tap.py` starts playing voice.wav with ffplay (-nodisp -autoexit) and shows the next word.
 - Every time I press Enter, record the current time as that word's start and show the next word.
-- Save day17/timings.json as a list of {"word": ..., "start": seconds}. Add a global offset setting (default -0.08 s)
-  to compensate for my reaction time.
-- If voice.wav is missing, instead generate a 100 BPM click track day17/beat.wav with ffmpeg and assign one word per
-  beat automatically.
+- Save day17/timings.json as a list of {"word": ..., "start": seconds}. Add a global offset setting (default -0.08 s) to compensate for my reaction time.
+- If voice.wav is missing, instead generate a 100 BPM click track day17/beat.wav with ffmpeg and assign one word per beat automatically.
 Done when: after one run, timings.json has one entry per word with increasing start times.
 ```
 
@@ -90,11 +88,9 @@ Goal: a 15-second kinetic typography video from day17/timings.json.
 Context: reuse my easing functions from day16/easing.py. Font file: assets/fonts/<YourFont>.ttf.
 Constraints:
 - 1080x1920 vertical, 30 fps, length = voice length (get it with ffprobe) or 15 s.
-- Render frames with Pillow (ImageFont.truetype so the .ttf is used) and pipe raw RGB frames into ffmpeg; mux
-  voice.wav (or beat.wav) as AAC; H.264, yuv420p.
+- Render frames with Pillow (ImageFont.truetype so the .ttf is used) and pipe raw RGB frames into ffmpeg; mux voice.wav (or beat.wav) as AAC; H.264, yuv420p.
 - Each word pops in at its start time: scale 0.85 -> 1.0 and fade in over 6 frames with ease_out_back.
-- Lay words out in lines of 2-4 words, centered, max 80% of the width. When a line is complete and the next word
-  starts a new line, the old line slides up and fades.
+- Lay words out in lines of 2-4 words, centered, max 80% of the width. When a line is complete and the next word starts a new line, the old line slides up and fades.
 - Words listed in EMPHASIS = [...] at the top of the script are 1.4x bigger and use the accent colour.
 - Keep all text inside the middle 70% of the frame height.
 Done when: day17/quote.mp4 plays with every word appearing as I hear it.

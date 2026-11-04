@@ -64,23 +64,19 @@ Pick one that fits your stack; ask the agent to compare them for your project if
 ```text
 Goal: add sign-in and make every record belong to a user.
 
-Context: app in docs/SPEC.md; backend on Cloudflare Workers + D1 (or Supabase). Use <Better Auth | Clerk | Supabase Auth>
-with <Google sign-in and/or email magic link>. Follow the provider's current docs for our stack.
+Context: app in docs/SPEC.md; backend on Cloudflare Workers + D1 (or Supabase). Use <Better Auth | Clerk | Supabase Auth> with <Google sign-in and/or email magic link>. Follow the provider's current docs for our stack.
 
 Constraints:
-- Migration: add user_id (NOT NULL) to every table with user data. Existing anonymous rows: assign them to my
-  account after my first sign-in (give me a one-off script), then make user_id required.
+- Migration: add user_id (NOT NULL) to every table with user data. Existing anonymous rows: assign them to my account after my first sign-in (give me a one-off script), then make user_id required.
 - Every API route except auth routes requires a valid session; otherwise 401.
 - The user id ALWAYS comes from the verified session on the server, NEVER from the request body, query or URL.
-- Every query filters by user_id, including updates and deletes. Accessing someone else's record returns 404
-  (don't reveal that it exists).
+- Every query filters by user_id, including updates and deletes. Accessing someone else's record returns 404 (don't reveal that it exists).
 - The AI endpoints (/api/extract, /api/extract-media) require sign-in; the daily limits now count per user id.
 - Session cookie: HttpOnly, Secure, SameSite=Lax. A visible "Sign out" in the UI.
 - Signed-out visitors see a short landing with what the app does and a "Sign in" button.
 
 Explain your plan first: provider choice and why, the migration SQL, which routes change, and the files you'll touch.
-Wait for my OK. At the end, list every API route with "auth required: yes/no" and show me a curl call
-without a cookie getting 401.
+Wait for my OK. At the end, list every API route with "auth required: yes/no" and show me a curl call without a cookie getting 401.
 ```
 
 Set up the provider's keys as secrets (`wrangler secret put ...`), add your live URL to the provider's allowed
@@ -115,8 +111,7 @@ If anything leaked, that's a great find — give the agent the exact request and
 
 ```text
 Security bug: user B can <read/change> user A's record. Request and response below.
-Explain the root cause first, then fix it everywhere the same pattern appears, add a Vitest test that
-reproduces it, and re-run my two-account test commands to prove it's fixed.
+Explain the root cause first, then fix it everywhere the same pattern appears, add a Vitest test that reproduces it, and re-run my two-account test commands to prove it's fixed.
 ```
 
 > **Safety:** a session cookie is as good as a password. Delete the terminal variable afterwards (`unset B_COOKIE`) and never post
@@ -129,14 +124,12 @@ reproduces it, and re-run my two-account test commands to prove it's fixed.
 3. Your session cookie expired overnight.
 4. Only the app owner may see the page with all users' sign-up dates.
 
-<details><summary>Answers</summary>
-
-1. Authentication — the app can't confirm who they are.
-2. Authorization — B is known, but not allowed to see this record. Answer 404.
-3. Authentication — the server no longer knows who you are; sign in again.
-4. Authorization — a role check ("is this user the owner?") on every request to that page.
-
-</details>
+> **Answers:**
+>
+> 1. Authentication — the app can't confirm who they are.
+> 2. Authorization — B is known, but not allowed to see this record. Answer 404.
+> 3. Authentication — the server no longer knows who you are; sign in again.
+> 4. Authorization — a role check ("is this user the owner?") on every request to that page.
 
 ## You're done when…
 

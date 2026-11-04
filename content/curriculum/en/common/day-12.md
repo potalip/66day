@@ -3,7 +3,7 @@ day: 12
 track: common
 phase: 1
 title: "Taste both tracks, then choose"
-summary: "Thirty minutes upgrading your app, thirty minutes rendering your first video from code, then you pick your road."
+summary: "Thirty minutes upgrading your app, thirty minutes rendering your first video from code, then you pick your track."
 estMinutes: 90
 badges: [track-picked]
 resources:
@@ -60,11 +60,8 @@ Open yesterday's AI tool in the agent:
 ```text
 Goal: two small upgrades to my AI tool.
 
-1. AI-made title: every result also gets a short, catchy title (max 6 words) shown above it.
-   Get it in the same API call: ask the model to return JSON with "title" and "text" fields, and parse it
-   safely — if parsing fails, show the text with a plain default title.
-2. Share button: under the result. On phones use the Web Share API (navigator.share) with the title and text;
-   where it isn't supported, copy "title + text + link to the tool" to the clipboard and show "Copied!".
+1. AI-made title: every result also gets a short, catchy title (max 6 words) shown above it. Get it in the same API call: ask the model to return JSON with "title" and "text" fields, and parse it safely — if parsing fails, show the text with a plain default title.
+2. Share button: under the result. On phones use the Web Share API (navigator.share) with the title and text; where it isn't supported, copy "title + text + link to the tool" to the clipboard and show "Copied!".
 
 Constraints: keep the key on the server as it is now; keep the design consistent; works at 390px wide.
 Done when: it works locally, then deploy with npx wrangler deploy and commit.
@@ -92,19 +89,14 @@ claude
 ```text
 Goal: render a 5-second animated title card as an mp4, entirely from code.
 
-Context: Python 3 and ffmpeg are installed. New folder, nothing else here. Create a virtual environment in .venv,
-install Pillow into it (a plain pip install is often blocked on macOS and Linux), and tell me the exact commands
-to activate it and run the script on my operating system.
+Context: Python 3 and ffmpeg are installed. New folder, nothing else here. Create a virtual environment in .venv, install Pillow into it (a plain pip install is often blocked on macOS and Linux), and tell me the exact commands to activate it and run the script on my operating system.
 
 Spec:
 - 1080x1920 (vertical), 30 fps, 150 frames, dark background (#0f1412).
-- Big title "<YOUR NAME> · Day 12 of 66" in white, centred. Smaller subtitle below: "<one line about your journey>".
-- Motion: 0–1 s the title slides up 80 px and fades in with an ease-out curve; 0.5–1.5 s the subtitle fades in;
-  1–2 s a green (#3ecf8e) underline grows from the centre to the title's width; 2–4.5 s hold; 4.5–5 s everything fades out.
-- Font: download a free font from Google Fonts (e.g. Inter or Manrope) into fonts/; if it's missing,
-  fall back to Pillow's default font at a large size, so the script never crashes.
-- Script render.py writes frames to frames/frame_0000.png … then calls ffmpeg:
-  ffmpeg -y -framerate 30 -i frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 title.mp4
+- Big title "<YOUR NAME> · Day 12 of 66" in white, centred. Smaller subtitle below: "<one line about what you're building>".
+- Motion: 0–1 s the title slides up 80 px and fades in with an ease-out curve; 0.5–1.5 s the subtitle fades in; 1–2 s a green (#3ecf8e) underline grows from the centre to the title's width; 2–4.5 s hold; 4.5–5 s everything fades out.
+- Font: download a free font from Google Fonts (e.g. Inter or Manrope) into fonts/; if it's missing, fall back to Pillow's default font at a large size, so the script never crashes.
+- Script render.py writes frames to frames/frame_0000.png … then calls ffmpeg: ffmpeg -y -framerate 30 -i frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 title.mp4
 - Put the timing numbers as named constants at the top so I can tweak them.
 
 Done when: python render.py produces title.mp4 that plays in my normal video player.

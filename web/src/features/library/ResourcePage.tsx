@@ -10,6 +10,8 @@ import { Player } from "./Player";
 import { ResourceCardView } from "./ResourceCardView";
 import { ArrowIcon, Button, Card, CheckIcon, ClockIcon, Empty, Pill, Skeleton, TypeIcon, hostOf } from "./ui";
 import MyList from "./MyList";
+import { showAwards } from "@web/features/game/widgets";
+import type { Award } from "@shared/types";
 
 export default function ResourcePage() {
   const { id = "" } = useParams();
@@ -51,7 +53,6 @@ function Resource({ id }: { id: string }) {
   const r = d.resource, m = d.material;
   const title = m?.title ?? r.title;
   const foreign = r.origLang !== lang && r.origLang !== "other";
-  const minutes = m?.estMinutes ?? (r.durationSec ? Math.ceil(r.durationSec / 60) : null);
 
   const toggleToday = async () => {
     setBusy(true);
@@ -64,7 +65,8 @@ function Resource({ id }: { id: string }) {
     setBusy(true);
     const done = !d.saved?.doneAt;
     try {
-      await api(`/library/${r.id}/done`, { method: "POST", json: { done } });
+      const res = await api<{ awards?: Award[] }>(`/library/${r.id}/done`, { method: "POST", json: { done } });
+      showAwards(res.awards);
       setD({ ...d, saved: { forDate: d.saved?.forDate ?? null, isToday: d.saved?.isToday ?? false, doneAt: done ? Date.now() / 1000 : null } });
     } finally { setBusy(false); }
   };
@@ -74,8 +76,8 @@ function Resource({ id }: { id: string }) {
       {back}
       <header className="max-w-4xl space-y-3">
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted">
-          <span className="inline-flex items-center gap-1.5"><TypeIcon type={r.sourceType} className="size-4" />{s.type[r.sourceType]}</span>
-          {minutes ? <span className="inline-flex items-center gap-1.5"><ClockIcon className="size-4" />{s.minutes(minutes)}</span> : null}
+          <span className="inline-flex items-center gap-1.5"><TypeIcon type={r.sourceType} className="size-4" />{s.type[r.sourceType]}{r.durationSec ? ` · ${s.minutes(Math.max(1, Math.round(r.durationSec / 60)))}` : ""}</span>
+          {m?.estMinutes ? <span className="inline-flex items-center gap-1.5" title={s.lessonLength}><ClockIcon className="size-4" />{s.lessonTime(s.minutes(m.estMinutes))}</span> : null}
           <span>{s.level[r.level]}</span>
           {r.tracks.map((t) => <Pill key={t}>{s.track[t]}</Pill>)}
           {foreign && <Pill>{r.origLang === "en" ? s.inEnglish : s.inRussian}</Pill>}

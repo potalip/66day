@@ -32,8 +32,8 @@ tasks:
     proof: none
 ---
 
-Yesterday you got three good-looking clips. Today they become an edit. Not by dragging blocks on a timeline, but by
-writing the timeline down as data and letting a script render it. This is the moment your videos stop being
+Yesterday you got three good-looking clips. Today they become an edit — not by dragging blocks along a timeline, but
+by writing the timeline down as data and letting a script render it. This is the moment your videos stop being
 one-offs: anything described in JSON can later be written by an LLM, versioned in git, and re-rendered in a minute.
 
 ## Edit decision lists
@@ -54,7 +54,7 @@ Your EDL needs four ideas:
   the next scene before you see it (rain starts, *then* we see the street). In an **L-cut** the sound of the current
   scene carries on over the next picture. They make code-made edits feel human instead of slideshow-like.
 
-Here's the shape we're aiming for:
+Here's the shape you're aiming for:
 
 ```json
 {
@@ -84,8 +84,7 @@ into `vo/`. Then:
 ```text
 Goal: a Python script edit.py that renders edl.json into out/edit.mp4.
 Context: my pipeline/ folder; clips in clips/, code renders in renders/, voiceover in vo/. ffmpeg is installed.
-Use the EDL shape from the JSON I paste below. You may use MoviePy 2 (note: v2 uses subclipped/with_start, not
-subclip/set_start) or build an ffmpeg filter_complex in Python — pick one and say why.
+Use the EDL shape from the JSON I paste below. You may use MoviePy 2 (note: v2 uses subclipped/with_start, not subclip/set_start) or build an ffmpeg filter_complex in Python — pick one and say why.
 Constraints:
 - Scale/pad every clip to the EDL size and fps, so mixed sources never break the render.
 - Transitions: cut by default; "fade" = video crossfade + audio crossfade of the same duration.
@@ -121,20 +120,18 @@ exactly on 'imagine'."*
 
 ## Quiz
 
-1. Our scene goes from a quiet office to a busy street. We hear the traffic half a second before the street appears.
+1. A scene goes from a quiet office to a busy street. We hear the traffic half a second before the street appears.
    What's that called?
 2. Which EDL field would you change to make it an L-cut instead?
 3. Why trim the first and last half-second of most AI clips?
 4. Your total edit is 33 s, the voiceover is 29 s. Name two one-line fixes.
 
-<details><summary>Answers</summary>
-
-1. A J-cut (`audio_lead` on the street clip).
-2. `audio_tail` on the office clip: its sound continues over the street picture.
-3. Generated clips often start and end with a warp, a freeze or a drift in style. Trimming them is free quality.
-4. Shorten the `out` of the longest clip, or delete a clip that repeats an idea. (Or add 4 s of VO, if the story needs it.)
-
-</details>
+> **Answers:**
+>
+> 1. A J-cut (`audio_lead` on the street clip).
+> 2. `audio_tail` on the office clip: its sound continues over the street picture.
+> 3. Generated clips often start and end with a warp, a freeze or a drift in style. Trimming them is free quality.
+> 4. Shorten the `out` of the longest clip, or delete a clip that repeats an idea. (Or add 4 s of VO, if the story needs it.)
 
 ## You're done when…
 
@@ -143,4 +140,4 @@ exactly on 'imagine'."*
 - [ ] You pasted the one line you changed, before and after, with what it fixed.
 - [ ] Quiz answered.
 
-Tomorrow: an LLM writes the script and storyboard — as JSON your editor can eat.
+**Tomorrow:** an LLM writes the script and storyboard — as JSON your editor can eat.

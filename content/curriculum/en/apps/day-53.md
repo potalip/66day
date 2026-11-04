@@ -6,9 +6,9 @@ title: "The first two minutes decide everything"
 summary: "A stranger opens your capstone and gets real value in under two minutes, on a phone, with every state looking deliberate."
 estMinutes: 120
 resources:
-  - https://playwright.dev/
-  - https://developer.mozilla.org/en-US/docs/Learn
-  - https://tailwindcss.com/docs
+  - "https://playwright.dev/"
+  - "https://developer.mozilla.org/en-US/docs/Learn_web_development/Getting_started"
+  - "https://tailwindcss.com/docs"
 tasks:
   - id: d53-apps-t1
     type: build
@@ -69,8 +69,7 @@ Constraints:
 - Add a one-line hint on the first screen that says what to do, not a multi-step tour.
 - Keep the existing data model; no new dependencies unless you ask me first.
 - If the AI key is missing, the demo must still work using a fixture response.
-Done when: you list the new path screen by screen with an estimated time per step, I approve it, you implement it,
-the build passes, and you write a short Playwright test that walks the new path and asserts the value moment appears.
+Done when: you list the new path screen by screen with an estimated time per step, I approve it, you implement it, the build passes, and you write a short Playwright test that walks the new path and asserts the value moment appears.
 Propose the plan first and wait for my OK.
 ```
 
@@ -89,11 +88,9 @@ find and fix the rest, and to take the evidence:
 Goal: every screen in the app has a deliberate empty, loading and error state, and looks right on mobile.
 Steps:
 1. List each route and which of the four states (empty / loading / error / full) it currently handles.
-2. Fix the missing ones: empty states explain + offer one action; loading says what is happening; errors say what
-   went wrong in plain words and offer "try again". No raw stack traces, no "Error: undefined".
+2. Fix the missing ones: empty states explain + offer one action; loading says what is happening; errors say what went wrong in plain words and offer "try again". No raw stack traces, no "Error: undefined".
 3. Simulate errors (e.g. a flag or a mocked failed fetch) so I can see them.
-4. Write a Playwright script that screenshots the main screens in each state at 390px and 1280px,
-   in light and dark themes, into ./screenshots/day-53/.
+4. Write a Playwright script that screenshots the main screens in each state at 390px and 1280px, in light and dark themes, into ./screenshots/day-53/.
 Done when: the build passes and the screenshots folder exists. Show me the list of files.
 ```
 
@@ -102,7 +99,7 @@ Open the screenshots. Actually look at them: text touching the edge of the scree
 sentence each about what's wrong. **Proof for task 2:** attach the best 3–4 screenshots (one must be an error state).
 
 > **Tip:** an error message is a tiny piece of customer support. "We couldn't reach the AI. Your text is saved — try
-> again in a minute" beats "Something went wrong" every time.
+> again in a minute" helps far more than "Something went wrong".
 
 ### 4. Watch someone (15 min)
 
