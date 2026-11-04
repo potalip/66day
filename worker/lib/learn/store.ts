@@ -71,17 +71,31 @@ export async function loadCtx(env: Env, userId: string, nowSec = now()): Promise
   };
 }
 
+/**
+ * A student counts as onboarded once they have a track. The full onboarding (POST /onboarding) also stores daily
+ * time + goal; a user who only set `track` via PATCH /api/me gets sensible defaults (60 min, no goal) and can use
+ * Today/Path right away — the learn_profiles row is created lazily on their first write.
+ */
 export function profileOf(ctx: Ctx): LearnProfile | null {
-  if (!ctx.profile || !ctx.user.track) return null;
+  if (!ctx.user.track) return null;
   return {
     name: ctx.user.display_name,
     track: ctx.user.track,
-    dailyMinutes: ctx.profile.daily_minutes,
-    goal: ctx.profile.goal,
-    goalNote: ctx.profile.goal_note,
+    dailyMinutes: ctx.profile?.daily_minutes ?? 60,
+    goal: ctx.profile?.goal ?? null,
+    goalNote: ctx.profile?.goal_note ?? null,
     timezone: ctx.tz,
-    startedAt: ctx.user.started_at ?? ctx.profile.onboarded_at,
+    startedAt: ctx.user.started_at ?? ctx.profile?.onboarded_at ?? Math.floor(Date.now() / 1000),
   };
+}
+
+/** Make sure the learn_profiles row exists (users who skipped POST /onboarding). */
+async function ensureProfile(ctx: Ctx) {
+  if (ctx.profile) return;
+  await ctx.env.DB.batch([
+    ctx.env.DB.prepare("INSERT OR IGNORE INTO learn_profiles (user_id) VALUES (?)").bind(ctx.userId),
+    ctx.env.DB.prepare("UPDATE users SET started_at = COALESCE(started_at, unixepoch()) WHERE id = ?").bind(ctx.userId),
+  ]);
 }
 
 export async function overview(ctx: Ctx, lang: Lang): Promise<Overview> {
@@ -171,6 +185,7 @@ export async function dayView(ctx: Ctx, lang: Lang, dayNum: number): Promise<Day
     next: dayNum < TOTAL ? summarize(lang, ctx.track, dayNum + 1) : null,
     nextAccess: dayNum < TOTAL ? dayAccess(dayNum + 1, ctx.completedSet, ctx.schedule) : null,
     isToday: ctx.schedule.nextDay === dayNum,
+    userTrack: ctx.track,
   };
 }
 
@@ -240,6 +255,7 @@ export async function submitTask(ctx: Ctx, lang: Lang, dayNum: number, taskId: s
   if (!task) throw new LearnError(404, "task_not_found");
   requireWritable(ctx, dayNum);
   const proof = validateProof(task, input);
+  await ensureProfile(ctx);
 
   const id = crypto.randomUUID();
   let fileKey: string | null = null;
@@ -270,7 +286,9 @@ export async function submitTask(ctx: Ctx, lang: Lang, dayNum: number, taskId: s
     ).bind(ctx.userId, taskId, dayNum, task.xp, id, nowSec),
   ]);
 
-  const awards = existing ? [] : await emit(ctx.env, ctx.userId, { type: "task.completed", taskId, day: dayNum, xp: task.xp });
+  // `proofUrl` is an optional extra the game uses for the profile's "Shipped" list (docs/requests/game-to-learn.md).
+  const ev = { type: "task.completed" as const, taskId, day: dayNum, xp: task.xp, ...(proof.url ? { proofUrl: proof.url } : {}) };
+  const awards = existing ? [] : await emit(ctx.env, ctx.userId, ev);
   let dayCompleted = false;
   if (!ctx.completedSet.has(dayNum)) {
     const r = await tryCompleteDay(ctx, lang, dayNum, nowSec);
@@ -318,6 +336,7 @@ export async function completeDay(ctx: Ctx, lang: Lang, dayNum: number, nowSec =
     return { day: dayNum, dayCompleted: false, awards: [], nextDay: ctx.schedule.nextDay, status: ctx.schedule.status };
   }
   requireWritable(ctx, dayNum);
+  await ensureProfile(ctx);
   const r = await tryCompleteDay(ctx, lang, dayNum, nowSec);
   if (!r.completed) throw new LearnError(409, "tasks_incomplete", "Finish the required tasks first.");
   const fresh = await loadCtx(ctx.env, ctx.userId, nowSec);
@@ -360,6 +379,7 @@ export async function updateProfile(env: Env, userId: string, patch: Partial<Omi
   if (patch.dailyMinutes !== undefined) { sets.push("daily_minutes = ?"); vals.push(patch.dailyMinutes); }
   if (patch.goal !== undefined) { sets.push("goal = ?"); vals.push(patch.goal); }
   if (patch.goalNote !== undefined) { sets.push("goal_note = ?"); vals.push(patch.goalNote); }
+  if (sets.length) stmts.push(env.DB.prepare("INSERT OR IGNORE INTO learn_profiles (user_id) VALUES (?)").bind(userId));
   if (sets.length) stmts.push(env.DB.prepare(`UPDATE learn_profiles SET ${sets.join(", ")}, updated_at = unixepoch() WHERE user_id = ?`).bind(...vals, userId));
   if (stmts.length) await env.DB.batch(stmts);
 }
