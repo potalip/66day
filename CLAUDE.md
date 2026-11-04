@@ -15,6 +15,11 @@ If pages stop loading after you change `.dev.vars` (Vite's dep optimizer can han
 `rm -rf node_modules/.vite`, and start it again.
 Python render server: see `render-server/README.md` (`pip install --break-system-packages -r render-server/requirements.txt`, needs ffmpeg).
 
+**If pages stop loading after you edit `.dev.vars`** (the dev server restarts, but the browser hangs on
+`/node_modules/.vite/deps/*.js`): stop `npm run dev`, `rm -rf node_modules/.vite`, and start it again. The dependency
+optimizer cache gets stuck across that restart. Also run `npm run db:migrate:local` after pulling main; a "no such
+table" 500 means a new migration landed.
+
 ## How to work
 - Work on your branch `agent/<name>`. Commit small and often; **push at least every ~45 minutes** so progress is never lost
   (`git push -u origin agent/<name>`). Before pushing: `git fetch origin main && git rebase origin/main`, then `npm run build`.
