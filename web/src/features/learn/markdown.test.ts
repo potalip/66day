@@ -107,4 +107,13 @@ describe("parseMarkdown", () => {
     expect(b[0]).toMatchObject({ t: "quote", callout: "tip" });
     expect(parseMarkdown("> [!WARNING] careful")[0]).toMatchObject({ t: "quote", callout: "warn" });
   });
+  it("collapses **Answers:** callouts into details", () => {
+    const b = parseMarkdown("> **Answers:** 1. B. 2. A.\n>\n> More text.");
+    expect(b[0]).toMatchObject({ t: "details" });
+    const d = b[0] as Extract<(typeof b)[0], { t: "details" }>;
+    expect(inlineText(d.summary)).toBe("Answers");
+    expect(d.c.length).toBe(2);
+    expect(parseMarkdown("> **Ответы:**\n> 1 — а")[0]).toMatchObject({ t: "details" });
+    expect(parseMarkdown("> **Tip:** x")[0]).toMatchObject({ t: "quote", callout: "tip" });
+  });
 });

@@ -21,7 +21,7 @@ export default function Onboarding() {
   const [mode, setMode] = useState<"first" | "change" | null>(null);
   const [step, setStep] = useState<Step>("welcome");
   const [track, setTrack] = useState<Track | null>(null);
-  const [minutes, setMinutes] = useState(60);
+  const [minutes, setMinutes] = useState(90); // curriculum: most days are 75–120 min
   const [goal, setGoal] = useState<GoalKey | null>(null);
   const [goalNote, setGoalNote] = useState("");
   const [name, setName] = useState("");

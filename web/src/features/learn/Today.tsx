@@ -2,7 +2,7 @@
 import { Link, Navigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { Badge, ButtonLink, Card, EmptyState, ProgressBar, Skeleton } from "@web/ui";
-import { StreakChip, StreakNudge, XpBar } from "@web/features/game/widgets";
+import { StreakChip, StreakNudge, WeeklyQuests, XpBar } from "@web/features/game/widgets";
 import { useGameMe, type GameMe } from "@web/features/game/api";
 import { useOverview, type Overview } from "./data";
 import { DayView } from "./DayView";
@@ -42,6 +42,8 @@ export default function Today() {
       ) : (
         <DayView lang={lang} data={o.today} onChanged={() => void ov.reload(true)} />
       )}
+      {/* Below the day content: it loads on its own, so it must not push the lesson around. */}
+      <WeeklyQuests className="mt-14" />
     </div>
   );
 }

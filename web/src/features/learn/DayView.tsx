@@ -1,7 +1,7 @@
 // OWNER: learn. Day hero + lesson + task checklist with proofs + completion moment. Used by Today and DayPage.
 import { Suspense, lazy, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useNavigate } from "react-router";
-import type { Award, CurriculumTask, Lang } from "@shared/types";
+import type { Award, CurriculumTask, Lang, Track } from "@shared/types";
 import { useStrings } from "@web/i18n";
 import { Badge, Button, ButtonLink, Card, Dialog, Field, Input, Textarea, useToast } from "@web/ui";
 import { showAwards } from "@web/features/game/widgets";
@@ -13,6 +13,8 @@ import { Icon, cx, taskTypeIcon } from "./ui";
 
 const MAX_FILE = 50 * 1024 * 1024;
 const ShareDay = lazy(() => import("./ShareDay"));
+/** Day 12: the curriculum lets students try both tracks, then decide (curriculum request). */
+const TRACK_DECISION_DAY = 12;
 const BOSS_SHARE_KEY = (day: number) => `fl-learn-share-boss-${day}`;
 /** Days whose time is spread over a whole day rather than one sitting (curriculum request: boss day 65 = launch day). */
 export const SPREAD_DAYS = new Set([65]);
@@ -211,7 +213,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
         )}
       </aside>
 
-      <Celebration open={!!celebrate} s={s} lang={lang} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next}
+      <Celebration open={!!celebrate} s={s} lang={lang} userTrack={data.userTrack} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next}
         xp={celebrate?.xp ?? 0} awards={celebrate?.awards ?? []} result={celebrate?.result ?? null}
         onClose={(mode) => closeCelebration(mode)} onShare={() => closeCelebration("share")} />
       {shareMounted && (
@@ -369,12 +371,12 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   return (
     <form onSubmit={onFormSubmit} className="mt-2 grid grid-cols-1 gap-2" noValidate>
       {task.proof === "text" && (
-        <Field label={label} error={shownErr ?? undefined}>
+        <Field label={label} error={shownErr ?? undefined} hint={s.secretsHint}>
           <Textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} maxLength={5000} placeholder={s.textPlaceholder} className="min-h-[84px] text-[0.9375rem]" />
         </Field>
       )}
       {task.proof === "link" && (
-        <Field label={label} error={shownErr ?? undefined}>
+        <Field label={label} error={shownErr ?? undefined} hint={s.secretsHint}>
           <Input type="url" inputMode="url" autoComplete="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder={s.linkPlaceholder} />
         </Field>
       )}
@@ -407,8 +409,8 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   );
 }
 
-function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, result, onClose, onShare }: {
-  open: boolean; s: LearnStrings; lang: Lang; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null;
+function Celebration({ open, s, lang, userTrack, badges, dayBadges, day, next, xp, awards, result, onClose, onShare }: {
+  open: boolean; s: LearnStrings; lang: Lang; userTrack: Track; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null;
   xp: number; awards: Award[]; result: TaskResult | null; onClose: (mode?: "close" | "nav") => void; onShare: () => void;
 }) {
   const nav = useNavigate();
@@ -464,6 +466,7 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
               </li>
             ))}
           </ul>
+          {day.day === TRACK_DECISION_DAY && <TrackCheck s={s} lang={lang} track={userTrack} />}
           {day.boss && (
             <div className="mt-6 flex flex-col items-center gap-2 rounded-[var(--radius-sm)] border border-gold-bright/40 bg-gold-soft p-4 text-sm">
               <p className="text-gold-ink">{s.bossInPortfolio}</p>
@@ -481,6 +484,33 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
       )}
       <LearnKeyframes />
     </Dialog>
+  );
+}
+
+function TrackCheck({ s, lang, track }: { s: LearnStrings; lang: Lang; track: Track }) {
+  const { toast } = useToast();
+  const [current, setCurrent] = useState(track);
+  const [state, setState] = useState<"ask" | "busy" | "done">("ask");
+  const other: Track = current === "apps" ? "video" : "apps";
+  const switchTrack = async () => {
+    setState("busy");
+    try {
+      await learnApi.updateProfile(lang, { track: other });
+      setCurrent(other); setState("done");
+      toast({ title: s.track[other], tone: "success", duration: 2500 });
+    } catch (e) { setState("ask"); toast({ title: s.errors[(e as ApiError).code] ?? s.errors.generic, tone: "error", duration: 4000 }); }
+  };
+  return (
+    <div className="mt-6 rounded-[var(--radius-sm)] border border-line bg-bg p-4 text-left">
+      <p className="text-xs font-semibold tracking-wide text-muted uppercase">{s.trackCheckTitle}</p>
+      <p className="mt-1 font-medium">{s.trackCheckBody(s.track[current])}</p>
+      {state !== "done" && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" onClick={() => setState("done")} disabled={state === "busy"}>{s.trackStay}</Button>
+          <Button size="sm" variant="ghost" onClick={switchTrack} loading={state === "busy"}>{s.trackSwitch}: {s.track[other]}</Button>
+        </div>
+      )}
+    </div>
   );
 }
 
