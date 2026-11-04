@@ -15,7 +15,7 @@ export type Inline =
   | { t: "img"; src: string; alt: string }
   | { t: "br" };
 
-export type CalloutKind = "tip" | "note" | "warn";
+export type CalloutKind = "tip" | "note" | "warn" | "stuck";
 
 export type Block =
   | { t: "h"; level: 1 | 2 | 3 | 4; c: Inline[]; id: string }
@@ -46,14 +46,15 @@ export function slugify(s: string): string {
 }
 
 const CALLOUTS: [RegExp, CalloutKind][] = [
-  [/^(tip|совет|лайфхак|подсказка|pro tip)$/i, "tip"],
-  [/^(warning|warn|careful|caution|important|внимание|важно|осторожно)$/i, "warn"],
-  [/^(note|remember|info|заметка|помни|кстати|note to self)$/i, "note"],
+  [/^(tip|pro tip|совет|лайфхак|подсказка)(?!\p{L})/iu, "tip"],
+  [/^(if you'?re stuck|stuck|если застрял|застрял)/iu, "stuck"],
+  [/^(warning|warn|careful|caution|important|safety|security|ethics|внимание|важно|осторожно|безопасность|этика)/iu, "warn"],
 ];
-export function calloutKind(label: string): CalloutKind | null {
-  const l = label.replace(/[:：.!]+$/, "").trim();
+/** Kind of a `> **Label:** …` callout. Any bold-led quote is a callout; unknown labels are notes. */
+export function calloutKind(label: string): CalloutKind {
+  const l = label.replace(/[:：.!?]+$/, "").trim();
   for (const [re, k] of CALLOUTS) if (re.test(l)) return k;
-  return null;
+  return "note";
 }
 
 // ---------------- inline ----------------

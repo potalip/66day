@@ -86,12 +86,23 @@ describe("crossValidate", () => {
     crossValidate([d("en", "common", 1, [{ id: "d01-t1", xp: 10 }]), d("ru", "common", 1, [{ id: "d01-t1", xp: 15 }])], r);
     expect(r.errors.join()).toMatch(/task ids\/xp differ/);
   });
-  it("requires both tracks for split days, and no common+track mix", () => {
+  it("requires both tracks for split days (strict), and never allows a common+track mix", () => {
+    const days = [d("en", "apps", 2, []), d("ru", "apps", 2, []), d("en", "common", 3, []), d("en", "video", 3, []), d("ru", "common", 3, [])];
+    const loose = new Report();
+    crossValidate(days, loose);
+    expect(loose.errors.join("\n")).toMatch(/en\/day-03: has both common/);
+    expect(loose.errors.join("\n")).not.toMatch(/but not video/);
+    expect(loose.warnings.join("\n")).toMatch(/en\/day-02: has apps\/ but not video/);
+    const strict = new Report();
+    crossValidate(days, strict, { strict: true });
+    expect(strict.errors.join("\n")).toMatch(/en\/day-02: has apps\/ but not video/);
+  });
+  it("one-language days are allowed until strict; skeleton conflicts are always errors", () => {
     const r = new Report();
-    crossValidate([d("en", "apps", 2, []), d("ru", "apps", 2, []), d("en", "common", 3, []), d("en", "video", 3, []), d("ru", "common", 3, [])], r);
-    const all = r.errors.join("\n");
-    expect(all).toMatch(/en\/day-02: has apps\/ but not video/);
-    expect(all).toMatch(/en\/day-03: has both common/);
+    crossValidate([d("en", "apps", 5, []), d("en", "video", 5, []), d("en", "common", 6, []), d("ru", "apps", 6, []), d("ru", "video", 6, [])], r);
+    expect(r.errors.join("\n")).toMatch(/day-06 .*skeleton must match/);
+    expect(r.errors.join("\n")).not.toMatch(/day-05/);
+    expect(r.warnings.join("\n")).toMatch(/day-05 \(apps\): exists in en but not in ru/);
   });
   it("missing days are warnings, or errors when strict", () => {
     const r1 = new Report();

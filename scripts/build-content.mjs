@@ -241,6 +241,10 @@ export function parseBadges(arr, where, report) {
 export function crossValidate(days, report, { strict = false, langs = LANGS } = {}) {
   const key = (l, t, d) => `${l}/${t}/${d}`;
   const map = new Map(days.map((d) => [key(d.lang, d.track, d.day), d]));
+  // Work-in-progress gaps (half a track pair, a day in one language only) are errors only in strict mode:
+  // the curriculum is written incrementally and a partial program must still build. The existing half is served;
+  // students on the other track / language see "being written".
+  const incomplete = (w, msg) => (strict ? report.error(w, msg) : report.warn(w, `${msg} (incomplete — allowed until --strict)`));
   const missing = {};
   for (const lang of langs) {
     missing[lang] = [];
@@ -250,7 +254,7 @@ export function crossValidate(days, report, { strict = false, langs = LANGS } = 
       const v = map.get(key(lang, "video", n));
       const w = `${lang}/day-${pad(n)}`;
       if (c && (a || v)) report.error(w, "has both common/ and a track-specific file — use one or the other");
-      if (!c && (a ? !v : v)) report.error(w, `has ${a ? "apps" : "video"}/ but not ${a ? "video" : "apps"}/ — track days need both tracks`);
+      if (!c && (a ? !v : v)) incomplete(w, `has ${a ? "apps" : "video"}/ but not ${a ? "video" : "apps"}/ — track days need both tracks`);
       if (!c && !a && !v) missing[lang].push(n);
     }
   }
@@ -261,7 +265,9 @@ export function crossValidate(days, report, { strict = false, langs = LANGS } = 
       const other = map.get(key(l2, d.track, d.day));
       const w = `day-${pad(d.day)} (${d.track})`;
       if (!other) {
-        report.error(w, `exists in ${l1} but not in ${l2}`);
+        const conflict = DAY_TRACKS.some((t) => t !== d.track && (t === "common") !== (d.track === "common") && map.has(key(l2, t, d.day)));
+        if (conflict) report.error(w, `is ${d.track === "common" ? "common" : "track-specific"} in ${l1} but not in ${l2} — the day/track skeleton must match`);
+        else incomplete(w, `exists in ${l1} but not in ${l2}`);
         continue;
       }
       const a = d.tasks.map((t) => `${t.id}:${t.xp}${t.optional ? "?" : ""}`).join(",");
@@ -272,7 +278,9 @@ export function crossValidate(days, report, { strict = false, langs = LANGS } = 
       if ((d.badges ?? []).join() !== (other.badges ?? []).join()) report.error(w, `badges differ between ${l1} and ${l2}`);
     }
     for (const d of days.filter((x) => x.lang === l2)) {
-      if (!map.has(key(l1, d.track, d.day))) report.error(`day-${pad(d.day)} (${d.track})`, `exists in ${l2} but not in ${l1}`);
+      if (map.has(key(l1, d.track, d.day))) continue;
+      const conflict = DAY_TRACKS.some((t) => t !== d.track && (t === "common") !== (d.track === "common") && map.has(key(l1, t, d.day)));
+      if (!conflict) incomplete(`day-${pad(d.day)} (${d.track})`, `exists in ${l2} but not in ${l1}`);
     }
   }
   for (const lang of langs) {

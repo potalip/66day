@@ -54,6 +54,7 @@ const calloutStyle: Record<CalloutKind, { box: string; icon: (p: { size?: number
   tip: { box: "border-accent/30 bg-accent-soft", icon: Icon.sparkle },
   note: { box: "border-line bg-surface-2", icon: Icon.info },
   warn: { box: "border-gold/40 bg-gold-soft", icon: Icon.alert },
+  stuck: { box: "border-line bg-surface", icon: Icon.help },
 };
 
 function renderBlocks(blocks: Block[], labels: { copy: string; copied: string }, key = "", tight = false): ReactNode[] {

@@ -72,6 +72,11 @@ describe("parseMarkdown", () => {
     expect(parseMarkdown("> **Важно:** да")[0]).toMatchObject({ t: "quote", callout: "warn" });
     expect(parseMarkdown("> just a quote")[0]).toMatchObject({ t: "quote", callout: null });
     expect(calloutKind("Note:")).toBe("note");
+    expect(calloutKind("If you're stuck:")).toBe("stuck");
+    expect(calloutKind("Если застрял")).toBe("stuck");
+    expect(calloutKind("Безопасность, на будущее:")).toBe("warn");
+    expect(calloutKind("Tip (Supabase path):")).toBe("tip");
+    expect(calloutKind("Money note:")).toBe("note");
   });
   it("parses tables", () => {
     const b = parseMarkdown("| a | b |\n|---|:-:|\n| 1 | 2 |\n| 3 | 4 |");
