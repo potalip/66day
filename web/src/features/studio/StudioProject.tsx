@@ -174,6 +174,7 @@ export default function StudioProject() {
       </div>
 
       <header className="space-y-3">
+        <h1 className="sr-only">{title || s.titlePlaceholder}</h1>
         <label htmlFor={titleId} className="sr-only">{s.titlePlaceholder}</label>
         <textarea id={titleId} value={title} maxLength={120} placeholder={s.titlePlaceholder} rows={1}
           onChange={(e) => { touch(); setTitle(e.target.value.replace(/\n/g, " ")); }}
@@ -193,7 +194,8 @@ export default function StudioProject() {
 
       <div className="grid items-start gap-6 lg:grid-cols-[minmax(0,1fr)_400px]">
         {/* right column first on mobile: preview + render */}
-        <aside className="space-y-6 lg:sticky lg:top-20 lg:order-2">
+        <aside className="space-y-6 lg:sticky lg:top-20 lg:order-2 lg:max-h-[calc(100dvh-6rem)] lg:overflow-y-auto lg:overscroll-contain">
+          {render?.status === "done" && <RenderPanel projectId={project.id} onChanged={() => load()} render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />}
           <Card className="p-4">
             <div className="mb-3 flex items-baseline justify-between gap-2">
               <h2 className="font-semibold">{s.preview}</h2>
@@ -202,7 +204,7 @@ export default function StudioProject() {
             {sb.scenes.length ? <PreviewPlayer sb={validation?.storyboard ?? sb} T={T} labels={labels} focusScene={focus} /> : <p className="text-sm text-muted">{s.emptyScenes}</p>}
             <p className="mt-3 text-xs leading-relaxed text-muted">{s.previewNote}</p>
           </Card>
-          <RenderPanel projectId={project.id} onChanged={() => load()} render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />
+          {render?.status !== "done" && <RenderPanel projectId={project.id} onChanged={() => load()} render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />}
         </aside>
 
         <fieldset disabled={planning} aria-busy={planning} className="min-w-0 space-y-6 lg:order-1 disabled:opacity-70">

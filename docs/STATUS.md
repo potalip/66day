@@ -28,7 +28,7 @@ Open the URL Vite prints → `/ru` or `/en`.
 | **Learn** | Onboarding, Today, the 66-day path map, day pages (lessons, tasks with text/link/file proof, "Go deeper" library cards), celebrations, share cards, public portfolio `/:lang/portfolio/:id` with link previews. | `docs/agents/learn-REPORT.md` |
 | **Game** | XP, ~22 levels over 66 days, streaks with freezes, per-track badges, weekly quests, week/all-time leaderboards, profiles, public certificate `/:lang/certificate/:id` (prints to A4 PDF). | `docs/agents/game-REPORT.md` |
 | **Library + pipeline** | Student library with search and filters. Admin intake: paste many links → metadata → transcript → Claude builds RU and EN lessons → you review side by side → publish to days. 24 seeded resources. `media-worker/` = Python service for AWS (yt-dlp + Whisper). | `docs/agents/library-REPORT.md` (starts with your daily workflow) |
-| **Studio + render server** | Students pick a video type, style and format (9:16, 1:1, 16:9) and a language; AI plans the scenes; they edit them; the video renders on our own Python server (`render-server/`, Docker, for AWS). Verified end to end: a 17-second RU code-walkthrough mp4. | `docs/agents/studio-REPORT.md`, `render-server/README.md`, `render-server/API.md` |
+| **Studio + render server** | 13 video types (kinetic hook, explainer, top-N, numbers, code walkthrough, before/after, day recap, quiz, your own footage with captions, AI tool comparison, 66-day journey, post card, split-screen tutorial), each with 2–4 styles × 3 formats (9:16, 1:1, 16:9) in RU and EN. AI plans the scenes, students edit them, and the video renders on our own Python server (`render-server/`, Docker, for AWS). Voice picker when an ElevenLabs key is set. Verified end to end: a RU code walkthrough (17 s), a RU 66-day journey (20 s) and an EN comparison (22 s). | `docs/agents/studio-REPORT.md`, `render-server/README.md`, `render-server/API.md`, `render-server/deploy/AWS.md` |
 | **Design** | Clean light and dark themes, a component kit, mobile tab bar, accessibility (axe: 101 issues → 1), RU/EN landing aligned with the real curriculum. | `docs/DESIGN.md`, `docs/agents/design-REPORT.md` |
 
 ## To go live (your steps; agents can't create accounts)
@@ -38,7 +38,7 @@ Open the URL Vite prints → `/ru` or `/en`.
    `ADMIN_TOKEN` (pick a long random string), `RENDER_SERVER_TOKEN`, and optionally `MEDIA_WORKER_TOKEN`.
    Set the `PUBLIC_BASE_URL` var to your domain.
 3. `npm run deploy`, then `wrangler d1 migrations apply DB --remote`.
-4. **AWS**: deploy `render-server/` (Dockerfile; ECS Fargate 4 vCPU / 8 GB recommended) and optionally `media-worker/`.
+4. **AWS**: deploy `render-server/` (step-by-step runbook in `render-server/deploy/AWS.md`, with an ECS task definition and a build-and-push script) and optionally `media-worker/`.
    Set `RENDER_SERVER_URL` / `MEDIA_WORKER_URL` to their URLs. Add `ELEVENLABS_API_KEY` on the render server for AI voiceover.
    Neither Docker image has been built yet (this sandbox has no Docker daemon), so build and smoke-test both first.
 

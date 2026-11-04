@@ -68,6 +68,15 @@ studio.get("/projects", async (c) => {
   });
 });
 
+/** Trim to `max` chars at a word boundary (adds "…" when cut) so auto titles never end mid-word. */
+function clipWords(text: string, max: number): string {
+  const t = text.trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max);
+  const sp = cut.lastIndexOf(" ");
+  return (sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s,;:–—-]+$/, "") + "…";
+}
+
 studio.post("/projects", async (c) => {
   const body = await c.req.json<{ template?: string; style?: string; format?: Format; lang?: Lang; brief?: string; title?: string }>().catch(() => ({} as never));
   const T = getTemplate(body.template ?? "");
@@ -78,7 +87,7 @@ studio.post("/projects", async (c) => {
   const sb = exampleStoryboard(T, lang, style, format);
   const id = newId("prj");
   const brief = (body.brief ?? "").slice(0, 2000);
-  const title = (body.title ?? "").trim().slice(0, 120) || (brief ? brief.split(/[.!?\n]/)[0].slice(0, 80) : sb.title);
+  const title = (body.title ?? "").trim().slice(0, 120) || (brief ? clipWords(brief.split(/[.!?\n]/)[0], 80) : sb.title);
   sb.title = title;
   await c.env.DB.prepare(
     "INSERT INTO studio_projects (id, user_id, title, template, style, format, lang, brief, storyboard) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
