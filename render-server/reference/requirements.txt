@@ -1,0 +1,5 @@
+pycairo>=1.25
+numpy>=1.26
+scipy>=1.11
+pillow>=10
+requests>=2.31
