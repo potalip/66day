@@ -100,6 +100,7 @@ function Handle({ c }: { c: Ctx }) {
 
 function sceneBody(c: Ctx, sc: Scene): ReactNode {
   const f = sc.fields; const { P, t, v } = c;
+  const hi = P.accent.toLowerCase() === P.fg.toLowerCase() ? P.accent2 : P.accent;
   const colW = c.W - (v ? 180 : c.wide ? 520 : 200);
   const emph = (s: unknown) => new Set(str(s).split(/[,\s]+/).map(keyOf).filter(Boolean));
   switch (sc.kind) {
@@ -109,7 +110,7 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
       return (
         <Center c={c} gap={40}>
           {str(f.kicker) && <Appear t={t} at={0}><Pill bg={P.accent} fg={P.on_accent}>{str(f.kicker).toUpperCase()}</Pill></Appear>}
-          <Words text={title} t={t} start={.2} size={size} color={P.fg} hl={emph(f.emphasis)} hcolor={P.accent} />
+          <Words text={title} t={t} start={.2} size={size} color={P.fg} hl={emph(f.emphasis)} hcolor={hi} />
           {sc.kind === "hook" && <div style={{ height: 14, borderRadius: 7, background: P.accent, width: `${30 * ease(t, .8, 1.4)}%` }} />}
           {str(f.subtitle) && <Appear t={t} at={.9}><div style={{ fontSize: v ? 46 : 40, color: P.muted, fontWeight: 500 }}>{str(f.subtitle)}</div></Appear>}
         </Center>
@@ -123,7 +124,7 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
           {str(f.label) && <Appear t={t} at={.05}><div style={{ fontSize: 28, fontWeight: 700, letterSpacing: ".12em", color: P.muted }}>{str(f.label).toUpperCase()}</div></Appear>}
           <div style={{ borderLeft: `14px solid ${P.accent}`, paddingLeft: 56 }}>
             <Appear t={t} at={.2}><div style={{ fontSize: size, fontWeight: 800, lineHeight: 1.16, color: P.fg }}>
-              {text.split(" ").map((w, k) => <span key={k} style={{ color: hl.has(keyOf(w)) ? P.accent : undefined }}>{w} </span>)}
+              {text.split(" ").map((w, k) => <span key={k} style={{ color: hl.has(keyOf(w)) ? hi : undefined }}>{w} </span>)}
             </div></Appear>
           </div>
         </Center>

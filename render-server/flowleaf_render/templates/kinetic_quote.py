@@ -50,7 +50,7 @@ def draw_statement(f: Frame, sc, bc: BuildCtx):
     bu = ease(t, 0, .5, out_cubic)
     fill_rrect(ctx, x0, top - 10 * s, 14 * s, (block + 20 * s) * bu, 7 * s, P.accent)
     paragraph(ctx, lines, x0 + 70 * s, top, size, "ExtraBold", P.fg, align="l", lh=1.16, reveal=.2, t=t,
-              stagger=.12, dur=.55, rise=40 * s, highlight=_emph(fl.get("emphasis")), hcolor=P.accent)
+              stagger=.12, dur=.55, rise=40 * s, highlight=_emph(fl.get("emphasis")), hcolor=P.highlight)
     if fl.get("label"):
         text(ctx, fl["label"].upper(), x0 + 70 * s, top - 70 * s, 28 * s, "Bold", P.muted, ease(t, .1, .5), "lm",
              tracking=.12, max_w=w)

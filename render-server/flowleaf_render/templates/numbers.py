@@ -119,7 +119,7 @@ def draw_bars(f: Frame, sc, bc: BuildCtx):
         c = P.accent if j == imax else mixc(P.accent, P.surface if not P.dark else P.bg, .45)
         fill_rrect(ctx, bx0, by, max(bar_h, W * abs(v) / vmax * u), bar_h, bar_h / 2, c, a)
     if fl.get("source"):
-        text(ctx, fl["source"], bx0, y1 + 10 * s, 26 * s, "Medium", P.muted, ease(t, 1.2, 1.6), "lm", max_w=W)
+        text(ctx, fl["source"], bx0, top + n * row + 10 * s, 26 * s, "Medium", P.muted, ease(t, 1.2, 1.6), "lm", max_w=W)
     handle_tag(f, bc.g.get("handle"), 1)
 
 

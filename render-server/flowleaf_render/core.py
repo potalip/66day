@@ -14,6 +14,7 @@ from __future__ import annotations
 
 import functools
 import math
+import re
 import os
 import random
 import subprocess
@@ -98,6 +99,11 @@ class Palette:
     vignette: float = 0.0
     code_bg: str = ""        # code panels (falls back to surface)
     syntax: tuple = ()       # (keyword, string, number, comment, function) colours for code
+
+    @property
+    def highlight(self):
+        """Colour for emphasised words: the accent, unless the accent is the text colour (ink style)."""
+        return self.accent2 if self.accent.lower() == self.fg.lower() else self.accent
 
     def to_json(self):
         return {k: v for k, v in self.__dict__.items()}
@@ -400,8 +406,9 @@ def text(ctx, s, x, y, size, weight="Bold", color="#FFFFFF", alpha=1.0, anchor="
 def wrap(s, size, weight, max_w, family="sans", tracking=0.0):
     """Greedy word wrap. Respects explicit newlines. Words longer than max_w are hard-split."""
     out = []
-    for para in str(s).split("\n"):
-        words, cur = para.split(), ""
+    s = re.sub(r" ([—–-]) ", "\u00a0\\1 ", str(s))       # never start a line with a dash
+    for para in s.split("\n"):
+        words, cur = [w for w in re.split(r"[ \t]+", para) if w], ""
         for wd in words:
             while text_width(wd, size, weight, tracking, family) > max_w and len(wd) > 1:
                 k = len(wd)
@@ -418,6 +425,10 @@ def wrap(s, size, weight, max_w, family="sans", tracking=0.0):
 def fit(s, max_w, max_h, size, weight="Bold", min_size=18, lh=1.15, family="sans", max_lines=None, tracking=0.0):
     """Largest font size <= size where `s` wraps into the box. Returns (size, lines)."""
     size = int(size)
+    words = re.split(r"[ \t\n]+", re.sub(r" ([—–-]) ", "\u00a0\\1 ", str(s)))
+    longest = max(words or [""], key=lambda w: text_width(w, 100, weight, tracking, family))
+    while size > min_size and text_width(longest, size, weight, tracking, family) > max_w:
+        size = max(min_size, int(size * .93))
     while True:
         lines = wrap(s, size, weight, max_w, family, tracking)
         h = size * (CAP[family] + (len(lines) - 1) * lh)
@@ -464,7 +475,7 @@ def kinetic_lines(f: Frame, lines, x, y, size, start, weight="Black", color=None
     """Words pop in one by one (rise + scale overshoot) across pre-wrapped lines. `highlight` = set of
     lower-cased words drawn in hcolor. Returns block height."""
     ctx, t = f.ctx, f.t
-    color = color or f.P.fg; hcolor = hcolor or f.P.accent
+    color = color or f.P.fg; hcolor = hcolor or f.P.highlight
     rise = rise if rise is not None else size * .45
     n = len(lines)
     block = size * (CAP[family] + (n - 1) * lh)
