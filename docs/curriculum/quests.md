@@ -89,7 +89,7 @@ Short descriptions, written natively. Use them as the quest card's subtitle.
 | q-apps-bot-life | Your bot is live and answering. Prove it with a t.me link. | Бот работает и отвечает. Докажи ссылкой t.me. |
 | q-apps-explain-the-diff | Review an agent's PR like a senior: three real comments. | Сделай ревью PR агента как сеньор: три настоящих комментария. |
 | q-apps-launch-crew | Launch kit ready and one pitch sent — same week. | Набор к запуску готов и один отклик отправлен — за одну неделю. |
-| q-apps-helper | Help a newer student and share what you learned. | Помоги новичку и поделись тем, чему научился сам. |
+| q-apps-helper | Help a newer student and share what you learned. | Помоги новичку и расскажи, что понял за это время. |
 | q-video-three-renders | Three finished renders uploaded this week. | Три готовых рендера за неделю. |
 | q-video-studio-spin | Make one video in the built-in Studio. | Сделай одно видео во встроенной Студии. |
 | q-video-hook-battle | Three hooks enter, one gets published. | Три крючка выходят на ринг, публикуется один. |
