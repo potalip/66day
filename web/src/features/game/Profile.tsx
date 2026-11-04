@@ -162,7 +162,7 @@ function BadgeGrid({ catalog, earned }: { catalog: BadgeInfo[] | null; earned: E
     if (!catalog) return [];
     const all = [...catalog];
     // badges earned but not in the catalog (e.g. a curriculum id before badges.json lands)
-    for (const b of earned) if (!all.some((c) => c.id === b.id)) all.push({ id: b.id, icon: "medal", title: { en: b.id, ru: b.id }, description: { en: "", ru: "" }, group: "program" });
+    for (const b of earned) if (!all.some((c) => c.id === b.id)) all.push({ id: b.id, icon: "medal", title: { en: b.id, ru: b.id }, description: { en: "", ru: "" }, group: "program", secret: false });
     const order = ["start", "streak", "craft", "rhythm", "level", "program"];
     const m = new Map<string, BadgeInfo[]>();
     for (const b of all) m.set(b.group, [...(m.get(b.group) ?? []), b]);

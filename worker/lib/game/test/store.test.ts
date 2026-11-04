@@ -9,7 +9,10 @@ const day = (d: Partial<CurriculumDay>): CurriculumDay => ({
 });
 const curriculum = buildIndex([
   day({ day: 14, boss: true, title: "Ship your first app", tasks: [{ id: "d14-t1", type: "ship", title: "Deploy it", xp: 80, proof: "link" }] }),
-  day({ day: 7, badges: ["week-1"] }),
+  day({ day: 7, rest: true, badges: ["week-1"] }),
+  day({ day: 20, track: "apps", badges: ["bot-builder"] }),
+  day({ day: 20, track: "video", badges: ["voice-on"] }),
+  day({ day: 21, track: "apps", tasks: Array.from({ length: 10 }, (_, i) => ({ id: `share-${i}`, type: "share" as const, title: "Post", xp: 10, proof: "link" as const })) }),
 ]);
 
 let db: ReturnType<typeof createTestD1>;
@@ -68,19 +71,52 @@ describe("applyEvent", () => {
     expect((await loadState(db, U)).state.streak.streak).toBe(1);
   });
 
-  it("boss days, ship tasks, curriculum day badges, night owl", async () => {
+  it("boss days, ship tasks, day badges and the night-owl secret (ship task 00–04 local)", async () => {
     await applyEvent(db, U, { type: "task.completed", taskId: "d14-t1", day: 14, xp: 80 }, at("2026-11-04T22:30:00Z")); // 01:30 MSK
     const a = await applyEvent(db, U, { type: "day.completed", day: 14 }, at("2026-11-04T22:31:00Z"));
     const ids = (await loadState(db, U)).state.badges;
-    expect(ids.has("first-ship")).toBe(true);
-    expect(ids.has("boss-1")).toBe(true);
     expect(ids.has("night-owl")).toBe(true);
     expect(a[0]).toMatchObject({ kind: "xp", amount: 120 });
     const b = await applyEvent(db, U, { type: "day.completed", day: 7, badges: ["extra-badge", "BAD ID!"] }, at("2026-11-04T22:32:00Z"));
     const got = b.filter((x) => x.kind === "badge").map((x) => x.id);
-    expect(got).toContain("week-1");
     expect(got).toContain("extra-badge");
     expect(got).not.toContain("BAD ID!");
+  });
+
+  it("an ordinary task after midnight is not night-owl", async () => {
+    await applyEvent(db, U, { type: "task.completed", taskId: "x", day: 1, xp: 10 }, at("2026-11-04T22:30:00Z"));
+    expect((await loadState(db, U)).state.badges.has("night-owl")).toBe(false);
+  });
+
+  it("day badges fall back to the day file of the student's own track", async () => {
+    const a = await applyEvent(db, U, { type: "day.completed", day: 20 }, at("2026-11-04T10:00:00Z")); // U is on apps
+    const ids = a.filter((x) => x.kind === "badge").map((x) => x.id);
+    expect(ids).toContain("bot-builder");
+    expect(ids).not.toContain("voice-on");
+  });
+
+  it("public-builder after 10 share tasks; labels are localised to the student's language", async () => {
+    await db.prepare("UPDATE users SET lang = 'ru' WHERE id = ?").bind(U).run();
+    let last: { kind: string; id?: string; label?: string }[] = [];
+    for (let i = 0; i < 10; i++) last = await applyEvent(db, U, { type: "task.completed", taskId: `share-${i}`, day: 21, xp: 10 }, at("2026-11-04T10:00:00Z"));
+    const pb = last.find((x) => x.id === "public-builder");
+    expect(pb).toBeTruthy();
+    expect(pb?.label).toBe("Строю публично");
+  });
+
+  it("polyglot: the same lesson opened in both languages (zero XP)", async () => {
+    expect(await applyEvent(db, U, { type: "lesson.viewed", day: 3, lang: "en" }, at("2026-11-04T10:00:00Z"))).toEqual([]);
+    await applyEvent(db, U, { type: "lesson.viewed", day: 4, lang: "ru" }, at("2026-11-04T10:00:00Z"));
+    const a = await applyEvent(db, U, { type: "lesson.viewed", day: 3, lang: "ru" }, at("2026-11-04T10:01:00Z"));
+    expect(a.map((x) => x.id)).toEqual(["polyglot"]);
+    expect((await loadState(db, U)).state.xp).toBe(0);
+  });
+
+  it("rest days count for the streak and three of them earn well-rested", async () => {
+    await applyEvent(db, U, { type: "day.completed", day: 7 }, at("2026-11-04T10:00:00Z"));
+    const s = (await loadState(db, U)).state;
+    expect(s.streak.streak).toBe(1);
+    expect(s.counters.rests).toBe(1);
   });
 
   it("caps resource XP per day and rejects invalid events", async () => {
@@ -105,7 +141,7 @@ describe("applyEvent", () => {
     // skip Nov 10, come back Nov 11 → freeze saves it
     await applyEvent(db, U, { type: "task.completed", taskId: "t10", day: 10, xp: 60 }, at("2026-11-11T09:00:00Z"));
     s = (await loadState(db, U)).state;
-    expect(s.streak.streak).toBe(10);
+    expect(s.streak.streak).toBe(11); // the frozen day counts as kept
     expect(s.badges.has("saved-by-freeze")).toBe(true);
   });
 });

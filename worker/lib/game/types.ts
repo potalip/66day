@@ -9,6 +9,7 @@ export interface BadgeInfo {
   title: Record<Lang, string>;
   description: Record<Lang, string>;
   group: string;
+  secret: boolean;
 }
 export interface EarnedBadge { id: string; awardedAt: number }
 
@@ -19,6 +20,18 @@ export interface StreakInfo { current: number; best: number; freezes: number; ma
 export interface ActivityCell { day: string; xp: number; index: number /* 1..66 program day */ }
 
 export interface ShippedItem { kind: "boss" | "ship"; key: string; day: number | null; title: Partial<Record<Lang, string>>; url: string | null; at: number }
+
+export interface WeeklyRecap {
+  from: string;
+  to: string;
+  xp: number;
+  prevXp: number;
+  activeDays: number;
+  tasks: number;
+  badges: string[];
+  bestDay: { day: string; xp: number } | null;
+  days: { day: string; xp: number }[];
+}
 
 export interface GameMe extends LevelInfo {
   userId: string;
@@ -31,6 +44,7 @@ export interface GameMe extends LevelInfo {
   weekXp: number;
   ranks: { week: number | null; all: number | null };
   activity: ActivityCell[];
+  recap: WeeklyRecap;
 }
 
 export interface PublicProfile extends LevelInfo {
@@ -43,6 +57,8 @@ export interface PublicProfile extends LevelInfo {
   badges: EarnedBadge[];
   activity: ActivityCell[];
   shipped: ShippedItem[];
+  /** only for your own profile */
+  recap: WeeklyRecap | null;
 }
 
 export interface LeaderRow { rank: number; userId: string; name: string | null; xp: number; level: number; track: Track | null; streak: number; isMe: boolean }

@@ -1,7 +1,7 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../env";
 import type { GameEvent } from "../../shared/types";
-import { onGameEvent } from "../lib/game";
+import { onGameEvent, onLessonViewed } from "../lib/game";
 import { badgeCatalog, getLeaderboard, getMe, getProfile, type Period, type TrackFilter } from "../lib/game/queries";
 import { syncTrack, loadStats } from "../lib/game/store";
 import { seedDemo, clearDemo } from "../lib/game/seed";
@@ -56,6 +56,17 @@ game.put("/timezone", async (c) => {
   if (!tz || safeTz(tz) !== tz) return c.json({ error: "invalid_timezone" }, 400);
   await c.env.DB.prepare("UPDATE users SET timezone = ? WHERE id = ?").bind(tz, c.get("userId")).run();
   return c.json({ ok: true, tz });
+});
+
+/**
+ * The client reports which lesson language was opened (zero XP; powers the secret "polyglot" badge).
+ * Prefer calling `onLessonViewed()` server-side where the lesson is served; this endpoint is the client fallback.
+ */
+game.post("/lesson-viewed", async (c) => {
+  const body = await c.req.json<{ day?: number; lang?: string }>().catch(() => ({}) as { day?: number; lang?: string });
+  const day = Number(body.day);
+  if (!Number.isInteger(day) || day < 1 || day > 66 || (body.lang !== "en" && body.lang !== "ru")) return c.json({ error: "invalid" }, 400);
+  return c.json({ awards: await onLessonViewed(c.env, c.get("userId"), day, body.lang) });
 });
 
 // ---- dev only -------------------------------------------------------------------------------

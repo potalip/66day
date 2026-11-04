@@ -43,7 +43,7 @@ describe("streak", () => {
     expect(after7.freezes).toBe(1);
     const ch = applyActivity(after7, addDays("2026-01-07", 2)); // missed exactly one day
     expect(ch.freezesUsed).toBe(1);
-    expect(ch.state.streak).toBe(8);
+    expect(ch.state.streak).toBe(9); // frozen days count as kept days
     expect(ch.state.freezes).toBe(0);
   });
 
@@ -59,6 +59,14 @@ describe("streak", () => {
     const { s } = run(["2026-11-02", "2026-11-01", "2026-11-02"]);
     expect(s.streak).toBe(1);
     expect(s.lastDay).toBe("2026-11-02");
+  });
+
+  it("bridging over a multiple of 7 still earns a freeze", () => {
+    const { s: after13 } = run(seq("2026-01-01", 14)); // 14 days → 2 freezes
+    const used = applyActivity({ ...after13, freezes: 1, streak: 5 }, addDays("2026-01-14", 2)); // 5 + 1 frozen + 1 = 7
+    expect(used.state.streak).toBe(7);
+    expect(used.freezeEarned).toBe(true);
+    expect(used.state.freezes).toBe(1);
   });
 
   it("works across month/year boundaries", () => {

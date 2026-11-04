@@ -1,9 +1,9 @@
 // OWNER: game agent. D1 persistence for the game engine. One optimistic-concurrency transaction per event.
-import type { Award, GameEvent, Track } from "../../../shared/types";
+import type { Award, Lang, Track } from "../../../shared/types";
 import { emptyCounters } from "./badges";
 import { CATALOG_BY_ID } from "./badges";
 import { CURRICULUM, type CurriculumIndex } from "./curriculum";
-import { eventKey, reduce, type GameState } from "./engine";
+import { eventKey, reduce, type AnyGameEvent, type GameState } from "./engine";
 import { isoWeek, safeTz } from "./time";
 
 export interface StatsRow {
@@ -31,14 +31,14 @@ export async function loadStats(db: D1Database, userId: string): Promise<StatsRo
   return db.prepare("SELECT * FROM game_stats WHERE user_id = ?").bind(userId).first<StatsRow>();
 }
 
-export async function loadState(db: D1Database, userId: string): Promise<{ state: GameState; version: number; exists: boolean; tz: string; userTrack: Track | null }> {
+export async function loadState(db: D1Database, userId: string): Promise<{ state: GameState; version: number; exists: boolean; tz: string; lang: Lang; userTrack: Track | null }> {
   const [stats, badges, user] = await db.batch([
     db.prepare("SELECT * FROM game_stats WHERE user_id = ?").bind(userId),
     db.prepare("SELECT badge_id FROM game_badges WHERE user_id = ?").bind(userId),
-    db.prepare("SELECT timezone, track FROM users WHERE id = ?").bind(userId),
+    db.prepare("SELECT timezone, track, lang FROM users WHERE id = ?").bind(userId),
   ]);
   const s = (stats.results[0] as StatsRow | undefined) ?? null;
-  const u = user.results[0] as { timezone?: string; track?: Track } | undefined;
+  const u = user.results[0] as { timezone?: string; track?: Track; lang?: string } | undefined;
   let counters = emptyCounters();
   try {
     if (s) counters = { ...counters, ...JSON.parse(s.counters) };
@@ -48,6 +48,7 @@ export async function loadState(db: D1Database, userId: string): Promise<{ state
     exists: !!s,
     version: s?.version ?? 0,
     tz: safeTz(u?.timezone),
+    lang: u?.lang === "ru" ? "ru" : "en",
     userTrack,
     state: {
       xp: s?.xp ?? 0,
@@ -67,7 +68,7 @@ const isConflict = (e: unknown) => /malformed JSON|UNIQUE constraint|SQLITE_CONS
  * recorded the first time. Concurrency: the whole write is one D1 batch (= one transaction) guarded by
  * a version check that aborts the batch if another event for this user committed in between.
  */
-export async function applyEvent(db: D1Database, userId: string, ev: GameEvent, opts: ApplyOptions = {}): Promise<Award[]> {
+export async function applyEvent(db: D1Database, userId: string, ev: AnyGameEvent, opts: ApplyOptions = {}): Promise<Award[]> {
   const key = eventKey(ev); // throws InvalidEvent on garbage
   const now = opts.now ?? new Date();
   const retries = opts.retries ?? 8;
@@ -76,8 +77,8 @@ export async function applyEvent(db: D1Database, userId: string, ev: GameEvent, 
     const existing = await db.prepare("SELECT awards FROM game_events WHERE user_id = ? AND event_key = ?").bind(userId, key).first<{ awards: string | null }>();
     if (existing) return parseAwards(existing.awards);
 
-    const { state, version, exists, tz } = await loadState(db, userId);
-    const out = reduce(state, ev, { now, tz, curriculum: opts.curriculum ?? CURRICULUM, catalog: CATALOG_BY_ID });
+    const { state, version, exists, tz, lang } = await loadState(db, userId);
+    const out = reduce(state, ev, { now, tz, lang, curriculum: opts.curriculum ?? CURRICULUM, catalog: CATALOG_BY_ID });
     const s = out.state;
     const ts = Math.floor(now.getTime() / 1000);
     const week = isoWeek(now);
@@ -107,7 +108,7 @@ export async function applyEvent(db: D1Database, userId: string, ev: GameEvent, 
     } else if (s.track !== state.track) {
       stmts.push(db.prepare("UPDATE game_weekly SET track = ? WHERE week = ? AND user_id = ?").bind(s.track, week, userId));
     }
-    stmts.push(
+    if (out.xp > 0) stmts.push(
       db.prepare(
         `INSERT INTO game_activity (user_id, day, xp, events) VALUES (?1,?2,?3,1)
          ON CONFLICT(user_id, day) DO UPDATE SET xp = xp + ?3, events = events + 1`,
