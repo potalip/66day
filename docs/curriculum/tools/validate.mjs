@@ -98,7 +98,7 @@ function parseOutline() {
     const tasks = [...tasksCell.matchAll(/(d\d\d-(?:apps-|video-)?t\d+) · (\w+) · (\d+) · (\w+)/g)].map((t) => ({
       id: t[1], type: t[2], xp: Number(t[3]), proof: t[4],
     }));
-    const est = /(\d+) min/.exec(outcome);
+    const est = /(\d+) min\s*$/.exec(outcome);
     const badges = flags.includes("🏅") ? flags.split("🏅")[1].trim().split(/[\s,]+/).filter(Boolean) : [];
     const sum = tasks.reduce((a, t) => a + t.xp, 0);
     if (sum !== Number(xp)) err(`OUTLINE day ${day}/${track}: XP column ${xp} != task sum ${sum}`);
