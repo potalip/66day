@@ -82,6 +82,9 @@ npm run content:check     # strict completeness check of the real curriculum
 ```
 Verified with Playwright in both themes, both languages, at 390 px and 1280 px (onboarding, Today, task proof, celebration,
 done-for-today, Path, Day page done/locked/unwritten), with both the fixtures and the real curriculum. No horizontal overflow at 390 px.
+Trial merge of `main` + all six agent branches (2026-11-04): no conflicts, `npm run build` passes (105+105 day files, 30 badges),
+and the learn pages render correctly inside the design shell, including the mobile bottom tab bar. Learn dispatches the game's
+`fl:game-changed` window event after every action, so the game widgets refresh without any import coupling.
 
 ## Known gaps / notes for others
 - Root `npm test` can't run vitest because of the Cloudflare plugin. Requested a root `vitest.config.ts` from the orchestrator (`docs/requests/learn-to-orchestrator.md`).
