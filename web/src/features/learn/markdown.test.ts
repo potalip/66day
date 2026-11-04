@@ -91,4 +91,20 @@ describe("parseMarkdown", () => {
     const md = "## What\n\nA **coding agent** is.\n\n1. Create.\n2. Open.\n\n> **Tip:** relax.\n\n```\nprompt\n```\n\n- a;\n- b.";
     expect(parseMarkdown(md).map((b) => b.t)).toEqual(["h", "p", "list", "quote", "code", "list"]);
   });
+  it("parses <details> with summary as a collapsed block", () => {
+    const b = parseMarkdown("Quiz.\n\n<details><summary>Answers</summary>\n\n1. One.\n2. Two.\n\n</details>\n\nAfter.");
+    expect(b.map((x) => x.t)).toEqual(["p", "details", "p"]);
+    const d = b[1] as Extract<(typeof b)[0], { t: "details" }>;
+    expect(inlineText(d.summary)).toBe("Answers");
+    expect(d.c[0]).toMatchObject({ t: "list", ordered: true });
+  });
+  it("parses summary on its own line", () => {
+    const b = parseMarkdown("<details>\n<summary>Ответы</summary>\n\ntext\n</details>");
+    expect(b[0]).toMatchObject({ t: "details" });
+  });
+  it("supports GitHub alerts", () => {
+    const b = parseMarkdown("> [!TIP]\n> Do this.");
+    expect(b[0]).toMatchObject({ t: "quote", callout: "tip" });
+    expect(parseMarkdown("> [!WARNING] careful")[0]).toMatchObject({ t: "quote", callout: "warn" });
+  });
 });

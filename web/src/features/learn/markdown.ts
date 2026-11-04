@@ -24,6 +24,7 @@ export type Block =
   | { t: "list"; ordered: boolean; start: number; items: { checked: boolean | null; c: Block[] }[] }
   | { t: "quote"; callout: CalloutKind | null; c: Block[] }
   | { t: "table"; align: ("left" | "center" | "right" | null)[]; head: Inline[][]; rows: Inline[][][] }
+  | { t: "details"; summary: Inline[]; c: Block[] }
   | { t: "hr" };
 
 /** Only allow safe URL schemes. Returns null for anything else (javascript:, data:, vbscript:…). */
@@ -182,6 +183,10 @@ const reHr = /^ {0,3}([-*_])( *\1){2,}\s*$/;
 const reQuote = /^ {0,3}> ?/;
 const reBullet = /^( *)([-*+])\s+(.*)$/;
 const reOrdered = /^( *)(\d{1,9})[.)]\s+(.*)$/;
+const reDetailsOpen = /^ {0,3}<details(?:\s+open)?>\s*(?:<summary>(.*?)<\/summary>)?\s*$/i;
+const reDetailsClose = /^ {0,3}<\/details>\s*$/i;
+const reSummary = /^\s*<summary>(.*?)<\/summary>\s*$/i;
+const reAlert = /^\[!(TIP|NOTE|WARNING|IMPORTANT|CAUTION)\]\s*/i;
 const reTableSep = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
 
 export function parseMarkdown(src: string): Block[] {
@@ -213,7 +218,7 @@ function splitRow(line: string): string[] {
 }
 
 function isBlockStart(line: string): boolean {
-  return reFence.test(line) || reHeading.test(line) || reHr.test(line) || reQuote.test(line) || reBullet.test(line) || /^ {0,3}\d{1,9}[.)]\s+/.test(line);
+  return reDetailsOpen.test(line) || reFence.test(line) || reHeading.test(line) || reHr.test(line) || reQuote.test(line) || reBullet.test(line) || /^ {0,3}\d{1,9}[.)]\s+/.test(line);
 }
 
 function parseBlocks(lines: string[], ids: Map<string, number>): Block[] {
@@ -222,6 +227,27 @@ function parseBlocks(lines: string[], ids: Map<string, number>): Block[] {
   while (i < lines.length) {
     const line = lines[i];
     if (!line.trim()) { i++; continue; }
+
+    // <details><summary>…</summary> … </details> — the only raw HTML we understand (collapsed quiz answers).
+    const det = reDetailsOpen.exec(line);
+    if (det) {
+      let summary = det[1] ?? "";
+      const inner: string[] = [];
+      let depth = 1;
+      i++;
+      if (!summary && i < lines.length) {
+        const sm = reSummary.exec(lines[i]);
+        if (sm) { summary = sm[1]; i++; }
+      }
+      while (i < lines.length) {
+        if (reDetailsOpen.test(lines[i])) depth++;
+        if (reDetailsClose.test(lines[i]) && --depth === 0) { i++; break; }
+        inner.push(lines[i]);
+        i++;
+      }
+      out.push({ t: "details", summary: parseInline(summary.trim()), c: parseBlocks(inner, ids) });
+      continue;
+    }
 
     const fence = reFence.exec(line);
     if (fence) {
@@ -254,10 +280,16 @@ function parseBlocks(lines: string[], ids: Map<string, number>): Block[] {
         inner.push(lines[i].replace(reQuote, ""));
         i++;
       }
-      const c = parseBlocks(inner, ids);
       let callout: CalloutKind | null = null;
+      const alert = inner.length ? reAlert.exec(inner[0].trim()) : null;
+      if (alert) {
+        const k = alert[1].toUpperCase();
+        callout = k === "TIP" ? "tip" : k === "NOTE" ? "note" : "warn";
+        inner[0] = inner[0].trim().replace(reAlert, "");
+      }
+      const c = parseBlocks(inner, ids);
       const first = c[0];
-      if (first?.t === "p" && first.c[0]?.t === "strong") {
+      if (!callout && first?.t === "p" && first.c[0]?.t === "strong") {
         callout = calloutKind(inlineText(first.c[0].c));
       }
       out.push({ t: "quote", callout, c });
