@@ -40,7 +40,8 @@ launched something strangers can use or watch. There's nothing new to learn toda
 Open two browser tabs side by side: the promise page you shipped on day 2, and your portfolio. Don't analyse
 anything yet. Just look from one to the other.
 
-Then open the letter you wrote to yourself on day 14. Read it once, slowly. Notice what you got right about
+Then open the letter you wrote to yourself on day 14, and your day-1 answer to "why are you here?". Read both once,
+slowly. Notice what you got right about
 yourself — and what you didn't see coming.
 
 ## 1. Day 1 vs day 66 (20 min)
@@ -49,12 +50,13 @@ Start with three numbers. Count your commits across every project folder (the nu
 checkpoint):
 
 ```bash
-# run in the folder that holds your projects
-for d in */; do [ -d "$d.git" ] && git -C "$d" log --oneline | wc -l; done | awk '{s+=$1} END {print s}'
+# from your home folder: finds every repo up to 4 levels deep (~/66-day-promise, ~/66/video, ~/66/apps/main-app…)
+cd ~
+find . -maxdepth 4 -name .git -type d 2>/dev/null | while read -r g; do git -C "${g%/.git}" rev-list --count HEAD 2>/dev/null; done | awk '{s+=$1} END {print s}'
 ```
 
 Then: how many things you've put online, and how many real people have used or watched your work. Rough counts are
-fine — honest ones only. (On Windows, run the loop in Git Bash.)
+fine — honest ones only. (On Windows, run it in Git Bash. Or simply ask your agent to count the commits in every repo under your home folder.)
 
 Now write, briefly and plainly:
 
@@ -118,8 +120,8 @@ who tested, watched or helped along the way.
 
 ## One last thing
 
-The research behind the number 66 found that habits take around that long, on average, to become automatic — and
-that missing a single day doesn't undo them. So here's the truth about tomorrow: there's no lesson, no XP, no
+The study behind the number 66 found that new habits took a median of about 66 days to become automatic (with a
+huge range from person to person), and that missing a single day didn't undo them. So here's the truth about tomorrow: there's no lesson, no XP, no
 checklist. Day 67 is just a day.
 
 Open the terminal anyway. Not because a program told you to. Because by now, you'd miss it.

@@ -66,7 +66,8 @@ Video: folder ~/66/video with assets/fonts, assets/music, assets/images, project
 title-card project from ~/title-card here, without its .venv and frames), notes/prompts.md, a CLAUDE.md (Python + Pillow + ffmpeg, 1080x1920 default, yuv420p) and a
 .gitignore that ignores renders/, frames/ and .venv/.
 
-Done when: git init is done, first commit exists, and you print the structure two levels deep.
+Done when: the folders exist and you print the structure two levels deep. Video: git init in ~/66/video with a
+first commit. Apps: no repo at the top of ~/66/apps — main-app gets its own repo on day 15.
 ```
 
 **Proof:** paste the printed structure.
