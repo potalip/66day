@@ -14,6 +14,12 @@ const outCubic = (u: number) => 1 - (1 - u) ** 3;
 const outBack = (u: number) => { const s = 1.7; const v = u - 1; return 1 + (s + 1) * v ** 3 + s * v ** 2; };
 const ease = (t: number, a: number, b: number) => outCubic(prog(t, a, b));
 const str = (v: unknown) => (v == null ? "" : String(v));
+const lum = (hex: string) => {
+  const [r, g, b] = [1, 3, 5].map((i) => parseInt(hex.slice(i, i + 2), 16) / 255).map((c) => (c <= .03928 ? c / 12.92 : ((c + .055) / 1.055) ** 2.4));
+  return .2126 * r + .7152 * g + .0722 * b;
+};
+/** Caption word highlight: the brighter accent (reads on the black caption chip), like the renderer. */
+const captionHi = (P: Palette) => (lum(P.accent) >= lum(P.accent2) ? P.accent : P.accent2);
 const keyOf = (w: string) => w.toLowerCase().replace(/[^\p{L}\p{N}]/gu, "");
 
 /** Pick a font size that keeps `text` inside roughly `area` px² at line-height lh. */
@@ -525,7 +531,7 @@ export function Stage({ sb, T, t, className }: { sb: Storyboard; T: TemplateDef;
     <div ref={box} className={cx("relative w-full overflow-hidden", className)} style={{ aspectRatio: `${W} / ${H}`, background: P.bg }}>
       <div style={{ width: W, height: H, transform: `scale(${k})`, transformOrigin: "0 0", position: "absolute", left: 0, top: 0, fontFamily: "Inter, var(--font-sans)", textAlign: "left",
         background: `radial-gradient(ellipse at 50% 38%, ${P.bg2} 0%, ${P.bg} 70%)`, color: P.fg }}>
-        {sc ? <>{sceneBody(c, sc)}<Handle c={c} /></> : null}
+        {sc ? <>{sceneBody(c, sc)}{(c.v || sc.kind !== "question") && <Handle c={c} />}</> : null}
         {cue && (
           <div style={{ position: "absolute", left: 0, right: 0, bottom: c.v ? 250 : 50, textAlign: "center" }}>
             <span style={{ background: "rgba(0,0,0,.7)", color: "#fff", fontSize: c.v ? 42 : 34, fontWeight: 700, padding: "10px 24px", borderRadius: 14, display: "inline-block", maxWidth: "80%" }}>
@@ -535,7 +541,7 @@ export function Stage({ sb, T, t, className }: { sb: Storyboard; T: TemplateDef;
                 let acc = 0;
                 return words.map((w, k) => {
                   const st = acc, en = (acc += wts[k]);
-                  const style = spoken >= en ? {} : spoken >= st ? { color: P.accent2 } : { opacity: .62 };
+                  const style = spoken >= en ? {} : spoken >= st ? { color: captionHi(P), filter: lum(captionHi(P)) < .25 ? "brightness(1.6)" : undefined } : { opacity: .62 };
                   return <span key={k} style={style}>{w}{k < words.length - 1 ? " " : ""}</span>;
                 });
               })()}
