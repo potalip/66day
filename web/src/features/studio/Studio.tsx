@@ -2,6 +2,7 @@ import { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { type Catalog, type Format, type Lang, type ProjectSummary, type StatusInfo, type TemplateDef, loadCatalog, studioApi } from "./api";
+import { applyRecap, loadRecapData } from "./prefill";
 import { strings } from "./strings";
 import { Button, Card, Chip, FormatIcon, Icon, Label, Notice, Segmented, Spinner, TextArea, cx } from "./ui";
 
@@ -172,6 +173,10 @@ function CreateSheet({ T, ai, onClose }: { T: TemplateDef; ai: boolean; onClose:
     setBusy(true); setErr(false);
     try {
       const p = await studioApi.create({ template: T.id, style, format, lang, brief });
+      if (T.id === "day-recap") {
+        const d = await loadRecapData(lang);
+        if (d) await studioApi.patch(p.id, { storyboard: applyRecap(p.storyboard, d) }).catch(() => undefined);
+      }
       if (ai && brief.trim()) await studioApi.plan(p.id, brief).catch(() => undefined);
       nav(`/${uiLang}/studio/${p.id}`);
     } catch {
@@ -219,6 +224,7 @@ function CreateSheet({ T, ai, onClose }: { T: TemplateDef; ai: boolean; onClose:
           <Label htmlFor={briefId} hint={ai ? s.briefHelpAi : s.briefHelpNoAi} right={`${brief.length}/2000`}>{s.brief}</Label>
           <TextArea id={briefId} value={brief} onChange={setBrief} rows={4} maxLength={2000} placeholder={s.briefPlaceholder} />
         </div>
+        {T.id === "day-recap" && <p className="text-sm text-muted">{s.recapPrefill}</p>}
         {err && <Notice tone="danger" title={s.loadError} />}
       </div>
       <div className="sticky bottom-0 flex justify-end gap-2 border-t border-line bg-surface p-4">

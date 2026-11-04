@@ -88,7 +88,7 @@ studio.get("/projects/:id", async (c) => {
   const p = await ownProject(c);
   if (!p) return c.json({ error: "not_found" }, 404);
   let current: RenderRow | null = p.current_render_id ? await getRender(c.env, p.current_render_id) : null;
-  if (current && ["submitted", "rendering"].includes(current.status)) current = await syncRender(c.env, current);
+  if (current && ["queued", "submitted", "rendering"].includes(current.status)) current = await syncRender(c.env, current);
   const fresh = (await getProject(c.env, p.id))!;
   const { results } = await c.env.DB.prepare("SELECT * FROM studio_renders WHERE project_id = ? ORDER BY created_at DESC LIMIT 10")
     .bind(p.id).all<RenderRow>();

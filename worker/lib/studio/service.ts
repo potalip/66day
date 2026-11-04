@@ -168,8 +168,18 @@ export async function applyJob(env: Env, r: RenderRow, job: Job): Promise<void> 
 
 /** Polling fallback (local dev has no reachable callback URL; production uses it if a callback was missed). */
 export async function syncRender(env: Env, r: RenderRow): Promise<RenderRow> {
+  const now = Date.now() / 1000;
+  if (ACTIVE.includes(r.status) && now - r.created_at > 45 * 60) {
+    await failRender(env, r, "Render timed out. Please try again.");
+    return (await getRender(env, r.id))!;
+  }
+  // queue message never processed (e.g. a local setup without a consumer): submit directly
+  if (r.status === "queued" && !r.job_id && now - r.created_at > 20) {
+    await submitRender(env, r.project_id).catch((e) => console.error("submitRender", e));
+    return (await getRender(env, r.id))!;
+  }
   if (!r.job_id || !["submitted", "rendering"].includes(r.status) || !rendererConfigured(env)) return r;
-  if (Date.now() / 1000 - r.updated_at < 2) return r;
+  if (now - r.updated_at < 2) return r;
   const res = await rs(env, `/v1/jobs/${r.job_id}`).catch(() => null);
   if (!res?.ok) {
     if (res?.status === 404) await failRender(env, r, "The render server lost this job (it may have been restarted). Try again.");
