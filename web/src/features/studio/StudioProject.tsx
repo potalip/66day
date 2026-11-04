@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { blankScene, totalDuration, validateStoryboard } from "../../../../worker/lib/studio/storyboard";
 import { type Catalog, type Voice, type Format, type Lang, type ProjectDetail, type Render, type SbError, type Storyboard, type TemplateDef, errorCode, loadCatalog, studioApi } from "./api";
+import { ShareDialog } from "@web/ui/ShareCard";
 import { PreviewPlayer } from "./Preview";
 import { type ProofTarget, loadProofTargets, submitProof } from "./proof";
 import { FieldInput, ProjectIdCtx, SceneCard } from "./SceneEditor";
@@ -178,6 +179,7 @@ export default function StudioProject() {
           onChange={(e) => { touch(); setTitle(e.target.value.replace(/\n/g, " ")); }}
           className="field-sizing-content -mx-1.5 w-[calc(100%+0.75rem)] resize-none rounded-lg bg-transparent px-1.5 leading-tight text-2xl font-semibold tracking-tight outline-none placeholder:text-muted/60 focus-visible:ring-2 focus-visible:ring-accent sm:text-3xl" />
         <div className="flex flex-wrap items-center gap-2">
+          {T.id === "day-recap" && <RecapShare sb={sb} />}
           <StatusChip status={project.status} label={s.status[project.status]} />
           <Chip>{T.name[lang]}</Chip>
           <Chip>{styleName}</Chip>
@@ -470,6 +472,25 @@ function VoicePicker({ voices, value, onChange }: { voices: Voice[]; value: stri
         {current?.preview_url && <Button size="sm" className="h-11" onClick={play} aria-label={s.voiceSample}><Icon name="play" /></Button>}
       </div>
     </div>
+  );
+}
+
+/** Day-recap projects can also be shared as the design system's progress card (PNG), same data as the video. */
+function RecapShare({ sb }: { sb: Storyboard }) {
+  const s = useStrings(strings);
+  const [open, setOpen] = useState(false);
+  const recap = sb.scenes.find((x) => x.kind === "recap");
+  if (!recap) return null;
+  const day = Math.max(1, Math.min(66, Number(recap.fields.day ?? sb.fields.day) || 1));
+  const track = sb.fields.track === "video" || sb.fields.track === "apps" ? (sb.fields.track as "apps" | "video") : null;
+  return (
+    <>
+      <Button size="sm" variant="soft" onClick={() => setOpen(true)}>{s.shareCard}</Button>
+      {open && <ShareDialog open={open} onClose={() => setOpen(false)} data={{
+        kind: "day", lang: sb.lang, day, title: String(recap.fields.title ?? ""), track,
+        streak: Number(recap.fields.streak) || undefined, xp: Number(recap.fields.xp) || undefined, xpLabel: sb.lang === "ru" ? "XP за день" : "XP today",
+      }} />}
+    </>
   );
 }
 

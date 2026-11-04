@@ -2,6 +2,7 @@
 export const strings = {
   en: {
     title: "Studio",
+    eyebrow: "Make videos with code and AI",
     lead: "Make real videos with code and AI. Pick a video type, describe your idea, let AI plan the scenes, tweak them, and render.",
     yourProjects: "Your videos",
     noProjects: "No videos yet. Pick a type below — your first one takes about five minutes.",
@@ -109,6 +110,7 @@ export const strings = {
     proofHint: "Submits this link to a task that asks for one.",
     proofSubmit: "Submit as proof",
     proofDone: (d: number) => `Submitted as proof for Day ${d}.`,
+    shareCard: "Share as image card",
     share: "Share",
     shareHint: "Get a public link to this video — for your portfolio, a chat or a post.",
     createShare: "Create public link",
@@ -133,6 +135,7 @@ export const strings = {
   },
   ru: {
     title: "Студия",
+    eyebrow: "Видео с помощью кода и ИИ",
     lead: "Делай настоящие видео с помощью кода и ИИ. Выбери тип, опиши идею — ИИ разложит её на сцены, ты подправишь и запустишь рендер.",
     yourProjects: "Твои видео",
     noProjects: "Пока пусто. Выбери тип ниже — первое видео займёт минут пять.",
@@ -239,6 +242,7 @@ export const strings = {
     proofHint: "Отправим эту ссылку в задание, где нужна ссылка.",
     proofSubmit: "Сдать",
     proofDone: (d: number) => `Сдано как результат дня ${d}.`,
+    shareCard: "Поделиться карточкой",
     share: "Поделиться",
     shareHint: "Получи публичную ссылку на видео — для портфолио, чата или поста.",
     createShare: "Создать ссылку",
