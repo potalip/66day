@@ -15,6 +15,7 @@ const ResourcePage = lazy(() => import("./features/library/ResourcePage"));
 const Admin = lazy(() => import("./features/admin/Admin"));
 const Studio = lazy(() => import("./features/studio/Studio"));
 const StudioProject = lazy(() => import("./features/studio/StudioProject"));
+const Portfolio = lazy(() => import("./features/learn/Portfolio"));
 const Showcase = lazy(() => import("./ui/Showcase"));
 /** Lazy page inside its own Suspense so the Shell (header/nav) never blanks while a route chunk loads. */
 function page(C: React.ComponentType) {
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: "me", element: page(Profile) },
       { path: "u/:userId", element: page(Profile) },
       { path: "ui", element: page(Showcase) },
+      { path: "portfolio/:userId", element: page(Portfolio) },
       { path: "library", element: page(Library) },
       { path: "library/:id", element: page(ResourcePage) },
       { path: "admin/*", element: page(Admin) },
