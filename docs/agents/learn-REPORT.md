@@ -238,3 +238,13 @@ Fixes:
 - **Day page:** prev/next navigation renders only once the day has loaded, so it no longer jumps.
 - What's left of LCP is the shared main chunk (`index-*.js`, ~127 kB gzip) and font loading. Both belong to the orchestrator and design.
   Learn's route chunks are DayView 11.6 kB, Today 2.1 kB and Path 2.2 kB gzip.
+
+**Round 4: design's recruiter-view review of the portfolio (`design-to-learn.md` 3b)**
+1. A card's title now defaults to the **day title**, which reads as an achievement ("Hello, agent: your first page in 30 minutes"). The task
+   instruction moves to a small meta line. The student's own title still wins; the edit dialog shows the default as a placeholder and suggests naming it like a project.
+2. When a portfolio has no boss or ship items, the remaining section is titled "Work" / «Работы» rather than "More work".
+3. Text items have no thumbnail; the quote is the card, shown with a 3px accent border at 1.0625rem.
+4. Visitors no longer see zero-value or in-app stats. "Milestone projects" appears only when at least 1 is done, best streak only when it's at least 3,
+   "Level" only to the owner, and visitors get "Started <date>". Owners still see everything.
+5. The 404 page now offers "Start your 66 days" / «Начать свои 66 дней».
+6. At 390px the 56px avatar sits inline next to the name, and the 72px avatar shows from `sm:` up.
