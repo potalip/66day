@@ -9,6 +9,7 @@ import os
 import threading
 import time
 import urllib.request
+from contextlib import asynccontextmanager
 from pathlib import Path
 
 from fastapi import Body, Depends, FastAPI, Header, HTTPException, Request
@@ -31,7 +32,13 @@ PUBLIC_BASE_URL = os.environ.get("PUBLIC_BASE_URL", f"http://localhost:{os.envir
 TOKEN = os.environ.get("RENDER_SERVER_TOKEN", "")
 ALLOW_NO_AUTH = os.environ.get("FLR_ALLOW_NO_AUTH") == "1"
 
-app = FastAPI(title="FlowLeaf render server", version=__version__)
+@asynccontextmanager
+async def lifespan(_app):
+    store.start(int(os.environ.get("FLR_CONCURRENCY", "1")))
+    yield
+
+
+app = FastAPI(title="FlowLeaf render server", version=__version__, lifespan=lifespan)
 
 
 def auth(authorization: str = Header(default="")):
@@ -62,11 +69,6 @@ def _post_callback(job: dict):
 
 
 store = JobStore(DATA, make_storage(PUBLIC_BASE_URL), notify=_post_callback, log=log.info)
-
-
-@app.on_event("startup")
-def _start():
-    store.start(int(os.environ.get("FLR_CONCURRENCY", "1")))
 
 
 @app.exception_handler(StoryboardError)
