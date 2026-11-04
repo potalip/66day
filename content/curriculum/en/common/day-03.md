@@ -122,8 +122,7 @@ tell me the exact command to run the tool here.
 
 Constraints:
 - Standard library only, one file.
-- Usage: python tidy.py <folder> (expand ~ in the path). The default is a DRY RUN that prints a table of
-  "file -> destination" plus a count per category, and moves nothing.
+- Usage: python tidy.py <folder> (expand ~ in the path). The default is a DRY RUN that prints a table of "file -> destination" plus a count per category, and moves nothing.
 - Files are moved only when I add --apply.
 - Only top-level files; never touch subfolders, never delete, never overwrite
   (add " (2)" to the name if it exists).
@@ -157,14 +156,12 @@ What does each command do?
 3. `rm -r old-project`
 4. `python3 tidy.py ~/Downloads --apply`
 
-<details><summary>Answers</summary>
-
-1. Moves you up one folder.
-2. Creates a folder called `photos` and steps into it.
-3. Deletes the folder `old-project` and everything inside it, permanently. Pause before typing this one.
-4. Runs your tool on Downloads for real, moving the files.
-
-</details>
+> **Answers:**
+>
+> 1. Moves you up one folder.
+> 2. Creates a folder called `photos` and steps into it.
+> 3. Deletes the folder `old-project` and everything inside it, permanently. Pause before typing this one.
+> 4. Runs your tool on Downloads for real, moving the files.
 
 ## You're done when…
 

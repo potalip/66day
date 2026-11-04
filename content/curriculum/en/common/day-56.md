@@ -48,8 +48,7 @@ Under it, one sentence: *the single change that would help most before launch.* 
 Send one beta tester or viewer a personal note. Not a template — one specific line:
 
 ```text
-Hey Sam — you were the one who said the export button hid behind the menu. I moved it today. Thank you for
-actually using the thing and telling me.
+Hey Sam — you were the one who said the export button hid behind the menu. I moved it today. Thank you for actually using the thing and telling me.
 ```
 
 People rarely hear that their feedback changed something. The ones who do often become your first real fans.

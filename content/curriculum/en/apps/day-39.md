@@ -79,8 +79,7 @@ claude mcp list
 Restart the agent and give it a real job:
 
 ```text
-Use the Playwright MCP tools to open my landing page at <URL> at 390px wide. Click the main call-to-action,
-go through sign-up with a test account, and report anything broken or confusing. Take a screenshot of each step.
+Use the Playwright MCP tools to open my landing page at <URL> at 390px wide. Click the main call-to-action, go through sign-up with a test account, and report anything broken or confusing. Take a screenshot of each step.
 ```
 
 Watch it ask permission for each tool call; that's the host protecting you. Paste for task 2: which server you
@@ -97,12 +96,10 @@ personal token, so it respects the same auth and limits as the app does.
 Choose two tools: one **read** and one **write**. For example `list_recent_items` and `add_item`.
 
 ```text
-Goal: a tiny MCP server for my app, in TypeScript, using the official MCP TypeScript SDK (@modelcontextprotocol/sdk)
-and zod for input schemas. Use stdio transport. Check the SDK README for current package names, import paths and
+Goal: a tiny MCP server for my app, in TypeScript, using the official MCP TypeScript SDK (@modelcontextprotocol/sdk) and zod for input schemas. Use stdio transport. Check the SDK README for current package names, import paths and
 APIs (they change between major versions).
 Context: my app's API is at APP_URL with endpoints <list them>; auth with an API token in env APP_TOKEN.
-Add a POST /api/tokens endpoint to the app that lets a signed-in user create a personal token (store only a hash),
-and let the API accept "Authorization: Bearer <token>" as an alternative to the session cookie, mapped to that user.
+Add a POST /api/tokens endpoint to the app that lets a signed-in user create a personal token (store only a hash), and let the API accept "Authorization: Bearer <token>" as an alternative to the session cookie, mapped to that user.
 Tools:
 1. list_recent_items: input { limit: integer 1–50, default 10 }; returns a short readable list.
 2. add_item: input { title: string 1–200 chars, note?: string }; creates an item via the API; returns its id and link.
@@ -147,14 +144,12 @@ your tools by their descriptions. Push the server and paste the repo link for ta
 3. "A reusable /weekly-review template the user picks from a menu": which one?
 4. Why should your MCP server call your app's API instead of the database directly?
 
-<details><summary>Answers</summary>
-
-1. Tool: an action with input that the model decides to call.
-2. Resource: read-only data loaded as context.
-3. Prompt: a user-chosen template.
-4. The API already enforces auth, ownership, validation and rate limits. Going around it skips all your security.
-
-</details>
+> **Answers:**
+>
+> 1. Tool: an action with input that the model decides to call.
+> 2. Resource: read-only data loaded as context.
+> 3. Prompt: a user-chosen template.
+> 4. The API already enforces auth, ownership, validation and rate limits. Going around it skips all your security.
 
 ## You're done when…
 

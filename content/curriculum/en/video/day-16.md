@@ -78,13 +78,9 @@ In your workshop (`~/66/video`) create `day16/`. Then:
 Goal: a 5-second animated title card rendered with pycairo and piped straight into ffmpeg.
 Context: folder day16/. Python 3, pycairo and ffmpeg are installed. I'm learning easing.
 Constraints:
-- 1920x1080, 30 fps, 150 frames. Render each frame into a cairo ImageSurface (FORMAT_ARGB32) and write its bytes
-  to ffmpeg's stdin (-f rawvideo -pix_fmt bgra -s 1920x1080 -r 30 -i -), output H.264, yuv420p, CRF 18.
-- Put easing functions in day16/easing.py: linear, ease_out_cubic, ease_in_out_cubic, ease_in_cubic, ease_out_back.
-  Add a helper animate(frame, start, end, a, b, ease) that clamps progress and returns the value.
-- Timeline: frames 0-24 the title slides up 80 px and fades in (ease_out_cubic); subtitle does the same starting
-  at frame 8 (stagger); a thin accent line grows from 0 to full width frames 10-40 (ease_out_back);
-  hold; frames 125-149 everything fades out and moves up 40 px (ease_in_cubic).
+- 1920x1080, 30 fps, 150 frames. Render each frame into a cairo ImageSurface (FORMAT_ARGB32) and write its bytes to ffmpeg's stdin (-f rawvideo -pix_fmt bgra -s 1920x1080 -r 30 -i -), output H.264, yuv420p, CRF 18.
+- Put easing functions in day16/easing.py: linear, ease_out_cubic, ease_in_out_cubic, ease_in_cubic, ease_out_back. Add a helper animate(frame, start, end, a, b, ease) that clamps progress and returns the value.
+- Timeline: frames 0-24 the title slides up 80 px and fades in (ease_out_cubic); subtitle does the same starting at frame 8 (stagger); a thin accent line grows from 0 to full width frames 10-40 (ease_out_back); hold; frames 125-149 everything fades out and moves up 40 px (ease_in_cubic).
 - Title: "Building in public". Subtitle: "Day 16 of 66". Clean sans-serif, generous margins.
 - One main script day16/title_card.py, no other dependencies.
 Done when: `python day16/title_card.py` writes day16/title_card.mp4, and ffprobe shows 150 frames at 1920x1080.
@@ -126,14 +122,12 @@ Look at the tick marks: evenly spaced for linear, bunched at both ends for ease-
 3. A camera pans across a map: slow start, smooth middle, slow stop. Which curve?
 4. A loading spinner rotates forever at constant speed. Which curve, and why is it fine here?
 
-<details><summary>Answers</summary>
-
-1. Ease-out (e.g. ease-out cubic) — fast arrival, soft landing.
-2. Ease-out back — the overshoot is the "back" part.
-3. Ease-in-out — speeds up, then slows down.
-4. Linear — a spinner has no start or end to soften; easing it would make it look like it's stuttering.
-
-</details>
+> **Answers:**
+>
+> 1. Ease-out (e.g. ease-out cubic) — fast arrival, soft landing.
+> 2. Ease-out back — the overshoot is the "back" part.
+> 3. Ease-in-out — speeds up, then slows down.
+> 4. Linear — a spinner has no start or end to soften; easing it would make it look like it's stuttering.
 
 ## You're done when…
 

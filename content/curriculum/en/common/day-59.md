@@ -78,8 +78,7 @@ two that aren't marketplaces. Then ask your agent to check your thinking:
 
 ```text
 Here are 10 job postings I collected, with my estimates: (paste the table).
-For each: what's the hidden work they didn't mention, is my estimate realistic for a beginner who
-builds with an AI coding agent, and which 3 are the best fit for my portfolio (link)? Be blunt.
+For each: what's the hidden work they didn't mention, is my estimate realistic for a beginner who builds with an AI coding agent, and which 3 are the best fit for my portfolio (link)? Be blunt.
 Don't rewrite the table — add one comment line under each row.
 ```
 
@@ -88,8 +87,7 @@ Don't rewrite the table — add one comment line under each row.
 One sentence, one price, one deliverable:
 
 ```text
-I build Telegram booking bots for beauty studios — reminders, cancellations and a weekly summary —
-deployed in 5 days for a fixed price, one revision included.
+I build Telegram booking bots for beauty studios — reminders, cancellations and a weekly summary — deployed in 5 days for a fixed price, one revision included.
 ```
 
 ```text
@@ -106,15 +104,13 @@ Add your price under it. If you can't say it out loud without wincing, it's eith
 3. "It's a small change" — for the fourth time, on a fixed-price job.
 4. A posting wants "an Uber clone with AI" for a budget smaller than a nice dinner, delivered by tomorrow.
 
-<details><summary>Answers</summary>
-
-1. Red flag. A short paid test or a 15-minute sample is normal; a full free build is free labour.
-2. Classic overpayment scam. Never send money back; keep payments on the platform or through a proper invoice.
-3. Scope creep. Kindly point to the agreed scope and offer a price for the extra work. A written scope protects
-   both of you.
-4. Unrealistic scope, budget and deadline at once. Skip it, or reply with what *is* possible for that budget.
-
-</details>
+> **Answers:**
+>
+> 1. Red flag. A short paid test or a 15-minute sample is normal; a full free build is free labour.
+> 2. Classic overpayment scam. Never send money back; keep payments on the platform or through a proper invoice.
+> 3. Scope creep. Kindly point to the agreed scope and offer a price for the extra work. A written scope protects
+>    both of you.
+> 4. Unrealistic scope, budget and deadline at once. Skip it, or reply with what *is* possible for that budget.
 
 ## You're done when…
 

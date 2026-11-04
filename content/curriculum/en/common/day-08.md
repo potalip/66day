@@ -149,15 +149,13 @@ Here's a response from the forecast API:
 3. Your page suddenly shows the fallback, and the Network tab says `429`. What happened, and what do you do?
 4. You removed `&timezone=auto` from the URL and the time looks an hour or two off. Why?
 
-<details><summary>Answers</summary>
-
-1. 11.2 km/h — the number lives in `current`, the unit in `current_units`.
-2. `data.current.temperature_2m`
-3. Too many requests: you (or a loop in your code) hit the API too often. Wait, and make sure you fetch once per page
-   load, not in a loop.
-4. Without it the API answers in GMT/UTC. `timezone=auto` converts the times to your location's local time.
-
-</details>
+> **Answers:**
+>
+> 1. 11.2 km/h — the number lives in `current`, the unit in `current_units`.
+> 2. `data.current.temperature_2m`
+> 3. Too many requests: you (or a loop in your code) hit the API too often. Wait, and make sure you fetch once per page
+>    load, not in a loop.
+> 4. Without it the API answers in GMT/UTC. `timezone=auto` converts the times to your location's local time.
 
 ## You're done when…
 

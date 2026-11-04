@@ -78,8 +78,7 @@ Constraints:
 - Add an "npm run db:migrate:local" script.
 
 First explain the plan: the schema (show the SQL), the endpoints, and which files you'll touch. Wait for my OK.
-When done: apply the migration locally, start the app, and prove it with curl — create one item, list, update it,
-delete it — and show me each response. Then tell me what I should click in the browser to test it myself.
+When done: apply the migration locally, start the app, and prove it with curl — create one item, list, update it, delete it — and show me each response. Then tell me what I should click in the browser to test it myself.
 ```
 
 Do the browser test: add two items, refresh, they're still there. Commit and push, then paste the link to the commit
@@ -127,15 +126,13 @@ Which storage fits each job: memory, `localStorage`, database, or none of these?
 3. The list of job applications the user wants on both phone and laptop.
 4. Your AI provider's API key.
 
-<details><summary>Answers</summary>
-
-1. Memory (component state). It's temporary until Save.
-2. `localStorage` is fine — it's a per-device preference. (Later you could store it per user in the database.)
-3. Database. It must survive refresh and be the same on every device.
-4. None of these: it's a **secret** on the server (`wrangler secret put` / your host's environment variables). Never in
-   the browser, never in the database, never in git.
-
-</details>
+> **Answers:**
+>
+> 1. Memory (component state). It's temporary until Save.
+> 2. `localStorage` is fine — it's a per-device preference. (Later you could store it per user in the database.)
+> 3. Database. It must survive refresh and be the same on every device.
+> 4. None of these: it's a **secret** on the server (`wrangler secret put` / your host's environment variables). Never in
+>    the browser, never in the database, never in git.
 
 ## You're done when…
 

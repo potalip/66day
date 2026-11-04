@@ -76,13 +76,11 @@ script a token. The token lives in a local file that is never committed.
 
 ```text
 Goal: a publish stage for my pipeline: upload_youtube.py uploads runs/<slug>/final-16x9.mp4 to my YouTube channel.
-Context: client_secret.json (Desktop OAuth client) is in the project root and gitignored. Use google-api-python-client
-and google-auth-oauthlib. Scope: youtube.upload only.
+Context: client_secret.json (Desktop OAuth client) is in the project root and gitignored. Use google-api-python-client and google-auth-oauthlib. Scope: youtube.upload only.
 Constraints:
 - First run opens the browser for consent and saves token.json (gitignored); later runs refresh it silently.
 - Read title, description, tags and privacy from runs/<slug>/metadata.json. Default privacy: unlisted.
-- Set madeForKids false and the synthetic-media disclosure field when metadata.json says ai_footage: true
-  (check the current videos resource docs for the exact field name).
+- Set madeForKids false and the synthetic-media disclosure field when metadata.json says ai_footage: true (check the current videos resource docs for the exact field name).
 - Resumable upload with a progress percentage; retry on 5xx with backoff; clear message on quota errors.
 - Then set the custom thumbnail from thumbs/thumb-1.jpg (warn, don't crash, if the channel isn't allowed custom thumbnails).
 - Print the video URL and save it to run.json.
@@ -102,10 +100,8 @@ Run `--dry-run`, then the real thing. Paste the link. If YouTube locked it to pr
 ### 3. Metadata per platform
 
 ```text
-Add a metadata stage: from storyboard.json and the transcript, ask the LLM (CLAUDE_MODEL, default claude-sonnet-5-5) for
-metadata.json with: youtube {title <= 70 chars, description with a 2-line hook, chapters from scene start times,
-5 tags}, shorts {title}, tiktok {caption <= 150 chars, 3 hashtags}, x {post <= 240 chars}. Add an AI disclosure line
-when ai_footage is true. Validate lengths in code. Without an API key, build plain metadata from the storyboard title.
+Add a metadata stage: from storyboard.json and the transcript, ask the LLM (CLAUDE_MODEL, default claude-sonnet-5-5) for metadata.json with: youtube {title <= 70 chars, description with a 2-line hook, chapters from scene start times,
+5 tags}, shorts {title}, tiktok {caption <= 150 chars, 3 hashtags}, x {post <= 240 chars}. Add an AI disclosure line when ai_footage is true. Validate lengths in code. Without an API key, build plain metadata from the storyboard title.
 ```
 
 Paste the generated `metadata.json`. Then edit the YouTube title by hand: models love "Unlocking the secrets of…". You
@@ -118,14 +114,12 @@ don't.
 3. Which file must never reach git: `client_secret.json`, `token.json`, or both?
 4. Where do people decide whether to expand a YouTube description?
 
-<details><summary>Answers</summary>
-
-1. Yes — vertical and up to 3 minutes counts as a Short (check the current rule; it has changed before).
-2. It moves the index to the start of the file so playback can begin before the download finishes.
-3. Both. The client secret identifies your app; the token can act as you.
-4. In the first two lines, before "more". Put the hook and the key link there.
-
-</details>
+> **Answers:**
+>
+> 1. Yes — vertical and up to 3 minutes counts as a Short (check the current rule; it has changed before).
+> 2. It moves the index to the start of the file so playback can begin before the download finishes.
+> 3. Both. The client secret identifies your app; the token can act as you.
+> 4. In the first two lines, before "more". Put the hook and the key link there.
 
 ## You're done when…
 

@@ -70,11 +70,8 @@ client names and private data.
 Goal: turn <folder> into a public, open-source-ready template repo.
 Do:
 1. Remove secrets, client names, private paths. Add .env.example and make sure .gitignore covers .env, out/, cache/.
-2. Replace licensed assets with CC0 or self-made samples (or download instructions). List all assets in ASSETS.md
-   with source and licence.
-3. README: one-line pitch, sample GIF at the top, quickstart in 3 commands, example input JSON, what it outputs,
-   render time on my machine, API cost per video if any, how to change brand config, licence section that also
-   names the licences of key dependencies.
+2. Replace licensed assets with CC0 or self-made samples (or download instructions). List all assets in ASSETS.md with source and licence.
+3. README: one-line pitch, sample GIF at the top, quickstart in 3 commands, example input JSON, what it outputs, render time on my machine, API cost per video if any, how to change brand config, licence section that also names the licences of key dependencies.
 4. Add LICENSE (MIT) with my name and the year.
 5. Make sure a fresh clone works: delete node_modules / venv, follow only the README, render the sample.
 Done when: a clean clone renders the sample by following the README alone.
@@ -103,8 +100,7 @@ Small is perfect. Pick one:
 
 ```text
 I want to make one small, useful contribution to <tool>. Look at the docs page I struggled with: <URL>.
-Suggest 3 concrete improvements (typo, missing example, outdated command). For the best one, draft the change
-following the project's CONTRIBUTING guide, and the PR description. I'll review and submit it myself.
+Suggest 3 concrete improvements (typo, missing example, outdated command). For the best one, draft the change following the project's CONTRIBUTING guide, and the PR description. I'll review and submit it myself.
 ```
 
 Submit it yourself, in your own words. Maintainers can tell an AI drive-by from a person who actually hit the

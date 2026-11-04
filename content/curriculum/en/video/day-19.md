@@ -62,11 +62,9 @@ Constraints:
 - New composition "Tip", 1080x1920, 30 fps, 240 frames. Props schema with zod:
   { number: int, title: string (max 40 chars), body: string (max 120 chars), accent: hex colour string }.
 - Pass the schema and sensible defaultProps to <Composition>, so Studio shows editable fields.
-- Layout: big number top-left in the accent colour, title springs in at frame 10, body fades in word groups from
-  frame 30, a progress bar along the bottom fills over the full duration.
+- Layout: big number top-left in the accent colour, title springs in at frame 10, body fades in word groups from frame 30, a progress bar along the bottom fills over the full duration.
 - If the body is longer than 80 characters, use calculateMetadata to make the video 300 frames instead of 240.
-- Create remotion/data/tips.json: an array of 5 tip objects with real, useful content (no filler text).
-  Also write data/tip-1.json ... tip-5.json (one object each) for single renders from the CLI.
+- Create remotion/data/tips.json: an array of 5 tip objects with real, useful content (no filler text). Also write data/tip-1.json ... tip-5.json (one object each) for single renders from the CLI.
 Done when: I can edit props in Studio, and
 `npx remotion render Tip out/tip-1.mp4 --props=./data/tip-1.json` renders a single tip.
 ```
@@ -93,8 +91,7 @@ Calling the CLI five times works, but it re-bundles your project every time. The
 Goal: a batch-render script for the Tip template.
 Context: remotion/data/tips.json holds an array of tip props.
 Constraints:
-- remotion/scripts/render-all.mjs using @remotion/bundler (bundle once) and @remotion/renderer
-  (selectComposition + renderMedia, codec h264) for every item.
+- remotion/scripts/render-all.mjs using @remotion/bundler (bundle once) and @remotion/renderer (selectComposition + renderMedia, codec h264) for every item.
 - Output out/tips/tip-<number>.mp4. Skip a file if it already exists unless I pass --force.
 - Print for each video: file name, frames, seconds taken. At the end: total time and average per video.
 - Add an npm script "render:tips".
@@ -121,15 +118,13 @@ For each, props or hard-code?
 3. Your logo and brand font.
 4. The background colour, if every episode of a series has its own colour.
 
-<details><summary>Answers</summary>
-
-1. Props — it changes every video.
-2. Hard-code — mixing frame rates across a series causes timing bugs and gains you nothing.
-3. Hard-code (or a brand config, day 32) — the point of a brand is that it doesn't change per video.
-4. Props — if it really varies per episode, it's data. If it's always one of three colours, pass a name ("blue")
-   rather than any hex, so nobody can break the palette.
-
-</details>
+> **Answers:**
+>
+> 1. Props — it changes every video.
+> 2. Hard-code — mixing frame rates across a series causes timing bugs and gains you nothing.
+> 3. Hard-code (or a brand config, day 32) — the point of a brand is that it doesn't change per video.
+> 4. Props — if it really varies per episode, it's data. If it's always one of three colours, pass a name ("blue")
+>    rather than any hex, so nobody can break the palette.
 
 ## You're done when…
 

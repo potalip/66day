@@ -84,8 +84,7 @@ Give each a complete, self-contained brief:
 
 ```text
 Goal: fix GitHub issue #21 (read it with gh issue view 21).
-Context: you're working in a git worktree on branch fix/issue-21. Another agent is working on a different issue
-in parallel in another folder; don't worry about it, but stay inside this folder and this issue.
+Context: you're working in a git worktree on branch fix/issue-21. Another agent is working on a different issue in parallel in another folder; don't worry about it, but stay inside this folder and this issue.
 Constraints:
 - Touch only files needed for this issue. No dependency upgrades, no formatting changes elsewhere.
 - If you run a dev server, use port 5174 (`npm run dev -- --port 5174`; the other agent uses 5175).
@@ -135,14 +134,12 @@ Paste your 3 comments for task 3.
 3. One task adds a database migration, the other changes the same table's code. Parallel?
 4. What's the difference between a worktree and a subagent?
 
-<details><summary>Answers</summary>
-
-1. One after another. Same file = merge conflicts and each agent working from stale code.
-2. One. Investigation needs one coherent picture; split later once you know the fix. (A subagent searching code is fine.)
-3. No. Schema changes ripple everywhere; land the migration first, then the rest.
-4. A worktree is a separate folder and branch for a separate task; a subagent is a helper one agent spawns inside its own task with a fresh context.
-
-</details>
+> **Answers:**
+>
+> 1. One after another. Same file = merge conflicts and each agent working from stale code.
+> 2. One. Investigation needs one coherent picture; split later once you know the fix. (A subagent searching code is fine.)
+> 3. No. Schema changes ripple everywhere; land the migration first, then the rest.
+> 4. A worktree is a separate folder and branch for a separate task; a subagent is a helper one agent spawns inside its own task with a fresh context.
 
 ## You're done when…
 

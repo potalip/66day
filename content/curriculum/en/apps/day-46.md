@@ -79,16 +79,13 @@ Start with **push-to-talk** (hold a button to speak). It sidesteps silence detec
 ```text
 Goal: a voice page /voice in my app for one job: <your one-sentence job>.
 Flow: hold-to-talk button records the mic with MediaRecorder (pick a supported type with
-MediaRecorder.isTypeSupported: webm/opus in Chrome, mp4/AAC in iPhone Safari) -> POST to /api/voice ->
-server: STT (<provider or faster-whisper>) -> LLM with this system prompt: <paste> and the last 6 turns ->
+MediaRecorder.isTypeSupported: webm/opus in Chrome, mp4/AAC in iPhone Safari) -> POST to /api/voice -> server: STT (<provider or faster-whisper>) -> LLM with this system prompt: <paste> and the last 6 turns ->
 TTS (<provider>) -> stream audio back and play it immediately.
 Requirements:
 - Stream the LLM reply; split it into sentences and send the FIRST sentence to TTS as soon as it's complete.
 - Show the transcript of both sides on screen.
-- Record timestamps for each stage (request received, STT done, first LLM token, first TTS audio byte, playback
-  started on the client) and show them in a small debug panel.
-- All API keys stay on the server. If a key is missing, show "Voice AI not configured" and play a recorded sample
-  conversation so the page is still demoable.
+- Record timestamps for each stage (request received, STT done, first LLM token, first TTS audio byte, playback started on the client) and show them in a small debug panel.
+- All API keys stay on the server. If a key is missing, show "Voice AI not configured" and play a recorded sample conversation so the page is still demoable.
 - Works on a phone (HTTPS is required for the microphone).
 Done when: I can hold the button, ask something, and hear a reply, with stage timings visible.
 ```
@@ -119,8 +116,7 @@ Then try the usual wins, one at a time, re-measuring after each:
 - Pick API regions close to your server, and your server close to your users.
 
 ```text
-Here are my latency numbers per stage: <paste>. Suggest the 3 changes most likely to cut total time,
-apply them one at a time, and re-run my 5-question benchmark after each. Report a before/after table.
+Here are my latency numbers per stage: <paste>. Suggest the 3 changes most likely to cut total time, apply them one at a time, and re-run my 5-question benchmark after each. Report a before/after table.
 ```
 
 Paste your table and one sentence about which change helped most.

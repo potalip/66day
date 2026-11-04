@@ -89,8 +89,7 @@ refresh the local page, check it.
 ```text
 Goal: add a small footer that says "Day 5: I read my own code." in a muted color.
 
-Constraints: footer only, keep everything else as it is. After the change, tell me exactly
-which lines you added so I can find them in my editor.
+Constraints: footer only, keep everything else as it is. After the change, tell me exactly which lines you added so I can find them in my editor.
 
 Done when: both my manual change and your footer are committed together with the message
 "day 5: hand edit + footer" and pushed. Print the GitHub link to the commit.
@@ -122,14 +121,12 @@ Find the agent's lines in your editor. Reading what it did is the whole point.
 3. Which line works out what day it is?
 4. Is the headline text HTML, CSS or JS? And the words " Day 7" after it?
 
-<details><summary>Answers</summary>
-
-1. `:root { --accent: #2f7d4f; }` — a CSS variable; every place that uses `var(--accent)` follows it.
-2. `grid-template-columns: repeat(11, 1fr)` — 11 columns, so 6 rows for 66 squares.
-3. `const n = Math.floor(...) + 1;` — milliseconds since the start, divided by the milliseconds in a day.
-4. The headline is HTML; " Day 7" is added by JavaScript when the page loads.
-
-</details>
+> **Answers:**
+>
+> 1. `:root { --accent: #2f7d4f; }` — a CSS variable; every place that uses `var(--accent)` follows it.
+> 2. `grid-template-columns: repeat(11, 1fr)` — 11 columns, so 6 rows for 66 squares.
+> 3. `const n = Math.floor(...) + 1;` — milliseconds since the start, divided by the milliseconds in a day.
+> 4. The headline is HTML; " Day 7" is added by JavaScript when the page loads.
 
 ## You're done when…
 

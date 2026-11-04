@@ -62,15 +62,12 @@ Work in a **new** repo, not in your capstone. Open your agent with both folders 
 
 ```text
 Goal: create a reusable starter kit in ./starter from my capstone in ./capstone.
-Keep (generalised, with neutral names): auth, database layer + first migration, the AI call helper with
-timeouts/retries/rate limit/fixture fallback, Stripe Checkout in test mode + verified webhook, theme (light/dark),
-one Vitest test, one Playwright smoke test, a GitHub Actions workflow that runs install + build + tests.
+Keep (generalised, with neutral names): auth, database layer + first migration, the AI call helper with timeouts/retries/rate limit/fixture fallback, Stripe Checkout in test mode + verified webhook, theme (light/dark), one Vitest test, one Playwright smoke test, a GitHub Actions workflow that runs install + build + tests.
 Remove: every capstone-specific screen, prompt, table, copy and asset. Replace the home page with a tiny demo:
 sign in → one form → AI answer → "Upgrade" button that opens test checkout.
 Add: .env.example with every variable and a comment each; README with "3 commands to run" and "how to deploy";
 CLAUDE.md and AGENTS.md describing the stack, folders, commands and rules; a LICENSE (MIT unless I say otherwise).
-Constraints: no real keys anywhere, including git history. Must run with no AI key (fixture mode) and no Stripe key
-(payments button shows "Payments not configured").
+Constraints: no real keys anywhere, including git history. Must run with no AI key (fixture mode) and no Stripe key (payments button shows "Payments not configured").
 Done when: a fresh clone runs with `npm install`, `npm run db:migrate:local`, `npm run dev`; build and tests pass.
 Show me the final file tree before you finish.
 ```

@@ -92,12 +92,9 @@ Goal: render a whole series from series.json with my make-video pipeline.
 Context: pipeline from days 33-34, storyboard stage from day 31, brand kit from day 32. Read them first.
 Build:
 - A SeriesSting and an EpisodeBadge component (episode number, series name) from my brand kit.
-- storyboard stage accepts --series series.json --episode N: the LLM must fill the fixed structure (segment names and
-  seconds from series.json), use the episode's angle, and only state facts it can tie to the given sources.
-  The signoff line is inserted verbatim, never rewritten by the model.
+- storyboard stage accepts --series series.json --episode N: the LLM must fill the fixed structure (segment names and seconds from series.json), use the episode's angle, and only state facts it can tie to the given sources. The signoff line is inserted verbatim, never rewritten by the model.
 - Refuse to render an episode whose sources list is empty, with a clear message.
-- render_series.py: renders all episodes (or --only 2), each into runs/<series-slug>/ep-0N/, reusing the cache.
-  Shared assets (sting, music bed, brand) are rendered once.
+- render_series.py: renders all episodes (or --only 2), each into runs/<series-slug>/ep-0N/, reusing the cache. Shared assets (sting, music bed, brand) are rendered once.
 - Print a summary table: episode, duration, render time, cost.
 Done when: python render_series.py series.json produces three finished episodes that look like one show.
 ```

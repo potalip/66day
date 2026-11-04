@@ -65,9 +65,7 @@ tasks:
 
 ```text
 Цель: retention.py, который привязывает падения удержания к сценам раскадровки.
-Вход: CSV удержания (time_s, percent_watching) — выгрузка из статистики площадки, вбитые руками точки с графика
-(10–12 точек хватит) или, если я передам --youtube <videoId>, данные из YouTube Analytics API (метрика
-audienceWatchRatio по elapsedVideoTimeRatio; нужно отдельное OAuth-право yt-analytics.readonly). Плюс runs/<slug>/storyboard.resolved.json.
+Вход: CSV удержания (time_s, percent_watching) — выгрузка из статистики площадки, вбитые руками точки с графика (10–12 точек хватит) или, если я передам --youtube <videoId>, данные из YouTube Analytics API (метрика audienceWatchRatio по elapsedVideoTimeRatio; нужно отдельное OAuth-право yt-analytics.readonly). Плюс runs/<slug>/storyboard.resolved.json.
 Выход:
 - out/retention.png: кривая, границы сцен вертикальными линиями, id сцен сверху.
 - Таблица: 3 самых крутых падения (сколько процентных пунктов теряется в секунду) — время, id сцены, её реплика vo и визуал.
@@ -97,8 +95,7 @@ audienceWatchRatio по elapsedVideoTimeRatio; нужно отдельное OAu
 Меняй первую сцену в раскадровке, а не на таймлайне:
 
 ```text
-В runs/<slug>/storyboard.json перепиши сцену 1 ради сильных первых 3 секунд: начни с визуала сцены <N>,
-обещание — в on_screen_text с первого кадра, заставку с логотипом убери из начала (оставь на финальной карточке).
+В runs/<slug>/storyboard.json перепиши сцену 1 ради сильных первых 3 секунд: начни с визуала сцены <N>, обещание — в on_screen_text с первого кадра, заставку с логотипом убери из начала (оставь на финальной карточке).
 Остальной ролик не меняй. Перерендери через make-video --from storyboard и сохрани как final-v2.mp4.
 Ещё отрендери out/hook-compare.mp4: первые 5 секунд v1 и v2 рядом.
 ```

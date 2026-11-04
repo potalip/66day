@@ -61,13 +61,10 @@ capstone-v1.0/
 Goal: final masters and delivery files for every launch video, in a clean folder structure.
 Context: formats/<capstone>.json, runs/<capstone>/ (current renders), the day 62 trailer, my channel plan.
 Do:
-1. Re-render every launch video from the pipeline at master quality (ProRes 422 HQ .mov, or H.264 at CRF 16 if
-   ProRes is impractical), with the exact final config. Name them <slug>_master.<ext>.
-2. From each master, export delivery files per platform in the channel plan (16:9, 9:16, 1:1 where needed),
-   loudness-normalised to the target, with SRT captions and the chosen thumbnail.
+1. Re-render every launch video from the pipeline at master quality (ProRes 422 HQ .mov, or H.264 at CRF 16 if ProRes is impractical), with the exact final config. Name them <slug>_master.<ext>.
+2. From each master, export delivery files per platform in the channel plan (16:9, 9:16, 1:1 where needed), loudness-normalised to the target, with SRT captions and the chosen thumbnail.
 3. Run qc.py on every delivery file and save reports into qc/.
-4. Copy all licence files and voice-consent notes into licences/. Write README.md listing every file, its version
-   and its credits. Generate checksums.sha256.
+4. Copy all licence files and voice-consent notes into licences/. Write README.md listing every file, its version and its credits. Generate checksums.sha256.
 5. Commit the pipeline and tag it: git tag -a v1.0.0 -m "Capstone launch masters".
 Done when: every QC report is clean, the folder matches the structure, and you show me the README.
 ```

@@ -63,10 +63,8 @@ Copy beats design. Ask the agent to help you think, then decide yourself:
 
 ```text
 Goal: draft landing page copy for my app.
-Context: the app does <one sentence>. Users are <who>. My 3 real users said: <paste their actual words or
-feedback from day 27>.
-Constraints: give me the problem in the user's words (2 sentences), 5 different headline options (max 10 words each,
-no buzzwords like "revolutionary", "AI-powered", "seamless"), a one-line subheadline, 3 how-it-works steps,
+Context: the app does <one sentence>. Users are <who>. My 3 real users said: <paste their actual words or feedback from day 27>.
+Constraints: give me the problem in the user's words (2 sentences), 5 different headline options (max 10 words each, no buzzwords like "revolutionary", "AI-powered", "seamless"), a one-line subheadline, 3 how-it-works steps,
 3 FAQ entries and one CTA label.
 Done when: each headline takes a different angle (time saved, pain removed, outcome, identity, curiosity).
 ```
@@ -79,15 +77,12 @@ Pick your favourite headline for now. You'll test it in step 3.
 Goal: a landing page for the app at the root URL "/" (move the app itself under "/app" if needed).
 Context: our React + Vite + Tailwind project and design tokens; copy is below.
 Constraints:
-- Sections: hero (headline, subheadline, primary CTA, real screenshot or short muted autoplay video),
-  problem, how it works (3 steps), proof (user quote with first name only), FAQ, final CTA, footer.
+- Sections: hero (headline, subheadline, primary CTA, real screenshot or short muted autoplay video), problem, how it works (3 steps), proof (user quote with first name only), FAQ, final CTA, footer.
 - One primary CTA style only (accent green). It goes to sign-up or a waitlist form that stores emails in our DB.
 - Mobile-first: perfect at 390px; the CTA is visible without scrolling on a phone.
-- Light and dark theme; Lighthouse mobile performance 90+; proper <title>, meta description and an Open Graph
-  image so the link looks good when shared.
+- Light and dark theme; Lighthouse mobile performance 90+; proper <title>, meta description and an Open Graph image so the link looks good when shared.
 - Track a "cta_clicked" event with track() from day 34 (add it to the allow-list of POST /api/events).
-- If the app moves to /app, update every redirect: sign-in callbacks in the auth provider's dashboard (day 24) and
-  the Stripe success/cancel URLs (day 32).
+- If the app moves to /app, update every redirect: sign-in callbacks in the auth provider's dashboard (day 24) and the Stripe success/cancel URLs (day 32).
 Done when: it's deployed and you show me phone and desktop screenshots in both themes.
 ```
 

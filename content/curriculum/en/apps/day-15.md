@@ -85,9 +85,7 @@ Context: I'm a beginner building with a coding agent. The problem in my words:
 
 Process:
 1. First ask me up to 8 short questions, one batch, to remove ambiguity. Wait for my answers.
-2. Then write docs/SPEC.md with exactly these sections: Problem (3 lines), Who it's for (1 person, concrete),
-   User stories (exactly 3, "As a... I want... so that..."), Main screen (what's on it), Data (the 1-2 things we store,
-   with fields), The AI part (one sentence), Out of scope for v1 (at least 5 items), Done when (testable checklist).
+2. Then write docs/SPEC.md with exactly these sections: Problem (3 lines), Who it's for (1 person, concrete), User stories (exactly 3, "As a... I want... so that..."), Main screen (what's on it), Data (the 1-2 things we store, with fields), The AI part (one sentence), Out of scope for v1 (at least 5 items), Done when (testable checklist).
 3. Keep it under 400 words. Plain language, no buzzwords.
 
 Before writing the file, show me the spec in chat and wait for my OK.
@@ -112,9 +110,7 @@ Goal: scaffold the project for the app in docs/SPEC.md and make the first commit
 Constraints:
 - Vite + React + TypeScript + Tailwind CSS (use the current official setup from the Vite and Tailwind docs).
 - Keep it minimal: one page that shows the app name and the one-line problem from the spec. No backend yet.
-- Create CLAUDE.md in this folder (and a copy named AGENTS.md for other agents) with: what the app is (2 lines, link to docs/SPEC.md),
-  how to run it, and our working rules: "explain your plan before coding and wait for OK; small commits;
-  after every change run the app and tell me exactly how you verified it".
+- Create CLAUDE.md in this folder (and a copy named AGENTS.md for other agents) with: what the app is (2 lines, link to docs/SPEC.md), how to run it, and our working rules: "explain your plan before coding and wait for OK; small commits; after every change run the app and tell me exactly how you verified it".
 - .gitignore must include node_modules, dist, .env and .dev.vars.
 - This folder is its own git repository: run git init here if it isn't one yet.
 

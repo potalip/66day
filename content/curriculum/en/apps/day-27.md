@@ -56,12 +56,9 @@ Start with an honest look, not with code:
 Goal: get v1 release-ready. Do NOT change any code yet.
 
 Do a release audit:
-1. Read docs/SPEC.md. For each user story and each "Done when" item, say: works / partly / missing,
-   with how you checked (test, curl, or what you clicked).
+1. Read docs/SPEC.md. For each user story and each "Done when" item, say: works / partly / missing, with how you checked (test, curl, or what you clicked).
 2. Run the build and all tests; report failures.
-3. Check: every API route requires auth except sign-in; no secrets in the repo (search the git history too);
-   friendly empty, loading and error states on every screen; "AI not configured" fallback works;
-   daily AI limits on; the app is usable at 390px wide.
+3. Check: every API route requires auth except sign-in; no secrets in the repo (search the git history too); friendly empty, loading and error states on every screen; "AI not configured" fallback works; daily AI limits on; the app is usable at 390px wide.
 4. Propose a fix list ordered by "blocks a user story" first. Max 8 items. Mark anything else as v1.1.
 
 Show me the audit and the fix list, then wait for my OK. After fixing each item, verify it and tell me how.
@@ -95,8 +92,7 @@ pause. For each person write: who (initials), what they tried, what worked, wher
 
 ```text
 Rewrite README.md as exactly five lines: 1) app name + what it does in one sentence; 2) who it's for;
-3) live link; 4) how to run it locally (one command after cloning, mention .dev.vars.example —
-create it if missing: variable names only, no values);
+3) live link; 4) how to run it locally (one command after cloning, mention .dev.vars.example — create it if missing: variable names only, no values);
 5) stack and status ("v1, used by 3 people"). Show it to me before saving.
 ```
 

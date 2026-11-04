@@ -72,13 +72,11 @@ Goal: produce a 3-video client pack with my pipeline.
 Context: client brief below; my make-video pipeline, brand kit, series template and formats flag (days 32–40). If my day-40 app works, submit the jobs through it instead of the command line.
 Steps:
 1. Create brand/client-<name>.json from the client's logo and colours (check contrast; use a licensed font).
-2. Generate storyboards: one explainer (45-60 s, 16:9) and two shorts (15-25 s, 9:16) as a mini-series with the same
-   hook structure. Use only facts and claims from the brief; mark anything else as [CHECK].
+2. Generate storyboards: one explainer (45-60 s, 16:9) and two shorts (15-25 s, 9:16) as a mini-series with the same hook structure. Use only facts and claims from the brief; mark anything else as [CHECK].
 3. Export the three scripts as one readable script.md (scene, voiceover, on-screen text, visual) for client approval.
 STOP after step 3 and wait for me.
 4. After approval: render all three with captions, music at -14 LUFS, and 3 thumbnail options each.
-5. Build the delivery folder: deliver/<client>/ with 01-explainer-16x9.mp4, 02-short-a-9x16.mp4, 03-short-b-9x16.mp4,
-   matching .srt files, thumbs/, and README.txt (what's inside, specs, music and AI-footage licences, AI disclosure text).
+5. Build the delivery folder: deliver/<client>/ with 01-explainer-16x9.mp4, 02-short-a-9x16.mp4, 03-short-b-9x16.mp4, matching .srt files, thumbs/, and README.txt (what's inside, specs, music and AI-footage licences, AI disclosure text).
 Done when: deliver/<client>/ exists with all files and the README.
 ```
 

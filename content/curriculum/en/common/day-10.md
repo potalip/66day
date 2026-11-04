@@ -129,15 +129,13 @@ Approve the fixes, run `node streak.mjs` again, and compare with your paper. Tha
 
 **Proof:** three lines, one per bug: where it was and why it was wrong, in your own words.
 
-<details><summary>Check your hunt (open only after you're done)</summary>
-
-1. `totalMinutes` starts at `i = 1`, so it skips the first day. Should start at `0`.
-2. `bestDay` uses `<`, so it finds the *worst* day. Should be `>`.
-3. `log.lenght` is a typo, so it's `undefined` and the average becomes `NaN`. Should be `log.length`.
-
-`currentStreak` was innocent. Suspecting an innocent function and clearing it is also good debugging.
-
-</details>
+> **Check your hunt (open only after you're done):**
+>
+> 1. `totalMinutes` starts at `i = 1`, so it skips the first day. Should start at `0`.
+> 2. `bestDay` uses `<`, so it finds the *worst* day. Should be `>`.
+> 3. `log.lenght` is a typo, so it's `undefined` and the average becomes `NaN`. Should be `log.length`.
+>
+> `currentStreak` was innocent. Suspecting an innocent function and clearing it is also good debugging.
 
 ### 2. Rescue a looping agent (30 min)
 
@@ -187,15 +185,13 @@ What does each message tell you, and where do you look first?
 3. `Error: listen EADDRINUSE: address already in use :::5173`
 4. `ReferenceError: totl is not defined`
 
-<details><summary>Answers</summary>
-
-1. The thing *before* `.temperature_2m` — `data.current` — is undefined, on line 14, column 31. The API probably
-   returned an error object instead of weather. Check the response in the Network tab.
-2. Your code expected JSON but got an HTML page — usually a wrong URL that returned a 404 page.
-3. Another program (often an older dev server) already uses port 5173. Stop it or use another port.
-4. A name that was never declared — here a typo for `total`.
-
-</details>
+> **Answers:**
+>
+> 1. The thing *before* `.temperature_2m` — `data.current` — is undefined, on line 14, column 31. The API probably
+>    returned an error object instead of weather. Check the response in the Network tab.
+> 2. Your code expected JSON but got an HTML page — usually a wrong URL that returned a 404 page.
+> 3. Another program (often an older dev server) already uses port 5173. Stop it or use another port.
+> 4. A name that was never declared — here a typo for `total`.
 
 ## You're done when…
 

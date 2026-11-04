@@ -66,8 +66,7 @@ their written OK. Third: a talk under a licence that allows remixing (check it, 
 
 ```text
 You are a short-form editor. Below is a transcript with word-level timestamps.
-Find the 6 best candidate clips of 20-60 s. Score each 1-5 on: hook (first 3 s), self-contained,
-payoff, specificity. A clip must start and end on a sentence boundary.
+Find the 6 best candidate clips of 20-60 s. Score each 1-5 on: hook (first 3 s), self-contained, payoff, specificity. A clip must start and end on a sentence boundary.
 Return JSON only: [{start, end, hook_line, scores: {...}, total, why}] sorted by total.
 Reject clips that need earlier context or start with a filler word.
 ```
@@ -81,15 +80,11 @@ and rubric as proof.
 Goal: clip.py turns long.mp4 into 3 vertical shorts with captions, as a stage in my pipeline.
 Steps:
 1. Transcribe with faster-whisper, word_timestamps=True, save transcript.json.
-2. Send it with my selection prompt (prompts/clip-select.txt) to the LLM; validate the JSON;
-   keep the top 3 that don't overlap.
+2. Send it with my selection prompt (prompts/clip-select.txt) to the LLM; validate the JSON; keep the top 3 that don't overlap.
 3. Snap start/end to the nearest silence within 0.4 s so cuts never clip a word.
 4. Cut with ffmpeg, re-encoding (frame-accurate), 0.2 s audio fade in/out.
-5. Reframe to 1080x1920: detect the face every 5th frame (MediaPipe or OpenCV; use their current API docs), smooth the x position
-   (moving average over ~1 s), crop around it. No face found: centre crop. Flag a clip as "two speakers"
-   if two faces stay apart, and fall back to a centre crop or a stacked layout for it.
-6. Captions from the transcript words, offset to the clip start, in my caption style. Add the hook_line
-   as a title card for the first 2 s.
+5. Reframe to 1080x1920: detect the face every 5th frame (MediaPipe or OpenCV; use their current API docs), smooth the x position (moving average over ~1 s), crop around it. No face found: centre crop. Flag a clip as "two speakers" if two faces stay apart, and fall back to a centre crop or a stacked layout for it.
+6. Captions from the transcript words, offset to the clip start, in my caption style. Add the hook_line as a title card for the first 2 s.
 7. Write out/clips/report.md: times, scores, why, and the crop mode used.
 Done when: three mp4s in out/clips/, the speaker never leaves the frame, no word is cut in half.
 ```
@@ -110,16 +105,14 @@ Upload your best clip.
 3. The speaker walks across a stage. Why does per-frame tracking look bad?
 4. A slide fills the screen with text for 15 seconds. 9:16 crop?
 
-<details><summary>Answers</summary>
-
-1. A fixed crop around their position. Tracking adds motion and risk for no gain.
-2. Switch the crop to whoever is speaking (from the transcript or audio), or stack both faces top and bottom.
-3. It follows every small step, so the frame jitters. Smooth, add a dead zone, and move the crop like a camera
-   operator would: rarely and steadily.
-4. No. Cropping cuts the text off. Show the slide scaled down with a blurred background, or redraw the key line as a
-   caption.
-
-</details>
+> **Answers:**
+>
+> 1. A fixed crop around their position. Tracking adds motion and risk for no gain.
+> 2. Switch the crop to whoever is speaking (from the transcript or audio), or stack both faces top and bottom.
+> 3. It follows every small step, so the frame jitters. Smooth, add a dead zone, and move the crop like a camera
+>    operator would: rarely and steadily.
+> 4. No. Cropping cuts the text off. Show the slide scaled down with a blurred background, or redraw the key line as a
+>    caption.
 
 ## You're done when…
 

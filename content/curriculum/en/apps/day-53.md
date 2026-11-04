@@ -69,8 +69,7 @@ Constraints:
 - Add a one-line hint on the first screen that says what to do, not a multi-step tour.
 - Keep the existing data model; no new dependencies unless you ask me first.
 - If the AI key is missing, the demo must still work using a fixture response.
-Done when: you list the new path screen by screen with an estimated time per step, I approve it, you implement it,
-the build passes, and you write a short Playwright test that walks the new path and asserts the value moment appears.
+Done when: you list the new path screen by screen with an estimated time per step, I approve it, you implement it, the build passes, and you write a short Playwright test that walks the new path and asserts the value moment appears.
 Propose the plan first and wait for my OK.
 ```
 
@@ -89,11 +88,9 @@ find and fix the rest, and to take the evidence:
 Goal: every screen in the app has a deliberate empty, loading and error state, and looks right on mobile.
 Steps:
 1. List each route and which of the four states (empty / loading / error / full) it currently handles.
-2. Fix the missing ones: empty states explain + offer one action; loading says what is happening; errors say what
-   went wrong in plain words and offer "try again". No raw stack traces, no "Error: undefined".
+2. Fix the missing ones: empty states explain + offer one action; loading says what is happening; errors say what went wrong in plain words and offer "try again". No raw stack traces, no "Error: undefined".
 3. Simulate errors (e.g. a flag or a mocked failed fetch) so I can see them.
-4. Write a Playwright script that screenshots the main screens in each state at 390px and 1280px,
-   in light and dark themes, into ./screenshots/day-53/.
+4. Write a Playwright script that screenshots the main screens in each state at 390px and 1280px, in light and dark themes, into ./screenshots/day-53/.
 Done when: the build passes and the screenshots folder exists. Show me the list of files.
 ```
 

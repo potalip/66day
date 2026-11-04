@@ -58,8 +58,7 @@ Best: a real export from someone you know (a friend's Etsy orders, a club's memb
 permission and remove names, emails and phones first. No real one? Ask the agent for a realistic one:
 
 ```text
-Generate a realistic CSV of 600 rows for a small online plant shop: order_id, date (last 6 months),
-product, category, quantity, unit_price, country, channel (web/instagram/market), status (paid/refunded).
+Generate a realistic CSV of 600 rows for a small online plant shop: order_id, date (last 6 months), product, category, quantity, unit_price, country, channel (web/instagram/market), status (paid/refunded).
 Include realistic mess: a few empty cells, prices with a currency symbol, two date formats, one duplicate row.
 Save it as data/orders.csv.
 ```
@@ -73,11 +72,9 @@ small separate project. Either way:
 
 ```text
 Goal: an internal dashboard page at /tools/orders.
-Context: data/orders.csv (columns listed in the header). Our stack: React + Vite front end, API on Cloudflare Workers + D1;
-the new table comes as a migration, like on day 17.
+Context: data/orders.csv (columns listed in the header). Our stack: React + Vite front end, API on Cloudflare Workers + D1; the new table comes as a migration, like on day 17.
 Constraints:
-- Upload CSV in the browser; parse it (Papa Parse is fine); show a preview of the first 10 rows and a list of
-  problems found (bad dates, non-numeric prices, duplicates) before importing.
+- Upload CSV in the browser; parse it (Papa Parse is fine); show a preview of the first 10 rows and a list of problems found (bad dates, non-numeric prices, duplicates) before importing.
 - Store clean rows in a database table "orders" with proper types.
 - Table view: sortable columns, filters for date range, category and status, a total at the bottom.
 - One chart: revenue per week, paid orders only. Use a small chart library.

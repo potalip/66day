@@ -97,16 +97,14 @@ Context: the bot belongs to my app from docs/SPEC.md. Use the same provider as t
 ANTHROPIC_API_KEY, model from CLAUDE_MODEL (default claude-sonnet-5-5).
 
 Constraints:
-- System prompt in bot/prompts/system.ts. Draft it with me: role, the one job, tone (friendly, brief, max ~80 words
-  per reply), what to do with off-topic requests, never claims to have saved data (it can't yet).
+- System prompt in bot/prompts/system.ts. Draft it with me: role, the one job, tone (friendly, brief, max ~80 words per reply), what to do with off-topic requests, never claims to have saved data (it can't yet).
 - /start: a 2-line welcome explaining what the bot does with one example message to try.
 - /help: the list of commands and 2 example messages. Register commands with setMyCommands so they show in the menu.
 - Show "typing..." while waiting. Messages longer than 2,000 characters are refused politely.
 - If the AI call fails or the key is missing, reply with a friendly fallback, never crash, and log the error.
 
 First show me the system prompt draft and your plan, and wait for my OK.
-At the end, list 5 test messages (including an off-topic one and a very long one), tell me what each should do,
-then I'll send them and report back.
+At the end, list 5 test messages (including an off-topic one and a very long one), tell me what each should do, then I'll send them and report back.
 ```
 
 Send all five test messages. Fix anything that surprised you with one precise follow-up prompt. Screenshot a chat

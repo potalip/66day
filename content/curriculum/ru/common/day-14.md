@@ -60,15 +60,10 @@ claude
 ```text
 Цель: подготовить аккуратное рабочее место для второй фазы обучения, трек: <приложения | видео>.
 
-Приложения: папка ~/66/apps с main-app/ (пока пустая — её заполнит 15-й день), sandbox/ для экспериментов, notes/prompts.md для удачных
-промптов и CLAUDE.md с описанием моего стека (Cloudflare Workers или Yandex Cloud Functions, мой провайдер ИИ,
-сначала мобильная версия, секреты никогда не коммитим).
-Видео: папка ~/66/video с assets/fonts (шрифты с кириллицей), assets/music, assets/images, projects/, renders/,
-snippets/ (скопируй сюда мой проект из ~/title-card, без .venv и кадров), notes/prompts.md, CLAUDE.md (Python + Pillow + ffmpeg,
-по умолчанию 1080x1920, yuv420p) и .gitignore, который игнорирует renders/, frames/ и .venv/.
+Приложения: папка ~/66/apps с main-app/ (пока пустая — её заполнит 15-й день), sandbox/ для экспериментов, notes/prompts.md для удачных промптов и CLAUDE.md с описанием моего стека (Cloudflare Workers или Yandex Cloud Functions, мой провайдер ИИ, сначала мобильная версия, секреты никогда не коммитим).
+Видео: папка ~/66/video с assets/fonts (шрифты с кириллицей), assets/music, assets/images, projects/, renders/, snippets/ (скопируй сюда мой проект из ~/title-card, без .venv и кадров), notes/prompts.md, CLAUDE.md (Python + Pillow + ffmpeg, по умолчанию 1080x1920, yuv420p) и .gitignore, который игнорирует renders/, frames/ и .venv/.
 
-Готово, когда: папки созданы, и ты вывел структуру на два уровня вглубь. Видео: git init в ~/66/video и первый
-коммит. Приложения: в корне ~/66/apps репозиторий не нужен — у main-app на 15-й день будет свой.
+Готово, когда: папки созданы, и ты вывел структуру на два уровня вглубь. Видео: git init в ~/66/video и первый коммит. Приложения: в корне ~/66/apps репозиторий не нужен — у main-app на 15-й день будет свой.
 ```
 
 **Доказательство:** вставь выведенную структуру.

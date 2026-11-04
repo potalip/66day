@@ -143,17 +143,15 @@ Which command do you reach for?
 3. You want to try something risky without touching the live site.
 4. You want to see exactly which lines the agent changed before you commit.
 
-<details><summary>Answers</summary>
-
-1. `git restore <file>` — throws away uncommitted changes to that file.
-2. `git revert HEAD` then `git push` — adds a commit that undoes it, history stays honest.
-3. `git switch -c experiment` — a branch; `main` (and Pages) stays untouched.
-4. `git diff` — every added and removed line.
-
-There's also `git reset --hard`, which rewinds and *erases*. Powerful and dangerous; leave it alone for now and
-never use it on work you've already pushed.
-
-</details>
+> **Answers:**
+>
+> 1. `git restore <file>` — throws away uncommitted changes to that file.
+> 2. `git revert HEAD` then `git push` — adds a commit that undoes it, history stays honest.
+> 3. `git switch -c experiment` — a branch; `main` (and Pages) stays untouched.
+> 4. `git diff` — every added and removed line.
+>
+> There's also `git reset --hard`, which rewinds and *erases*. Powerful and dangerous; leave it alone for now and
+> never use it on work you've already pushed.
 
 ## You're done when…
 

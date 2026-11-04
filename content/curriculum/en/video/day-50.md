@@ -71,10 +71,7 @@ Help me write a one-page capstone spec. Ask me questions one at a time until you
 - Format: length, aspect ratios, style, language(s), platform(s)
 - Deliverables on day 65: what exists, where, how many
 - Pipeline changes needed (new stages, templates)
-- Milestones: day 51 first full output; day 52 outputs 2-3 + time and cost per video; day 53 craft pass + clean QC;
-  day 54 five test viewers; day 55 public premiere; day 58 (common day) a 60-90 s demo or reel;
-  day 61 productize; day 62 trailer + channel plan; day 64 final masters (series: episodes 4-5 through the
-  batch if scope allows); day 65 launch
+- Milestones: day 51 first full output; day 52 outputs 2-3 + time and cost per video; day 53 craft pass + clean QC; day 54 five test viewers; day 55 public premiere; day 58 (common day) a 60-90 s demo or reel; day 61 productize; day 62 trailer + channel plan; day 64 final masters (series: episodes 4-5 through the batch if scope allows); day 65 launch
 - Success metric for day 65 (one number) and how I'll measure it
 Push back if the scope doesn't fit nine build days of ~2 hours. Output Markdown.
 ```

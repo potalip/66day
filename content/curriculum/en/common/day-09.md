@@ -120,13 +120,11 @@ No key, not even part of it.
 Goal: a script compare.mjs that sends the same prompt to two models and prints both answers side by side.
 
 Context: Node.js, no frameworks. The key is in .env; run it with node --env-file=.env compare.mjs.
-Provider: <Anthropic Messages API | OpenRouter chat completions>. Models: <claude-sonnet-5-5> and <claude-opus-5-5>
-(or two models from different families on OpenRouter). Check the provider's current docs for the exact request format.
+Provider: <Anthropic Messages API | OpenRouter chat completions>. Models: <claude-sonnet-5-5> and <claude-opus-5-5> (or two models from different families on OpenRouter). Check the provider's current docs for the exact request format.
 
 Constraints:
 - Prompt comes from the command line: node --env-file=.env compare.mjs "Explain DNS to a 10-year-old in 3 sentences"
-- For each model print: model name, the answer, input and output tokens (from the response's usage field),
-  seconds it took, and estimated cost using price constants at the top of the file that I fill in from the pricing page.
+- For each model print: model name, the answer, input and output tokens (from the response's usage field), seconds it took, and estimated cost using price constants at the top of the file that I fill in from the pricing page.
 - If the key is missing, print "No API key found in .env" and exit — no stack trace.
 - max_tokens around 400 so a mistake can't burn money.
 - Never print the key.

@@ -66,11 +66,9 @@ Open your app's code with the agent and ask what's risky:
 
 ```text
 Goal: find the 3–5 functions in this repo most worth unit-testing.
-Context: this is my main app (React + Vite front end, API on Cloudflare Workers + D1, AI feature with structured
-output). Some Vitest tests already exist; list them first and say which ones could never fail.
+Context: this is my main app (React + Vite front end, API on Cloudflare Workers + D1, AI feature with structured output). Some Vitest tests already exist; list them first and say which ones could never fail.
 Constraints: prefer pure functions with business rules, validation and parsing. Ignore UI styling.
-Done when: you list each function with file path, why a bug there would hurt users, and 2–3 cases to test
-(including one edge case and one invalid input). Don't write any code yet.
+Done when: you list each function with file path, why a bug there would hurt users, and 2–3 cases to test (including one edge case and one invalid input). Don't write any code yet.
 ```
 
 Read the list. Cross out anything that's really testing a library. Keep three.
@@ -110,8 +108,7 @@ Commit and push, then copy the commit link from GitHub. That's your proof for ta
 ### 3. One end-to-end smoke test (optional but recommended, 15 min)
 
 ```text
-Goal: add one Playwright test that starts the dev server, opens the main page, performs the core action
-(e.g. create an item) and checks it appears.
+Goal: add one Playwright test that starts the dev server, opens the main page, performs the core action (e.g. create an item) and checks it appears.
 Constraints: use the AI fallback/fixture, never the real AI API, in tests. Keep it under 40 lines.
 Done when: npx playwright test passes locally.
 ```
@@ -124,8 +121,7 @@ push and pull request. It catches "works on my machine".
 ```text
 Goal: add a GitHub Actions workflow at .github/workflows/ci.yml.
 Context: Node project with npm test (and npm run build). Optional Playwright test.
-Constraints: run on push and pull_request; use the current major versions of actions/checkout and
-actions/setup-node with Node 22 and npm caching; run npm ci, npm test, npm run build.
+Constraints: run on push and pull_request; use the current major versions of actions/checkout and actions/setup-node with Node 22 and npm caching; run npm ci, npm test, npm run build.
 No secrets needed: tests must use fixtures, not real API keys.
 Done when: the workflow file is committed and you explain each step in one line.
 ```
@@ -160,14 +156,12 @@ task 3's proof. Red? Click the failed step, copy the log, give it to the agent.
 3. A test passed. How do you know it can ever fail?
 4. CI is green but the live app is broken. Name one likely reason.
 
-<details><summary>Answers</summary>
-
-1. Useless. It tests the mock, not your code.
-2. The shape: required fields exist, types are right, lengths are within limits, and the fallback kicks in on bad output.
-3. Break the code on purpose and watch it go red.
-4. Tests don't cover that path, or production config/secrets differ from CI. Add a test for exactly what broke.
-
-</details>
+> **Answers:**
+>
+> 1. Useless. It tests the mock, not your code.
+> 2. The shape: required fields exist, types are right, lengths are within limits, and the fallback kicks in on bad output.
+> 3. Break the code on purpose and watch it go red.
+> 4. Tests don't cover that path, or production config/secrets differ from CI. Add a test for exactly what broke.
 
 ## You're done when…
 

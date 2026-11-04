@@ -93,10 +93,8 @@ tasks:
 Мой brand.json ниже.
 Сделай:
 - Типизированный загрузчик brand.json (zod или тип TypeScript в Remotion; dataclass в Python), который громко падает, если нет ключа.
-- Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — все цвета, шрифты, размеры,
-  скругления и анимация берутся из конфига. Анимация — через пресеты motion.enter / motion.exit.
-- Шрифты подключи правильно (Remotion: @remotion/google-fonts с кириллическим подмножеством или локальные файлы
-  через staticFile; Python: локальные .ttf).
+- Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — все цвета, шрифты, размеры, скругления и анимация берутся из конфига. Анимация — через пресеты motion.enter / motion.exit.
+- Шрифты подключи правильно (Remotion: @remotion/google-fonts с кириллическим подмножеством или локальные файлы через staticFile; Python: локальные .ttf).
 - Соблюдай layout.safe_margin для каждого элемента.
 - Композиция SampleSheet: все три компонента в середине анимации на одном кадре 1920x1080, с подписями.
 Ограничения: ни одного hex-цвета или названия шрифта вне brand.json. Добавь скрипт-проверку на grep, который падает, если они нашлись.
@@ -123,8 +121,7 @@ npx remotion still SampleSheet out/sample-sheet.png --frame=20
 шрифтов, более резкий пресет `enter`. Отрендери тот же ролик с ним:
 
 ```text
-Добавь в команду рендера флаг --brand (или переменную BRAND), чтобы любую композицию можно было отрендерить с
-brand/brand.json или brand/brand-alt.json. Затем отрендери мой эксплейнер с brand-alt.json в out/explainer-alt.mp4.
+Добавь в команду рендера флаг --brand (или переменную BRAND), чтобы любую композицию можно было отрендерить с brand/brand.json или brand/brand-alt.json. Затем отрендери мой эксплейнер с brand-alt.json в out/explainer-alt.mp4.
 Компоненты не трогай.
 ```
 
@@ -142,14 +139,12 @@ brand/brand.json или brand/brand-alt.json. Затем отрендери мо
 3. Сколько секунд титр висит на экране.
 4. Пружина, с которой появляется любой элемент.
 
-<details><summary>Ответы</summary>
-
-1. Конфиг (`colors.accent`).
-2. Компонент — раскладка и есть форма; размеры и цвета она берёт из конфига.
-3. Конфиг (`motion.title_hold_s`).
-4. Конфиг (`motion.enter`), компонент только применяет пресет.
-
-</details>
+> **Ответы:**
+>
+> 1. Конфиг (`colors.accent`).
+> 2. Компонент — раскладка и есть форма; размеры и цвета она берёт из конфига.
+> 3. Конфиг (`motion.title_hold_s`).
+> 4. Конфиг (`motion.enter`), компонент только применяет пресет.
 
 ## Готово, когда…
 

@@ -66,11 +66,8 @@ Can't watch everyone live? Let the agent build a tiny watch page:
 ```text
 Goal: a private watch page that tells me where each test viewer stopped watching.
 Build a single static page with an HTML <video> element for [video url], a "name" field, and one big button:
-"I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp,
-and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1
-(or KV), and give me a /report page listing each viewer's events in order.
-Constraints: no third-party trackers; nothing stored beyond name + timestamps; one line on the page says exactly
-what is logged; the URL is unlisted.
+"I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp, and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1 (or KV), and give me a /report page listing each viewer's events in order.
+Constraints: no third-party trackers; nothing stored beyond name + timestamps; one line on the page says exactly what is logged; the URL is unlisted.
 Done when: I watch it myself, press the button at 0:12, and see that row on /report.
 ```
 
@@ -102,9 +99,7 @@ Pick **one** — the biggest cluster. Typical causes and fixes:
 ```text
 Goal: fix the main retention problem in runs/<capstone>/<nn>/ (the output I tested) and render v2.
 Evidence: 3 of 5 viewers drifted between 0:38 and 0:45 (table attached). Viewers said: [quotes].
-Propose 2 options for fixing that stretch in the storyboard/EDL (with the new durations), wait for my choice,
-then apply it in the pipeline (not as a manual edit), re-render into the same folder
-with a -v2 suffix (e.g. final-9x16-v2.mp4), and run qc.py on it.
+Propose 2 options for fixing that stretch in the storyboard/EDL (with the new durations), wait for my choice, then apply it in the pipeline (not as a manual edit), re-render into the same folder with a -v2 suffix (e.g. final-9x16-v2.mp4), and run qc.py on it.
 Done when: v2 is rendered, QC is clean, and the total runtime change is reported.
 ```
 

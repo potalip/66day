@@ -59,8 +59,7 @@ reusable piece instead: your MCP server from day 39, your Telegram bot, or your 
 Before anything else — git remembers **everything**, including a `.env` you committed by accident weeks ago and deleted the next day.
 
 ```text
-Scan this repository, including the full git history, for secrets: API keys, tokens, passwords, private URLs,
-real user data. Use gitleaks if it's available (or search the history with git log -p for typical key patterns).
+Scan this repository, including the full git history, for secrets: API keys, tokens, passwords, private URLs, real user data. Use gitleaks if it's available (or search the history with git log -p for typical key patterns).
 List every finding with the commit and file. Don't rewrite history yet — just report.
 ```
 
@@ -83,9 +82,7 @@ as a service to share their changes.
 
 ```text
 Goal: make this repo welcoming to a stranger.
-1. Rewrite README.md: one-sentence description; docs/demo.gif right below it; "Quick start" with exactly 3 commands
-   (git clone ... && cd ..., npm run setup, npm run dev); "How it works" in 5 bullets; "Configuration" table built
-   from .env.example; "Licence" line.
+1. Rewrite README.md: one-sentence description; docs/demo.gif right below it; "Quick start" with exactly 3 commands (git clone ... && cd ..., npm run setup, npm run dev); "How it works" in 5 bullets; "Configuration" table built from .env.example; "Licence" line.
 2. Add `npm run setup`: copies .env.example to .env if missing, installs dependencies, applies local migrations.
 3. Make sure the app starts without any API keys (AI features show "not configured" with demo data).
 4. Add the <MIT/Apache-2.0/AGPL-3.0> LICENSE file with my name and the year.

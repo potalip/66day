@@ -127,15 +127,13 @@ Upload the three keepers (or `compare.mp4`). For the prompt log, paste 3–5 lin
 3. Can you put a generated clip in a paid client ad?
 4. Which part of a "how compound interest works" video should *not* be AI-generated?
 
-<details><summary>Answers</summary>
-
-1. 3 clips × 3 attempts × 6 s × P = 54 × P. Write that number down before you press Enter.
-2. Reuse the exact style suffix and reference image; mention the palette and light explicitly; regenerate only that shot.
-3. Only if the provider's terms on your plan allow commercial use, the clip shows no real people, brands or protected
-   characters, and the client knows it's AI footage.
-4. The numbers, formulas and charts — anything that must be correct. Render those in code.
-
-</details>
+> **Answers:**
+>
+> 1. 3 clips × 3 attempts × 6 s × P = 54 × P. Write that number down before you press Enter.
+> 2. Reuse the exact style suffix and reference image; mention the palette and light explicitly; regenerate only that shot.
+> 3. Only if the provider's terms on your plan allow commercial use, the clip shows no real people, brands or protected
+>    characters, and the client knows it's AI footage.
+> 4. The numbers, formulas and charts — anything that must be correct. Render those in code.
 
 ## You're done when…
 

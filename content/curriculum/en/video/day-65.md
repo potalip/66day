@@ -57,10 +57,8 @@ being in the comments matters more than any "best time to post" chart.
 
 ```text
 Pre-flight for launch. For every scheduled or ready video in my channel plan:
-1. Confirm the platform's copy matches the file in capstone-v1.0/delivery/ (duration, resolution, checksum of the
-   uploaded source where possible).
-2. Check that title, description, chapters, captions (SRT) and thumbnail are set, and the scheduled time is right in
-   my time zone.
+1. Confirm the platform's copy matches the file in capstone-v1.0/delivery/ (duration, resolution, checksum of the uploaded source where possible).
+2. Check that title, description, chapters, captions (SRT) and thumbnail are set, and the scheduled time is right in my time zone.
 3. Open every link in every description and report any that fail.
 Report in a short table. Change nothing; tell me if anything is wrong.
 ```
@@ -82,13 +80,11 @@ X / THREADS / LINKEDIN
 4/ The series is live, [n] episodes so far: [playlist link]. New episodes [schedule]. I'm reading every comment today.
 
 PINNED COMMENT UNDER THE VIDEO
-Thanks for watching! This is episode [n] of [N]. What should I explain next? (Made with my own code pipeline —
-ask me anything about how.)
+Thanks for watching! This is episode [n] of [N]. What should I explain next? (Made with my own code pipeline — ask me anything about how.)
 
 SHOW HN / PRODUCT HUNT (only for a tool people can try)
 Show HN: [Name] – turns [input] into [video output] with code
-First comment: why I built it, how it works (stack, which models for script/voice), limits, how to try it free,
-one specific question I'd love feedback on.
+First comment: why I built it, how it works (stack, which models for script/voice), limits, how to try it free, one specific question I'd love feedback on.
 ```
 
 > **Tip:** ask for **feedback and questions**, never for likes, upvotes or "smash that subscribe". Platforms and
@@ -107,9 +103,7 @@ thumbnail, audio out of sync on a re-encode. Fix the metadata in the studio imme
 broken:
 
 ```text
-Launch hotfix. Problem: [e.g. "audio drifts out of sync after 0:50 on the 9:16 version"]. Re-export only that
-delivery file from its master with the exact pipeline config, run qc.py, and compare duration and audio stream with
-the master. Change nothing else. Show me the QC report before I re-upload.
+Launch hotfix. Problem: [e.g. "audio drifts out of sync after 0:50 on the 9:16 version"]. Re-export only that delivery file from its master with the exact pipeline config, run qc.py, and compare duration and audio stream with the master. Change nothing else. Show me the QC report before I re-upload.
 ```
 
 > **If you're stuck:** a platform flags your video for copyright in the first hour? Don't panic and don't delete it.
@@ -128,10 +122,8 @@ weak after a few hundred impressions, swap to your second-best thumbnail and not
 ### T+24 h: The report and the thank-you (30 min)
 
 ```text
-Help me write the 24-hour launch report. I'll paste the analytics export / screenshots numbers for each video and
-platform: views, impressions and click-through rate, average view duration, average percentage viewed, retention at
-30 s, new followers, comments. Build one markdown table across platforms, then summarise comments into top 3 praises,
-top 3 complaints, top 3 requests. List what broke and how it was fixed. Don't round small numbers up.
+Help me write the 24-hour launch report. I'll paste the analytics export / screenshots numbers for each video and platform: views, impressions and click-through rate, average view duration, average percentage viewed, retention at
+30 s, new followers, comments. Build one markdown table across platforms, then summarise comments into top 3 praises, top 3 complaints, top 3 requests. List what broke and how it was fixed. Don't round small numbers up.
 ```
 
 Check every number against the studio yourself. Add one line comparing it to your day 64 success definition.

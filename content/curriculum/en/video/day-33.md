@@ -78,12 +78,8 @@ drift out of sync.
 Don't ask the agent for all eight stages in one go. First the skeleton with fake stages, then real ones:
 
 ```text
-Goal: a CLI `make-video "topic"` that runs an 8-stage video pipeline (brief, storyboard, voice, visuals, edit,
-captions, music, render) and writes everything to runs/<slug>/.
-Context: ~/66/video/pipeline/ (and the dayNN/ folders next to it) already has: day27/make.py (v0 of this — reuse its
-stage logic), storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23),
-edit.py with EDL (day 30), brand kit components (day 32), gen_clips.py (day 29), music mixing (day 20). Read them first
-and list what each one's inputs and outputs are before writing code.
+Goal: a CLI `make-video "topic"` that runs an 8-stage video pipeline (brief, storyboard, voice, visuals, edit, captions, music, render) and writes everything to runs/<slug>/.
+Context: ~/66/video/pipeline/ (and the dayNN/ folders next to it) already has: day27/make.py (v0 of this — reuse its stage logic), storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23), edit.py with EDL (day 30), brand kit components (day 32), gen_clips.py (day 29), music mixing (day 20). Read them first and list what each one's inputs and outputs are before writing code.
 Step 1 only: build the orchestrator with each stage as a function stub that writes a placeholder file.
 - Each stage declares inputs, outputs, and computes a cache key = sha256(inputs' contents + stage settings + STAGE_VERSION).
 - Keys stored in runs/<slug>/cache.json. Skip a stage if its key matches and outputs exist; print "cached".
@@ -119,10 +115,7 @@ handful of stages should do work.
 ### 3. README with honest numbers
 
 ```text
-Write README.md for my pipeline: what it does in one sentence; install steps; required and optional env vars (names
-only, never values); the command with all flags and examples; a table of stages with inputs/outputs; where outputs go;
-how caching works and how to force a rerun. Add "Cost per video": read run.json from my last 3 runs and compute
-average time and API cost per stage and in total.
+Write README.md for my pipeline: what it does in one sentence; install steps; required and optional env vars (names only, never values); the command with all flags and examples; a table of stages with inputs/outputs; where outputs go; how caching works and how to force a rerun. Add "Cost per video": read run.json from my last 3 runs and compute average time and API cost per stage and in total.
 ```
 
 Paste the inputs/outputs section and the cost table. A typical finding: *"45-s video in 3 min 40 s; script and voice

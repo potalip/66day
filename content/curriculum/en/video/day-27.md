@@ -80,14 +80,10 @@ Goal: render the full 60-second explainer from day27/plan.json by chaining my ex
 Context: day22/tts.py (cached TTS), day23/transcribe.py + day23/make_ass.py (captions), day20/mix.py (music, ducking,
 -14 LUFS), Remotion project in remotion/ with my brand font and colours. Music and licences in assets/.
 Constraints:
-- day27/make.py runs stages in order and skips any stage whose output already exists unless I pass --force <stage>:
-  1 voice per frame -> durations.json; 2 Remotion composition "Explainer" (1080x1920, 30 fps) with one <Sequence>
-  per frame, lengths from durations.json, visuals following "on_screen" and "animation"; 3 render; 4 transcribe the
-  joined voice and burn word-highlight captions inside the safe zone; 5 mix music ducked under voice to -14 LUFS.
+- day27/make.py runs stages in order and skips any stage whose output already exists unless I pass --force <stage>: 1 voice per frame -> durations.json; 2 Remotion composition "Explainer" (1080x1920, 30 fps) with one <Sequence> per frame, lengths from durations.json, visuals following "on_screen" and "animation"; 3 render; 4 transcribe the joined voice and burn word-highlight captions inside the safe zone; 5 mix music ducked under voice to -14 LUFS.
 - Final file day27/final.mp4. Also write day27/final.srt for upload.
 - Print each stage's time, and at the end a QC report: duration, resolution, codecs, integrated loudness, true peak.
-Done when: `python day27/make.py` produces final.mp4 that passes QC (55-65 s, 1080x1920, h264/aac, -14 +/-1 LUFS,
-peak below -1 dBTP).
+Done when: `python day27/make.py` produces final.mp4 that passes QC (55-65 s, 1080x1920, h264/aac, -14 +/-1 LUFS, peak below -1 dBTP).
 ```
 
 Work frame by frame: get frame 1 looking right in Remotion Studio before asking for frame 2. Then run your own QC:

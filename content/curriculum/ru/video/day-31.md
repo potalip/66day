@@ -62,8 +62,7 @@ tasks:
 
 ```text
 Цель: скрипт storyboard.py, который по теме пишет storyboard.json и проверяет его по схеме.
-Контекст: моя папка pipeline/. Ключ Claude API в .env как ANTHROPIC_API_KEY; модель из env CLAUDE_MODEL,
-по умолчанию claude-sonnet-5-5. Мои рендеры умеют такие виды визуала: "template" (title, lower_third, list),
+Контекст: моя папка pipeline/. Ключ Claude API в .env как ANTHROPIC_API_KEY; модель из env CLAUDE_MODEL, по умолчанию claude-sonnet-5-5. Мои рендеры умеют такие виды визуала: "template" (title, lower_third, list),
 "chart" (файл данных + тип графика), "diagram" (имя сцены Manim/Remotion), "ai_clip" (промпт для gen_clips.py).
 Схема (schema/storyboard.schema.json и модель pydantic):
   title, audience, duration_s, aspect ("16:9" | "9:16"), language ("ru"),
@@ -71,8 +70,7 @@ tasks:
   scenes: [{ id, duration_s, vo, on_screen_text (<= 5 слов), visual: { kind, ... }, sfx? }]
 Ограничения:
 - Используй структурированный вывод / tool use в API, чтобы ответ был обязан соответствовать схеме; локально всё равно проверь.
-- Проверки кодом: сумма длительностей сцен = duration_s (±2 с); в каждой vo не больше 2,2 слова на секунду сцены;
-  ни одной сцены длиннее 6 с. При ошибках отправь их модели один раз и попроси исправить.
+- Проверки кодом: сумма длительностей сцен = duration_s (±2 с); в каждой vo не больше 2,2 слова на секунду сцены; ни одной сцены длиннее 6 с. При ошибках отправь их модели один раз и попроси исправить.
 - Текст пиши по-русски, живым разговорным языком, без канцелярита.
 - Если ANTHROPIC_API_KEY нет — выведи «ИИ не настроен» и скопируй fixtures/storyboard.example.json.
 - Сохраняй отправленный промпт рядом с результатом (storyboard.prompt.txt), чтобы потом сравнивать версии.

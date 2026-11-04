@@ -69,15 +69,11 @@ Telegram requires HTTPS. Use your deployed app (a preview deploy on Cloudflare o
 Goal: make my main app work as a Telegram Mini App without breaking the normal web version.
 Context: deployed at <URL>; frontend <framework>; backend <Workers/Node/Python> with existing user accounts.
 Do this:
-1. Load the official script https://telegram.org/js/telegram-web-app.js in <head> before our own code
-   (it's harmless in a normal browser). Treat the app as "inside Telegram" only when WebApp.initData is
-   non-empty; only then call WebApp.ready() and WebApp.expand() and switch on the Telegram-specific UI.
-2. Map Telegram theme params to our design tokens (bg, text, hint, link, button, button text) so the app follows
-   Telegram light/dark automatically. Listen to the themeChanged event.
+1. Load the official script https://telegram.org/js/telegram-web-app.js in <head> before our own code (it's harmless in a normal browser). Treat the app as "inside Telegram" only when WebApp.initData is non-empty; only then call WebApp.ready() and WebApp.expand() and switch on the Telegram-specific UI.
+2. Map Telegram theme params to our design tokens (bg, text, hint, link, button, button text) so the app follows Telegram light/dark automatically. Listen to the themeChanged event.
 3. Use Telegram's BackButton for in-app navigation and the main bottom button for our primary action.
 4. On start, POST the raw WebApp.initData string (not initDataUnsafe) to /api/telegram/auth.
-Constraints: outside Telegram everything works exactly as before. No new dependencies on the frontend
-except the official script.
+Constraints: outside Telegram everything works exactly as before. No new dependencies on the frontend except the official script.
 Done when: opening the t.me link shows my app in Telegram's colours, and the normal URL in a browser is unchanged.
 ```
 
@@ -94,14 +90,11 @@ The algorithm, straight from Telegram's docs:
 
 ```text
 Goal: add POST /api/telegram/auth that validates Telegram Mini App initData and logs the user in.
-Implement the official algorithm exactly (WebAppData HMAC, alphabetical data-check-string, constant-time compare,
-reject auth_date older than 24h). Use Web Crypto if we're on Workers; or use a maintained library
-(e.g. @telegram-apps/init-data-node, or aiogram's safe_parse_webapp_init_data in Python) if it fits our stack.
+Implement the official algorithm exactly (WebAppData HMAC, alphabetical data-check-string, constant-time compare, reject auth_date older than 24h). Use Web Crypto if we're on Workers; or use a maintained library (e.g. @telegram-apps/init-data-node, or aiogram's safe_parse_webapp_init_data in Python) if it fits our stack.
 The bot token comes from an environment secret, never from the client.
 On success: find or create the user by telegram_id, start our normal session, return the user.
 On failure: 401 with a clear error. Log why validation failed, never log the token.
-Tests: one valid initData fixture (signed in the test with a fake token), one with a tampered user field,
-one expired. All three must behave correctly.
+Tests: one valid initData fixture (signed in the test with a fake token), one with a tampered user field, one expired. All three must behave correctly.
 Done when: tests pass, and inside Telegram the app greets me by name from the server response.
 ```
 
@@ -138,15 +131,13 @@ and the result of your tampered-curl test.
 3. Can you validate `initData` in the browser to save a server round-trip?
 4. Your Mini App calls the Claude API directly from the frontend with your key. What's wrong?
 
-<details><summary>Answers</summary>
-
-1. No. `initDataUnsafe` is unsigned convenience data — anyone can forge it. Use only what the server extracted from a
-   validated `initData`.
-2. To stop replay: a valid string copied last month shouldn't log anyone in today.
-3. No. Validation needs the bot token; putting it in the browser hands your bot to everyone.
-4. The key is visible to every user. All model calls go through your server, which checks the session first.
-
-</details>
+> **Answers:**
+>
+> 1. No. `initDataUnsafe` is unsigned convenience data — anyone can forge it. Use only what the server extracted from a
+>    validated `initData`.
+> 2. To stop replay: a valid string copied last month shouldn't log anyone in today.
+> 3. No. Validation needs the bot token; putting it in the browser hands your bot to everyone.
+> 4. The key is visible to every user. All model calls go through your server, which checks the session first.
 
 ## You're done when…
 

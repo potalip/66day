@@ -61,11 +61,8 @@ once in a corner at the start so you can line up both clocks.
 Goal: a 60-second screen tutorial of my pipeline web form, with automatic zooms and callouts.
 Context: the web app runs locally (see README). Remotion is set up from earlier days. Voiceover uses my TTS stage.
 Steps:
-1. record.ts (Playwright): open the app at 1920x1080, record video, perform: type a topic, pick a format,
-   click Render, wait for the result, click the video. For each action log {t_ms, x, y, w, h, label} to clicks.json.
-   Speed: realistic typing, 600 ms pause after each click.
-2. A Remotion composition takes the recording + clicks.json and, for each click, zooms to 2x centred on the target
-   over 12 frames with easing, holds, and eases back out before the next action. Clamp the zoom window to the frame.
+1. record.ts (Playwright): open the app at 1920x1080, record video, perform: type a topic, pick a format, click Render, wait for the result, click the video. For each action log {t_ms, x, y, w, h, label} to clicks.json. Speed: realistic typing, 600 ms pause after each click.
+2. A Remotion composition takes the recording + clicks.json and, for each click, zooms to 2x centred on the target over 12 frames with easing, holds, and eases back out before the next action. Clamp the zoom window to the frame.
 3. A callout component shows the action label next to the target (brand font and colours), fading in with the zoom.
 4. Cut or 4x speed-up any segment longer than 2 s where nothing changes on screen (compare frames).
 5. Short VO from my TTS stage; burned captions from my caption stage. Export 1920x1080 and a 1080x1920 version.
@@ -89,8 +86,7 @@ Upload `tutorial.mp4` as proof.
 ```text
 Goal: YouTube-ready chapters and a description for out/tutorial.mp4.
 Steps: transcribe with faster-whisper (segment timestamps) to transcript.json. Send the transcript to the LLM:
-group it into 3-5 chapters, each at least 10 s, first one at 0:00, titles of max 5 words in the viewer's
-language. Then write a 2-sentence description, the chapter list, and one line about what tool is shown.
+group it into 3-5 chapters, each at least 10 s, first one at 0:00, titles of max 5 words in the viewer's language. Then write a 2-sentence description, the chapter list, and one line about what tool is shown.
 Validate in code: first chapter 0:00, ascending, >= 10 s apart. Print the result to paste.
 Done when: the block pastes straight into a YouTube description and the chapters show up.
 ```
@@ -104,14 +100,12 @@ Paste the generated chapters and description.
 3. Three quick clicks in the same settings panel, 1.5 s apart. Three zooms or one?
 4. A result appears at the opposite corner of the screen from the last zoom. Pan, or zoom out and back in?
 
-<details><summary>Answers</summary>
-
-1. Speed up 3–4x with a zoom on the text field, so viewers see the prompt forming but don't wait for it.
-2. Cut most of it: keep a second of the bar, a "fast-forward" label or a jump cut, then the result.
-3. One zoom framing the whole panel, held across the three clicks. Pumping in and out three times is seasickness.
-4. Zoom out briefly, then in. A long diagonal pan at 2x loses the viewer; the wide shot re-orients them.
-
-</details>
+> **Answers:**
+>
+> 1. Speed up 3–4x with a zoom on the text field, so viewers see the prompt forming but don't wait for it.
+> 2. Cut most of it: keep a second of the bar, a "fast-forward" label or a jump cut, then the result.
+> 3. One zoom framing the whole panel, held across the three clicks. Pumping in and out three times is seasickness.
+> 4. Zoom out briefly, then in. A long diagonal pan at 2x loses the viewer; the wide shot re-orients them.
 
 ## You're done when…
 

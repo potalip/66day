@@ -68,13 +68,11 @@ pages or a demo account, never real customer data.
 Goal: a 30-second, 1920x1080 product promo made from an automated screen recording with code-driven zooms and callouts.
 Context: product URL: <url>. My brand kit from day 32 and my pipeline from day 33. Playwright and ffmpeg installed.
 Part A — record.mjs (Playwright, Chromium):
-- Viewport 1920x1080, recordVideo at the same size. Follow steps.json: [{ action: goto|click|type|wait, selector,
-  text?, callout: "label shown on screen", hold_s }].
+- Viewport 1920x1080, recordVideo at the same size. Follow steps.json: [{ action: goto|click|type|wait, selector, text?, callout: "label shown on screen", hold_s }].
 - Before each click, log { t: seconds since start, box: element boundingBox, callout } to timeline.json.
 - Move the mouse smoothly to each target (steps of ~25) so the cursor path looks human. Slow typing (~60 ms per key).
 Part B — compose (Remotion or Python, whichever my pipeline uses):
-- Play the recording; at each timeline entry, ease-zoom (my brand's easing) so the box fills ~45% of the frame,
-  hold, then ease out. Draw a rounded highlight around the box and a callout label in brand colours.
+- Play the recording; at each timeline entry, ease-zoom (my brand's easing) so the box fills ~45% of the frame, hold, then ease out. Draw a rounded highlight around the box and a callout label in brand colours.
 - Intro card (2 s, product name + one-line promise), end card (3 s, CTA + URL) from my brand components.
 - Music bed at -14 LUFS; no voiceover needed — the video must work muted.
 - Also output 9:16 using my day-34 formats flag (zoom targets keep the box inside the vertical safe zone).
@@ -120,15 +118,13 @@ A café owner writes: *"Can you make us a video for Instagram about our new brea
 3. What must the café provide?
 4. What protects you from the fifth round of "tiny changes"?
 
-<details><summary>Answers</summary>
-
-1. "What should people do after watching — come in this week, order online, follow?" The goal decides everything else.
-2. For example: one 20-s Reel (9:16) with burned-in captions and a thumbnail, plus a 1:1 cut for the feed; delivered
-   as H.264 mp4s.
-3. Logo, colours, menu items and prices (checked by them), photos or permission to film, opening hours for the end card.
-4. Two revision rounds written in the brief, script approval before rendering, and a price for extra rounds.
-
-</details>
+> **Answers:**
+>
+> 1. "What should people do after watching — come in this week, order online, follow?" The goal decides everything else.
+> 2. For example: one 20-s Reel (9:16) with burned-in captions and a thumbnail, plus a 1:1 cut for the feed; delivered
+>    as H.264 mp4s.
+> 3. Logo, colours, menu items and prices (checked by them), photos or permission to film, opening hours for the end card.
+> 4. Two revision rounds written in the brief, script approval before rendering, and a price for extra rounds.
 
 ## You're done when…
 

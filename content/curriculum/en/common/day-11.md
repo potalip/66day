@@ -80,8 +80,7 @@ Constraints:
 - The key never appears in the front-end, in logs or in any response.
 - Reject inputs longer than 2,000 characters with a friendly message. max_tokens around 500.
 - If the key is missing, the API returns an error, or the call times out, show a calm human message, not a stack trace.
-- Clean, mobile-first page: a title, one sentence explaining the tool, a textarea, a button, a result area with a
-  "Copy" button, and a loading state on the button.
+- Clean, mobile-first page: a title, one sentence explaining the tool, a textarea, a button, a result area with a "Copy" button, and a loading state on the button.
 - For local dev, read the key from .dev.vars and make sure .dev.vars is in .gitignore.
 - Explain the request flow in 5 short bullets when done.
 

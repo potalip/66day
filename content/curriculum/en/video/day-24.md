@@ -65,16 +65,12 @@ Choose a tiny, useful topic. Example: "three keyboard shortcuts that save you an
 
 ```text
 Goal: a 20-second vertical short rendered in 3 hook variants.
-Context: Remotion project in remotion/; TTS script day22/tts.py; captions scripts day23/transcribe.py and
-day23/make_ass.py; mixing script day20/mix.py. Folder day24/.
+Context: Remotion project in remotion/; TTS script day22/tts.py; captions scripts day23/transcribe.py and day23/make_ass.py; mixing script day20/mix.py. Folder day24/.
 Constraints:
-- day24/short.json: { "body": "<body script>", "hooks": [ {"id": "result", "line": "...", "visual": "..."},
-  {"id": "claim", ...}, {"id": "question", ...} ] }.
+- day24/short.json: { "body": "<body script>", "hooks": [ {"id": "result", "line": "...", "visual": "..."}, {"id": "claim", ...}, {"id": "question", ...} ] }.
 - Generate TTS for each hook line and for the body (cached). Measure durations with ffprobe.
-- Remotion composition "Short" (1080x1920, 30 fps) with props { hookId, hookText, hookAudio, bodyAudio, durations }.
-  Hook visual is big, bold and moving from frame 0 — no fade from black. Body: a visual change at least every 1.5 s.
-- A prop showSafeZones draws translucent red boxes over the top 220 px, bottom 420 px and right 140 px (for checking
-  only; off in final renders).
+- Remotion composition "Short" (1080x1920, 30 fps) with props { hookId, hookText, hookAudio, bodyAudio, durations }. Hook visual is big, bold and moving from frame 0 — no fade from black. Body: a visual change at least every 1.5 s.
+- A prop showSafeZones draws translucent red boxes over the top 220 px, bottom 420 px and right 140 px (for checking only; off in final renders).
 - The last body line should lead back into the hook for a loop.
 - Render out/short-<hookId>.mp4 for all three, then burn captions and mix music at -14 LUFS with my existing scripts.
 Done when: day24/ has three finished 18-22 s mp4s that differ only in the first 2 seconds.
@@ -112,15 +108,13 @@ Is this a hook? Yes or no, and why.
 3. "Hey everyone, welcome back! Today we're talking about productivity."
 4. "Your phone battery isn't dying. It's lying to you."
 
-<details><summary>Answers</summary>
-
-1. No — nothing to wonder about for two seconds is two seconds of goodbye.
-2. Yes — result first, a visual change in frame one, and a promise of how.
-3. No — a greeting, not a question or a promise.
-4. Yes, if the video explains it honestly (battery percentage readings drift in the cold). A hook that the video
-   doesn't pay off is clickbait — viewers punish it with swipes.
-
-</details>
+> **Answers:**
+>
+> 1. No — nothing to wonder about for two seconds is two seconds of goodbye.
+> 2. Yes — result first, a visual change in frame one, and a promise of how.
+> 3. No — a greeting, not a question or a promise.
+> 4. Yes, if the video explains it honestly (battery percentage readings drift in the cold). A hook that the video
+>    doesn't pay off is clickbait — viewers punish it with swipes.
 
 ## You're done when…
 

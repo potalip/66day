@@ -51,8 +51,7 @@ Replace yesterday's simple version or fixture with the real thing.
 Goal: implement the core AI step of my capstone: <what it does, e.g. "turn dad's constraints into a 7-day meal plan">.
 Read docs/CAPSTONE.md for context. Requirements:
 - Prompt lives in its own versioned file (prompts/<name>.v1.md), not inline in code.
-- Model from env (CLAUDE_MODEL, default claude-sonnet-5-5). Structured JSON output validated against a schema;
-  on invalid output, retry once, then show a friendly error.
+- Model from env (CLAUDE_MODEL, default claude-sonnet-5-5). Structured JSON output validated against a schema; on invalid output, retry once, then show a friendly error.
 - Guards: max input length, per-user rate limit (e.g. 20 runs/day), 30-second timeout.
 - Log every call to the DB: user_id, prompt version, model, input_tokens, output_tokens, latency_ms, ok/error.
 - Stream or show progress if it takes more than 2 seconds.
@@ -85,9 +84,7 @@ file and the eval with its results.
 Pull real numbers from the log you just added:
 
 ```text
-From our AI call log, compute: average input_tokens and output_tokens per call, and calls per active user per day
-from my own testing. Then write docs/COSTS.md: cost per call, per active user per month, and per 100 users,
-using the prices I'll paste from the provider's pricing page. Include retries, and note any other paid APIs we call.
+From our AI call log, compute: average input_tokens and output_tokens per call, and calls per active user per day from my own testing. Then write docs/COSTS.md: cost per call, per active user per month, and per 100 users, using the prices I'll paste from the provider's pricing page. Include retries, and note any other paid APIs we call.
 ```
 
 Open your provider's **pricing page** and find the price per million input and output tokens for your model. The

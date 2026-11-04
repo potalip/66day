@@ -67,15 +67,13 @@ Context: Vite + React + TypeScript + Tailwind project. No backend yet.
 
 Constraints:
 - Mobile-first: must look intentional at 390px wide, then adapt at 1280px (max content width ~720px, centred).
-- Follow these rules: one primary action (accent colour), hierarchy via size/weight, spacing only from
-  4/8/16/24/32px, neutral palette + one accent, no gradients, no emoji as decoration, no cards inside cards.
+- Follow these rules: one primary action (accent colour), hierarchy via size/weight, spacing only from 4/8/16/24/32px, neutral palette + one accent, no gradients, no emoji as decoration, no cards inside cards.
 - Put 6 realistic sample items in src/sampleData.ts (real-sounding names, dates, edge cases like a very long title).
 - Include an empty state (shown when the list is empty), and keyboard-accessible buttons with visible focus.
 - Support light and dark mode via prefers-color-scheme.
 
 First explain your plan: components, layout at both widths, colours you'll use. Wait for my OK.
-When done, install Playwright if needed and write scripts/screenshot.mjs that saves screenshots of the running app
-at 390x844 and 1280x800 as screenshots/mobile.png and screenshots/desktop.png. Run it and tell me the file paths.
+When done, install Playwright if needed and write scripts/screenshot.mjs that saves screenshots of the running app at 390x844 and 1280x800 as screenshots/mobile.png and screenshots/desktop.png. Run it and tell me the file paths.
 ```
 
 Look at the screenshots yourself — the phone one first. Upload both as proof.
@@ -94,8 +92,7 @@ Look at screenshots/mobile.png. I want exactly one change:
 the "Add job" button is the same weight as the filter chips, so the main action doesn't stand out.
 Make it the only filled accent button on the screen; make the chips outlined and smaller.
 
-Tell me in 2 lines what you'll change before editing. Afterwards re-run scripts/screenshot.mjs,
-save the result as screenshots/after-1-mobile.png, look at it and tell me honestly if it's fixed.
+Tell me in 2 lines what you'll change before editing. Afterwards re-run scripts/screenshot.mjs, save the result as screenshots/after-1-mobile.png, look at it and tell me honestly if it's fixed.
 ```
 
 Good targets for your three rounds: a cramped list item, a title that wraps badly, low-contrast secondary text, an
@@ -116,16 +113,14 @@ git add -A && git commit -m "UI: clearer primary action" && git push
 3. The list looks great with sample data, but a real user's first visit shows a blank white area. Which rule was skipped?
 4. Gaps on your page are 7px, 12px, 15px and 22px. What would you ask the agent to do?
 
-<details><summary>Answers</summary>
-
-1. Three primary actions means no primary action. Pick the most frequent one, make it the only accent button; the
-   others become secondary (outlined or text).
-2. The contrast is too low to read for many people, especially outside on a phone. Use a darker grey that passes the
-   WCAG AA contrast check (4.5:1 for body text).
-3. Rule 5: real states. The empty state needs a short explanation and the first action ("Add your first job").
-4. Snap all spacing to the scale (for example 8, 16, 24) and use the same gap for the same kind of relationship.
-
-</details>
+> **Answers:**
+>
+> 1. Three primary actions means no primary action. Pick the most frequent one, make it the only accent button; the
+>    others become secondary (outlined or text).
+> 2. The contrast is too low to read for many people, especially outside on a phone. Use a darker grey that passes the
+>    WCAG AA contrast check (4.5:1 for body text).
+> 3. Rule 5: real states. The empty state needs a short explanation and the first action ("Add your first job").
+> 4. Snap all spacing to the scale (for example 8, 16, 24) and use the same gap for the same kind of relationship.
 
 ## You're done when…
 

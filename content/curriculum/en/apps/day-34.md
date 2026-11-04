@@ -77,8 +77,7 @@ Context: here is the Lighthouse report (paste the failed audits) and my keyboard
 Constraints:
 - Images: correct sizes, modern formats, width/height set, lazy-load below the fold.
 - Split heavy routes with dynamic import; remove unused dependencies.
-- Accessibility: real buttons and links, labels on all inputs, contrast at least 4.5:1 in BOTH light and dark themes,
-  visible focus styles, dialogs trap focus and close on Escape, meaningful alt text.
+- Accessibility: real buttons and links, labels on all inputs, contrast at least 4.5:1 in BOTH light and dark themes, visible focus styles, dialogs trap focus and close on Escape, meaningful alt text.
 - Add an automated a11y check: a Playwright test using @axe-core/playwright on the main pages, run in CI.
 Done when: you list each fix with the audit it addresses; CI is green.
 ```
@@ -94,15 +93,10 @@ side by side for task 2. Don't chase 100: 90+ on accessibility and a clear gain 
 ```text
 Goal: privacy-friendly analytics and an error log.
 Constraints:
-- Events table (D1 migration): events(id, user_id NULL, anon_id, name, props_json, created_at), with indexes on
-  (name, created_at) and (user_id, created_at). anon_id is a random id in a first-party cookie, so visitors who
-  haven't signed up are counted too; link it to user_id on sign-up.
-- A server helper track(name, props) used inside our API handlers, plus POST /api/events for front-end-only events
-  (accepts only an allow-list of names, rate-limited). Never let a failed track() break the user's request.
-- Track exactly: session_started, signup_completed, core_action_done, ai_called (props: model, tokens, ms),
-  upgrade_clicked. Props never contain emails, names or message text.
-- Optional: mirror the same events to Plausible OR PostHog (EU host, session recording and input autocapture off),
-  production only.
+- Events table (D1 migration): events(id, user_id NULL, anon_id, name, props_json, created_at), with indexes on (name, created_at) and (user_id, created_at). anon_id is a random id in a first-party cookie, so visitors who haven't signed up are counted too; link it to user_id on sign-up.
+- A server helper track(name, props) used inside our API handlers, plus POST /api/events for front-end-only events (accepts only an allow-list of names, rate-limited). Never let a failed track() break the user's request.
+- Track exactly: session_started, signup_completed, core_action_done, ai_called (props: model, tokens, ms), upgrade_clicked. Props never contain emails, names or message text.
+- Optional: mirror the same events to Plausible OR PostHog (EU host, session recording and input autocapture off), production only.
 - Error log: window error + unhandledrejection handlers and an API error middleware send
   {message, stack (trimmed), route, release, time} to POST /api/errors, stored in an errors table.
   Rate-limit that endpoint. A new error type sends me one Telegram message (reuse day 31's helper).

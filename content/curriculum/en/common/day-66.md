@@ -74,9 +74,7 @@ Your capstone is now your strongest piece. Give it the best seat:
 Goal: update my portfolio so the capstone is the first and largest piece.
 Context: capstone details: (name, one-line result, live link or channel, launch post link).
 Numbers from my 24-hour launch report: (paste). Demo or trailer: (link or file).
-Constraints: keep the existing design; move the weakest older piece off the page if there are now more than 5;
-add a short case study page for the capstone using the problem → process → result → numbers shape;
-update the headline if my niche has changed: (new headline or "keep it").
+Constraints: keep the existing design; move the weakest older piece off the page if there are now more than 5; add a short case study page for the capstone using the problem → process → result → numbers shape; update the headline if my niche has changed: (new headline or "keep it").
 Done when: it looks right at 390px and 1280px, all links work, and it's deployed.
 ```
 
@@ -100,8 +98,7 @@ habit, and push it. The page that held your first promise now holds the next one
 Skip "what a journey". Be specific, the way you've learned to be:
 
 ```text
-66 days ago I'd never opened a terminal. Today: 412 commits, 9 things live, 1 launched product
-that 140 people have tried, 1 paying client.
+66 days ago I'd never opened a terminal. Today: 412 commits, 9 things live, 1 launched product that 140 people have tried, 1 paying client.
 What's a habit now: I write a spec before I prompt, and I ship before I'm ready.
 Hardest part: week 5, when nothing deployed and I nearly quit.
 Next 66 days: three paying clients. Portfolio: (link)

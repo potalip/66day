@@ -88,8 +88,7 @@ Context: ~/66/video/pipeline/ and my renderer (Remotion project in ~/66/video/re
 Paste of my brand.json below.
 Build:
 - A typed loader for brand.json (zod or TypeScript type in Remotion; dataclass in Python) that fails loudly on a missing key.
-- Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — all colours, fonts, sizes,
-  radii and motion read from the brand config, nothing hard-coded. Motion uses motion.enter / motion.exit presets.
+- Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — all colours, fonts, sizes, radii and motion read from the brand config, nothing hard-coded. Motion uses motion.enter / motion.exit presets.
 - Fonts loaded properly (Remotion: @remotion/google-fonts or local files with staticFile; Python: local .ttf files).
 - Respect layout.safe_margin for every element.
 - A SampleSheet composition that shows all three components mid-animation on one 1920x1080 frame, labelled.
@@ -117,8 +116,7 @@ components (a one-time refactor) and commit that. Then create a second config, `
 another font pair, a snappier `enter` preset. Render the same video with it:
 
 ```text
-Add a --brand flag (or BRAND env var) to my render command so I can render any composition with brand/brand.json or
-brand/brand-alt.json. Then render my explainer with brand-alt.json to out/explainer-alt.mp4. Do not change any component.
+Add a --brand flag (or BRAND env var) to my render command so I can render any composition with brand/brand.json or brand/brand-alt.json. Then render my explainer with brand-alt.json to out/explainer-alt.mp4. Do not change any component.
 ```
 
 Run `git status` before rendering: since the refactor is committed, the only new file should be the JSON. Upload `explainer-alt.mp4`.
@@ -135,14 +133,12 @@ Config or component?
 3. How long a title stays on screen.
 4. The spring used when anything enters.
 
-<details><summary>Answers</summary>
-
-1. Config (`colors.accent`).
-2. Component — layout is the shape; it reads sizes and colours from the config.
-3. Config (`motion.title_hold_s`).
-4. Config (`motion.enter`); the component just applies the preset.
-
-</details>
+> **Answers:**
+>
+> 1. Config (`colors.accent`).
+> 2. Component — layout is the shape; it reads sizes and colours from the config.
+> 3. Config (`motion.title_hold_s`).
+> 4. Config (`motion.enter`); the component just applies the preset.
 
 ## You're done when…
 

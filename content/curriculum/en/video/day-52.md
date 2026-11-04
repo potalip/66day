@@ -56,13 +56,9 @@ Getting real numbers is easy if the pipeline logs them as it goes:
 Goal: produce outputs 2 and 3 of my capstone in one batch run, and measure everything.
 Context: format file formats/<capstone>.json and manual.log from day 51; pipeline stages in this repo.
 Steps:
-1. Add a batch command: make-video --format formats/<capstone>.json --batch inputs/batch-02.json
-   (two inputs). Run stages per item; one item failing must not kill the other; resume from the
-   failed stage using the cache.
-2. Instrument every stage: wall-clock seconds, cache hit, and API usage from each response
-   (tokens, TTS characters or seconds, video seconds). Write runs/<capstone>/<nn>/metrics.json.
-3. Read prices from pricing.json (I fill it in from the providers' pricing pages, with a checked_on date)
-   and compute machine cost per video and per stage.
+1. Add a batch command: make-video --format formats/<capstone>.json --batch inputs/batch-02.json (two inputs). Run stages per item; one item failing must not kill the other; resume from the failed stage using the cache.
+2. Instrument every stage: wall-clock seconds, cache hit, and API usage from each response (tokens, TTS characters or seconds, video seconds). Write runs/<capstone>/<nn>/metrics.json.
+3. Read prices from pricing.json (I fill it in from the providers' pricing pages, with a checked_on date) and compute machine cost per video and per stage.
 4. Run QC on both. Upload the finals to an unlisted playlist or a shared folder via my publish stage.
 5. Print a table: video, total minutes, machine cost, manual minutes, QC status.
 Done when: both videos are rendered, QC'd, uploaded, and the table prints.

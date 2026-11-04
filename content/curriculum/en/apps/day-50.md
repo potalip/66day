@@ -65,8 +65,7 @@ it next week?" A quick "yes, and can it also…" is worth more than any scoring.
 ### 2. Write the spec with your agent (40 min)
 
 ```text
-You are a sharp product manager. Interview me with one question at a time (max 10 questions) and then write
-docs/CAPSTONE.md for my capstone: <one-sentence idea>, built <on top of my main app / as a new product>.
+You are a sharp product manager. Interview me with one question at a time (max 10 questions) and then write docs/CAPSTONE.md for my capstone: <one-sentence idea>, built <on top of my main app / as a new product>.
 Sections:
 1. Problem — who, what pain, how they cope today (with a real quote if I have one).
 2. Users — the 5 named people (first names only) and how I'll reach them.

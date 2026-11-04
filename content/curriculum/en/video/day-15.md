@@ -73,8 +73,7 @@ into this venv. Then give your agent this:
 
 ```text
 Goal: a Python script that draws 90 PNG frames for a 3-second animation.
-Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are installed
-in ~/66/video/.venv (activated).
+Context: I'm learning how video is made from frames. Folder: day15/. Python 3 and Pillow are installed in ~/66/video/.venv (activated).
 Constraints:
 - 1920x1080, dark background, a bright circle that moves from the left edge to the right edge over 90 frames.
 - Draw the frame number in the top-left corner in large text so I can see individual frames.
@@ -144,14 +143,12 @@ Paste the four commands as proof.
 3. You play the same 90 frames at 60 fps. What changes?
 4. In a 30 fps video, at what time does frame 45 appear (counting from frame 0)?
 
-<details><summary>Answers</summary>
-
-1. 3 seconds (90 ÷ 30).
-2. 288 frames (12 × 24).
-3. It lasts 1.5 seconds and the motion looks twice as fast — same frames, less time.
-4. At 1.5 seconds (45 ÷ 30). Frame 0 is at 0.0 s.
-
-</details>
+> **Answers:**
+>
+> 1. 3 seconds (90 ÷ 30).
+> 2. 288 frames (12 × 24).
+> 3. It lasts 1.5 seconds and the motion looks twice as fast — same frames, less time.
+> 4. At 1.5 seconds (45 ÷ 30). Frame 0 is at 0.0 s.
 
 ## You're done when…
 

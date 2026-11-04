@@ -95,14 +95,11 @@ one Google Font. Write them down — they'll become your brand config on day 32.
 
 ```text
 Goal: a 10-second branded intro as a new Remotion composition.
-Context: Remotion project in remotion/ (Hello World template). My brand: name "<your name>", background <#hex>,
-accent <#hex>, font <Google Font name>, tagline "<one short line>".
+Context: Remotion project in remotion/ (Hello World template). My brand: name "<your name>", background <#hex>, accent <#hex>, font <Google Font name>, tagline "<one short line>".
 Constraints:
 - New composition id "Intro": 1920x1080, 30 fps, 300 frames. Component in src/Intro.tsx, registered in Root.tsx.
 - Load the font with @remotion/google-fonts (install it). No external images.
-- Timeline using <Sequence>: 0-40 an accent shape draws in (spring, damping 200); 20-70 the name appears letter
-  by letter with interpolate + Easing.out(Easing.cubic); 70-110 the tagline fades and slides up; hold until 260;
-  260-300 everything scales down slightly and fades to the background colour.
+- Timeline using <Sequence>: 0-40 an accent shape draws in (spring, damping 200); 20-70 the name appears letter by letter with interpolate + Easing.out(Easing.cubic); 70-110 the tagline fades and slides up; hold until 260; 260-300 everything scales down slightly and fades to the background colour.
 - Put timing numbers in one const at the top so I can tweak them.
 - Keep text inside a 10% safe margin on every side.
 Done when: `npx remotion render Intro out/intro.mp4` produces a 10-second video with no console errors.
@@ -129,14 +126,12 @@ that skips `node_modules` and `out/`).
    inside it?
 4. A composition is 1080×1920, 60 fps, 450 frames. How long is it, and what shape?
 
-<details><summary>Answers</summary>
-
-1. 300.
-2. 25 — a quarter of the way through the range gives a quarter of the values.
-3. 30 — frames inside a Sequence count from its start.
-4. 7.5 seconds, vertical 9:16.
-
-</details>
+> **Answers:**
+>
+> 1. 300.
+> 2. 25 — a quarter of the way through the range gives a quarter of the values.
+> 3. 30 — frames inside a Sequence count from its start.
+> 4. 7.5 seconds, vertical 9:16.
 
 ## You're done when…
 

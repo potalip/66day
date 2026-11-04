@@ -70,9 +70,7 @@ Then turn your notes into a brief with the agent:
 ```text
 Goal: turn my discovery-call notes into a one-page brief.
 Notes: <paste>.
-Format: client and context (2 lines); the problem in their words; who uses it and on which device;
-v1 scope = the ONE workflow we'll solve, as 3 user stories; out of scope (at least 4 items);
-data and privacy notes; success criterion they named; risks; what I need from them.
+Format: client and context (2 lines); the problem in their words; who uses it and on which device; v1 scope = the ONE workflow we'll solve, as 3 user stories; out of scope (at least 4 items); data and privacy notes; success criterion they named; risks; what I need from them.
 Constraints: v1 must be buildable by me with a coding agent in about 2 hours of build time.
 ```
 
@@ -88,8 +86,7 @@ folder and repo next to your main app, e.g. `~/66/apps/marta-waitlist`, and give
 
 ```text
 Goal: build v1 of the tool described in BRIEF.md (paste the brief into the repo first).
-Context: reuse our usual stack (React + Vite + Tailwind, Cloudflare Workers + D1, auth as on day 24,
-the day-31 Telegram helper if needed).
+Context: reuse our usual stack (React + Vite + Tailwind, Cloudflare Workers + D1, auth as on day 24, the day-31 Telegram helper if needed).
 Constraints:
 - Only the 3 user stories in scope. Mobile-first, both themes, in the client's language.
 - Simple sign-in for the client's staff only; per-business data isolation.

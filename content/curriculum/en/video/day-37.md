@@ -65,9 +65,7 @@ Your storyboard knows exactly which scene is on screen at every second. That's a
 
 ```text
 Goal: retention.py that maps audience drop-offs to storyboard scenes.
-Input: a retention CSV (time_s, percent_watching) — exported from the platform's analytics, typed in by hand from the
-graph (10-12 points is enough), or fetched via the YouTube Analytics API (metric audienceWatchRatio by
-elapsedVideoTimeRatio; needs the yt-analytics.readonly OAuth scope, separate from day 36's upload token) if I pass
+Input: a retention CSV (time_s, percent_watching) — exported from the platform's analytics, typed in by hand from the graph (10-12 points is enough), or fetched via the YouTube Analytics API (metric audienceWatchRatio by elapsedVideoTimeRatio; needs the yt-analytics.readonly OAuth scope, separate from day 36's upload token) if I pass
 --youtube <videoId>. Plus runs/<slug>/storyboard.resolved.json.
 Output:
 - out/retention.png: the curve with scene boundaries as vertical lines and scene ids on top.
@@ -97,8 +95,7 @@ Pick the video with the worse hook rate. The fix for the first 3 seconds is almo
 Change the opening scene in the storyboard, not in a timeline:
 
 ```text
-In runs/<slug>/storyboard.json, rewrite scene 1 for a stronger first 3 seconds: start on the visual of scene <N>,
-put the promise as on_screen_text in frame 1, remove the logo sting from the start (keep it on the end card).
+In runs/<slug>/storyboard.json, rewrite scene 1 for a stronger first 3 seconds: start on the visual of scene <N>, put the promise as on_screen_text in frame 1, remove the logo sting from the start (keep it on the end card).
 Keep the rest of the video unchanged. Re-render with make-video --from storyboard and save as final-v2.mp4.
 Also render out/hook-compare.mp4: v1 and v2 first 5 seconds side by side.
 ```

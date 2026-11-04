@@ -84,8 +84,7 @@ into `vo/`. Then:
 ```text
 Goal: a Python script edit.py that renders edl.json into out/edit.mp4.
 Context: my pipeline/ folder; clips in clips/, code renders in renders/, voiceover in vo/. ffmpeg is installed.
-Use the EDL shape from the JSON I paste below. You may use MoviePy 2 (note: v2 uses subclipped/with_start, not
-subclip/set_start) or build an ffmpeg filter_complex in Python — pick one and say why.
+Use the EDL shape from the JSON I paste below. You may use MoviePy 2 (note: v2 uses subclipped/with_start, not subclip/set_start) or build an ffmpeg filter_complex in Python — pick one and say why.
 Constraints:
 - Scale/pad every clip to the EDL size and fps, so mixed sources never break the render.
 - Transitions: cut by default; "fade" = video crossfade + audio crossfade of the same duration.
@@ -127,14 +126,12 @@ exactly on 'imagine'."*
 3. Why trim the first and last half-second of most AI clips?
 4. Your total edit is 33 s, the voiceover is 29 s. Name two one-line fixes.
 
-<details><summary>Answers</summary>
-
-1. A J-cut (`audio_lead` on the street clip).
-2. `audio_tail` on the office clip: its sound continues over the street picture.
-3. Generated clips often start and end with a warp, a freeze or a drift in style. Trimming them is free quality.
-4. Shorten the `out` of the longest clip, or delete a clip that repeats an idea. (Or add 4 s of VO, if the story needs it.)
-
-</details>
+> **Answers:**
+>
+> 1. A J-cut (`audio_lead` on the street clip).
+> 2. `audio_tail` on the office clip: its sound continues over the street picture.
+> 3. Generated clips often start and end with a warp, a freeze or a drift in style. Trimming them is free quality.
+> 4. Shorten the `out` of the longest clip, or delete a clip that repeats an idea. (Or add 4 s of VO, if the story needs it.)
 
 ## You're done when…
 

@@ -104,12 +104,10 @@ Done when: deployed with npx wrangler deploy, works on my phone, code pushed to 
 Goal: a 20–30 second vertical video (1080x1920, 30 fps) for <person>, solving: <the annoyance>.
 Solved looks like: <line 3 of my problem statement>.
 
-Context: Python + Pillow + ffmpeg, like my title-card project in ~/title-card (new folder, its own .venv). Assets in assets/: <photos/logo/screenshots I have
-permission to use>, a font in fonts/, and music.mp3 (royalty-free, from Pixabay Music).
+Context: Python + Pillow + ffmpeg, like my title-card project in ~/title-card (new folder, its own .venv). Assets in assets/: <photos/logo/screenshots I have permission to use>, a font in fonts/, and music.mp3 (royalty-free, from Pixabay Music).
 
 Spec:
-- The script lives in scenes.json: a list of scenes with text, duration in seconds and an optional image.
-  I'll edit the wording there without touching code.
+- The script lives in scenes.json: a list of scenes with text, duration in seconds and an optional image. I'll edit the wording there without touching code.
 - Each scene: text fades/slides in with ease-out; images get a slow zoom; 0.3 s crossfade between scenes.
 - Last scene: a clear call to action (<what the viewer should do>), held for 3 seconds.
 - Music under everything, fades out over the last 2 seconds. Final mp4 is H.264 with yuv420p, plays on phones.

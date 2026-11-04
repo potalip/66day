@@ -84,17 +84,12 @@ The queue and worker are the same either way.
 Goal: turn my make-video pipeline into an app: <web form | Telegram bot> → job queue → worker → video delivered back.
 Context: pipeline from days 33-34 (make-video CLI, writes runs/<slug>/run.json per stage). Python + SQLite.
 Build:
-- jobs table: id (random, unguessable), requester, topic, options JSON, status (queued|running|done|failed),
-  stage, progress 0-100, error, attempts, created_at, started_at, finished_at, result_path.
-- Front door (bot: aiogram or python-telegram-bot, long polling, token from .env): a form with topic, length (30/45/60 s), format (16:9 / 9:16), brand (my brand files) — or bot commands
-  /new <topic>, /status, /cancel. Validate input; reject topics over 120 chars. Reply instantly with the job id and queue position.
-- worker.py: separate process, claims the oldest queued job atomically (UPDATE ... WHERE status='queued' ... RETURNING),
-  runs make-video as a subprocess with a 20-minute timeout, updates stage/progress from run.json every few seconds.
-- Delivery: web → a status page that refreshes and shows a download link /files/<job_id>.mp4;
-  bot → edit one status message as stages change, then sendVideo (compress if > 50 MB, the bot upload limit).
+- jobs table: id (random, unguessable), requester, topic, options JSON, status (queued|running|done|failed), stage, progress 0-100, error, attempts, created_at, started_at, finished_at, result_path.
+- Front door (bot: aiogram or python-telegram-bot, long polling, token from .env): a form with topic, length (30/45/60 s), format (16:9 / 9:16), brand (my brand files) — or bot commands /new <topic>, /status, /cancel. Validate input; reject topics over 120 chars. Reply instantly with the job id and queue position.
+- worker.py: separate process, claims the oldest queued job atomically (UPDATE ... WHERE status='queued' ... RETURNING), runs make-video as a subprocess with a 20-minute timeout, updates stage/progress from run.json every few seconds.
+- Delivery: web → a status page that refreshes and shows a download link /files/<job_id>.mp4; bot → edit one status message as stages change, then sendVideo (compress if > 50 MB, the bot upload limit).
 - Limits: ALLOWED_USERS from .env, max 3 jobs per user per day, one running job at a time.
-- Failure: retry once on a transient error (network, 5xx); a stale running job (> timeout) is retried once, then failed;
-  failed jobs show a friendly message and keep the technical error in the log only.
+- Failure: retry once on a transient error (network, 5xx); a stale running job (> timeout) is retried once, then failed; failed jobs show a friendly message and keep the technical error in the log only.
 Done when: I submit a topic, watch the status move through the stages, and receive a playable video.
 ```
 
@@ -122,16 +117,14 @@ running for 20 min, then went back to queued, finished on retry; user saw 'Takin
 3. Where *can* rendering run?
 4. What does "atomic claim" protect you from?
 
-<details><summary>Answers</summary>
-
-1. The request would hang for minutes and time out; meanwhile nobody else gets an answer. Accept, queue, return.
-2. No. Serverless functions have short CPU time limits and usually no ffmpeg or headless browser. Keep the light front
-   door there if you like, and send jobs to a worker.
-3. On a machine that can run long, heavy processes: your own computer for now, a VPS, a container service, or a cloud
-   machine (our Studio's render server is a Python service that deploys to AWS). GPU only if you render AI models locally.
-4. Two workers taking the same job and rendering it twice — double cost, double delivery.
-
-</details>
+> **Answers:**
+>
+> 1. The request would hang for minutes and time out; meanwhile nobody else gets an answer. Accept, queue, return.
+> 2. No. Serverless functions have short CPU time limits and usually no ffmpeg or headless browser. Keep the light front
+>    door there if you like, and send jobs to a worker.
+> 3. On a machine that can run long, heavy processes: your own computer for now, a VPS, a container service, or a cloud
+>    machine (our Studio's render server is a Python service that deploys to AWS). GPU only if you render AI models locally.
+> 4. Two workers taking the same job and rendering it twice — double cost, double delivery.
 
 ## You're done when…
 

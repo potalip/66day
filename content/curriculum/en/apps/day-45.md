@@ -84,11 +84,9 @@ single note — that one number rewrote her onboarding.
 
 ```text
 Goal: an admin-only page /admin/stats with 3 charts from our real data.
-Charts: (1) daily active users, line, 30 days; (2) sign-ups per week, bars; (3) the activation % as a big number
-with last week's value for comparison.
+Charts: (1) daily active users, line, 30 days; (2) sign-ups per week, bars; (3) the activation % as a big number with last week's value for comparison.
 Constraints: only users with the admin role can open it or call its API (check on the server).
-Use a small chart library (Chart.js or Recharts); colours from our design tokens; works in light and dark,
-readable at 390px. Queries live in one file, server-side, each with a LIMIT.
+Use a small chart library (Chart.js or Recharts); colours from our design tokens; works in light and dark, readable at 390px. Queries live in one file, server-side, each with a LIMIT.
 Done when: the page renders with real numbers and a non-admin gets 403 from the API.
 ```
 
@@ -110,14 +108,10 @@ would stop the disaster:
 
 ```text
 Goal: an "Ask a question" box on /admin/stats that turns a plain-English question into SQL and shows a table.
-Flow: send the model ONLY the schema of allow-listed tables (no rows, no personal data) and the question;
-ask for a single SQLite SELECT as structured output. Then on the server: parse with node-sql-parser,
-reject anything that is not exactly one SELECT/WITH, reject tables outside ALLOWED_TABLES, reject PRAGMA/ATTACH,
-append or cap LIMIT 200, run it against the read-only analytics database with a 5-second timeout.
+Flow: send the model ONLY the schema of allow-listed tables (no rows, no personal data) and the question; ask for a single SQLite SELECT as structured output. Then on the server: parse with node-sql-parser, reject anything that is not exactly one SELECT/WITH, reject tables outside ALLOWED_TABLES, reject PRAGMA/ATTACH, append or cap LIMIT 200, run it against the read-only analytics database with a 5-second timeout.
 Show the generated SQL above the result table. Log every question and query.
 If ANTHROPIC_API_KEY is missing: show "AI not configured" and offer 5 preset questions with hand-written queries.
-Tests: "how many users signed up last week" passes; "delete all users", "show me emails", and a two-statement
-query are all rejected with a clear reason.
+Tests: "how many users signed up last week" passes; "delete all users", "show me emails", and a two-statement query are all rejected with a clear reason.
 Done when: tests pass and a real question returns a real table.
 ```
 
@@ -143,16 +137,14 @@ ORDER BY active DESC;
 3. Would a plan with zero active users this week appear in the result?
 4. The AI box generates `SELECT * FROM events; DROP TABLE events`. Which of your guards stop it?
 
-<details><summary>Answers</summary>
-
-1. For each plan, how many different users did anything in the last 7 days, biggest first.
-2. Exactly 1 — `DISTINCT` counts people, not clicks.
-3. No. The inner `JOIN` plus the `WHERE` on events removes users with no recent events; that plan simply vanishes.
-   Showing zeros needs a `LEFT JOIN` with the date condition moved into `ON`.
-4. Several: the single-statement check rejects it, and even if it slipped through, the read-only connection (or the
-   analytics copy) can't drop the real table.
-
-</details>
+> **Answers:**
+>
+> 1. For each plan, how many different users did anything in the last 7 days, biggest first.
+> 2. Exactly 1 — `DISTINCT` counts people, not clicks.
+> 3. No. The inner `JOIN` plus the `WHERE` on events removes users with no recent events; that plan simply vanishes.
+>    Showing zeros needs a `LEFT JOIN` with the date condition moved into `ON`.
+> 4. Several: the single-statement check rejects it, and even if it slipped through, the read-only connection (or the
+>    analytics copy) can't drop the real table.
 
 ## You're done when…
 
