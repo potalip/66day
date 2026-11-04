@@ -37,6 +37,30 @@ function timingSafeEqual(a: string, b: string) {
 }
 
 admin.use("/resources/*", requireAdmin);
+admin.use("/collections", requireAdmin);
+
+/** GET /api/admin/collections — shelves with their resource ids (for the review screen). */
+admin.get("/collections", async (c) => {
+  const { results: cols } = await c.env.DB.prepare("SELECT id, title_en, title_ru, sort FROM lib_collections ORDER BY sort, id").all<{ id: string; title_en: string; title_ru: string; sort: number }>();
+  const { results: items } = await c.env.DB.prepare("SELECT collection_id, resource_id FROM lib_collection_items ORDER BY position").all<{ collection_id: string; resource_id: string }>();
+  return c.json(cols.map((col) => ({ ...col, resourceIds: items.filter((i) => i.collection_id === col.id).map((i) => i.resource_id) })));
+});
+
+/** PUT /api/admin/resources/:id/collections { ids: string[] } — set which shelves a resource is on (appended at the end). */
+admin.put("/resources/:id/collections", async (c) => {
+  const id = c.req.param("id");
+  if (!(await getResourceRow(c.env, id))) return c.json({ error: "not found" }, 404);
+  const { ids = [] } = await c.req.json<{ ids?: string[] }>().catch(() => ({ ids: [] as string[] }));
+  const keep = ids.filter((x) => typeof x === "string").slice(0, 20);
+  await c.env.DB.prepare(`DELETE FROM lib_collection_items WHERE resource_id = ?${keep.length ? ` AND collection_id NOT IN (${keep.map(() => "?").join(",")})` : ""}`).bind(id, ...keep).run();
+  for (const col of keep) {
+    await c.env.DB.prepare(
+      `INSERT OR IGNORE INTO lib_collection_items (collection_id, resource_id, position)
+       SELECT ?1, ?2, COALESCE((SELECT MAX(position) + 1 FROM lib_collection_items WHERE collection_id = ?1), 0) WHERE EXISTS (SELECT 1 FROM lib_collections WHERE id = ?1)`,
+    ).bind(col, id).run();
+  }
+  return c.json({ ok: true });
+});
 
 /** GET /api/admin/resources/:id — everything for the review screen. */
 admin.get("/resources/:id", async (c) => {

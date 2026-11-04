@@ -48,6 +48,7 @@ skips any URL the founder already added.
 - **Public** (`worker/routes/library.ts`):
   - `GET /api/library?lang&q&track&topic&level&type&limit&offset` returns items, total and facets. Search handles RU and ё.
   - `GET /api/library/collections?lang`
+  - `GET /api/library/resolve?lang&url=…&url=…` maps raw curriculum URLs (or `lib:<id>`) to published cards
   - **`GET /api/library/by-day/:day?track=&lang=`**, for learn's day pages
   - `GET /api/library/:id?lang` returns the lesson in that language, related resources and saved state
   - `POST|DELETE /api/library/:id/today`, `POST /api/library/:id/done`, `GET /api/library/me`
@@ -58,6 +59,7 @@ skips any URL the founder already added.
   - `GET /board`, `GET /status`, plus the media-worker callback and source routes (bearer token)
 - **Admin, session and review** (`worker/routes/admin.ts`):
   - `GET /session`, `POST /login|logout` (token in an httpOnly SameSite=Strict cookie, constant-time compare)
+  - `GET /collections`, `PUT /resources/:id/collections` (shelf membership)
   - `GET|PATCH|DELETE /resources/:id`, `PUT|DELETE /resources/:id/materials/:lang` (zod-validated, returns per-field issues),
     `POST /resources/:id/publish|unpublish`
 
@@ -111,7 +113,8 @@ with an injected model call, but it has not been run against the live API from t
 - **YouTube captions** go through the watch page's `captionTracks`. YouTube increasingly wants PO tokens for timedtext, so
   expect "captions not reachable" often in production. The fallback is a pasted transcript now and the media worker later.
 - **Instagram** metadata is best effort. Expect title "Instagram reel <code>" until the founder edits it.
-- Collections are seed-only; there is no admin UI to curate shelves yet.
+- Shelves: the founder can put a resource on existing shelves (review screen). Creating, renaming or reordering shelves is
+  still done in SQL / seed JSON.
 - `resource.viewed` isn't sent to the game layer yet (no ingestion API; see `docs/requests/library-to-game.md`).
 - Uploaded videos have no thumbnail unless the founder sets one, and files over 500 MB need the media worker. The upload
   form reads the whole file into the Worker request (fine for reels, not for hour-long raw footage). Next step: R2 presigned
@@ -123,6 +126,6 @@ with an injected model call, but it has not been run against the live API from t
 ## Next steps
 1. A live run with a real key on a handful of URLs; tune the prompt on real output (length, quiz quality, RU tone).
 2. Media worker on AWS (yt-dlp + Whisper) per `MEDIA-WORKER.md`; R2 presigned uploads for large raw videos.
-3. Collections editor, drag-to-reorder, and "featured" ordering in the admin.
-4. `GET /api/library/resolve?url=` so curriculum `resources:` URLs can render as rich library cards on day pages.
+3. Shelf create/rename/reorder in the admin.
+4. Learn uses `/api/library/resolve` to render curriculum `resources:` URLs as rich cards on day pages.
 5. Emit `resource.viewed` / quiz-passed events to the game layer for XP.

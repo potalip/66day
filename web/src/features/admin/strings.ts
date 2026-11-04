@@ -57,6 +57,7 @@ export const strings = {
     review: {
       back: "Pipeline",
       details: "Details",
+      collections: "Shelves in the library",
       save: "Save",
       saved: "Saved",
       publish: "Publish",
@@ -160,6 +161,7 @@ export const strings = {
     review: {
       back: "Конвейер",
       details: "Карточка",
+      collections: "Полки в библиотеке",
       save: "Сохранить",
       saved: "Сохранено",
       publish: "Опубликовать",

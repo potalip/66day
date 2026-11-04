@@ -3,7 +3,7 @@ import type { AppEnv } from "../env";
 import type { LibLang, LessonMaterial } from "../lib/library/schema";
 import { loadPublished, applyFilters, facets, related, forDay } from "../lib/library/catalog";
 import { getResourceRow, toResource, STUDENT_VISIBLE_MATERIAL } from "../lib/library/repo";
-import { youtubeEmbedUrl, instagramEmbedUrl } from "../lib/library/url";
+import { youtubeEmbedUrl, instagramEmbedUrl, parseResourceUrl } from "../lib/library/url";
 import { uploadKey } from "../lib/library/pipeline";
 
 // OWNER: library agent (docs/OWNERSHIP.md). Public student-facing library API.
@@ -51,6 +51,30 @@ library.get("/by-day/:day", async (c) => {
   const lang = langOf(c.req.query("lang") ?? (await userLang(c)));
   const all = await loadPublished(c.env, lang);
   return c.json({ day, track: c.req.query("track") ?? null, items: forDay(all, day, c.req.query("track")) });
+});
+
+/**
+ * GET /api/library/resolve?lang=&url=…&url=… — map raw URLs (e.g. curriculum `resources:` entries) to published cards.
+ * Accepts `lib:<id>` too. Returns { items: [{ input, card | null }] } in input order.
+ */
+library.get("/resolve", async (c) => {
+  const lang = langOf(c.req.query("lang"));
+  const inputs = (c.req.queries("url") ?? []).slice(0, 50);
+  const all = await loadPublished(c.env, lang);
+  const byId = new Map(all.map((x) => [x.card.id, x.card]));
+  const ids = new Map<string, string>();
+  const canon = inputs.map((u) => (u.startsWith("lib:") ? null : parseResourceUrl(u)?.canonicalUrl ?? null)).filter((x): x is string => !!x);
+  if (canon.length) {
+    const { results } = await c.env.DB.prepare(`SELECT id, canonical_url FROM lib_resources WHERE canonical_url IN (${canon.map(() => "?").join(",")})`)
+      .bind(...canon).all<{ id: string; canonical_url: string }>();
+    for (const r of results) ids.set(r.canonical_url, r.id);
+  }
+  return c.json({
+    items: inputs.map((input) => {
+      const id = input.startsWith("lib:") ? input.slice(4) : ids.get(parseResourceUrl(input)?.canonicalUrl ?? "");
+      return { input, card: (id && byId.get(id)) || null };
+    }),
+  });
 });
 
 /** GET /api/library/me — the student's saved list ("add to today"). */

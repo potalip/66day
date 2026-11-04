@@ -76,7 +76,10 @@ export default function Review() {
       </header>
 
       <div className="grid gap-6 lg:grid-cols-2">
-        <DetailsForm res={res} onSaved={load} />
+        <div className="space-y-6">
+          <DetailsForm res={res} onSaved={load} />
+          <CollectionsPanel id={id} />
+        </div>
         <div className="space-y-6">
           <TranscriptPanel id={id} d={d} onSaved={load} />
           <Card className="p-4">
@@ -253,4 +256,30 @@ function TranscriptPanel({ id, d, onSaved }: { id: string; d: Detail; onSaved: (
 
 function Lbl({ t, children }: { t: string; children: React.ReactNode }) {
   return <label className="block"><span className="mb-1 block text-xs text-muted">{t}</span>{children}</label>;
+}
+
+function CollectionsPanel({ id }: { id: string }) {
+  const r = useStrings(strings).review;
+  const lang = useLang();
+  const [cols, setCols] = useState<{ id: string; title_en: string; title_ru: string; resourceIds: string[] }[] | null>(null);
+  const [busy, setBusy] = useState(false);
+  useEffect(() => { api<typeof cols>("/admin/collections").then(setCols).catch(() => setCols([])); }, [id]);
+  if (!cols?.length) return null;
+  const mine = cols.filter((c) => c.resourceIds.includes(id)).map((c) => c.id);
+  const toggle = async (cid: string) => {
+    const next = mine.includes(cid) ? mine.filter((x) => x !== cid) : [...mine, cid];
+    setBusy(true);
+    try {
+      await api(`/admin/resources/${id}/collections`, { method: "PUT", json: { ids: next } });
+      setCols(cols.map((c) => ({ ...c, resourceIds: next.includes(c.id) ? [...new Set([...c.resourceIds, id])] : c.resourceIds.filter((x) => x !== id) })));
+    } finally { setBusy(false); }
+  };
+  return (
+    <Card className="p-4">
+      <h2 className="mb-2 font-semibold">{r.collections}</h2>
+      <div className="flex flex-wrap gap-1.5">
+        {cols.map((c) => <Chip key={c.id} active={mine.includes(c.id)} disabled={busy} onClick={() => toggle(c.id)}>{lang === "ru" ? c.title_ru : c.title_en}</Chip>)}
+      </div>
+    </Card>
+  );
 }
