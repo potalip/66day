@@ -21,12 +21,12 @@
   --muted: #5d636b;
   --line: #e4e4dc;          /* 1px borders */
   --line-strong: #cfcfc6;   /* input borders, dividers that must be seen */
-  --accent: #1a7f52;        /* FlowLeaf leaf green — primary action */
+  --accent: #187a4e;        /* FlowLeaf leaf green — primary action */
   --accent-hover: #156b45;
   --accent-fg: #ffffff;
   --accent-soft: #e6f2eb;
   --accent-ink: #136b44;    /* text on accent-soft */
-  --gold: #946a12;          /* rewards (text-safe) */
+  --gold: #8a6410;          /* rewards (text-safe) */
   --gold-bright: #d4a23a;   /* rewards (fills, stars, rings — non-text) */
   --gold-soft: #f7efdc;
   --gold-ink: #7a560c;
@@ -35,7 +35,7 @@
   --danger-ink: #962c26;
   --info: #2f62b3;
   --info-soft: #e7eef9;
-  --ring: #1a7f52;
+  --ring: #187a4e;
   --overlay: rgb(16 18 20 / 0.42);
 
   --radius: 14px;           /* cards */

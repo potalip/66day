@@ -16,3 +16,6 @@
 5. `dict.shell` strings in `web/src/i18n` are no longer used by the Shell (it uses `web/src/ui/strings.ts`, per the
    "no strings in i18n" rule) except `shell.brand` for the document title. Safe to keep or trim.
 - please add `*.tsbuildinfo` to .gitignore (`tsc -b` writes one at the root).
+- **Vitest + cloudflare() plugin**: `npm test` fails with "There is already a server associated with the config" because
+  the root `vite.config.ts` loads `cloudflare()`. Suggest a root `vitest.config.ts` without that plugin (same aliases).
+  Design's tests run with `npx vitest run --config web/src/ui/vitest.config.ts` meanwhile.

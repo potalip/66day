@@ -71,7 +71,7 @@ export function parseInline(src: string): Inline[] {
       }
     }
     if (ch === "[") {
-      const m = /^\[([^\]]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/.exec(rest);
+      const m = /^\[([^\]]*)\]\(((?:[^()\s]|\([^()\s]*\))+)(?:\s+"[^"]*")?\)/.exec(rest);
       if (m) {
         const href = safeUrl(m[2]);
         flush();
