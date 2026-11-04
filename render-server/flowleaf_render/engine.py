@@ -105,8 +105,15 @@ def audio_spec(sb: dict) -> dict:
             bc = BuildCtx(sb, i, kinds[:i].count(sc["kind"]), kinds.count(sc["kind"]), len(kinds))
             for t, name, opt in K.sfx(sc, bc):
                 if t < sc["duration"]: sfx.append((o + t, name, opt))
-    music = None if sb["music"] == "none" else {"mood": sb["music"], "gain": -10 if vo else -7}
-    return {"vo": vo, "sfx": sfx, "music": music}
+    # the creator's own footage: keep its sound under the scenes that show it (music ducks under it)
+    clips = []
+    src = (sb.get("_assets") or {}).get(sb["fields"].get("video") or "")
+    if src and sb["fields"].get("keep_audio", "on") != "off":
+        for sc, o in zip(sb["scenes"], offs):
+            if "start" in sc["fields"]:
+                clips.append((o, src, float(sc["fields"].get("start") or 0), sc["duration"], -2))
+    music = None if sb["music"] == "none" else {"mood": sb["music"], "gain": -10 if (vo or clips) else -7}
+    return {"vo": vo, "sfx": sfx, "music": music, "clips": clips}
 
 
 def fit_to_voiceover(sb: dict, log=print) -> dict:

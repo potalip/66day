@@ -30,7 +30,7 @@ from typing import Any, Callable
 from .core import FORMATS
 from .styles import STYLES, STYLE_NAMES
 
-FIELD_TYPES = ("text", "textarea", "list", "code", "number", "select", "lines", "image")
+FIELD_TYPES = ("text", "textarea", "list", "code", "number", "select", "lines", "image", "video")
 MUSIC = ("calm", "uplift", "drive", "focus", "none")
 TRANSITIONS = ("wipe", "fade", "cut")
 LANGS = ("en", "ru")
@@ -158,7 +158,7 @@ def normalize_field(f: Field, v, path, errs):
             errs.append({"path": path, "code": "too_long", "message": f"max {f.max_lines} lines", "soft": True})
             v = "\n".join(lines[: f.max_lines])
         return v
-    if f.type == "image":
+    if f.type in ("image", "video"):
         v = (v or "").strip() if isinstance(v, str) else ""
         if v and not re.match(r"^https?://", v):
             errs.append({"path": path, "code": "url", "message": "image must be an http(s) URL", "soft": True}); v = ""

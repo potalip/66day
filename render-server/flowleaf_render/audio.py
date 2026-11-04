@@ -298,6 +298,18 @@ def build_mix(spec, dur, outdir: Path):
         t, name, o = cue[0], cue[1], (cue[2] if len(cue) > 2 else {})
         x = sfx(name, o.get("dur"), o.get("prompt"))
         place(sfx_t, x, t, db(o.get("gain", -6)))
+    clip_t = np.zeros(n, np.float32)
+    for t0, path, src_start, seg, gain in spec.get("clips", []):
+        try:
+            p = subprocess.run(["ffmpeg", "-loglevel", "error", "-ss", f"{src_start:.3f}", "-t", f"{seg:.3f}", "-i", str(path),
+                                "-vn", "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True, check=True)
+            x = np.frombuffer(p.stdout, np.float32).copy()
+            if len(x):
+                f = min(len(x), int(.05 * SR)); x[:f] *= np.linspace(0, 1, f); x[-f:] *= np.linspace(1, 0, f)
+                place(clip_t, x, t0, db(gain))
+        except subprocess.CalledProcessError:
+            pass  # clip without an audio stream
+    vo_t = vo_t + clip_t
     m = spec.get("music", {"mood": "drive"})
     if m:
         mus_t = fit(music(dur, m.get("mood", "drive"), m.get("prompt")), dur, fade=1.0) * db(m.get("gain", -8))

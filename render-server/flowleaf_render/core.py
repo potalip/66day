@@ -532,6 +532,66 @@ def image_cover(ctx, path, x, y, w, h, alpha=1.0, zoom=1.0, pan=(0.0, 0.0), radi
     ctx.get_source().set_filter(cairo.FILTER_GOOD)
     ctx.paint_with_alpha(alpha); ctx.restore()
 
+class VideoClip:
+    """Sequential frame reader for a video file, scaled/cropped to cover (w, h), via an ffmpeg pipe.
+    frame(t) returns a cairo surface for local time t (seconds after `start` in the source); holds the last frame
+    after the clip ends. Seeks (restarts ffmpeg) only when t jumps backwards or far ahead."""
+    def __init__(self, path, w, h, start=0.0, fps=FPS):
+        self.path, self.w, self.h, self.start, self.fps = str(path), int(w), int(h), float(start), fps
+        self.stride = cairo.ImageSurface.format_stride_for_width(cairo.FORMAT_ARGB32, self.w)
+        self.proc = None; self.idx = -1; self.buf = None; self.eof = False
+
+    def _open(self, t):
+        self.close()
+        vf = (f"scale={self.w}:{self.h}:force_original_aspect_ratio=increase,crop={self.w}:{self.h},"
+              f"fps={self.fps},format=bgra")
+        self.proc = subprocess.Popen(["ffmpeg", "-loglevel", "error", "-ss", f"{self.start + max(0, t):.3f}", "-i", self.path,
+                                      "-an", "-vf", vf, "-f", "rawvideo", "-"], stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+        self.idx = round(max(0, t) * self.fps) - 1; self.eof = False
+
+    def frame(self, t):
+        want = round(max(0, t) * self.fps)
+        if self.proc is None or want < self.idx or want - self.idx > self.fps * 2: self._open(t)
+        size = self.w * self.h * 4
+        while self.idx < want and not self.eof:
+            data = self.proc.stdout.read(size)
+            if len(data) < size: self.eof = True; break
+            self.buf = data; self.idx += 1
+        if self.buf is None: return None
+        arr = np.frombuffer(self.buf, np.uint8).reshape(self.h, self.w, 4)
+        if self.stride != self.w * 4:
+            pad = np.zeros((self.h, self.stride // 4, 4), np.uint8); pad[:, :self.w] = arr; arr = pad
+        else:
+            arr = arr.copy()
+        arr[..., 3] = 255
+        return cairo.ImageSurface.create_for_data(memoryview(arr), cairo.FORMAT_ARGB32, self.w, self.h, self.stride)
+
+    def close(self):
+        if self.proc:
+            try: self.proc.stdout.close(); self.proc.kill(); self.proc.wait(timeout=2)
+            except Exception: pass  # noqa: BLE001
+        self.proc = None
+
+_CLIPS: dict = {}
+
+def video_frame(ctx, path, x, y, w, h, start, t, alpha=1.0, radius=0, zoom=1.0):
+    """Draw the frame of `path` at source time start + t, cover-fit into the box (per-process clip cache)."""
+    if alpha <= 0 or not path: return False
+    key = (str(path), int(w / zoom), int(h / zoom), round(start, 3))
+    clip = _CLIPS.get(key)
+    if clip is None:
+        if len(_CLIPS) > 6:
+            for c in _CLIPS.values(): c.close()
+            _CLIPS.clear()
+        clip = _CLIPS[key] = VideoClip(path, key[1], key[2], start)
+    surf = clip.frame(t)
+    if surf is None: return False
+    ctx.save(); rrect(ctx, x, y, w, h, radius); ctx.clip()
+    ctx.translate(x + w / 2, y + h / 2); ctx.scale(zoom * w / key[1] if key[1] else 1, zoom * h / key[2] if key[2] else 1)
+    ctx.set_source_surface(surf, -key[1] / 2, -key[2] / 2); ctx.get_source().set_filter(cairo.FILTER_GOOD)
+    ctx.paint_with_alpha(alpha); ctx.restore()
+    return True
+
 @functools.lru_cache(32)
 def _img_top(path: str, w: int):
     im = Image.open(path).convert("RGBA")
