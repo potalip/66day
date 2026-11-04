@@ -136,3 +136,8 @@ no console errors. Also checked:
   `/portfolio/:id` and `/certificate/:id` links visitor chrome: a CTA, no app nav, no tab bar, the full footer and no game
   calls. Shell chrome is hidden when printing. Recruiter-facing requests went to learn (portfolio); certificate guidance
   went to game, because game's certificate page is still a placeholder.
+- **Studio QA** with the real render server. Gallery → create → edit → quick-draft render produced a playable MP4 in
+  17 s. Checked in EN/RU × light/dark × 390/1280, plus axe. Requests are in `docs/requests/design-to-studio.md`. The P1 is
+  that the finished video is hidden below the fold on desktop, because the sticky right column is taller than the
+  viewport. The project page also has no `<h1>`, and the project title is the brief cut mid-word. No design-file changes
+  were needed.
