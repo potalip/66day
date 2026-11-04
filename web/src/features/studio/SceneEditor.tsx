@@ -7,7 +7,10 @@ import { Button, Card, Icon, Label, SelectInput, TextArea, TextInput, cx } from 
 /** Project id, so image fields can upload into the right project. */
 export const ProjectIdCtx = createContext("");
 
-function ImageField({ id, value, onChange }: { id: string; value: string; onChange: (v: string) => void }) {
+const ACCEPT = { image: "image/png,image/jpeg,image/webp", video: "video/mp4,video/quicktime,video/webm" };
+const MAX_MB = { image: 8, video: 100 };
+
+function MediaField({ id, kind, value, onChange }: { id: string; kind: "image" | "video"; value: string; onChange: (v: string) => void }) {
   const s = useStrings(strings);
   const projectId = useContext(ProjectIdCtx);
   const input = useRef<HTMLInputElement>(null);
@@ -15,12 +18,12 @@ function ImageField({ id, value, onChange }: { id: string; value: string; onChan
   const [err, setErr] = useState<string | null>(null);
   const upload = async (file: File) => {
     setErr(null);
-    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) { setErr(s.imageType); return; }
-    if (file.size > 8 * 1024 * 1024) { setErr(s.imageTooBig); return; }
+    if (!ACCEPT[kind].split(",").includes(file.type)) { setErr(kind === "video" ? s.videoType : s.imageType); return; }
+    if (file.size > MAX_MB[kind] * 1024 * 1024) { setErr(kind === "video" ? s.videoTooBig : s.imageTooBig); return; }
     setBusy(true);
     try {
-      const fd = new FormData(); fd.append("file", file);
-      const res = await fetch(`/api/studio/projects/${projectId}/assets`, { method: "POST", body: fd, credentials: "include" });
+      // raw body upload: the Worker streams it straight into storage
+      const res = await fetch(`/api/studio/projects/${projectId}/assets`, { method: "POST", body: file, headers: { "content-type": file.type }, credentials: "include" });
       if (!res.ok) throw new Error(String(res.status));
       onChange(((await res.json()) as { url: string }).url);
     } catch { setErr(s.imageFailed); }
@@ -29,13 +32,19 @@ function ImageField({ id, value, onChange }: { id: string; value: string; onChan
   return (
     <div className="flex items-center gap-3">
       <div className="grid size-20 shrink-0 place-items-center overflow-hidden rounded-[10px] border border-line bg-surface-2">
-        {value ? <img src={value} alt="" className="size-full object-cover object-top" /> : <Icon name="film" className="size-6 text-muted" />}
+        {value ? (kind === "video"
+          ? <video src={`${value}#t=0.5`} muted playsInline preload="metadata" className="size-full object-cover" />
+          : <img src={value} alt="" className="size-full object-cover object-top" />)
+          : <Icon name="film" className="size-6 text-muted" />}
       </div>
       <div className="flex flex-wrap items-center gap-2">
-        <input ref={input} id={id} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only"
+        <input ref={input} id={id} type="file" accept={ACCEPT[kind]} className="sr-only"
           onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ""; }} />
-        <Button size="sm" loading={busy} onClick={() => input.current?.click()}>{value ? s.imageReplace : s.imageUpload}</Button>
+        <Button size="sm" loading={busy} onClick={() => input.current?.click()}>
+          {value ? s.imageReplace : kind === "video" ? s.videoUpload : s.imageUpload}
+        </Button>
         {value && <Button size="sm" variant="ghost" onClick={() => onChange("")}>{s.imageRemove}</Button>}
+        {busy && kind === "video" && <p className="w-full text-xs text-muted">{s.videoUploading}</p>}
         {err && <p className="w-full text-xs text-danger" role="alert">{err}</p>}
       </div>
     </div>
@@ -67,15 +76,15 @@ export function FieldInput({ f, value, onChange, error }: { f: FieldDef; value: 
       input = <TextInput id={id} value={String(value ?? "")} onChange={(v) => onChange(v === "" || v === "-" ? v : Number.isNaN(Number(v.replace(",", "."))) ? String(value ?? "") : v)} invalid={invalid} className="max-w-48 tabular-nums" />; break;
     case "select":
       input = <SelectInput id={id} value={String(value ?? f.default ?? "")} onChange={onChange} options={(f.options ?? []).map((o) => ({ value: o.value, label: o.label[lang] }))} />; break;
-    case "image":
-      input = <ImageField id={id} value={String(value ?? "")} onChange={onChange} />; break;
+    case "image": case "video":
+      input = <MediaField id={id} kind={f.type} value={String(value ?? "")} onChange={onChange} />; break;
     case "lines":
       input = <TextInput id={id} value={String(value ?? "")} onChange={onChange} placeholder="2, 4-5" className="max-w-48" />; break;
     default:
       input = <TextInput id={id} value={String(value ?? "")} onChange={onChange} maxLength={f.maxLen} invalid={invalid} />;
   }
   return (
-    <div className={cx(f.type === "code" || f.type === "textarea" || f.type === "list" || f.type === "image" ? "sm:col-span-2" : "")}>
+    <div className={cx(f.type === "code" || f.type === "textarea" || f.type === "list" || f.type === "image" || f.type === "video" ? "sm:col-span-2" : "")}>
       {lbl}{input}
       {invalid && <p className="mt-1 text-xs text-danger" role="alert">{error!.code === "required" ? s.required : error!.message}</p>}
     </div>
