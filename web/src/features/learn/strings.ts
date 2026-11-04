@@ -45,7 +45,8 @@ const en = {
 
   // Lesson + tasks
   lesson: "Lesson",
-  resources: "Resources",
+  resources: "Go deeper (optional)",
+  resourcesHint: "Today's lesson is complete on its own.",
   tasks: "Tasks",
   tasksProgress: (d: number, t: number) => `${d}/${t} done`,
   optional: "Optional",
@@ -180,7 +181,8 @@ const ru: Strings = {
   fixturesNote: "Демо-программа: полная 66-дневная программа уже в пути.",
 
   lesson: "Урок",
-  resources: "Материалы",
+  resources: "Копнуть глубже (по желанию)",
+  resourcesHint: "Урок дня самодостаточен — это для тех, кому интересно больше.",
   tasks: "Задания",
   tasksProgress: (d, t) => `${d}/${t} готово`,
   optional: "По желанию",
