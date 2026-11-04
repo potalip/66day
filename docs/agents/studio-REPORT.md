@@ -109,6 +109,11 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
 - Jobs queue in-process on the render server: scale vertically or run one service per URL; SQS is the next step.
 
 ## Next steps
+0. Design QA (`docs/requests/design-to-studio.md`, not done because of the budget stop):
+   P1 — at 1280×800 keep the finished video visible without scrolling (shorter sticky right column / result first);
+   add an `h1` on the project page (title is a textarea now); trim auto-titles from the brief at a word boundary.
+   P2 — gallery button hierarchy, accessible name for the preview play button, mobile preview height, quiz preview
+   crop, RU copy pass, Share action surfaced for finished renders.
 1. A small public share *page* (`/:lang/v/:slug` with title, player, "made in FlowLeaf 66") — needs a route in App.tsx.
 2. Toast on render finished. (Dev note: learn rejects `localhost` links as proof — use `127.0.0.1` locally.)
 3. More templates (talking-points over an uploaded clip, AI-image slideshow with Ken Burns, quiz/poll short),
