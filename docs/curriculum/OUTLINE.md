@@ -116,6 +116,10 @@ footage and turn everything into the student's own **one-command pipeline** (lik
 
 ### Apps track
 
+Running thread: the main app meets the world (launch page, feedback → issues → agent PRs), the student levels up
+as an operator (parallel agents, MCP, background jobs), does a real client brief (41), widens reach (PWA, Mini App,
+analytics, voice), proves quality (evals, open source) and starts the capstone (50–52).
+
 | Day | Track | Title | Outcome | Tasks | XP | Flags |
 |---|---|---|---|---|---|---|
 | 36 | apps | A launch page that converts | Landing page with one CTA; headline test with 5 people. 90 min | d36-apps-t1 · read · 10 · none — Problem, promise, proof, call to action<br>d36-apps-t2 · build · 50 · link — Landing page for the main app; live link<br>d36-apps-t3 · build · 20 · text — 5 headlines, 5 people vote; results<br>d36-apps-t4 · share · 20 · link — Share the landing page | 100 | |
@@ -136,9 +140,13 @@ footage and turn everything into the student's own **one-command pipeline** (lik
 
 ### Video track
 
+Running thread: the pipeline goes public — publish via APIs, read retention and re-cut, turn formats into series,
+make business promos, wrap the pipeline as an app (form or bot → render job), deliver a client pack (41); then new
+formats (generative visuals, tutorials, dubbing, auto-clipping), quality gates and open source, and the capstone (50–52).
+
 | Day | Track | Title | Outcome | Tasks | XP | Flags |
 |---|---|---|---|---|---|---|
-| 36 | video | Publishing like a pro | Upload via API with metadata; LLM metadata per platform. 90 min | d36-video-t1 · read · 10 · none — Platform specs and metadata that matters<br>d36-video-t2 · build · 50 · link — Upload script via API (unlisted test); link<br>d36-video-t3 · build · 20 · text — LLM writes titles/descriptions per platform; paste<br>d36-video-t4 · quiz · 15 · none — Which spec for which platform? | 95 | |
+| 36 | video | Publishing like a pro | Upload via API with metadata; LLM metadata per platform. 90 min | d36-video-t1 · read · 10 · none — Platform specs and metadata that matters<br>d36-video-t2 · build · 50 · link — Upload script via API (private or unlisted test); link<br>d36-video-t3 · build · 20 · text — LLM writes titles/descriptions per platform; paste<br>d36-video-t4 · quiz · 15 · none — Which spec for which platform? | 95 | |
 | 37 | video | Read the numbers | Retention notes on 2 videos; weakest opening re-cut. 75 min | d37-video-t1 · read · 10 · none — Retention curves, hook rate, CTR<br>d37-video-t2 · build · 30 · text — Retention notes for 2 videos<br>d37-video-t3 · build · 50 · file — Re-cut the weakest first 3 seconds; upload v2<br>d37-video-t4 · reflect · 15 · text — What will you test next? | 105 | |
 | 38 | video | Series: a format as a template | Repeatable series format; 3 episodes rendered from JSON; ep. 1 published. 120 min | d38-video-t1 · read · 10 · none — Why series beat one-offs<br>d38-video-t2 · build · 60 · file — Series template + 3 episodes from JSON; upload one<br>d38-video-t3 · share · 20 · link — Publish episode 1<br>d38-video-t4 · reflect · 15 · text — Could you make 50 of these? | 105 | |
 | 39 | video | Video for business: demos and promos | 30-s promo for a real product/business with code-driven callouts; client brief template. 90 min | d39-video-t1 · read · 10 · none — What businesses actually buy<br>d39-video-t2 · build · 60 · file — 30-s promo with code-driven callouts; mp4<br>d39-video-t3 · build · 20 · text — Your client brief template; paste<br>d39-video-t4 · quiz · 15 · none — Spec the deliverable | 105 | |

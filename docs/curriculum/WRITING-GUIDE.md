@@ -36,11 +36,11 @@ tasks:
 - `estMinutes` = the minutes in OUTLINE's Outcome cell (same in both languages).
 - Task `title` = native, specific, imperative ("Задеплой бота на вебхуке", "Deploy the bot on a webhook").
 - `summary`: one sentence, ≤ 140 characters, shown on the path map. Sells the outcome, not the topic.
-- `resources`: 1–4 URLs, **only from the vetted list below** (or ones you are certain exist). Language-appropriate
+- `resources`: 1–4 URLs (quoting them, `- "https://…"`, is recommended; the validator accepts both), **only from the vetted list below** (or ones you are certain exist). Language-appropriate
   (RU gets RU versions where they exist). The founder will later add their own videos via the library pipeline — don't
   invent YouTube links.
 
-## Body structure (300–900 words; rest days 200–400)
+## Body structure (300–900 words of prose, code blocks not counted; rest days 200–400)
 
 Use this skeleton, with native headings:
 
@@ -114,10 +114,10 @@ https://jsonplaceholder.typicode.com/
 
 Backend & data: https://developers.cloudflare.com/workers/ · https://developers.cloudflare.com/d1/ · https://developers.cloudflare.com/queues/ ·
 https://developers.cloudflare.com/workers/configuration/cron-triggers/ · https://vercel.com/docs · https://supabase.com/docs ·
-https://www.sqlite.org/docs.html · https://12factor.net/ · https://12factor.net/ru/ · https://vitest.dev/ · https://playwright.dev/
+https://www.sqlite.org/docs.html · https://www.sqlite.org/fts5.html · https://12factor.net/ · https://12factor.net/ru/ · https://vitest.dev/ · https://playwright.dev/
 
 Telegram: https://core.telegram.org/bots/tutorial · https://core.telegram.org/bots/api · https://core.telegram.org/bots/webapps ·
-https://core.telegram.org/bots/payments-stars · https://grammy.dev/ · https://docs.aiogram.dev/
+https://core.telegram.org/bots/payments-stars · https://core.telegram.org/widgets/login · https://grammy.dev/ · https://docs.aiogram.dev/
 
 Payments & security: https://docs.stripe.com/payments/checkout · https://docs.stripe.com/webhooks · https://yookassa.ru/developers ·
 https://owasp.org/www-project-top-10-for-large-language-model-applications/ · https://plausible.io/docs · https://posthog.com/docs
@@ -127,7 +127,7 @@ https://docs.manim.community/ · https://motioncanvas.io/docs/ · https://zulko.
 https://github.com/SYSTRAN/faster-whisper · https://elevenlabs.io/docs · https://platform.openai.com/docs/guides/text-to-speech ·
 https://yandex.cloud/ru/docs/speechkit/ · https://github.com/snakers4/silero-models · https://developers.google.com/youtube/v3 ·
 https://dev.vk.com/ · https://p5js.org/ · https://www.shadertoy.com/ · https://docs.replicate.com/ · https://fal.ai/docs ·
-https://pixabay.com/music/ · https://freesound.org/ · https://fonts.google.com/
+https://pixabay.com/music/ · https://freesound.org/ · https://fonts.google.com/ · https://ourworldindata.org/
 
 Work & launch: https://www.producthunt.com/ · https://news.ycombinator.com/showhn.html · https://www.upwork.com/ · https://contra.com/ ·
 https://kwork.ru/ · https://www.fl.ru/ · https://freelance.habr.com/ · https://habr.com/ · https://vc.ru/
