@@ -67,8 +67,9 @@ it's where you park every shiny idea (payments, teams, a mobile app) so v1 actua
 
 ### 1. Write the spec with your agent (25 min)
 
-Create a new folder for the app, open your coding agent there (Claude Code or any other agent — Codex CLI, Gemini CLI,
-Cursor all work), and make it interview you instead of guessing.
+Your app lives in `~/66/apps/main-app`, the empty folder you set up on day 14 (no folder yet? create it now). Every
+apps lesson from here on says "your repo" and means this folder. Open your coding agent there (Claude Code or any other
+agent — Codex CLI, Gemini CLI, Cursor all work), and make it interview you instead of guessing.
 
 ```text
 Goal: help me write a one-page spec for a small web app. Do NOT write any code today.
@@ -105,24 +106,27 @@ Goal: scaffold the project for the app in docs/SPEC.md and make the first commit
 Constraints:
 - Vite + React + TypeScript + Tailwind CSS (use the current official setup from the Vite and Tailwind docs).
 - Keep it minimal: one page that shows the app name and the one-line problem from the spec. No backend yet.
-- Create CLAUDE.md (and a copy named AGENTS.md for other agents) with: what the app is (2 lines, link to docs/SPEC.md),
+- Create CLAUDE.md in this folder (and a copy named AGENTS.md for other agents) with: what the app is (2 lines, link to docs/SPEC.md),
   how to run it, and our working rules: "explain your plan before coding and wait for OK; small commits;
   after every change run the app and tell me exactly how you verified it".
-- .gitignore must include node_modules, dist and .env.
+- .gitignore must include node_modules, dist, .env and .dev.vars.
+- This folder is its own git repository: run git init here if needed. If the parent ~/66/apps is also a git repo,
+  add main-app/ to the parent's .gitignore so the two don't get tangled.
 
 Before you run anything, list the commands you plan to run and the files you will create, then wait for my OK.
 When done: run the build, start the dev server, tell me the local URL, and show me `git status` and `git log --oneline`.
 ```
 
-Open the URL, see your app's name in the browser. Then create a GitHub repo and push, just like on day 2:
+Open the URL, see your app's name in the browser. Then commit and put it on GitHub with `gh`, just like on day 2. The
+folder stays `main-app`; the repo gets your app's real name (lowercase, dashes, e.g. `jobjar`):
 
 ```bash
 git add -A
 git commit -m "Scaffold app and add spec"
-git branch -M main
-git remote add origin https://github.com/<you>/<repo>.git
-git push -u origin main
+gh repo create jobjar --public --source=. --remote=origin --push
 ```
+
+`--private` is fine too if you'd rather not show the code yet.
 
 > **If you're stuck:** if `npm run dev` fails, paste the *whole* error into the agent with "Reproduce this, explain the
 > cause in one sentence, then fix it". If Tailwind classes do nothing, the agent probably used an outdated setup —

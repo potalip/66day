@@ -62,7 +62,7 @@ tasks:
 
 ```text
 Цель: скрипт storyboard.py, который по теме пишет storyboard.json и проверяет его по схеме.
-Контекст: моя видеопапка. Ключ Claude API в .env как ANTHROPIC_API_KEY; модель из env CLAUDE_MODEL,
+Контекст: моя папка pipeline/. Ключ Claude API в .env как ANTHROPIC_API_KEY; модель из env CLAUDE_MODEL,
 по умолчанию claude-sonnet-5-5. Мои рендеры умеют такие виды визуала: "template" (title, lower_third, list),
 "chart" (файл данных + тип графика), "diagram" (имя сцены Manim/Remotion), "ai_clip" (промпт для gen_clips.py).
 Схема (schema/storyboard.schema.json и модель pydantic):

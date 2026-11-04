@@ -74,7 +74,7 @@ Goal: a small web tool called <Tool name>: the user pastes text, clicks one butt
 Context: deploy target is Cloudflare Workers (use the current Wrangler CLI and a wrangler config file).
 The Worker serves a static index.html from a public/ folder AND handles POST /api/run.
 The AI call happens only inside the Worker, using the secret ANTHROPIC_API_KEY (model claude-sonnet-5-5)
-<or OPENROUTER_API_KEY — say which>. Check the current docs for the API request format.
+<or OPENROUTER_API_KEY / GEMINI_API_KEY / GROQ_API_KEY — whichever you used on day 9>. Check the current docs for the API request format.
 
 Constraints:
 - The key never appears in the front-end, in logs or in any response.
@@ -102,7 +102,9 @@ Try it with a normal input, an empty input and a ridiculously long one. Open Dev
 
 **Proof:** paste the main prompt you gave the agent (with your tool's details filled in).
 
-> **If you're stuck:** if the page loads but the button does nothing, open the browser console first, then the
+> **If you're stuck:** on Windows, an error like "npx.ps1 cannot be loaded because running scripts is disabled"
+> means PowerShell blocks helper scripts by default. Run `Set-ExecutionPolicy -Scope CurrentUser RemoteSigned`
+> once, answer Y, and reopen the terminal. If the page loads but the button does nothing, open the browser console first, then the
 > terminal where `wrangler dev` runs — server errors show up there, not in the browser. Paste both to the agent.
 
 ### 3. Deploy with a secret (60 min)
@@ -113,7 +115,8 @@ npx wrangler secret put ANTHROPIC_API_KEY
 npx wrangler deploy
 ```
 
-`wrangler login` opens a browser to connect your Cloudflare account. `secret put` asks you to paste the key into the
+`wrangler login` opens a browser to connect your Cloudflare account (a free one is enough). Use the secret name your
+code actually reads — `ANTHROPIC_API_KEY` is just the example. `secret put` asks you to paste the key into the
 terminal — not into a file, not into the chat. `deploy` prints a URL ending in `workers.dev`. Open it on your phone and
 use the tool for real.
 

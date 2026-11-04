@@ -40,14 +40,15 @@ A good case study reads in two minutes and answers four questions:
    how you fixed it. Mentioning the agent is fine — say what *you* decided.
 3. **Result.** What exists now and who uses or watches it.
 4. **Numbers.** Measured, not invented. If you have no client figures, use your own measurements: render time per
-   video, cost per call, load time, your day-47 eval score, the retention curve from day 37.
+   video, cost per call, load time, your day-47 eval score (apps), the retention curve from day 37 (video).
 
 The example above is made up to show the shape. Yours must be true — a client who catches one inflated number
 stops believing the rest. "Small but real" wins: "3 testers, 2 still use it weekly" is a great line.
 
 ## Step 1 — Write the case study (35 min)
 
-Pick the piece with the clearest before/after: usually the day-41 client brief or your capstone beta. Let the agent
+Pick the piece with the clearest before/after: usually the day-41 client brief or your capstone beta. If it's your
+day-13 boss instead, your mini case study from that day is already a first draft in this exact shape. Let the agent
 interview you instead of writing for you:
 
 ```text

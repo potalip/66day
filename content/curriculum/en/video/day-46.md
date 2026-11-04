@@ -50,8 +50,9 @@ A good short works with **zero context**. Your rubric, scored 1–5 each:
 Then the craft: cut on sentence boundaries (never mid-word), reframe 16:9 to 9:16 so the speaker stays in frame, and
 add captions, since many people watch with the sound off.
 
-**Rights first.** Only clip content you own or have written permission for. "It's on YouTube" is not permission.
-If a guest appears, the host's permission should cover guests; ask.
+**Rights first.** Only clip content you own or have written permission for. "It's on YouTube" is not permission,
+and "credit to the original" is not a licence either. If a guest appears, ask the host whether their agreement with
+the guest covers clips; if nobody knows, ask the guest. Keep the written OK next to the project.
 
 ## Step by step
 
@@ -84,7 +85,7 @@ Steps:
    keep the top 3 that don't overlap.
 3. Snap start/end to the nearest silence within 0.4 s so cuts never clip a word.
 4. Cut with ffmpeg, re-encoding (frame-accurate), 0.2 s audio fade in/out.
-5. Reframe to 1080x1920: detect the face every 5th frame (MediaPipe or OpenCV), smooth the x position
+5. Reframe to 1080x1920: detect the face every 5th frame (MediaPipe or OpenCV; use their current API docs), smooth the x position
    (moving average over ~1 s), crop around it. No face found: centre crop. Flag a clip as "two speakers"
    if two faces stay apart, and fall back to a centre crop or a stacked layout for it.
 6. Captions from the transcript words, offset to the clip start, in my caption style. Add the hook_line

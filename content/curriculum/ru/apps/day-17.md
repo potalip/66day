@@ -100,7 +100,7 @@ API говорит с базой. Четыре базовые операции �
 ```bash
 npx wrangler d1 create tutor-db              # один раз; выведет конфиг привязки, который нужно добавить
 npx wrangler d1 migrations apply tutor-db --remote
-npx wrangler deploy
+npm run build && npx wrangler deploy   # с Vite-плагином сначала сборка
 ```
 
 Пусть агент сделает это вместе с тобой:

@@ -35,12 +35,14 @@ git log --oneline | wc -l
 
 On Windows PowerShell: `(git log --oneline).Count`.
 
-That number is how many times in three weeks you decided something was worth keeping. Write it down — you'll want
+That number is how many times you decided something was worth keeping. Write it down — you'll want
 it on day 66. Now read your five oldest commit messages and enjoy how unsure they sound:
 
 ```bash
 git log --reverse --oneline | head -5
 ```
+
+In PowerShell, swap `head -5` for `Select-Object -First 5`.
 
 ## 1. Best build, honest redo (15 min)
 

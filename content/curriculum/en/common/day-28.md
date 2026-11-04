@@ -42,7 +42,7 @@ No `gh`? Open github.com → your profile → Repositories. Sort each repo into 
   `gh repo archive your-name/repo-name` (or Settings → Archive this repository).
 
 The small surprise: before you archive, write each one a one-line epitaph in a file called `GRAVEYARD.md` in your
-main repo. "Weather page, day 8 — taught me what JSON is. Rest in peace." It turns "wasted time" into a list of
+main repo. "Headline Doctor, day 11 — taught me where keys live. Rest in peace." It turns "wasted time" into a list of
 lessons.
 
 ## 1. A README on every keeper (20 min)
@@ -58,7 +58,7 @@ Constraints: plain words, no marketing fluff, no badges wall. Don't change any c
 Done when: README.md exists and every command in it actually works — run them to check.
 ```
 
-Video people, one extra sweep: renders eat disk. Check with `du -sh */` and delete intermediate frame folders you
+Video people, one extra sweep: renders eat disk. Check with `du -sh */` (on Windows, right-click a folder → Properties) and delete intermediate frame folders you
 can regenerate; keep masters and the code that made them.
 
 > **If you're stuck:** if the agent's "3 commands" don't work on a fresh clone, that's a real bug the README just

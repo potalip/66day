@@ -75,7 +75,7 @@ Playwright, one frame at a time.
 Goal: a 20-second, 1080x1920, 30 fps audio-reactive visual from clip.wav, as a new scene type in my video pipeline.
 Context: my pipeline is in this repo (see README/CLAUDE.md). Python and ffmpeg are installed.
 Steps:
-1. analyse.py: load clip.wav, split into one window per frame (sample_rate / fps samples), FFT each window,
+1. analyse.py: load clip.wav, split into one window per frame (sample_rate / fps samples), multiply each by a Hann window and FFT it,
    compute bass (20-150 Hz), mids (150-2000 Hz), highs (2000-8000 Hz), normalise 0..1, smooth with fast attack
    and slow release. Save bands.json: one entry per frame.
 2. render.py: for frame i, read bands[i], draw a noise-driven flow field (simplex noise over x, y, time):
@@ -83,7 +83,7 @@ Steps:
    from brand config. Seeded randomness so the same input gives the same video.
 3. Pipe raw frames to ffmpeg, mux clip.wav, H.264, yuv420p, out/generative.mp4.
 Constraints: no screen capture, no real-time playback; time comes only from the frame index.
-Done when: the mp4 is exactly 20.0 s (check with ffprobe), and the pulse visibly lands on the kicks.
+Done when: the mp4 is 20.0 s give or take one frame (check with ffprobe), and the pulse visibly lands on the kicks.
 ```
 
 If you chose p5.js, swap step 2 and 3 for: "a p5.js sketch with `noLoop()` and a `window.renderFrame(i)` function;

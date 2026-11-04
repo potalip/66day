@@ -47,14 +47,24 @@ started, I do 20 minutes anyway." Habits survive on small promises, not heroic o
 
 ## 2. Your phase-2 workshop (15 min)
 
+From now on everything lives under one folder, `~/66`. Your earlier projects stay where they are — they're already
+safe on GitHub. Create the folder and start the agent there:
+
+```bash
+cd ~
+mkdir 66
+cd 66
+claude
+```
+
 ```text
 Goal: set up a tidy workspace for phase 2 of my learning, track: <apps | video>.
 
-Apps: folder ~/66/apps with main-app/ (empty for now), sandbox/ for experiments, notes/prompts.md for prompts that
+Apps: folder ~/66/apps with main-app/ (empty for now — day 15 fills it), sandbox/ for experiments, notes/prompts.md for prompts that
 worked, and a CLAUDE.md describing my stack (Cloudflare Workers, my AI provider, mobile-first, never commit secrets).
 Video: folder ~/66/video with assets/fonts, assets/music, assets/images, projects/, renders/, snippets/ (copy my
-title-card project here), notes/prompts.md, a CLAUDE.md (Python + Pillow + ffmpeg, 1080x1920 default, yuv420p) and a
-.gitignore that ignores renders/ and frames/.
+title-card project from ~/title-card here, without its .venv and frames), notes/prompts.md, a CLAUDE.md (Python + Pillow + ffmpeg, 1080x1920 default, yuv420p) and a
+.gitignore that ignores renders/, frames/ and .venv/.
 
 Done when: git init is done, first commit exists, and you print the structure two levels deep.
 ```

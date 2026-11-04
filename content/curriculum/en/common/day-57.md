@@ -53,8 +53,8 @@ Start from your day-35 seeds, add the day-41 client work and your capstone beta.
 one-line result ("cut booking messages by half for a 2-person studio"), your role, built with, link.
 
 **Apps people:** each piece needs a live URL, a screenshot, and ideally a 5–8-second clip of the main flow.
-Your agent can take clean screenshots with Playwright (`npx playwright screenshot --viewport-size=1280,800
-https://your-app.example.com shot.png`).
+Your agent can take clean screenshots with Playwright (`npx playwright install chromium` once, then
+`npx playwright screenshot --viewport-size=1280,800 https://your-app.example.com shot.png`).
 
 **Video people:** your reel *is* the product, so it must play instantly. Make a light, muted preview and a poster
 frame for each piece; link the full version on YouTube or Vimeo:
@@ -63,7 +63,7 @@ frame for each piece; link the full version on YouTube or Vimeo:
 # poster frame at 3 seconds
 ffmpeg -ss 3 -i explainer.mp4 -frames:v 1 -q:v 3 explainer.jpg
 # 8-second silent preview, 720p, web-friendly
-ffmpeg -ss 0 -t 8 -i explainer.mp4 -vf "scale=-2:720" -c:v libx264 -crf 28 -preset slow -an -movflags +faststart explainer-preview.mp4
+ffmpeg -ss 0 -t 8 -i explainer.mp4 -vf "scale=-2:720" -c:v libx264 -pix_fmt yuv420p -crf 28 -preset slow -an -movflags +faststart explainer-preview.mp4
 ```
 
 Aim for previews under ~5 MB each. GitHub blocks files over 100 MB and Cloudflare Pages caps single files at 25 MiB,
@@ -85,8 +85,8 @@ proper title, meta description and an Open Graph image; loads fast — no heavy 
 Done when: it runs locally, looks right at 390px and 1280px wide, and you tell me how to deploy it.
 ```
 
-Look at it on your phone-width window, not just your laptop. Ask for changes in screenshots-and-sentences, the way
-you did on day 16.
+Look at it on your phone-width window, not just your laptop. Ask for changes in screenshots-and-sentences — "what
+and where", the way you briefed your promise page on day 1.
 
 ## Step 3 — Deploy (15 min)
 

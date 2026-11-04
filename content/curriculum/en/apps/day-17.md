@@ -96,7 +96,7 @@ The live database is a separate, empty copy. You create it, apply the same migra
 ```bash
 npx wrangler d1 create jobs-db              # once; prints the binding config to add
 npx wrangler d1 migrations apply jobs-db --remote
-npx wrangler deploy
+npm run build && npx wrangler deploy   # with the Vite plugin, build first
 ```
 
 Ask the agent to do it with you:

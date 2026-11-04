@@ -47,15 +47,25 @@ tasks:
 
 ## 2. Мастерская для второй фазы (15 мин)
 
+Дальше всё живёт в одной папке — `~/66`. Прошлые проекты пусть остаются на своих местах: они уже лежат на GitHub.
+Создай папку и запусти в ней агента:
+
+```bash
+cd ~
+mkdir 66
+cd 66
+claude
+```
+
 ```text
 Цель: подготовить аккуратное рабочее место для второй фазы обучения, трек: <приложения | видео>.
 
-Приложения: папка ~/66/apps с main-app/ (пока пустая), sandbox/ для экспериментов, notes/prompts.md для удачных
+Приложения: папка ~/66/apps с main-app/ (пока пустая — её заполнит 15-й день), sandbox/ для экспериментов, notes/prompts.md для удачных
 промптов и CLAUDE.md с описанием моего стека (Cloudflare Workers или Yandex Cloud Functions, мой провайдер ИИ,
 сначала мобильная версия, секреты никогда не коммитим).
 Видео: папка ~/66/video с assets/fonts (шрифты с кириллицей), assets/music, assets/images, projects/, renders/,
-snippets/ (скопируй сюда мой проект title-card), notes/prompts.md, CLAUDE.md (Python + Pillow + ffmpeg,
-по умолчанию 1080x1920, yuv420p) и .gitignore, который игнорирует renders/ и frames/.
+snippets/ (скопируй сюда мой проект из ~/title-card, без .venv и кадров), notes/prompts.md, CLAUDE.md (Python + Pillow + ffmpeg,
+по умолчанию 1080x1920, yuv420p) и .gitignore, который игнорирует renders/, frames/ и .venv/.
 
 Готово, когда: сделан git init, есть первый коммит, и ты вывел структуру на два уровня вглубь.
 ```

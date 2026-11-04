@@ -83,6 +83,9 @@ Video: Your podcast has 80 episodes and no shorts yet. I cut one of them into a 
 to show you what I mean (link). I can do 5 per episode in 3 days.
 ```
 
+Cold messages stay one-to-one: one business, one specific message, easy to ignore. Never bulk-send the same text to
+a scraped list — that's spam, and in many countries it's also illegal.
+
 Track every send in a small table: date, where, link, status, follow-up date. Follow up **once**, after 3–4 days,
 with one friendly line.
 

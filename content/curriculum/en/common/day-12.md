@@ -80,12 +80,21 @@ You'll make a video without opening a video editor. The idea is how cartoons wor
 slightly different, then play them at 30 frames per second. Python draws the frames, ffmpeg (installed on day 3)
 glues them into an mp4.
 
-Make a new folder `title-card/`, open the agent there and paste:
+Make a new folder in your home folder and open the agent there:
+
+```bash
+cd ~
+mkdir title-card
+cd title-card
+claude
+```
 
 ```text
 Goal: render a 5-second animated title card as an mp4, entirely from code.
 
-Context: Python 3 with Pillow (pip install pillow), ffmpeg is installed. New folder, nothing else here.
+Context: Python 3 and ffmpeg are installed. New folder, nothing else here. Create a virtual environment in .venv,
+install Pillow into it (a plain pip install is often blocked on macOS and Linux), and tell me the exact commands
+to activate it and run the script on my operating system.
 
 Spec:
 - 1080x1920 (vertical), 30 fps, 150 frames, dark background (#0f1412).
@@ -104,7 +113,8 @@ Done when: python render.py produces title.mp4 that plays in my normal video pla
 Watch it. Then change one constant — make the slide slower, or the colour gold — and render again. That loop
 (tweak a number, re-render, look) is the heart of the video track.
 
-> **If you're stuck:** if the video plays on your laptop but not on your phone, the `-pix_fmt yuv420p` flag is
+> **If you're stuck:** "externally-managed-environment" from pip means you skipped the virtual environment —
+> ask the agent to set up `.venv` as the prompt says. If the video plays on your laptop but not on your phone, the `-pix_fmt yuv420p` flag is
 > missing. If the text is tiny, the font file wasn't found — check the path the script prints. If `ffmpeg` is "not
 > found", reopen the terminal or revisit day 3.
 

@@ -78,7 +78,7 @@ Goal: qc.py checks a rendered video and writes a report; it becomes the last sta
 Input: path to mp4, optional .srt, target spec from my pipeline config (resolution, fps, loudness).
 Checks: ffprobe spec match; ebur128 integrated loudness + true peak; blackdetect; silencedetect;
 freezedetect; caption rules (overlap, min/max duration, characters per second, ends before video end).
-Output: out/qc/<name>.md with PASS / WARN / FAIL per check, the measured value, and the timestamp of
+Output: a report next to the video, <video-name>.qc.md (e.g. runs/<slug>/final-9x16.qc.md), with PASS / WARN / FAIL per check, the measured value, and the timestamp of
 every problem. Exit code 1 on any FAIL so the pipeline stops before publishing.
 Done when: it runs on my last render, and a deliberately broken copy (add 2 s of black and +6 dB) fails.
 ```

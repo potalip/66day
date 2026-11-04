@@ -64,7 +64,8 @@ Today we use **Open-Meteo**: free, no sign-up, no key. Perfect for a first knock
 
 ### 1. Knock with curl (30 min)
 
-`curl` is a terminal tool that sends a request and prints the response. First, find your city's coordinates (swap
+`curl` is a terminal tool that sends a request and prints the response. On Windows, type `curl.exe` instead of
+`curl` in every command today: in the older Windows PowerShell, plain `curl` is a different command in disguise. First, find your city's coordinates (swap
 `Lisbon` for yours):
 
 ```bash

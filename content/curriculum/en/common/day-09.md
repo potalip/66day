@@ -76,10 +76,21 @@ this whole phase. Prepaid credit is a second safety net: you can't spend what is
 > agent), a screenshot, a commit or a public page. If it ever leaks, delete it in the console and make a new one —
 > that takes 30 seconds, so don't hesitate.
 
-Now let the agent prepare the folder, without ever seeing the key:
+> **No card, or no budget yet?** Google's Gemini API and Groq both have free tiers with a key (check their current
+> limits and supported countries). Two models from one free provider are a perfectly good comparison today.
+
+Now let the agent prepare the folder, without ever seeing the key. Start it in a fresh folder of its own — not inside
+your promise-page repo, or the key's folder would end up nested in a public project:
+
+```bash
+cd ~
+mkdir ai-compare
+cd ai-compare
+claude
+```
 
 ```text
-Goal: set up a new folder ai-compare/ for a Node.js script that calls an AI API.
+Goal: set up this folder (ai-compare) for a Node.js script that calls an AI API.
 
 Constraints:
 - Create .gitignore that ignores .env and node_modules.

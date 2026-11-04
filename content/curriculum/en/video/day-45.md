@@ -63,6 +63,9 @@ times segment duration.
 - **Lip-sync is the hard limit.** Motion graphics and voiceover-over-B-roll dub perfectly. A talking head will look
   off when lips don't match. Lip-sync models exist but often look uncanny; for faces, prefer cutting away to visuals
   during dubbed lines, or keep the original with subtitles.
+- **Say it's a dub.** One line in the description ("AI-dubbed from English, voice: my own clone") keeps viewers'
+  trust. If the voice sounds like a real, identifiable person, the platform may require an AI label too; you'll check
+  those rules properly on day 47.
 
 ## Step by step
 
@@ -89,6 +92,9 @@ Steps:
 Constraints: never exceed atempo 1.15; voice cloning disabled unless config says consent=true.
 Done when: out/dub-<lang>.mp4 plays in sync, captions match the speech, the report is in out/.
 ```
+
+The 1.15 cap is about how speech sounds, not about ffmpeg: current builds accept `atempo` from 0.5 up to 100 (very
+old ones stopped at 2.0, which is why you'll see chained `atempo=2,atempo=1.5` in forum answers).
 
 > **If you're stuck:** a line keeps coming back too long? Give the model the exact character budget *and* the count
 > of its last attempt. "Your version is 118 characters; the limit is 92" fixes it far more often than "shorter please".

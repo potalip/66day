@@ -42,16 +42,16 @@ Pick one of three shapes:
 
 | Shape | What you launch on day 65 | Good if… |
 |---|---|---|
-| **A series** | 5+ episodes of one format, published on a schedule | you want an audience or a channel |
+| **A series** | 3–5 episodes of one format plus a trailer: at least 3 public, the rest scheduled | you want an audience or a channel |
 | **A video tool** | your pipeline as a product: web app, bot or CLI that makes one kind of video for others | you like building more than posting |
-| **A client-grade showreel** | 4–6 pieces in different styles plus a reel, made for or with real businesses | you want paid video work soon |
+| **A client-grade showreel** | 3–5 finished pieces in different styles, made for or with real businesses, plus a 60–90-s reel cut from them | you want paid video work soon |
 
 A good capstone, whichever shape:
 
 - **Uses the pipeline.** If episode 3 takes as long as episode 1, it isn't a pipeline project yet.
 - **Has a real viewer or user.** A named audience ("solo bakers on Instagram", "Python beginners"), not "everyone".
-- **Is small enough to finish.** Fifteen days, about 1.5 hours each, with a rest day and the earning block in the
-  middle. Scope for 70% of your energy; the last 30% goes to polish and things breaking.
+- **Is small enough to finish.** Days 51–65 hold nine capstone days of about two hours each,
+  with rest days and the earning block (days 56–60) in between. Scope for 70% of your energy; the last 30% goes to polish and things breaking.
 - **Shows range.** It should use at least three things from days 29–47 (AI clips, dubbing, clipping, QC, publishing API).
 
 Examples: a 6-episode explainer series "Money basics in 60 seconds" in English and Spanish; a Telegram bot that turns
@@ -72,10 +72,11 @@ Help me write a one-page capstone spec. Ask me questions one at a time until you
 - Deliverables on day 65: what exists, where, how many
 - Pipeline changes needed (new stages, templates)
 - Milestones: day 51 first full output; day 52 outputs 2-3 + time and cost per video; day 53 craft pass + clean QC;
-  day 54 five test viewers; day 55 public premiere; day 61 productize; day 62 trailer + channel plan;
-  day 64 final masters; day 65 launch
+  day 54 five test viewers; day 55 public premiere; day 58 (common day) a 60-90 s demo or reel;
+  day 61 productize; day 62 trailer + channel plan; day 64 final masters (series: episodes 4-5 through the
+  batch if scope allows); day 65 launch
 - Success metric for day 65 (one number) and how I'll measure it
-Push back if the scope doesn't fit 15 days at ~90 minutes a day. Output Markdown.
+Push back if the scope doesn't fit nine build days of ~2 hours. Output Markdown.
 ```
 
 Save it as `CAPSTONE.md` in your repo. Paste it as proof.

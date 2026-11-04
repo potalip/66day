@@ -60,7 +60,7 @@ at roughly 2.5 words per second; a 4-second scene with 18 words will sound like 
 
 ```text
 Goal: a script storyboard.py that turns a topic into storyboard.json, validated against a schema.
-Context: my video workspace. Claude API key in .env as ANTHROPIC_API_KEY; model from env CLAUDE_MODEL,
+Context: my pipeline/ folder. Claude API key in .env as ANTHROPIC_API_KEY; model from env CLAUDE_MODEL,
 default claude-sonnet-5-5. My renderers can do these visual kinds: "template" (title, lower_third, list),
 "chart" (data file + chart type), "diagram" (Manim/Remotion scene name), "ai_clip" (prompt for gen_clips.py).
 Schema (write it as schema/storyboard.schema.json and as a pydantic model):

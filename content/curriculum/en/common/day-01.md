@@ -77,14 +77,16 @@ cd 66-day-promise
 claude
 ```
 
-The first run opens a browser to log in. Then type `hi, what can you do in this folder?` and press Enter.
+The first run asks you to pick a colour theme, opens a browser to log in, and asks whether you trust the files in
+this folder — it's your own empty folder, so yes. Then type `hi, what can you do in this folder?` and press Enter.
 
 > **Other agents work too.** OpenAI's Codex CLI, Google's Gemini CLI, or an AI editor like Cursor all do the same
 > job. Every prompt in this program is written for "any capable agent". Install whichever you have access to by
 > following its official docs.
 
 > **If you're stuck:** "command not found" right after installing almost always means the terminal needs a
-> restart. Close it, open a new one, try `claude --version`. Still nothing? Paste the exact error into
+> restart. Close it, open a new one, try `claude --version`. If the installer printed a line about adding a folder
+> to your PATH, run exactly that line first. Still nothing? Paste the exact error into
 > claude.ai (or any chatbot) and ask what it means — that's a legit skill, not cheating.
 
 **Proof:** paste the output of `claude --version` (or your agent's version) and its first reply.

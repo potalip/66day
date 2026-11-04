@@ -77,15 +77,17 @@ sudo apt update
 sudo apt install git gh
 ```
 
-Перезапусти терминал, войди и представься git:
+Если на Linux apt не находит `gh`, поставь его по инструкции для Linux на cli.github.com. Перезапусти терминал, войди и представься git:
 
 ```bash
 gh auth login
 git config --global user.name "Katya Smirnova"
 git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
 ```
 
-В `gh auth login` выбирай GitHub.com → HTTPS → Login with a web browser. Вместо настоящей почты можно указать
+Последняя строка нужна, чтобы новые проекты начинались с ветки `main`: некоторые версии git по старинке называют её
+`master`. В `gh auth login` выбирай GitHub.com → HTTPS → Login with a web browser. Вместо настоящей почты можно указать
 приватный адрес `…@users.noreply.github.com` из Settings → Emails — тогда твой ящик не засветится в истории.
 
 ## Шаг 3. Пушим вместе с агентом (15 минут)
@@ -117,7 +119,7 @@ claude
 ## Шаг 4. Включаем Pages (10 минут)
 
 На странице репозитория: **Settings → Pages**. В блоке `Build and deployment` выбери Source **Deploy from a
-branch**, ветку **main**, папку **/ (root)** и нажми **Save**. Подожди минуту-другую и обнови страницу — появится
+branch**, ветку **main** (если в списке только `master` — выбирай её), папку **/ (root)** и нажми **Save**. Подожди минуту-другую и обнови страницу — появится
 плашка с живым адресом. Открой его и с телефона: это главный экзамен.
 
 > **Если застрял:** 404 обычно значит «ещё не готово» — подожди пару минут. Всё ещё 404? Проверь, что файл

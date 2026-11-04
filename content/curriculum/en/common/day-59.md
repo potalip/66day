@@ -66,6 +66,10 @@ Then sanity-check it:
 Your first 2–3 projects can be priced as "portfolio rate" — lower, but never free. Raise prices after three good
 reviews.
 
+Two honest notes. First, expect weeks rather than days before the first paid job — and many beginners land it
+through someone they already know, not a marketplace. Second, before the first payment arrives, check how freelance
+income is registered and taxed where you live, and which ways of receiving money from abroad are legally open to you.
+
 ## Step 1 — Ten real postings (35 min)
 
 Browse by hand (don't scrape platforms — it breaks their terms). Collect 10 requests you could deliver in under a

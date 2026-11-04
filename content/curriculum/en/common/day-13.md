@@ -104,7 +104,7 @@ Done when: deployed with npx wrangler deploy, works on my phone, code pushed to 
 Goal: a 20–30 second vertical video (1080x1920, 30 fps) for <person>, solving: <the annoyance>.
 Solved looks like: <line 3 of my problem statement>.
 
-Context: Python + Pillow + ffmpeg, like my title-card project. Assets in assets/: <photos/logo/screenshots I have
+Context: Python + Pillow + ffmpeg, like my title-card project in ~/title-card (new folder, its own .venv). Assets in assets/: <photos/logo/screenshots I have
 permission to use>, a font in fonts/, and music.mp3 (royalty-free, from Pixabay Music).
 
 Spec:

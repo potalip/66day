@@ -55,8 +55,8 @@ tasks:
 сделано, ссылка.
 
 **Приложения:** у каждой работы — живой адрес, скриншот и, в идеале, клип главного сценария на 5–8 секунд. Чистые
-скриншоты агент снимет Playwright'ом (`npx playwright screenshot --viewport-size=1280,800
-https://твоё-приложение.example.com shot.png`).
+скриншоты агент снимет Playwright'ом (один раз `npx playwright install chromium`, потом
+`npx playwright screenshot --viewport-size=1280,800 https://твоё-приложение.example.com shot.png`).
 
 **Видео:** здесь ролик и есть товар, поэтому он должен заиграть мгновенно. Сделай лёгкое беззвучное превью и
 кадр-обложку для каждой работы, а полную версию дай ссылкой:
@@ -65,7 +65,7 @@ https://твоё-приложение.example.com shot.png`).
 # кадр-обложка на третьей секунде
 ffmpeg -ss 3 -i explainer.mp4 -frames:v 1 -q:v 3 explainer.jpg
 # беззвучное превью на 8 секунд, 720p, для веба
-ffmpeg -ss 0 -t 8 -i explainer.mp4 -vf "scale=-2:720" -c:v libx264 -crf 28 -preset slow -an -movflags +faststart explainer-preview.mp4
+ffmpeg -ss 0 -t 8 -i explainer.mp4 -vf "scale=-2:720" -c:v libx264 -pix_fmt yuv420p -crf 28 -preset slow -an -movflags +faststart explainer-preview.mp4
 ```
 
 Целься в превью до ~5 МБ. GitHub не примет файл больше 100 МБ, а Cloudflare Pages — больше 25 МиБ, так что полные
@@ -89,8 +89,8 @@ ffmpeg -ss 0 -t 8 -i explainer.mp4 -vf "scale=-2:720" -c:v libx264 -crf 28 -pres
 Готово, когда: сайт запускается локально, нормально выглядит при ширине 390 и 1280 пикселей, и ты объяснил, как его задеплоить.
 ```
 
-Смотри на результат в узком окне, а не только на большом экране. Правки проси скриншотами и фразами — как на
-16-м дне.
+Смотри на результат в узком окне, а не только на большом экране. Правки проси скриншотами и фразами «что и где» — как
+объяснял агенту страницу-обещание в первый день.
 
 ## Шаг 3 — Задеплой (15 минут)
 

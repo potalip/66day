@@ -44,7 +44,7 @@ The terminal always "stands" in one folder, like a file explorer window without 
 | Command | What it does |
 |---|---|
 | `pwd` | Where am I? Prints the current folder |
-| `ls` | What's here? Lists files (`ls -la` shows hidden ones) |
+| `ls` | What's here? Lists files (`ls -la` shows hidden ones; in PowerShell it's `ls -Force`) |
 | `cd folder` / `cd ..` / `cd ~` | Go into a folder / up one level / home |
 | `mkdir name` | Make a new folder |
 | `cp a b` / `mv a b` | Copy / move or rename a file |
@@ -71,7 +71,7 @@ brew install node python ffmpeg
 ```powershell
 # Windows — run each line, then close and reopen the terminal
 winget install OpenJS.NodeJS.LTS
-winget install Python.Python.3.13
+winget install Python.Python.3.14
 winget install Gyan.FFmpeg
 ```
 
@@ -79,11 +79,13 @@ winget install Gyan.FFmpeg
 # Ubuntu / Debian
 sudo apt update
 sudo apt install python3 python3-pip python3-venv ffmpeg
-# Node from apt is often old: use the "nvm" command from nodejs.org/en/download, then
+# Node from apt is often old: run the "nvm" install line from nodejs.org/en/download,
+# close and reopen the terminal, then
 nvm install --lts
 ```
 
-Version numbers move fast. On Windows, `winget search Python.Python` lists the current 3.x releases; take the newest.
+Version numbers move fast. On Windows, `winget search Python.Python` lists the current 3.x releases; if 3.14 isn't
+the newest any more, take the newest.
 Then check all three:
 
 ```bash
@@ -138,6 +140,7 @@ Watch the test run. When it looks right, try a dry run on your real Downloads (u
 python3 tidy.py ~/Downloads
 ```
 
+On a Mac, a pop-up may ask whether Terminal can access your Downloads folder — allow it, or the tool sees nothing.
 Read the plan. Happy? Add `--apply`. Not sure? Don't. A dry run you never apply is still a win.
 
 > **Tip:** "dry run first" is a habit for life. Every time an agent's script moves, deletes or sends something,

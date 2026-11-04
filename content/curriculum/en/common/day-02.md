@@ -72,14 +72,16 @@ sudo apt update
 sudo apt install git gh
 ```
 
-Reopen the terminal, then log in and introduce yourself to git:
+On Linux, if apt says it can't find `gh`, follow the Linux instructions at cli.github.com. Reopen the terminal, then log in and introduce yourself to git:
 
 ```bash
 gh auth login
 git config --global user.name "Mira Santos"
 git config --global user.email "you@example.com"
+git config --global init.defaultBranch main
 ```
 
+The last line makes new projects start on a branch called `main` (some git versions still default to `master`).
 For `gh auth login` choose GitHub.com → HTTPS → "Login with a web browser". For the email, GitHub's private
 `…@users.noreply.github.com` address (Settings → Emails) keeps your real one out of public history.
 
@@ -113,7 +115,7 @@ Open the URL it prints. You should see `index.html` and `README.md` on GitHub.
 ## Step 4 — Turn on Pages (10 min)
 
 On the repo page: **Settings → Pages**. Under *Build and deployment*, set Source to **Deploy from a branch**,
-branch **main**, folder **/ (root)**, then **Save**. Wait one or two minutes and refresh: a box appears with your
+branch **main** (if you only see `master`, pick that), folder **/ (root)**, then **Save**. Wait one or two minutes and refresh: a box appears with your
 live URL. Open it on your phone, too — that's the real test.
 
 > **If you're stuck:** a 404 page usually means "not yet" — wait two minutes. Still 404? Check that the file is

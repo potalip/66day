@@ -77,12 +77,13 @@ Here's the shape we're aiming for:
 
 ### 1. Build the editor
 
-Collect your three AI clips from yesterday plus two code renders from earlier days (a title card, a chart, a diagram)
-and the voiceover from day 22 or 27. Then:
+Work in `~/66/video/pipeline/` (set up yesterday). Your three AI clips are already in `clips/`; copy two code renders
+from earlier days into `renders/` (say `day16/title_card.mp4` and `day26/chart.mp4`) and a voiceover from day 22 or 27
+into `vo/`. Then:
 
 ```text
 Goal: a Python script edit.py that renders edl.json into out/edit.mp4.
-Context: my video workspace; clips in clips/, code renders in renders/, voiceover in vo/. ffmpeg is installed.
+Context: my pipeline/ folder; clips in clips/, code renders in renders/, voiceover in vo/. ffmpeg is installed.
 Use the EDL shape from the JSON I paste below. You may use MoviePy 2 (note: v2 uses subclipped/with_start, not
 subclip/set_start) or build an ffmpeg filter_complex in Python — pick one and say why.
 Constraints:

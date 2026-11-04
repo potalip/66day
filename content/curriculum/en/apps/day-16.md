@@ -75,7 +75,7 @@ Constraints:
 
 First explain your plan: components, layout at both widths, colours you'll use. Wait for my OK.
 When done, install Playwright if needed and write scripts/screenshot.mjs that saves screenshots of the running app
-at 390x844 and 1280x800 into screenshots/. Run it and tell me the file paths.
+at 390x844 and 1280x800 as screenshots/mobile.png and screenshots/desktop.png. Run it and tell me the file paths.
 ```
 
 Look at the screenshots yourself — the phone one first. Upload both as proof.
