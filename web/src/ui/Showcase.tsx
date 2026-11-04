@@ -4,7 +4,7 @@ import { useStrings } from "@web/i18n";
 import {
   Avatar, Badge, Button, Card, CardHeader, Checkbox, Chip, Dialog, Divider, EmptyState, Field, Input, Kbd, LangSwitcher,
   Markdown, PageHeader, ProgressBar, ProgressRing, Segmented, Select, Sheet, Skeleton, SkeletonCard, SkeletonText, Stat,
-  Switch, Tabs, Textarea, ThemeToggle, Tooltip, useToast, Logo, LeafMark, uiStrings,
+  Switch, Tabs, Textarea, ThemeToggle, Tooltip, useToast, Logo, LeafMark, uiStrings, AiNotice,
 } from "./index";
 
 /**
@@ -138,6 +138,7 @@ export default function Showcase() {
           <Badge>Day 12</Badge><Badge tone="accent">{t.apps}</Badge><Badge tone="gold" icon={<Zap />}>+40 XP</Badge>
           <Badge tone="danger">Needs work</Badge><Badge tone="info">Beta</Badge><Badge tone="outline">EN</Badge><Badge size="sm" tone="accent">New</Badge>
         </div>
+        <AiNotice className="mt-5 max-w-xl" />
         <div className="mt-5 flex flex-wrap gap-3">
           <Button variant="outline" onClick={() => toast({ title: t.toastOk, description: t.toastOkD, tone: "success" })}>Toast · success</Button>
           <Button variant="outline" onClick={() => toast({ title: t.toastXp, description: t.toastXpD, tone: "reward" })}>Toast · reward</Button>
