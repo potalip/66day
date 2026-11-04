@@ -129,3 +129,6 @@ no console errors. Also checked:
   - 31 tests: palette matches the tokens, XML escaping, wrapping, plurals, post text.
   - I tested the real PNG export in Chromium.
   - Integration guide: `docs/requests/design-share-card.md`.
+- **GameLayer in the Shell** (per `game-to-design.md`): the Shell lazy-loads it on every page except the landing page,
+  so visitors make no game API calls and the main chunk stays at ~401 kB. Verified: completing a task shows exactly one
+  reward toast, placed above the mobile tab bar.

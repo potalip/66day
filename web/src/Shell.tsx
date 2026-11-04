@@ -1,10 +1,13 @@
-import { Suspense, useEffect, type ReactNode } from "react";
+import { lazy, Suspense, useEffect, type ReactNode } from "react";
 import { Link, NavLink, Outlet, useLocation, useParams } from "react-router";
 import { CalendarCheck2, Clapperboard, Library, Map as MapIcon, Trophy, UserRound } from "lucide-react";
 import { LangContext, LANGS, type Lang, dict } from "./i18n";
 import { Logo, LeafMark, ThemeToggle, LangSwitcher, ToastProvider, ButtonLink, RouteFallback, cn, uiStrings, useResolvedTheme } from "./ui";
 
 // OWNER: design agent (layout/visuals). Keep nav items + routes in sync with App.tsx.
+// Game celebrations (reward toasts, level-up dialog) on every app page — see docs/requests/game-to-design.md.
+// Lazy so the game widgets stay out of the main chunk; not mounted on the public landing (no game API calls for visitors).
+const GameLayer = lazy(() => import("./features/game/widgets").then((m) => ({ default: m.GameLayer })));
 type NavKey = "today" | "path" | "library" | "studio" | "leaderboard";
 const NAV: { key: NavKey; to: string; icon: ReactNode }[] = [
   { key: "today", to: "today", icon: <CalendarCheck2 aria-hidden /> },
@@ -75,6 +78,7 @@ export function Shell() {
             </div>
           </header>
 
+          {!isLanding && <Suspense fallback={null}><GameLayer /></Suspense>}
           <main id="main" tabIndex={-1} className={cn("flex-1 focus:outline-none",
             isLanding ? "" : "mx-auto w-full max-w-6xl px-4 pb-28 pt-6 sm:px-6 sm:pt-10 md:pb-16")}>
             <Suspense fallback={isLanding ? null : <RouteFallback />}>
