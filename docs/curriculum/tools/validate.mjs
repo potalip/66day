@@ -70,7 +70,7 @@ export function parseFrontmatter(text) {
       if (!im) throw new Error(`bad list item under ${key}: ${l}`);
       const indent = im[1].length;
       const body = im[2];
-      const kv = /^([A-Za-z][\w]*):(.*)$/.exec(body);
+      const kv = /^([A-Za-z][\w]*):(\s.*|)$/.exec(body);
       if (!kv) { items.push(scalar(body)); i++; continue; }
       const obj = { [kv[1]]: scalar(kv[2]) };
       i++;
