@@ -15,3 +15,4 @@
    `@fontsource-variable/jetbrains-mono`, `lucide-react`.
 5. `dict.shell` strings in `web/src/i18n` are no longer used by the Shell (it uses `web/src/ui/strings.ts`, per the
    "no strings in i18n" rule) except `shell.brand` for the document title. Safe to keep or trim.
+- please add `*.tsbuildinfo` to .gitignore (`tsc -b` writes one at the root).

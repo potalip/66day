@@ -65,7 +65,7 @@ export function Shell() {
                 <LangSwitcher />
                 <ThemeToggle variant="icon" />
                 {isLanding ? (
-                  <ButtonLink to={`/${l}/start`} size="sm" className="ml-1 hidden sm:inline-flex">{s.start}</ButtonLink>
+                  <span className="ml-1 hidden sm:block"><ButtonLink to={`/${l}/start`} size="sm">{s.start}</ButtonLink></span>
                 ) : !isFocus && (
                   <NavLink to={`/${l}/me`} aria-label={s.nav.me} title={s.nav.me}
                     className="grid size-9 place-items-center rounded-full border border-line text-muted transition-colors hover:text-fg aria-[current=page]:border-accent aria-[current=page]:text-accent-ink">
@@ -142,7 +142,7 @@ function Footer({ lang: l, compact }: { lang: Lang; compact: boolean }) {
           <Link className={link} to={`/${l}/studio`}>{s.nav.studio}</Link>
           <Link className={link} to={`/${l}/leaderboard`}>{s.navLong.leaderboard}</Link>
         </div>
-        <div className="grid content-start gap-3">
+        <div className="grid content-start justify-items-start gap-3">
           <LangSwitcher />
           <ThemeToggle />
         </div>
