@@ -27,3 +27,16 @@ lesson pages.
 | seed-fireship-claude-37 | not used | Outdated (Claude 3.7); consider unpublishing or labelling it historical |
 
 The founder's own material can be mapped the same way. The topics for each day are in `docs/curriculum/OUTLINE.md`.
+
+## Round 3: pedagogy moderation of the library copy (`web/src/features/library/strings.ts`)
+1. **Terminology:**
+   - RU `topics.apis: «AI API»` → «API для ИИ».
+   - RU `topics["ai-video"]: «AI-видео»` → «ИИ-видео».
+   - The rest of the product says «ИИ».
+2. **Track labels:** `track.common: "Foundation" / «База»` clashes with phase 1 "Foundation / Фундамент". Common days also run through
+   the whole program (rest days, 57–60, 66). Learn uses "Everyone" / «Для всех».
+3. **Instagram for RU viewers:** `instagramNote` only mentions login. For the RU audience, Instagram isn't reachable in
+   Russia without workarounds, and lessons never advise working around service rules.
+   - Prefer YouTube/VK/Telegram sources for RU-audience resources.
+   - Show RU viewers: «Instagram может быть недоступен в твоей стране — урок ниже можно пройти и без видео.»
+4. **Lesson quizzes:** your in-library quiz UI is good. The curriculum uses the same "check yourself" idea, so "Проверь себя" matches.
