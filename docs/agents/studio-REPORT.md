@@ -11,7 +11,7 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   scenes stretch to fit the spoken line), two-pass loudnorm to −14 LUFS, thumbnail + 12-frame contact sheet per render.
 - **Resolution-independent layout**: design units (`f.s`), safe areas for Reels/TikTok/Shorts, every user string is
   wrapped/fitted into its box (`fit()`), so AI- or student-written text never clips.
-- **8 templates × 2–4 styles × 3 formats (9:16, 1:1, 16:9)**, each with natively written EN + RU examples:
+- **13 templates × 2–4 styles × 3 formats (9:16, 1:1, 16:9)**, each with natively written EN + RU examples:
   `kinetic-quote`, `explainer`, `listicle`, `numbers`, `code-walkthrough` (pygments syntax colours, typing, line
   highlights, terminal), `before-after` (swipe reveal, side-by-side, screenshot in phone/browser mockup, features),
   `quiz` (countdown + answer reveal), `day-recap` (66-cell progress grid, XP in gold, streak, tomorrow teaser). 6 palettes: paper, night, forest, sunrise,
@@ -65,6 +65,27 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
 - RU written natively (ты), EN; light + dark; checked at 390 px and 1280 px (`docs/agents/studio-screens/`).
 - Hardened after an independent review: no lost edits (edit generations, functional updates, flush before
   plan/render), editor locked while the AI plans, stale plan/ingest recovery, no double submission, resilient polling.
+
+## Round 2 (after the first merge)
+- **5 new templates → 13 total**, each with EN + RU examples, 3 formats, 2–4 styles, rendered and contact-sheet-checked
+  (`render-server/samples/`):
+  - `footage` — the student's **own clip** (phone video / screen recording): title over the dimmed clip, full-bleed
+    lower thirds or a framed layout for horizontal screen recordings; the clip's sound is kept under the music.
+    Engine: `core.VideoClip` decodes the clip through an ffmpeg pipe into the frame loop; clip audio in `audio.build_mix`.
+  - `compare` — AI tool A vs B: versus card, criteria with racing score bars, verdict.
+  - `journey` — "my 66 days": milestone timeline that draws itself, progress ring, highlight.
+  - `post-card` — neutral social post card (typed text, counting reactions) and threads.
+  - `split` — split-screen tutorial: steps + code / screenshot / screen recording.
+- **Video uploads**: raw-body upload streamed straight into R2 (≤100 MB, no buffering in the Worker), `video` field type in
+  both validators, media field in the editor, SSRF-safe video fetch on the render server (`FLR_MAX_VIDEO_MB`).
+- **Voice picker** (when the render server has `ELEVENLABS_API_KEY`): `GET /v1/voices` (curated multilingual premade voices +
+  the account's own), storyboard `voice`, Worker proxy `GET /api/studio/voices`, select with sample playback.
+- **Design consistency**: Studio uses `PageHeader`/`SectionTitle`; Day-recap projects can open the design's `ShareDialog`
+  (same progress card as learn/game); `paper`/`night` video palettes use the app's tokens.
+- **Docker/AWS**: multi-stage, non-root (uid 10001) Dockerfile, `hadolint` clean; wheels build verified locally; exact
+  runbook `render-server/deploy/AWS.md` + `ecs-task-definition.json` + `build-and-push.sh`. (No Docker registry access in
+  this container, so the image itself wasn't built here.)
+- Note: `npm test` currently has 1 failing test in the game area (`first-ship` badge rule) — not Studio.
 
 ## How to test
 ```bash

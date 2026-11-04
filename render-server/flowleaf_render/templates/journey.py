@@ -56,11 +56,13 @@ def draw_timeline(f: Frame, sc, bc: BuildCtx):
             up = k % 2 == 0
             cw = (lx1 - lx0) / max(1, n - 1) * 1.6 if n > 1 else 600 * s
             cw = min(cw, 460 * s)
-            text(ctx, day_label(d, f.lang), px, py + (-90 if up else 80) * s, 28 * s, "Bold", P.muted, a, tracking=.1)
             ls, ll = fit(txt, cw, 130 * s, 44 * s, "Bold", 20 * s, lh=1.15, max_lines=2)
+            lw = max(text_width(l, ls, "Bold") for l in ll) if ll else 0
+            lx = min(max(px, x0 + lw / 2), x1 - lw / 2)          # keep labels inside the frame
+            text(ctx, day_label(d, f.lang), lx, py + (-90 if up else 80) * s, 28 * s, "Bold", P.muted, a, tracking=.1)
             block = ls * (.727 + 1.15 * (len(ll) - 1))
             yy = py - 130 * s - block if up else py + 120 * s
-            paragraph(ctx, ll, px, yy, ls, "Bold", P.fg, a, lh=1.15)
+            paragraph(ctx, ll, lx, yy, ls, "Bold", P.fg, a, lh=1.15)
     else:
         top, bottom = y0 + th + 20 * s, y1 - f.pick(150, 70, 0) * s
         lx = x0 + 40 * s
