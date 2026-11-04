@@ -66,12 +66,12 @@ Constraints:
   frame 30, a progress bar along the bottom fills over the full duration.
 - If the body is longer than 80 characters, use calculateMetadata to make the video 300 frames instead of 240.
 - Create remotion/data/tips.json: an array of 5 tip objects with real, useful content (no filler text).
+  Also write data/tip-1.json ... tip-5.json (one object each) for single renders from the CLI.
 Done when: I can edit props in Studio, and
 `npx remotion render Tip out/tip-1.mp4 --props=./data/tip-1.json` renders a single tip.
 ```
 
-The agent may ask whether to split `tips.json` into separate files for the CLI — let it make `data/tip-1.json` …
-`tip-5.json` from the array. Open Studio, change the accent in the form, watch it update. Then render one:
+Read the five tips the agent wrote and rewrite any that sound generic — your name is on them. Open Studio, change the accent in the form, watch it update. Then render one:
 
 ```bash
 cd remotion
