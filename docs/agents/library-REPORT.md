@@ -1,5 +1,41 @@
 # Library + smart resource pipeline — report
 
+## Round 3 (founder dashboard)
+
+`/:lang/admin/stats` (a "Dashboard" tab, behind the same ADMIN_TOKEN gate) over `GET /api/admin/dashboard?range=7|30|90&demo=0|1`.
+It's read-only SQL over `users`, `learn_*`, `game_*` and `lib_*`; no schema changes and no new indexes were needed.
+- **KPIs**: students (onboarded) vs visitors (every `users` row), new this week/today, active this week/today (`game_activity`),
+  median current day, students finished, average *live* streak (a streak whose last day is before yesterday counts as 0).
+- **Daily series**: new students (by onboarding time) and active students per day.
+- **Splits**: track and language (split bars with a numeric legend), and streak distribution (0, 1, 2–3, 4–6, 7–13, 14–29, 30+).
+- **Where students are now**: a 66-bar histogram of each student's current day (first uncompleted day).
+- **Day completion rate**: for each day, completed ÷ reached, where reached = completed the previous day. Hover shows
+  "15 of 19 completed · 4 stuck" plus the day's real title.
+  **Where people get stuck**: the top 5 days by stuck rate. Stuck = reached more than 48 h ago and still not done. Only days
+  with at least 5 eligible students count, and days with fewer than 5 are drawn grey. Also shows the task completion rate,
+  using task counts from learn's compiled curriculum.
+- **Library**: most viewed (`resource.viewed` events), most completed and most added to today (`lib_user_items`).
+- **Pipeline health**: counts by status (each links to the board filter), failed lessons, transcripts needed, items
+  processing for more than 15 min, errors in the last 24 h, recent errors (each links to the resource), and AI / media
+  worker status.
+- **Seed-friendly**: works with the game's dev seed (`POST /api/game/dev/seed`). "Include demo students" toggles `seed-*`
+  users; the empty state offers "Load demo students" in dev.
+- **Activity source**: `game_events` (learn emits task/day/onboarding into it; the seed writes the same events), merged with
+  `learn_day_progress` for day completions.
+- **Charts**: `admin/charts.tsx`, inline SVG. Bars sit on the baseline with 4px rounded tops and 2px gaps; recessive grid;
+  hover tooltip clamped inside the card; "Show as table" under every chart; colours from tokens. The categorical pair was
+  validated with the dataviz checker in both themes (dark is stepped down; see `docs/requests/library-to-design.md`).
+- **Tests**: `worker/lib/library/analytics.test.ts` runs the **real migrations in `node:sqlite`** behind a tiny D1 adapter, so
+  the SQL is exercised for real. It caught an ambiguous `GROUP BY id` that silently grouped by `users.id`. It also covers the
+  pure helpers (funnel, stuck ranking, buckets, current day). Library suite: 38 tests.
+- **Screenshots**: EN/RU × light/dark × 390/1280. On phones the stuck-days table turns into a card list.
+
+Known limits: dates are UTC (`game_activity` days are the students' local dates, so "today" can be off by a few hours at
+the edges). Everything is computed per request, which is fine up to tens of thousands of students; beyond that, cache it
+or add a nightly rollup table.
+
+---
+
 ## Round 2 (founder intake, media worker, kit)
 
 ### Founder's daily flow (`/:lang/admin`)

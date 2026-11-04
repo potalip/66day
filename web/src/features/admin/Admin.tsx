@@ -9,6 +9,7 @@ import Board from "./Board";
 import AddResources from "./AddResources";
 import Review from "./Review";
 import Guide from "./Guide";
+import Dashboard from "./Dashboard";
 
 export interface Session { configured: boolean; authed: boolean; ai: boolean }
 
@@ -24,7 +25,7 @@ export default function Admin() {
   if (!session) return <div className="grid place-items-center py-24 text-muted"><Spinner className="size-6" /></div>;
   if (!session.authed) return <Gate session={session} onDone={load} />;
 
-  const tab = "relative -mb-px inline-flex h-11 items-center border-b-2 border-transparent px-1 text-sm font-medium text-muted hover:text-fg aria-[current=page]:border-accent aria-[current=page]:text-fg";
+  const tab = "relative -mb-px inline-flex h-11 shrink-0 items-center whitespace-nowrap border-b-2 border-transparent px-1 text-sm font-medium text-muted hover:text-fg aria-[current=page]:border-accent aria-[current=page]:text-fg";
   return (
     <div>
       <PageHeader
@@ -41,11 +42,13 @@ export default function Admin() {
       <nav className="no-scrollbar mb-6 flex gap-6 overflow-x-auto border-b border-line">
         <NavLink end to={`/${lang}/admin`} className={tab}>{s.nav.board}</NavLink>
         <NavLink to={`/${lang}/admin/add`} className={tab}>{s.nav.add}</NavLink>
+        <NavLink to={`/${lang}/admin/stats`} className={tab}>{s.nav.stats}</NavLink>
         <NavLink to={`/${lang}/admin/guide`} className={tab}>{s.nav.guide}</NavLink>
       </nav>
       <Routes>
         <Route index element={<Board />} />
         <Route path="add" element={<AddResources />} />
+        <Route path="stats" element={<Dashboard />} />
         <Route path="guide" element={<Guide />} />
         <Route path="r/:id" element={<Review />} />
       </Routes>
