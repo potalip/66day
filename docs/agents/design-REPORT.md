@@ -132,3 +132,7 @@ no console errors. Also checked:
 - **GameLayer in the Shell** (per `game-to-design.md`): the Shell lazy-loads it on every page except the landing page,
   so visitors make no game API calls and the main chunk stays at ~401 kB. Verified: completing a task shows exactly one
   reward toast, placed above the mobile tab bar.
+- **Public pages:** I reviewed the portfolio logged out, as a stranger or recruiter would see it. The Shell now gives shared
+  `/portfolio/:id` and `/certificate/:id` links visitor chrome: a CTA, no app nav, no tab bar, the full footer and no game
+  calls. Shell chrome is hidden when printing. Recruiter-facing requests went to learn (portfolio); certificate guidance
+  went to game, because game's certificate page is still a placeholder.
