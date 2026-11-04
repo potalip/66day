@@ -9,7 +9,8 @@ import { landing, type LandingStrings } from "./strings";
 
 // OWNER: design agent. Public landing page at /:lang.
 
-const BOSS = new Set([13, 27, 41, 55, 66]);
+// Mirrors docs/curriculum/OUTLINE.md: boss days 13/27/41/55/65, rest every 7th day.
+const BOSS = new Set([13, 27, 41, 55, 65]);
 const TODAY = 12;
 type CellState = "done" | "today" | "boss" | "rest" | "locked";
 export function cellState(d: number, today = TODAY): CellState {

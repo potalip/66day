@@ -76,10 +76,10 @@ export const landing = {
     phasesEyebrow: "The 66 days",
     phasesTitle: "From your first prompt to a public launch.",
     phases: [
-      { t: "Foundation", d: "Tools, terminal, prompting, your first deploy." },
-      { t: "Build", d: "Real projects every day, with boss days as milestones." },
-      { t: "Ship", d: "Users, feedback, polish, going public." },
-      { t: "Portfolio", d: "A capstone and a portfolio page you can send to anyone." },
+      { t: "Foundation", d: "A live page by day 2, directing an agent, APIs, your first real user." },
+      { t: "Build", d: "The core craft of your track, with boss days as milestones." },
+      { t: "Ship", d: "Real users and real clients: launch, listen, iterate." },
+      { t: "Portfolio & Earn", d: "A public capstone launch, a portfolio that sells, your first pitches." },
     ],
     phaseDays: ["Days 1–14", "Days 15–35", "Days 36–52", "Days 53–66"],
 
@@ -173,10 +173,10 @@ export const landing = {
     phasesEyebrow: "66 дней",
     phasesTitle: "От первого промпта до публичного запуска.",
     phases: [
-      { t: "Фундамент", d: "Инструменты, терминал, промпты, первый деплой." },
-      { t: "Практика", d: "Реальные проекты каждый день, босс-дни как контрольные точки." },
-      { t: "Запуск", d: "Пользователи, обратная связь, доводка, выход в публичное поле." },
-      { t: "Портфолио", d: "Итоговый проект и страница-портфолио, которую не стыдно отправить." },
+      { t: "Фундамент", d: "Своя страница в сети уже на второй день, задачи для агента, API, первый живой пользователь." },
+      { t: "Сборка", d: "Ремесло своего трека каждый день, босс-дни как контрольные точки." },
+      { t: "Запуск", d: "Живые пользователи и первые заказчики: запускайся, слушай, улучшай." },
+      { t: "Портфолио и заработок", d: "Публичный запуск финального проекта, портфолио, которое продаёт, первые отклики." },
     ],
     phaseDays: ["Дни 1–14", "Дни 15–35", "Дни 36–52", "Дни 53–66"],
 
