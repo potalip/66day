@@ -11,8 +11,6 @@ npm run db:migrate:local              # applies all migrations to local D1
 npm run dev                           # Vite + Worker on one port; API under /api
 npm run build                         # must pass before every push
 ```
-If pages stop loading after you change `.dev.vars` (Vite's dep optimizer can hang), stop the dev server,
-`rm -rf node_modules/.vite`, and start it again.
 Python render server: see `render-server/README.md` (`pip install --break-system-packages -r render-server/requirements.txt`, needs ffmpeg).
 
 **If pages stop loading after you edit `.dev.vars`** (the dev server restarts, but the browser hangs on
