@@ -581,21 +581,41 @@ def handle_tag(f: Frame, handle, alpha=1.0):
     text(f.ctx, handle, x0 + 44 * s, y0 - 40 * s if f.vertical else y0 + 4 * s, 30 * s, "SemiBold", f.P.muted, alpha, "lm",
          max_w=(x1 - x0) * .6)
 
+def caption_highlight(P: Palette) -> str:
+    """Brightest of the style's accents that reads well on the black caption chip."""
+    c = max((P.accent, P.accent2), key=lambda x: contrast(x, "#000000"))
+    while contrast(c, "#000000") < 6: c = mixc(c, "#FFFFFF", .25)
+    return c
+
 def caption(f: Frame, s, t_in, t_out):
-    """Burned-in subtitle chip for sound-off viewing (local frame time vs t_in/t_out)."""
+    """Burned-in subtitle chip for sound-off viewing (local frame time vs t_in/t_out). Words light up as they are
+    spoken (timed by length across the chunk): spoken = white, current = accent, upcoming = dimmed."""
     a = inout(f.t, t_in, t_in + .15, t_out - .15, t_out)
     if a <= 0 or not s: return
     ctx, sc = f.ctx, f.s
-    size = (40 if f.vertical else 34) * sc
+    size = (42 if f.vertical else 34) * sc
     x0, y0, x1, y1 = f.safe()
     y = (y1 + 40 * sc) if f.vertical else f.H - 64 * sc
-    lines = wrap(s, size, "SemiBold", (x1 - x0) * .92)[:3]
-    lh = size * 1.32
-    for k, ln in enumerate(lines):
-        w = text_width(ln, size, "SemiBold")
-        yy = y + (k - (len(lines) - 1)) * lh
-        fill_rrect(ctx, f.cx - w / 2 - size * .5, yy - lh / 2, w + size, lh, size * .32, "#000000", .66 * a)
-        text(ctx, ln, f.cx, yy, size, "SemiBold", "#FFFFFF", a)
+    lines = wrap(s, size, "Bold", (x1 - x0) * .92)[:3]
+    lh = size * 1.34
+    words = [w for ln in lines for w in ln.split(" ")]
+    weights = [len(w) + 2 for w in words]
+    total = sum(weights) or 1
+    spoken = prog(f.t, t_in, t_out - .1) * total
+    hi = caption_highlight(f.P)
+    gap = text_width(" ", size, "Bold")
+    k = 0; acc = 0.0
+    for li, ln in enumerate(lines):
+        w = text_width(ln, size, "Bold")
+        yy = y + (li - (len(lines) - 1)) * lh
+        fill_rrect(ctx, f.cx - w / 2 - size * .5, yy - lh / 2, w + size, lh, size * .32, "#000000", .7 * a)
+        xx = f.cx - w / 2
+        for wd in ln.split(" "):
+            start, end = acc, acc + weights[k]
+            col, al = ("#FFFFFF", a) if spoken >= end else (hi, a) if spoken >= start else ("#FFFFFF", a * .62)
+            text(ctx, wd, xx, yy, size, "Bold", col, al, "lm")
+            xx += text_width(wd, size, "Bold") + gap
+            acc = end; k += 1
 
 # --------------------------------------------------------------------------- transitions
 def wipe(f: Frame, u, color=None, alt=None, bars=7, direction=1):

@@ -494,7 +494,18 @@ export function Stage({ sb, T, t, className }: { sb: Storyboard; T: TemplateDef;
         {sc ? <>{sceneBody(c, sc)}<Handle c={c} /></> : null}
         {cue && (
           <div style={{ position: "absolute", left: 0, right: 0, bottom: c.v ? 250 : 50, textAlign: "center" }}>
-            <span style={{ background: "rgba(0,0,0,.66)", color: "#fff", fontSize: c.v ? 40 : 34, fontWeight: 600, padding: "10px 24px", borderRadius: 14, display: "inline-block", maxWidth: "80%" }}>{cue.c}</span>
+            <span style={{ background: "rgba(0,0,0,.7)", color: "#fff", fontSize: c.v ? 42 : 34, fontWeight: 700, padding: "10px 24px", borderRadius: 14, display: "inline-block", maxWidth: "80%" }}>
+              {(() => {
+                const words = cue.c.split(" "), wts = words.map((w) => w.length + 2), tot = wts.reduce((a, b) => a + b, 0);
+                const spoken = prog(lt, cue.a, cue.b - .1) * tot;
+                let acc = 0;
+                return words.map((w, k) => {
+                  const st = acc, en = (acc += wts[k]);
+                  const style = spoken >= en ? {} : spoken >= st ? { color: P.accent2 } : { opacity: .62 };
+                  return <span key={k} style={style}>{w}{k < words.length - 1 ? " " : ""}</span>;
+                });
+              })()}
+            </span>
           </div>
         )}
         {sb.transition === "wipe" && cover > 0 && Array.from({ length: 7 }, (_, r) => {
