@@ -172,7 +172,7 @@ export default function StudioProject() {
         <label htmlFor={titleId} className="sr-only">{s.titlePlaceholder}</label>
         <textarea id={titleId} value={title} maxLength={120} placeholder={s.titlePlaceholder} rows={1}
           onChange={(e) => { touch(); setTitle(e.target.value.replace(/\n/g, " ")); }}
-          className="field-sizing-content w-full resize-none rounded-lg bg-transparent leading-tight text-2xl font-semibold tracking-tight outline-none placeholder:text-muted/60 focus-visible:ring-2 focus-visible:ring-accent sm:text-3xl" />
+          className="field-sizing-content -mx-1.5 w-[calc(100%+0.75rem)] resize-none rounded-lg bg-transparent px-1.5 leading-tight text-2xl font-semibold tracking-tight outline-none placeholder:text-muted/60 focus-visible:ring-2 focus-visible:ring-accent sm:text-3xl" />
         <div className="flex flex-wrap items-center gap-2">
           <StatusChip status={project.status} label={s.status[project.status]} />
           <Chip>{T.name[lang]}</Chip>

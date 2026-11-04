@@ -1,45 +1,23 @@
-/**
- * Small local UI primitives for the Studio, built only on the shared design tokens. When the design system's
- * `@web/ui` lands on main these can be swapped for its Button/Card/Field one by one.
- */
-import { type ButtonHTMLAttributes, type ReactNode, useId } from "react";
+/** Studio UI helpers: thin adapters over the shared design system (`@web/ui`) plus a few Studio-only pieces. */
+import type { ReactNode } from "react";
+import { Badge, Button as UIButton, type ButtonProps, Card as UICard, Input, ProgressBar as UIProgressBar, Segmented as UISegmented, Select, Switch, Textarea } from "@web/ui";
 
 export function cx(...c: (string | false | null | undefined)[]) { return c.filter(Boolean).join(" "); }
 
-type Variant = "primary" | "secondary" | "ghost" | "danger";
-export function Button({ variant = "secondary", size = "md", loading, className, children, ...rest }:
-  ButtonHTMLAttributes<HTMLButtonElement> & { variant?: Variant; size?: "sm" | "md" | "lg"; loading?: boolean }) {
-  const v = {
-    primary: "bg-accent text-accent-fg hover:brightness-110 shadow-sm",
-    secondary: "border border-line bg-surface text-fg hover:bg-surface-2",
-    ghost: "text-muted hover:text-fg hover:bg-surface-2",
-    danger: "border border-line bg-surface text-danger hover:bg-surface-2",
-  }[variant];
-  const s = { sm: "h-8 px-3 text-sm gap-1.5", md: "h-10 px-4 text-[0.9375rem] gap-2", lg: "h-12 px-6 text-base gap-2" }[size];
-  return (
-    <button type="button" {...rest} disabled={rest.disabled || loading}
-      className={cx("inline-flex shrink-0 items-center justify-center rounded-[10px] font-medium transition",
-        "focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent disabled:opacity-50 disabled:pointer-events-none",
-        v, s, className)}>
-      {loading && <Spinner />}
-      {children}
-    </button>
-  );
+// Shared design-system components, adapted to the small API the Studio uses.
+export { Spinner } from "@web/ui";
+
+/** Kit button; Studio's default is the quiet "secondary" variant. */
+export function Button({ variant = "secondary", ...rest }: ButtonProps) {
+  return <UIButton variant={variant} {...rest} />;
 }
 
-export function Spinner({ className }: { className?: string }) {
-  return <span aria-hidden className={cx("inline-block size-4 animate-spin rounded-full border-2 border-current border-t-transparent", className)} />;
-}
-
-export function Card({ className, children, as: As = "div" }: { className?: string; children: ReactNode; as?: "div" | "section" | "article" }) {
-  return <As className={cx("rounded-[var(--radius)] border border-line bg-surface", className)}>{children}</As>;
+export function Card({ className, children, as = "div" }: { className?: string; children: ReactNode; as?: "div" | "section" | "article" }) {
+  return <UICard as={as} padding="none" className={className}>{children}</UICard>;
 }
 
 export function Chip({ children, tone = "neutral", className }: { children: ReactNode; tone?: "neutral" | "accent" | "gold" | "danger"; className?: string }) {
-  const t = {
-    neutral: "bg-surface-2 text-muted", accent: "bg-accent-soft text-accent", gold: "bg-gold-soft text-gold", danger: "bg-surface-2 text-danger",
-  }[tone];
-  return <span className={cx("inline-flex items-center gap-1 rounded-full px-2.5 py-0.5 text-xs font-medium", t, className)}>{children}</span>;
+  return <Badge tone={tone} className={className}>{children}</Badge>;
 }
 
 export function Label({ htmlFor, children, hint, right }: { htmlFor?: string; children: ReactNode; hint?: ReactNode; right?: ReactNode }) {
@@ -54,65 +32,36 @@ export function Label({ htmlFor, children, hint, right }: { htmlFor?: string; ch
   );
 }
 
-const inputCls = "w-full rounded-[10px] border border-line bg-surface px-3 py-2 text-[0.9375rem] text-fg placeholder:text-muted/70 " +
-  "focus:outline-2 focus:outline-offset-0 focus:outline-accent aria-[invalid=true]:border-danger";
-
 export function TextInput(p: { id?: string; value: string; onChange: (v: string) => void; placeholder?: string; maxLength?: number; invalid?: boolean; className?: string; mono?: boolean; "aria-label"?: string }) {
-  return <input id={p.id} aria-label={p["aria-label"]} value={p.value} maxLength={p.maxLength} placeholder={p.placeholder} aria-invalid={p.invalid || undefined}
-    onChange={(e) => p.onChange(e.target.value)} className={cx(inputCls, "h-10", p.mono && "font-mono text-sm", p.className)} />;
+  return <Input id={p.id} aria-label={p["aria-label"]} value={p.value} maxLength={p.maxLength} placeholder={p.placeholder} invalid={p.invalid}
+    onChange={(e) => p.onChange(e.target.value)} className={cx(p.mono && "font-mono text-sm", p.className)} />;
 }
 
 export function TextArea(p: { id?: string; value: string; onChange: (v: string) => void; placeholder?: string; maxLength?: number; rows?: number; invalid?: boolean; mono?: boolean; className?: string; "aria-label"?: string }) {
-  return <textarea id={p.id} aria-label={p["aria-label"]} value={p.value} maxLength={p.maxLength} rows={p.rows ?? 3} placeholder={p.placeholder}
-    aria-invalid={p.invalid || undefined} spellCheck={!p.mono}
-    onChange={(e) => p.onChange(e.target.value)} className={cx(inputCls, "resize-y leading-relaxed", p.mono && "font-mono text-[13px] leading-6", p.className)} />;
+  return <Textarea id={p.id} aria-label={p["aria-label"]} value={p.value} maxLength={p.maxLength} rows={p.rows ?? 3} placeholder={p.placeholder}
+    invalid={p.invalid} spellCheck={!p.mono} onChange={(e) => p.onChange(e.target.value)}
+    className={cx("min-h-0", p.mono && "font-mono text-[13px] leading-6", p.className)} />;
 }
 
 export function SelectInput(p: { id?: string; value: string; onChange: (v: string) => void; options: { value: string; label: string }[]; className?: string; inline?: boolean; "aria-label"?: string }) {
   return (
-    <select id={p.id} aria-label={p["aria-label"]} value={p.value} onChange={(e) => p.onChange(e.target.value)}
-      className={cx(p.inline ? inputCls.replace("w-full ", "w-auto ") : inputCls, "h-10 pr-8", p.className)}>
+    <Select id={p.id} aria-label={p["aria-label"]} value={p.value} onChange={(e) => p.onChange(e.target.value)} className={cx(p.inline && "inline-block min-w-44", p.className)}>
       {p.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
-    </select>
+    </Select>
   );
 }
 
 export function Toggle({ checked, onChange, label, hint }: { checked: boolean; onChange: (v: boolean) => void; label: string; hint?: string }) {
-  const id = useId();
-  return (
-    <div className="flex items-start gap-3">
-      <button id={id} type="button" role="switch" aria-checked={checked} onClick={() => onChange(!checked)}
-        className={cx("relative mt-0.5 h-6 w-10 shrink-0 rounded-full border border-line transition focus-visible:outline-2 focus-visible:outline-accent",
-          checked ? "bg-accent" : "bg-surface-2")}>
-        <span className={cx("absolute top-0.5 size-[18px] rounded-full bg-surface shadow transition-all", checked ? "left-[19px]" : "left-0.5")} />
-      </button>
-      <label htmlFor={id} className="text-sm"><span className="font-medium">{label}</span>{hint && <span className="block text-xs text-muted">{hint}</span>}</label>
-    </div>
-  );
+  return <Switch checked={checked} onChange={onChange} className="items-start" label={<span><span className="font-medium">{label}</span>{hint && <span className="block text-xs text-muted">{hint}</span>}</span>} />;
 }
 
 /** Segmented control (radio group). */
 export function Segmented<T extends string>({ value, onChange, options, label }: { value: T; onChange: (v: T) => void; options: { value: T; label: ReactNode }[]; label: string }) {
-  return (
-    <div role="radiogroup" aria-label={label} className="inline-flex flex-wrap gap-1 rounded-[12px] border border-line bg-surface-2 p-1">
-      {options.map((o) => (
-        <button key={o.value} type="button" role="radio" aria-checked={value === o.value} onClick={() => onChange(o.value)}
-          className={cx("rounded-[9px] px-3 py-1.5 text-sm transition focus-visible:outline-2 focus-visible:outline-accent",
-            value === o.value ? "bg-surface text-fg shadow-sm font-medium" : "text-muted hover:text-fg")}>
-          {o.label}
-        </button>
-      ))}
-    </div>
-  );
+  return <UISegmented value={value} onChange={onChange} options={options} label={label} className="flex-wrap" />;
 }
 
 export function ProgressBar({ value, label }: { value: number; label?: string }) {
-  return (
-    <div role="progressbar" aria-label={label} aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(value * 100)}
-      className="h-2 w-full overflow-hidden rounded-full bg-surface-2">
-      <div className="h-full rounded-full bg-accent transition-[width] duration-500" style={{ width: `${Math.max(2, value * 100)}%` }} />
-    </div>
-  );
+  return <UIProgressBar value={Math.round(value * 100)} label={label ?? ""} />;
 }
 
 export function Notice({ tone = "neutral", title, children, action }: { tone?: "neutral" | "warn" | "danger"; title: ReactNode; children?: ReactNode; action?: ReactNode }) {

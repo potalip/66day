@@ -51,7 +51,11 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   (final / quick draft, progress + stage, video player, download, frame overview, history).
 - States: "AI not configured" (start from example), "render server not connected / not responding" (plan + edit +
   preview still work), loading skeletons, errors with retry, not-found.
+- Built on the shared design system (`@web/ui`: Button, Card, Badge, Input/Textarea/Select, Switch, Segmented,
+  ProgressBar) through thin adapters in `web/src/features/studio/ui.tsx`.
 - RU written natively (ты), EN; light + dark; checked at 390 px and 1280 px (`docs/agents/studio-screens/`).
+- Hardened after an independent review: no lost edits (edit generations, functional updates, flush before
+  plan/render), editor locked while the AI plans, stale plan/ingest recovery, no double submission, resilient polling.
 
 ## How to test
 ```bash
@@ -71,15 +75,13 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
   ElevenLabs voice (reference code path kept; synth fallback verified). Docker image not built here (no Docker daemon).
 - `npm test` at the root can't start because of the Cloudflare vite plugin — see `docs/requests/studio-to-orchestrator.md`
   (plus: skip `anonUser` on the callback route; first-visit cookie race in `anonUser`).
-- Studio uses small local UI primitives (`web/src/features/studio/ui.tsx`) built on tokens, because the design kit
-  wasn't on `main` yet; swap to `@web/ui` once merged.
 - In-browser preview is a sketch (icons are simplified, fonts are the web fonts); the rendered video is the truth.
 - Jobs queue in-process on the render server: scale vertically or run one service per URL; SQS is the next step.
 - Day-recap doesn't auto-fill from the student's real progress yet (game/learn APIs weren't merged).
 
 ## Next steps
 1. Prefill `day-recap` from `/api/progress` + `/api/game` (day, tasks done, XP, streak) — one-click daily post.
-2. Swap to `@web/ui` components; add a toast on render finished; share link for finished videos (public R2 key).
+2. Add a toast on render finished; share link for finished videos (public R2 key).
 3. More templates (talking-points over an uploaded clip, AI-image slideshow with Ken Burns, quiz/poll short),
    per-word karaoke captions from ElevenLabs timestamps, brand kits (student's own colours/logo).
 4. Render server: SQS-backed queue for horizontal scale, per-user rate limits, webhook signature (HMAC) instead of
