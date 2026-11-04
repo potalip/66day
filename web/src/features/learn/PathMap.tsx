@@ -26,6 +26,7 @@ export default function PathMap() {
         <div>
           <h1 className="text-[clamp(1.75rem,4vw,2.4rem)] font-semibold tracking-tight">{s.pathTitle}</h1>
           <p className="mt-2 max-w-[52ch] text-muted">{s.pathSubtitle}</p>
+          <ButtonLink to={`/${lang}/portfolio/me`} variant="outline" size="sm" className="mt-4" icon={<Icon.crown className="text-gold-bright" />}>{s.openPortfolio}</ButtonLink>
         </div>
         <div className="flex items-center gap-5">
           <ProgressRing value={o.completedCount} max={o.totalDays} size={84} stroke={7} label={s.percentDone(o.percent)}>

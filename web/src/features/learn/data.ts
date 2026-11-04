@@ -129,3 +129,14 @@ export function useDayResources(lang: Lang, day: number, track: string, urls: st
   }, [key]);
   return state;
 }
+
+// ---- public portfolio ----
+import type { PortfolioResponse, Visibility } from "../../../../worker/lib/learn/portfolio";
+export type { PortfolioItem, PortfolioResponse, Visibility } from "../../../../worker/lib/learn/portfolio";
+export function usePortfolio(lang: Lang, userId: string) {
+  return useResource(`pf:${lang}:${userId}`, () => call<PortfolioResponse>(`/progress/portfolio/${encodeURIComponent(userId)}?lang=${lang}`));
+}
+export const portfolioApi = {
+  update: (lang: Lang, taskId: string, patch: { visibility?: Visibility; title?: string | null; description?: string | null }) =>
+    call<PortfolioResponse>(`/progress/portfolio/items/${encodeURIComponent(taskId)}?lang=${lang}`, { method: "PATCH", json: patch }),
+};

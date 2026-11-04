@@ -14,3 +14,11 @@
 6. **`worker/lib/user.ts` race:** on a brand-new visit, parallel API calls without a cookie each create a different anon user;
    the last `Set-Cookie` wins and earlier writes are orphaned. Suggest issuing the cookie on the first HTML/asset response
    or making the SPA call `/api/me` once before anything else.
+
+## Round 3 — portfolio OG tags for crawlers
+`/:lang/portfolio/:userId` sets `document.title` and `og:title` / `og:description` on the client, which is enough for people
+sharing from the browser. Link-preview crawlers (Telegram, X, LinkedIn, Slack) don't run JS. To get real previews:
+1. In `wrangler.jsonc`, add `"/*/portfolio/*"` to `assets.run_worker_first`.
+2. In `worker/index.ts`, for `GET /:lang/portfolio/:userId`, fetch the SPA (`env.ASSETS.fetch(req)`) and rewrite its head with
+   `HTMLRewriter` using `portfolioMeta(env, userId, lang)` from `worker/lib/learn/portfolio.ts`. It returns
+   `{ title, description }` (localized), or `null` → leave the default tags.

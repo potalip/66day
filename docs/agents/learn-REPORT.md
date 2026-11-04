@@ -149,3 +149,45 @@ Branch `agent/learn` was rebased onto `main`. Requests in `docs/requests/*-to-le
   (time-travel +1 day) Day 2 → Day 1 review → Day 13 locked. Covered in EN light 1280, EN dark 390, RU light 1280 and RU dark 390.
   No page errors and no horizontal overflow. The only console noise is a blocked external font/thumbnail request in this sandbox.
 - `npm test`: 181 tests pass (learn: 58).
+
+---
+
+## Round 3: public portfolio
+
+**Route:** `/:lang/portfolio/:userId`, or `/:lang/portfolio/me` for your own. It is read-only and works for strangers with no cookie; a stranger only gets an anonymous id, which grants nothing.
+
+**Data (migration `0101_learn_portfolio.sql`, logic in `worker/lib/learn/portfolio.ts`)**
+- Each item is the **latest proof per task** (link, file or text) with its curriculum context: day, track, task and day title.
+- Items fall into three kinds. **Boss** covers any task on a boss day. **Ship** covers `type: ship` tasks. **Other** covers everything else.
+- Default visibility: boss and ship items with a link or file are **public**; everything else (reflections, quizzes, notes) is **private**.
+  `learn_portfolio_items` stores only what the student changed: visibility, title (max 120 chars) and description (max 600).
+- Files are served through `/api/progress/portfolio/:userId/files/:submissionId` **only while the item is public** and only for the
+  task's latest proof. The owner can always read them. Safe media types are served inline; everything goes out with `nosniff` + a CSP sandbox. SVG is never shown as an image.
+- The header pulls level, rank, best streak and badges server-side from the game's `getProfile()`. A failure there leaves the header without game stats and the page still renders.
+
+**API**
+- `GET /api/progress/portfolio/:userId?lang=` returns `{ user, isMe, stats, game, items }`. Strangers get public items only; the owner gets all.
+- `PATCH /api/progress/portfolio/items/:taskId` takes `{ visibility?, title?, description? }` and only touches tasks you submitted proof for.
+
+**Page (`web/src/features/learn/Portfolio.tsx`)**
+- **Header:** avatar, name (or "FlowLeaf student"), track, last active date, "Copy link", and four stats (days with a ring, milestone projects,
+  level, best streak). Badges show six at first, with a "+N more" button for the rest.
+- **Sections:** milestone projects (boss, featured), Shipped, More work. Image proofs show as screenshots; links show as host previews.
+  Buttons: "Open project" (`rel=nofollow`) and "Open file".
+- **Owner view:** a banner, "Preview as visitor", a Public/Private switch on every card, and an edit dialog for title and description.
+  A collapsed "Only you can see these" list makes it one click to publish a reflection.
+- **Visitor view:** a "Start your 66 days" CTA. Empty states are written separately for owners and visitors. Unknown ids get a not-found page.
+- **Sharing:** `document.title`, `og:title`, `og:description` and `description` are set while the page is open. Server-side OG tags for
+  crawlers need a small worker hook; I wrote the request (`learn-to-orchestrator.md`) and `portfolioMeta()` is ready for it.
+- **Entry points:** a "My portfolio" button on the Path page, and a gold "My portfolio" button in boss-day celebrations. Game should
+  link from the profile page; that request is in `learn-to-game.md`.
+- **ShareCard:** design's `web/src/ui/ShareCard.tsx` isn't on `main` yet, so the "Day N done" share button is still to come. It goes into
+  the `Celebration` footer in `DayView.tsx`.
+
+**Verification**
+- curl: the stranger sees 4 public items out of 38 for the owner. A private file returns 404 to the stranger and 200 to the owner,
+  then 200 to the stranger once the item is made public. A stranger's PATCH returns 404, and an unknown user returns 404.
+- Playwright: owner and visitor views in EN light 1280, EN dark 390, RU light 390 and RU dark 1280, all with correct localized `<title>`,
+  no page errors and no horizontal overflow.
+- Tests: `worker/lib/learn/portfolio.test.ts` covers visibility defaults, kinds, overrides, file URLs and image detection (SVG is
+  excluded), tasks removed from the curriculum, and language-independent ids. `npm test` passes 189/189.
