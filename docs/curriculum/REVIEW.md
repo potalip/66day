@@ -117,8 +117,11 @@ technical bugs that would have stopped students cold. All of these are fixed.
 
 ## Known gaps (not fixed, deliberately or out of scope)
 
-- **Apps 45:** asks for activation numbers before day 54 adds event logging. Students get approximate answers.
-  - *Next:* add simple event logging around apps 36–37.
+- ~~**Apps 45:** asks for activation numbers before event logging exists.~~ **Fixed after review:** apps day 34 now
+  builds a first-party `events` table in D1 with a `track()` helper (session_started, signup_completed,
+  core_action_done, ai_called, upgrade_clicked; anonymous id linked on sign-up; no personal data). Day 36 adds
+  `cta_clicked`, day 45 queries the table, day 54 adds the beta events to it, and day 65's report reads it.
+  Plausible/PostHog are now an optional mirror.
 - **Apps 29:** the optional Playwright test in CI would need a local D1 migration step. It is described only in
   prose.
 - **Apps 53–54 and video 54:** need outside testers with a 24–48-hour lead time. Day 52 already tells students to

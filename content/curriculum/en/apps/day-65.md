@@ -131,7 +131,7 @@ outperforms any broadcast. At T+6, glance at the numbers — not to judge, just 
 ### T+24 h: The report and the thank-you (30 min)
 
 ```text
-Write a 24-hour launch report from our data. Use the events table / analytics for the last 24 hours:
+Write a 24-hour launch report from our data. Query the events table (day 34, beta events from day 54) for the last 24 hours:
 visitors by source, sign-ups, activation (reached value ÷ new visitors), returning users, AI calls and cost,
 errors by route. Then summarise the comments and feedback into: top 3 praises, top 3 complaints, top 3 requests.
 List what broke and how it was fixed. Format: a markdown table + bullets. Don't round small numbers up.
