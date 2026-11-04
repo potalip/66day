@@ -180,7 +180,7 @@ pipeline.get("/board", async (c) => {
   return c.json({ counts, total: results.length, items });
 });
 
-// ---------------- Media worker seam (docs/library/MEDIA-WORKER.md) ----------------
+// ---------------- Media worker seam (worker/lib/library/MEDIA-WORKER.md) ----------------
 
 const mediaAuth = (c: { env: LibEnv; req: { header: (k: string) => string | undefined } }) => {
   const tok = c.env.MEDIA_WORKER_TOKEN;

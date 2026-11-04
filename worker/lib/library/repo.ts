@@ -91,10 +91,11 @@ export async function setMaterial(
      VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8, unixepoch())
      ON CONFLICT (resource_id, lang) DO UPDATE SET state = ?3,
        data = CASE WHEN ?9 THEN ?4 ELSE data END,
-       origin = COALESCE(?5, origin), model = COALESCE(?6, model), edited = ?7, error = ?8, updated_at = unixepoch()`,
+       origin = COALESCE(?5, origin), model = COALESCE(?6, model), edited = COALESCE(?10, edited), error = ?8, updated_at = unixepoch()`,
   ).bind(
     resourceId, lang, f.state, f.data === undefined ? null : f.data === null ? null : JSON.stringify(f.data),
     f.origin ?? null, f.model ?? null, f.edited ? 1 : 0, f.error ?? null, f.data !== undefined ? 1 : 0,
+    f.edited === undefined ? null : f.edited ? 1 : 0,
   ).run();
 }
 
@@ -112,3 +113,9 @@ export async function saveTranscript(env: Env, resourceId: string, t: { source: 
   ).bind(resourceId, t.source, t.lang ?? null, text, t.r2Key ?? null, text.length).run();
   await updateResource(env, resourceId, { transcript_state: "ready" });
 }
+
+/**
+ * SQL predicate (alias m) for "students may see this lesson": approved content that is not a starter draft.
+ * A lesson being regenerated (queued/generating) or whose regeneration failed keeps showing its last good version.
+ */
+export const STUDENT_VISIBLE_MATERIAL = `m.data IS NOT NULL AND m.state IN ('ready','queued','generating','failed') AND NOT (m.origin = 'manual' AND m.edited = 0)`;

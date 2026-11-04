@@ -1,8 +1,8 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../env";
-import type { LibLang } from "../lib/library/schema";
+import type { LibLang, LessonMaterial } from "../lib/library/schema";
 import { loadPublished, applyFilters, facets, related, forDay } from "../lib/library/catalog";
-import { getResourceRow, toResource, getMaterials } from "../lib/library/repo";
+import { getResourceRow, toResource, STUDENT_VISIBLE_MATERIAL } from "../lib/library/repo";
 import { youtubeEmbedUrl, instagramEmbedUrl } from "../lib/library/url";
 import { uploadKey } from "../lib/library/pipeline";
 
@@ -114,9 +114,11 @@ library.get("/:id", async (c) => {
   const row = await getResourceRow(c.env, c.req.param("id"));
   if (!row || row.status !== "published") return c.json({ error: "not found" }, 404);
   const r = toResource(row);
-  const mats = await getMaterials(c.env, r.id);
-  const mine = mats[lang]?.state === "ready" ? mats[lang]!.data : null;
   const other: LibLang = lang === "ru" ? "en" : "ru";
+  const visible = async (l: LibLang) => (await c.env.DB.prepare(`SELECT m.data FROM lib_materials m WHERE m.resource_id = ? AND m.lang = ? AND ${STUDENT_VISIBLE_MATERIAL}`)
+    .bind(r.id, l).first<{ data: string }>())?.data ?? null;
+  const mineRaw = await visible(lang);
+  const mine = mineRaw ? (JSON.parse(mineRaw) as LessonMaterial) : null;
   const all = await loadPublished(c.env, lang);
   const self = all.find((x) => x.card.id === r.id)?.card;
   const saved = await c.env.DB.prepare("SELECT for_date, done_at FROM lib_user_items WHERE user_id = ? AND resource_id = ?")
@@ -133,7 +135,7 @@ library.get("/:id", async (c) => {
     },
     lang,
     material: mine,
-    otherLangAvailable: !mine && mats[other]?.state === "ready",
+    otherLangAvailable: !mine && !!(await visible(other)),
     saved: saved ? { forDate: saved.for_date, doneAt: saved.done_at, isToday: saved.for_date === today() } : null,
     related: self ? related(all, self) : [],
   });

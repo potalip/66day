@@ -154,7 +154,7 @@ export async function buildLesson(env: Env, id: string, lang: LibLang) {
   const t = await getTranscript(env, id);
   const res = await generateMaterial(env, r, lang, t?.text ?? null);
   if (res.ok) {
-    await setMaterial(env, id, lang, { state: "ready", data: res.data, origin: "ai", model: res.model, error: null });
+    await setMaterial(env, id, lang, { state: "ready", data: res.data, origin: "ai", model: res.model, edited: false, error: null });
     await logEvent(env, id, `build_lesson:${lang}`, "ok", `generated${res.attempts > 1 ? " after 1 retry" : ""}${t ? "" : " without transcript (metadata only)"}`);
     // Adopt AI classification where the founder left fields empty.
     const fresh = toResource((await getResourceRow(env, id))!);
@@ -189,7 +189,7 @@ async function settle(env: Env, id: string) {
 }
 
 /**
- * Seam for the external media worker (AWS: yt-dlp/download + Whisper). Contract in docs/library/MEDIA-WORKER.md.
+ * Seam for the external media worker (AWS: yt-dlp/download + Whisper). Contract in worker/lib/library/MEDIA-WORKER.md.
  * No-op unless MEDIA_WORKER_URL is configured.
  */
 export async function requestMediaWorker(env: LibEnv, id: string) {

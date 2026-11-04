@@ -1,6 +1,6 @@
 import type { Env } from "../../env";
 import { type LessonMaterial, type LibLang, type Level, type LibTrack, type SourceType, safeJson } from "./schema";
-import { type ResourceRow, toResource } from "./repo";
+import { type ResourceRow, toResource, STUDENT_VISIBLE_MATERIAL } from "./repo";
 
 /** What a student sees on a library card. */
 export interface ResourceCard {
@@ -19,7 +19,7 @@ type Row = ResourceRow & { m_data: string | null };
 export async function loadPublished(env: Env, lang: LibLang): Promise<{ card: ResourceCard; material: LessonMaterial | null; search: string }[]> {
   const { results } = await env.DB.prepare(
     `SELECT r.*, m.data AS m_data FROM lib_resources r
-     LEFT JOIN lib_materials m ON m.resource_id = r.id AND m.lang = ?1 AND m.state = 'ready'
+     LEFT JOIN lib_materials m ON m.resource_id = r.id AND m.lang = ?1 AND ${STUDENT_VISIBLE_MATERIAL}
      WHERE r.status = 'published' AND EXISTS (SELECT 1 FROM json_each(r.audience) WHERE value = ?1)
      ORDER BY r.featured DESC, r.sort_weight DESC, r.published_at DESC`,
   ).bind(lang).all<Row>();
