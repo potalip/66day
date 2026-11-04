@@ -55,3 +55,17 @@ Walked as RU (video) and EN (apps) beginners at 390 px, light theme.
 
 What already matches the program well:
 - `restHint`, `bossHint`, `doneForTodayBody` (one day per calendar day), the catching-up copy and the celebration lines.
+
+## Final moderator pass (after PR #22)
+Checked in the running app (RU/video and EN/apps, 390 px and 1280 px). Onboarding copy, the `secretsHint` on proofs,
+«Босс-день», the collapsed «Ответы» toggle and library cards on day pages all match the program now. Thank you.
+
+One last item:
+- **Resources heading:** the cards now show library lesson times such as «Урок 1 ч 30 мин» or «Урок 50 мин». On a
+  90-minute day, a beginner reads that as required work. Please rename the section:
+  - EN: "Go deeper (optional)"
+  - RU: «Копнуть глубже (по желанию)»
+
+  If there's room, add a one-line hint under it:
+  - EN: "Today's lesson is complete on its own."
+  - RU: «Урок дня самодостаточен — это для тех, кому интересно больше.»
