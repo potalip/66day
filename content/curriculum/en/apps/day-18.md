@@ -67,8 +67,7 @@ client email.
 ```text
 Goal: add an "AI fill" feature. The user pastes messy text into a textarea, presses "Fill with AI", and the fields of the existing "add item" form get filled. The user reviews and presses Save as usual.
 
-Context: see docs/SPEC.md (Data section). Backend is our Worker under /api. The API key is a server secret
-ANTHROPIC_API_KEY (model from env CLAUDE_MODEL, default claude-sonnet-5-5). Any provider is fine if I say so.
+Context: see docs/SPEC.md (Data section). Backend is our Worker under /api. The API key is a server secret ANTHROPIC_API_KEY (model from env CLAUDE_MODEL, default claude-sonnet-5-5). Any provider is fine if I say so.
 
 Constraints:
 - New endpoint POST /api/extract { text } -> { ok: true, fields } or { ok: false, reason }.

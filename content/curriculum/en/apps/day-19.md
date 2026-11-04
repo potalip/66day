@@ -93,8 +93,7 @@ when asked something off-topic.
 ```text
 Goal: replace the echo with AI replies.
 
-Context: the bot belongs to my app from docs/SPEC.md. Use the same provider as the web app; key in bot/.env as
-ANTHROPIC_API_KEY, model from CLAUDE_MODEL (default claude-sonnet-5-5).
+Context: the bot belongs to my app from docs/SPEC.md. Use the same provider as the web app; key in bot/.env as ANTHROPIC_API_KEY, model from CLAUDE_MODEL (default claude-sonnet-5-5).
 
 Constraints:
 - System prompt in bot/prompts/system.ts. Draft it with me: role, the one job, tone (friendly, brief, max ~80 words per reply), what to do with off-topic requests, never claims to have saved data (it can't yet).
@@ -115,7 +114,7 @@ showing `/start` and at least one AI reply, and upload it. Commit and push (chec
 
 ### 3. Reflect (10 min)
 
-Imagine a friend using this bot daily. What would make it genuinely useful, not just a chatbot with a name? Write
+Imagine a friend using this bot daily. What would make it worth opening every day, not just a chatbot with a name? Write
 3–5 sentences: the one thing it should do, what it needs to remember, and when it should send a message unprompted.
 
 ## You're done when…
@@ -123,6 +122,6 @@ Imagine a friend using this bot daily. What would make it genuinely useful, not 
 - [ ] You can explain token, update, long polling and command in your own words.
 - [ ] The echo bot ran locally — you pasted its @username.
 - [ ] The bot answers with AI, has `/start` and `/help`, survives errors — you uploaded a chat screenshot.
-- [ ] You wrote what would make the bot genuinely useful.
+- [ ] You wrote what would make the bot worth using every day.
 
 **Tomorrow:** buttons, memory, and a bot that keeps answering while your laptop sleeps.

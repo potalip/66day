@@ -91,8 +91,7 @@ I build Telegram booking bots for beauty studios — reminders, cancellations an
 ```
 
 ```text
-I turn one long podcast episode into 5 captioned vertical shorts with your branding,
-delivered in 3 days, for a fixed price per episode.
+I turn one long podcast episode into 5 captioned vertical shorts with your branding, delivered in 3 days, for a fixed price per episode.
 ```
 
 Add your price under it. If you can't say it out loud without wincing, it's either too low or the scope is too big.

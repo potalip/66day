@@ -95,7 +95,7 @@ At the end, re-read docs/SPEC.md and tell me which line is still the most ambigu
 Answer its questions honestly — "I don't know yet" is a valid answer and usually goes into *out of scope*. Push back
 when a story sounds like two stories glued together.
 
-> **Tip:** If the spec has more than one main screen, or the word "and" appears in a user story twice, cut.
+> **Tip:** if the spec has more than one main screen, or the word "and" appears in a user story twice, cut.
 > Small and shipped beats big and imagined.
 
 ### 2. Scaffold the project (25 min)

@@ -61,8 +61,7 @@ one creator. Use the agent as an editor, not a ghostwriter:
 ```text
 Goal: help me write a proposal for this job, 80–150 words.
 Context: the posting: (paste). My best matching proof: (link to case study or demo). My offer and price: (paste).
-Process: first ask me 2 questions about the job I should think through. Then draft it:
-line 1 their problem in their words, then my one proof, a 3-step plan, one question, price and timeline.
+Process: first ask me 2 questions about the job I should think through. Then draft it: line 1 their problem in their words, then my one proof, a 3-step plan, one question, price and timeline.
 Constraints: no clichés ("passionate", "I hope this finds you well", "I'm the perfect fit"), no bullet walls, sound like a person. Don't invent experience I don't have.
 Done when: I can read it aloud in under 45 seconds and it couldn't be sent to any other client.
 ```

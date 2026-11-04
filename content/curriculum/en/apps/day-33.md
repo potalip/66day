@@ -106,7 +106,7 @@ injection is mitigated, never "solved").
 
 ### 3. Rate limit + spend cap (20 min)
 
-Two belts, both required:
+Two limits, and you need both:
 
 - **Provider side**: in your AI provider's console set a **monthly spend limit** and a usage alert at 50%. This is the
   cap that still works when your code has a bug.

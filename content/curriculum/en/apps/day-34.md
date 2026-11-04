@@ -97,9 +97,7 @@ Constraints:
 - A server helper track(name, props) used inside our API handlers, plus POST /api/events for front-end-only events (accepts only an allow-list of names, rate-limited). Never let a failed track() break the user's request.
 - Track exactly: session_started, signup_completed, core_action_done, ai_called (props: model, tokens, ms), upgrade_clicked. Props never contain emails, names or message text.
 - Optional: mirror the same events to Plausible OR PostHog (EU host, session recording and input autocapture off), production only.
-- Error log: window error + unhandledrejection handlers and an API error middleware send
-  {message, stack (trimmed), route, release, time} to POST /api/errors, stored in an errors table.
-  Rate-limit that endpoint. A new error type sends me one Telegram message (reuse day 31's helper).
+- Error log: window error + unhandledrejection handlers and an API error middleware send {message, stack (trimmed), route, release, time} to POST /api/errors, stored in an errors table. Rate-limit that endpoint. A new error type sends me one Telegram message (reuse day 31's helper).
 - A tiny /admin/errors page (owner only) listing the last 50 errors.
 - Mention analytics in our privacy note in one plain sentence.
 Done when: I trigger a test event and a test error and see both, and this query works:

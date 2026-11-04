@@ -35,7 +35,7 @@ tasks:
 
 On day 26 you gave the AI *inside* your app two tools. Today you flip it around: you give AI assistants *outside* your
 app (Claude Code, Claude Desktop, other MCP-capable tools) a way to use it. Ask your agent "what did I add this
-week?" and it simply checks. That's MCP, and once you've built one server, you'll see plugs everywhere.
+week?" and it checks. That's MCP, and once you've built one server, you'll see plugs everywhere.
 
 ## MCP in one picture
 
@@ -96,8 +96,7 @@ personal token, so it respects the same auth and limits as the app does.
 Choose two tools: one **read** and one **write**. For example `list_recent_items` and `add_item`.
 
 ```text
-Goal: a tiny MCP server for my app, in TypeScript, using the official MCP TypeScript SDK (@modelcontextprotocol/sdk) and zod for input schemas. Use stdio transport. Check the SDK README for current package names, import paths and
-APIs (they change between major versions).
+Goal: a tiny MCP server for my app, in TypeScript, using the official MCP TypeScript SDK (@modelcontextprotocol/sdk) and zod for input schemas. Use stdio transport. Check the SDK README for current package names, import paths and APIs (they change between major versions).
 Context: my app's API is at APP_URL with endpoints <list them>; auth with an API token in env APP_TOKEN.
 Add a POST /api/tokens endpoint to the app that lets a signed-in user create a personal token (store only a hash), and let the API accept "Authorization: Bearer <token>" as an alternative to the session cookie, mapped to that user.
 Tools:

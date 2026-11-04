@@ -44,7 +44,7 @@ which is also data.
 - **One person, one annoyance.** A parent, a friend who runs a small business, a colleague, the organiser of your
   running club. Someone you can reach today.
 - **Small enough to finish.** You have about 85 minutes of building. If it can't be done in that time, cut it until
-  it can. A finished small thing beats an impressive half-thing every single time.
+  it can. A finished small thing beats an impressive half-thing every time.
 - **Either track.** A small tool (apps) or a 20–30 second video made with code (video). Use the track you picked
   yesterday — or the other one, if their problem clearly calls for it.
 - **It goes online and into their hands.** A link they can open, not a file on your laptop.
@@ -86,8 +86,7 @@ vertical video that shows the café's new opening hours and how to pre-order". T
 Goal: a small web tool for <person>, who <the annoyance, in their words>.
 Solved looks like: <line 3 of my problem statement>.
 
-Context: reuse the pattern from my previous tool: Cloudflare Worker serving public/index.html plus POST /api/run,
-AI key as a secret, model claude-sonnet-5-5 (or what I used before). If this needs no AI at all, skip the API.
+Context: reuse the pattern from my previous tool: Cloudflare Worker serving public/index.html plus POST /api/run, AI key as a secret, model claude-sonnet-5-5 (or what I used before). If this needs no AI at all, skip the API.
 
 Constraints:
 - One screen, phone first, big buttons, plain words — <person> is not technical.

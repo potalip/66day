@@ -65,7 +65,7 @@ One input box, one button, one useful answer. Some that work well:
 - **Plain English** — paste a confusing letter from a bank or landlord, get three bullet points of what it means.
 - **Headline Doctor** — paste a post title, get five sharper versions.
 
-Choose one you'd actually use this week. Real beats impressive.
+Choose one you'd actually use this week. Useful matters more than impressive.
 
 ### 2. Build it (50 min)
 

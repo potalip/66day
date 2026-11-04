@@ -35,7 +35,7 @@ about the app.
 
 A good beta has three properties:
 
-- **Real people with the real problem.** Not your mum being polite. People who match the "users" line from your
+- **Real people with the real problem.** Not a friend being polite. People who match the "users" line from your
   day 50 spec. Your best sources are already in your hands: the 3 users from day 27, the waitlist from your day 36
   landing page, the client from day 41, and anyone who replied to your day 50 announcement.
 - **A specific task.** "Have a look" produces "looks nice!". "Use it to plan next week's meals and tell me where it

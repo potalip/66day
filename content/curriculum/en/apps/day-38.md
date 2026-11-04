@@ -46,7 +46,7 @@ change, and `git status` becomes a crime scene. You need separate workspaces.
   checked out. Same history, separate files. Perfect for one agent per folder.
 - **Subagents** are helpers that one agent starts for itself, for example to search the codebase or review a diff,
   each with a fresh context. Claude Code supports them, and so do other agents in some form. Good for research and
-  review inside one task; worktrees are for truly separate tasks.
+  review inside one task; worktrees are for fully separate tasks.
 
 The analogy: worktrees are two desks with two copies of the same blueprint. Subagents are interns your lead engineer
 sends to the archive.

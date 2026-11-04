@@ -62,8 +62,7 @@ claude
 Goal: set up a tidy workspace for phase 2 of my learning, track: <apps | video>.
 
 Apps: folder ~/66/apps with main-app/ (empty for now — day 15 fills it), sandbox/ for experiments, notes/prompts.md for prompts that worked, and a CLAUDE.md describing my stack (Cloudflare Workers, my AI provider, mobile-first, never commit secrets).
-Video: folder ~/66/video with assets/fonts, assets/music, assets/images, projects/, renders/, snippets/ (copy my title-card project from ~/title-card here, without its .venv and frames), notes/prompts.md, a CLAUDE.md (Python + Pillow + ffmpeg, 1080x1920 default, yuv420p) and a
-.gitignore that ignores renders/, frames/ and .venv/.
+Video: folder ~/66/video with assets/fonts, assets/music, assets/images, projects/, renders/, snippets/ (copy my title-card project from ~/title-card here, without its .venv and frames), notes/prompts.md, a CLAUDE.md (Python + Pillow + ffmpeg, 1080x1920 default, yuv420p) and a .gitignore that ignores renders/, frames/ and .venv/.
 
 Done when: the folders exist and you print the structure two levels deep. Video: git init in ~/66/video with a first commit. Apps: no repo at the top of ~/66/apps — main-app gets its own repo on day 15.
 ```
@@ -75,7 +74,7 @@ Done when: the folders exist and you print the structure two levels deep. Video:
 Write to the person who'll open this in seven weeks. What are you scared of? What do you hope they've built? What
 should they remember about how today felt? Keep a copy somewhere private — you'll read it on graduation day.
 
-**Proof:** paste the letter — or just its first line, if you’d rather keep the rest to yourself.
+**Proof:** paste the letter — or just its first line, if you'd rather keep the rest to yourself.
 
 ## You're done when…
 

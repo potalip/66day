@@ -99,7 +99,7 @@ Open the screenshots. Actually look at them: text touching the edge of the scree
 sentence each about what's wrong. **Proof for task 2:** attach the best 3–4 screenshots (one must be an error state).
 
 > **Tip:** an error message is a tiny piece of customer support. "We couldn't reach the AI. Your text is saved — try
-> again in a minute" beats "Something went wrong" every time.
+> again in a minute" helps far more than "Something went wrong".
 
 ### 4. Watch someone (15 min)
 

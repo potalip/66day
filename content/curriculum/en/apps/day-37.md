@@ -43,7 +43,7 @@ of feedback, ask:
 
 1. **What type is it?** `bug` (something broken), `ux` (works, but confusing), `idea` (new feature), `question`
    (maybe your copy is unclear, which is a `ux` in disguise).
-2. **How many people does it hit, and how badly?** A bug in sign-up beats a typo on the FAQ.
+2. **How many people does it hit, and how badly?** A bug in sign-up matters more than a typo in the FAQ.
 3. **How big is the fix?** Small, medium, large.
 
 Fix **high-impact + small** first. Park big ideas in a `later` label without guilt. And listen for the problem, not

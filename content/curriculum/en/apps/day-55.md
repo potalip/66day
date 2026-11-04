@@ -85,7 +85,7 @@ Cloudflare, or a push to `main` on Vercel). Then do the smoke test on your phone
 test from day 53 against the production URL too.
 
 > **If you're stuck:** a deploy fails 20 minutes before you meant to post? Don't fight it at speed. Roll back to the
-> last working deploy (both Cloudflare and Vercel keep previous versions), post the beta on that, and fix in calm.
+> last working deploy (both Cloudflare and Vercel keep previous versions), post the beta on that, and fix it calmly.
 > A beta with one fewer fix is fine; a broken link is not.
 
 **Proof for task 1:** the public URL.

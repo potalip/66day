@@ -92,7 +92,7 @@ Constraints:
 - Simple sign-in for the client's staff only; per-business data isolation.
 - Tests for the core rule (e.g. "next person on the waitlist gets the spot"); CI on GitHub Actions.
 - Seed with realistic fake data for the demo; a clear import path for their real data.
-- AI only where it really helps; works without an API key.
+- AI only where it clearly helps; works without an API key.
 Done when: deployed, the 3 stories work end to end at 390px, and CI is green. Plan the work first and show me.
 ```
 
@@ -102,7 +102,7 @@ email message to the next person with a link to confirm within 2 hours
 phone. Paste the live link for task 2.
 
 > **If you're stuck:** at the halfway mark, if a story isn't working, cut it and tell the client honestly: "This is v1;
-> X comes next week." A finished small tool beats an unfinished big one, every time.
+> X comes next week." A small tool that works is worth more than a big one that doesn't.
 
 ### 3. Hand-over (40 min)
 

@@ -3,7 +3,7 @@ day: 12
 track: common
 phase: 1
 title: "Taste both tracks, then choose"
-summary: "Thirty minutes upgrading your app, thirty minutes rendering your first video from code, then you pick your road."
+summary: "Thirty minutes upgrading your app, thirty minutes rendering your first video from code, then you pick your track."
 estMinutes: 90
 badges: [track-picked]
 resources:
@@ -93,11 +93,10 @@ Context: Python 3 and ffmpeg are installed. New folder, nothing else here. Creat
 
 Spec:
 - 1080x1920 (vertical), 30 fps, 150 frames, dark background (#0f1412).
-- Big title "<YOUR NAME> · Day 12 of 66" in white, centred. Smaller subtitle below: "<one line about your journey>".
+- Big title "<YOUR NAME> · Day 12 of 66" in white, centred. Smaller subtitle below: "<one line about what you're building>".
 - Motion: 0–1 s the title slides up 80 px and fades in with an ease-out curve; 0.5–1.5 s the subtitle fades in; 1–2 s a green (#3ecf8e) underline grows from the centre to the title's width; 2–4.5 s hold; 4.5–5 s everything fades out.
 - Font: download a free font from Google Fonts (e.g. Inter or Manrope) into fonts/; if it's missing, fall back to Pillow's default font at a large size, so the script never crashes.
-- Script render.py writes frames to frames/frame_0000.png … then calls ffmpeg:
-  ffmpeg -y -framerate 30 -i frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 title.mp4
+- Script render.py writes frames to frames/frame_0000.png … then calls ffmpeg: ffmpeg -y -framerate 30 -i frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 title.mp4
 - Put the timing numbers as named constants at the top so I can tweak them.
 
 Done when: python render.py produces title.mp4 that plays in my normal video player.

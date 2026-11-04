@@ -100,8 +100,7 @@ Open your promise-page repo in the agent and give it this:
 Goal: show live weather for my city on my 66-day promise page.
 
 Context: this is a static site on GitHub Pages (plain HTML/CSS/JS, no build step).
-Use the Open-Meteo forecast API, no key needed:
-https://api.open-meteo.com/v1/forecast?latitude=<LAT>&longitude=<LON>&current=temperature_2m,wind_speed_10m&timezone=auto
+Use the Open-Meteo forecast API, no key needed: https://api.open-meteo.com/v1/forecast?latitude=<LAT>&longitude=<LON>&current=temperature_2m,wind_speed_10m&timezone=auto
 My coordinates: <LAT>, <LON>. City name to display: <CITY>.
 
 Constraints:
@@ -120,7 +119,7 @@ click the `forecast` request: you'll see the same JSON your terminal showed. Sam
 
 Test the failure path once: in DevTools, set Network to **Offline** and reload. Your fallback line should appear.
 
-> **Tip:** Not into weather? Swap in another key-free API with the same prompt: a random fact, today's sunrise time
+> **Tip:** not into weather? Swap in another key-free API with the same prompt: a random fact, today's sunrise time
 > (Open-Meteo has `daily=sunrise`), or a placeholder JSON from jsonplaceholder.typicode.com for practice.
 
 Push, wait a minute for GitHub Pages to rebuild, and open your live URL on your phone.

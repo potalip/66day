@@ -55,7 +55,7 @@ Test these, in this order:
 
 Skip: styling, third-party libraries, and the AI model's exact wording (it changes every run, so test the *shape*, not the words).
 
-> **Tip:** The best single trick: after a test passes, break the code on purpose (flip a `>` to `<`). If the test stays
+> **Tip:** the best single trick: after a test passes, break the code on purpose (flip a `>` to `<`). If the test stays
 > green, it's useless. This is called mutation testing, and you just did it by hand.
 
 ## Step by step

@@ -52,8 +52,7 @@ any text editor works.
 Then ask your agent for a guided tour:
 
 ```text
-Explain index.html to me section by section, like I'm a beginner. For each section give
-the line numbers, what it does in one sentence, and one thing I could safely change there.
+Explain index.html to me section by section, like I'm a beginner. For each section give the line numbers, what it does in one sentence, and one thing I could safely change there.
 Don't edit anything.
 ```
 
@@ -91,8 +90,7 @@ Goal: add a small footer that says "Day 5: I read my own code." in a muted color
 
 Constraints: footer only, keep everything else as it is. After the change, tell me exactly which lines you added so I can find them in my editor.
 
-Done when: both my manual change and your footer are committed together with the message
-"day 5: hand edit + footer" and pushed. Print the GitHub link to the commit.
+Done when: both my manual change and your footer are committed together with the message "day 5: hand edit + footer" and pushed. Print the GitHub link to the commit.
 ```
 
 Find the agent's lines in your editor. Reading what it did is the whole point.

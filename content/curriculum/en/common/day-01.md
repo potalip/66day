@@ -40,14 +40,14 @@ yourself for the next 66 days.
 ## What a coding agent is (and isn't)
 
 A chatbot gives you code to copy. A **coding agent** works *inside a folder on your computer*: it reads files, writes
-new ones, runs commands, looks at the result and tries again. Think of a fast, eager junior developer sitting at your
-keyboard — you're the one who decides what gets built and whether it's good.
+new ones, runs commands, looks at the result and tries again. Think of a fast, eager junior developer at your
+keyboard. You decide what gets built and whether it's good.
 
-What it isn't: a mind reader or an oracle. It will confidently do the wrong thing if you're vague, and it asks
-permission before touching files or running commands. Read those prompts; saying "yes" is your job now.
+What it isn't: a mind reader or an oracle. Be vague and it will confidently do the wrong thing. It also asks
+permission before touching files or running commands. Read those requests: saying "yes" is your job now.
 
 **The terminal** is the text window where you type commands. macOS: *Terminal* (Cmd+Space, type "Terminal").
-Windows: *Terminal* or *PowerShell* from the Start menu. Linux: you probably know already (Ctrl+Alt+T on most).
+Windows: *Terminal* or *PowerShell* from the Start menu. Linux: you probably know already (Ctrl+Alt+T on most systems).
 
 ## Step 1 — Install your agent (15 min)
 
@@ -88,7 +88,7 @@ this folder — it's your own empty folder, so yes. Then type `hi, what can you 
 > **If you're stuck:** "command not found" right after installing almost always means the terminal needs a
 > restart. Close it, open a new one, try `claude --version`. If the installer printed a line about adding a folder
 > to your PATH, run exactly that line first. Still nothing? Paste the exact error into
-> claude.ai (or any chatbot) and ask what it means — that's a legit skill, not cheating.
+> claude.ai (or any chatbot) and ask what it means — that's a real skill, not cheating.
 
 **Proof:** paste the output of `claude --version` (or your agent's version) and its first reply.
 
@@ -99,18 +99,11 @@ Copy this prompt, rewrite the "About me" part so it's about *you*, and paste it 
 ```text
 Goal: build a one-page website called "My 66-day promise" in this folder.
 
-About me: my name is Alex. I'm learning to build apps and videos with AI coding agents,
-one or two hours a day, for 66 days starting today. By day 66 I want to have built
-a small app that helps my sister book clients for her nail studio.
+About me: my name is Alex. I'm learning to build apps and videos with AI coding agents, one or two hours a day, for 66 days starting today. By day 66 I want to have built a small app that helps my sister book clients for her nail studio.
 
-Content: a big headline with my promise, a short "why I'm doing this" paragraph,
-what I want built by day 66, today's date as the start date, and a grid of 66 small
-squares (the first one filled in) to show progress.
+Content: a big headline with my promise, a short "why I'm doing this" paragraph, what I want built by day 66, today's date as the start date, and a grid of 66 small squares (the first one filled in) to show progress.
 
-Constraints: a single index.html file with the CSS inside it, no frameworks, no images
-from the internet. Calm and beautiful: lots of white space, one accent color, nice
-typography from the system font stack, readable on a phone. Support light and dark
-mode automatically.
+Constraints: a single index.html file with the CSS inside it, no frameworks, no images from the internet. Calm and beautiful: lots of white space, one accent color, clean typography from the system font stack, readable on a phone. Support light and dark mode automatically.
 
 Done when: index.html exists and you have opened it in my default browser.
 ```
@@ -123,7 +116,7 @@ start index.html       # Windows
 xdg-open index.html    # Linux
 ```
 
-Don't love something? Just say so, like you would to a designer: `make the headline bigger and the squares round`,
+Don't like something? Say so, as you would to a designer: `make the headline bigger and the squares round`,
 `the green looks like a hospital, try a warm leaf green`. Two or three rounds is normal.
 
 **Proof:** a screenshot of the page in your browser.

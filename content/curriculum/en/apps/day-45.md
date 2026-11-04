@@ -92,7 +92,7 @@ Done when: the page renders with real numbers and a non-admin gets 403 from the 
 
 ### 3. The "ask a question" box — with guard rails (25 min)
 
-Natural-language-to-SQL is magic and dangerous: the model writes the query, your database runs it. Without
+Natural-language-to-SQL is impressive and dangerous: the model writes the query, your database runs it. Without
 guards, one confused (or manipulated) answer is `DELETE FROM users`. So you stack defences, and each one alone
 would stop the disaster:
 

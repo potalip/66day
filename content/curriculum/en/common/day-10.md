@@ -33,7 +33,7 @@ tasks:
 ---
 
 Sooner or later your agent will say "Fixed it!" for the fourth time while the same error stares back at you. That's
-not a sign you're bad at this — it's Tuesday. The difference between people who give up and people who ship is a
+not a sign you're bad at this. It's a normal day. The difference between people who give up and people who ship is a
 boring, reliable method for finding what's wrong, plus a few moves for pulling an agent out of a loop.
 
 ## The debugging loop
@@ -115,8 +115,7 @@ day 5. Then bring in the agent, but make it follow the loop instead of rewriting
 ```text
 Goal: find the bugs in streak.mjs. Don't edit the file yet.
 
-Context: for this log the correct output is: Total 4.5 h, Current streak 2 days, Best day 2026-11-04,
-Average 54 min/day. The actual output is: <paste what you got>.
+Context: for this log the correct output is: Total 4.5 h, Current streak 2 days, Best day 2026-11-04, Average 54 min/day. The actual output is: <paste what you got>.
 
 Constraints:
 - For each wrong line, point to the exact line of code responsible and explain the cause in one sentence.

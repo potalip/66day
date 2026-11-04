@@ -59,13 +59,12 @@ If they can't answer, the headline failed, not the person.
 
 ### 1. Write the words first (15 min)
 
-Copy beats design. Ask the agent to help you think, then decide yourself:
+Words first, design second. Ask the agent to help you think, then decide yourself:
 
 ```text
 Goal: draft landing page copy for my app.
 Context: the app does <one sentence>. Users are <who>. My 3 real users said: <paste their actual words or feedback from day 27>.
-Constraints: give me the problem in the user's words (2 sentences), 5 different headline options (max 10 words each, no buzzwords like "revolutionary", "AI-powered", "seamless"), a one-line subheadline, 3 how-it-works steps,
-3 FAQ entries and one CTA label.
+Constraints: give me the problem in the user's words (2 sentences), 5 different headline options (max 10 words each, no buzzwords like "revolutionary", "AI-powered", "seamless"), a one-line subheadline, 3 how-it-works steps, 3 FAQ entries and one CTA label.
 Done when: each headline takes a different angle (time saved, pain removed, outcome, identity, curiosity).
 ```
 
@@ -89,7 +88,7 @@ Done when: it's deployed and you show me phone and desktop screenshots in both t
 Look at the screenshots like a stranger. Is the CTA obvious? Is there anything you'd skip? Cut it. Deploy and paste the live link.
 
 > **If you're stuck:** if it looks generic, it's usually the screenshot. Replace stock illustrations with a real
-> crop of your app doing the main thing. Real beats pretty. If the link preview in a messenger shows no image, ask the
+> crop of your app doing the main thing. Real convinces; pretty doesn't. If the link preview in a messenger shows no image, ask the
 > agent to check the `og:image` URL is absolute and publicly reachable.
 
 ### 3. Headline test with 5 people (20 min)

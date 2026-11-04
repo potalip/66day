@@ -35,7 +35,7 @@ tasks:
 
 Typing is great until your hands are full, your eyes are busy, or the thing you need to practise is *speaking*.
 Today you build a small voice assistant that does **one narrow job** well — and you learn the one number that
-decides whether voice feels magical or broken: latency.
+decides whether voice feels natural or broken: latency.
 
 ## Two ways to build voice
 
@@ -78,9 +78,7 @@ Start with **push-to-talk** (hold a button to speak). It sidesteps silence detec
 
 ```text
 Goal: a voice page /voice in my app for one job: <your one-sentence job>.
-Flow: hold-to-talk button records the mic with MediaRecorder (pick a supported type with
-MediaRecorder.isTypeSupported: webm/opus in Chrome, mp4/AAC in iPhone Safari) -> POST to /api/voice -> server: STT (<provider or faster-whisper>) -> LLM with this system prompt: <paste> and the last 6 turns ->
-TTS (<provider>) -> stream audio back and play it immediately.
+Flow: hold-to-talk button records the mic with MediaRecorder (pick a supported type with MediaRecorder.isTypeSupported: webm/opus in Chrome, mp4/AAC in iPhone Safari) -> POST to /api/voice -> server: STT (<provider or faster-whisper>) -> LLM with this system prompt: <paste> and the last 6 turns -> TTS (<provider>) -> stream audio back and play it immediately.
 Requirements:
 - Stream the LLM reply; split it into sentences and send the FIRST sentence to TTS as soon as it's complete.
 - Show the transcript of both sides on screen.

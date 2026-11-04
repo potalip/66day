@@ -28,7 +28,7 @@ break from it. Close the laptop when you're done.
 
 ## Look back (15 min)
 
-Write five sentences, one for each prompt. Honest beats polished.
+Write five sentences, one for each prompt. Aim for honest, not polished.
 
 1. What **surprised** you this week?
 2. What was **hard** — the moment you almost gave up?

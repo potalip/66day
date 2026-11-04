@@ -87,7 +87,7 @@ For `gh auth login` choose GitHub.com → HTTPS → "Login with a web browser". 
 
 ## Step 3 — Push with the agent (15 min)
 
-Go to your project folder, start the agent and paste:
+Go to your project folder and start the agent, then paste the prompt below:
 
 ```bash
 cd ~/66-day-promise
@@ -97,15 +97,11 @@ claude
 ```text
 Goal: put this folder on GitHub as a public repository called 66-day-promise.
 
-Context: I'm a beginner. git and the GitHub CLI (gh) are installed and I'm logged in
-with gh. The folder contains my index.html page.
+Context: I'm a beginner. git and the GitHub CLI (gh) are installed and I'm logged in with gh. The folder contains my index.html page.
 
-Constraints: explain each command in one plain sentence before you run it. Make one
-first commit with a clear message. Don't add any files except a short README.md
-that says what this page is.
+Constraints: explain each command in one plain sentence before you run it. Make one first commit with a clear message. Don't add any files except a short README.md that says what this page is.
 
-Done when: the repo exists on GitHub, the commit is pushed, and you've printed the
-repo URL.
+Done when: the repo exists on GitHub, the commit is pushed, and you've printed the repo URL.
 ```
 
 Open the URL it prints. You should see `index.html` and `README.md` on GitHub.
@@ -115,7 +111,7 @@ Open the URL it prints. You should see `index.html` and `README.md` on GitHub.
 ## Step 4 — Turn on Pages (10 min)
 
 On the repo page: **Settings → Pages**. Under *Build and deployment*, set Source to **Deploy from a branch**,
-branch **main** (if you only see `master`, pick that), folder **/ (root)**, then **Save**. Wait one or two minutes and refresh: a box appears with your
+branch **main** (if you only see `master`, pick that), folder **/ (root)**, then **Save**. Wait a minute or two and refresh: a box appears with your
 live URL. Open it on your phone, too — that's the real test.
 
 > **If you're stuck:** a 404 page usually means "not yet" — wait two minutes. Still 404? Check that the file is

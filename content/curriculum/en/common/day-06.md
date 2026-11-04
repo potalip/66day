@@ -44,7 +44,7 @@ A **branch** is a parallel timeline. `main` is the real one — it's what GitHub
 `redesign`, and every commit there stays off `main` until you decide to **merge**. Hate the result? Delete the
 branch; `main` never knew.
 
-Five commands cover 90% of life:
+Five commands cover 90% of everyday git:
 
 ```bash
 git status                 # what changed since the last commit?
@@ -67,16 +67,13 @@ claude
 ```
 
 ```text
-Goal: a bold redesign of my promise page. Try a completely different look: a new layout,
-a new color mood, different typography. Surprise me.
+Goal: a bold redesign of my promise page. Try a completely different look: a new layout, a new color mood, different typography. Surprise me.
 
 Context: we're on a git branch called redesign, so it's safe to change a lot.
 
-Constraints: keep all the content and the day counter working. Still one index.html,
-still readable at 390px and in dark mode.
+Constraints: keep all the content and the day counter working. Still one index.html, still readable at 390px and in dark mode.
 
-Done when: the page is open in my browser and the redesign is committed on the redesign
-branch. Don't merge and don't push.
+Done when: the page is open in my browser and the redesign is committed on the redesign branch. Don't merge and don't push.
 ```
 
 Look at it. Then jump between timelines and watch the page change after each switch (refresh the browser):

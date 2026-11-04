@@ -108,7 +108,7 @@ curl -i -X POST https://<your-app>/api/telegram/auth \
 ```
 
 You want `401`. If you get `200`, your validation isn't validating. (On Windows, run this in Git Bash — PowerShell
-handles the quotes and line breaks differently — or simply ask the agent to send the request for you.)
+handles the quotes and line breaks differently — or ask the agent to send the request for you.)
 
 > **If you're stuck:** the most common bug is building the data-check-string from already-decoded JSON in a different
 > order, or including `hash` in it. Second most common: using the bot token directly as the HMAC key instead of the

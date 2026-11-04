@@ -57,9 +57,7 @@ Pick one format:
 Not sure? Ask your own agent first, then explain it *in your own words*:
 
 ```text
-A beginner sent me this error: (paste it). Explain the most likely cause in plain words,
-then give me one question I should ask them to confirm it. Don't write the fix — I want
-to guide them to it.
+A beginner sent me this error: (paste it). Explain the most likely cause in plain words, then give me one question I should ask them to confirm it. Don't write the fix — I want to guide them to it.
 ```
 
 > **Important:** never ask for someone's API key or password. If they paste a key into a chat, tell them kindly to

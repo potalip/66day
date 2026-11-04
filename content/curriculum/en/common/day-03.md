@@ -39,7 +39,7 @@ later day depends on, and get your first useful program.
 
 ## The dozen commands
 
-The terminal always "stands" in one folder, like a file explorer window without the pictures.
+The terminal always sits inside one folder, like a file explorer window without the pictures.
 
 | Command | What it does |
 |---|---|
@@ -85,8 +85,7 @@ nvm install --lts
 ```
 
 Version numbers move fast. On Windows, `winget search Python.Python` lists the current 3.x releases; if 3.14 isn't
-the newest any more, take the newest.
-Then check all three:
+the newest any more, take the newest. Then check all three:
 
 ```bash
 node --version
@@ -114,23 +113,18 @@ claude
 ```
 
 ```text
-Goal: a small Python command-line tool, tidy.py, that sorts the files in a folder into
-subfolders by type: Images, Documents, Videos, Audio, Archives, Other.
+Goal: a small Python command-line tool, tidy.py, that sorts the files in a folder into subfolders by type: Images, Documents, Videos, Audio, Archives, Other.
 
-Context: I'm a beginner. Python 3 is installed. Check which operating system I'm on and
-tell me the exact command to run the tool here.
+Context: I'm a beginner. Python 3 is installed. Check which operating system I'm on and tell me the exact command to run the tool here.
 
 Constraints:
 - Standard library only, one file.
 - Usage: python tidy.py <folder> (expand ~ in the path). The default is a DRY RUN that prints a table of "file -> destination" plus a count per category, and moves nothing.
 - Files are moved only when I add --apply.
-- Only top-level files; never touch subfolders, never delete, never overwrite
-  (add " (2)" to the name if it exists).
-- First create a test folder called sample with 12 fake empty files of mixed types,
-  and demonstrate the tool on it.
+- Only top-level files; never touch subfolders, never delete, never overwrite (add " (2)" to the name if it exists).
+- First create a test folder called sample with 12 fake empty files of mixed types, and demonstrate the tool on it.
 
-Done when: you've shown me the dry run on sample, then --apply on sample, and explained
-the code in five short bullet points.
+Done when: you've shown me the dry run on sample, then --apply on sample, and explained the code in five short bullet points.
 ```
 
 Watch the test run. When it looks right, try a dry run on your real Downloads (use `python` on Windows):

@@ -32,7 +32,7 @@ tasks:
     proof: text
 ---
 
-A public repo is a portfolio piece that works while you sleep. A future client, a hiring manager or a fellow
+A public repo is a portfolio piece that's always on display. A future client, a hiring manager or a fellow
 builder lands on it and decides in about ten seconds whether you're someone who finishes things. Today you make one
 repo pass that ten-second test, and you send your first contribution to a project you've been using for free.
 
@@ -107,8 +107,8 @@ You've used dozens of open-source tools in 48 days. Give one of them something s
 
 Etiquette that gets you merged instead of ignored: read `CONTRIBUTING.md` first, search existing issues, keep it
 small, and explain *why*. Maintainers are drowning in low-effort AI-generated PRs — use your agent to help, but
-understand and stand behind every line, and say that AI helped if the project asks. A thoughtful issue beats a
-careless PR every time.
+understand and stand behind every line, and say that AI helped if the project asks. A thoughtful issue is worth more
+than a careless PR.
 
 Paste the link to your issue or PR. It doesn't have to be merged today.
 

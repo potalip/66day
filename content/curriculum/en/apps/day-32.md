@@ -32,7 +32,7 @@ tasks:
     proof: none
 ---
 
-The day someone pays for something you built is a different day. Today you build the whole money path in **test
+The first time someone pays for something you built feels different. Today you build the whole money path in **test
 mode**: no real cards, no real money, but exactly the same code you'd run in production. By tonight your app has a
 "Pro" switch that only a real (test) payment can flip.
 
@@ -77,8 +77,7 @@ Context: our app (React + Vite, API on Cloudflare Workers + D1, auth from day 24
 Price id is in env STRIPE_PRICE_ID; keys in STRIPE_SECRET_KEY and STRIPE_WEBHOOK_SECRET.
 Constraints:
 - POST /api/billing/checkout (signed-in only) creates a Checkout Session with client_reference_id = user id (mode "payment" for a one-time price, "subscription" for a monthly one) and returns the URL. Never accept price or user id from the browser.
-- POST /api/stripe/webhook reads the RAW body and verifies the Stripe-Signature header
-  (on Workers use the async verification with the SubtleCrypto provider). Reject invalid signatures with 400.
+- POST /api/stripe/webhook reads the RAW body and verifies the Stripe-Signature header (on Workers use the async verification with the SubtleCrypto provider). Reject invalid signatures with 400.
 - On checkout.session.completed with payment_status "paid": set users.plan = 'pro' for client_reference_id.
 - Store processed event ids in a stripe_events table (id UNIQUE); if seen before, return 200 and do nothing.
 - The success page polls GET /api/me until plan is 'pro'. One Pro-only feature checks plan on the SERVER.

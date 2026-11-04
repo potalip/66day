@@ -66,8 +66,7 @@ git, so your laptop and the live database always have the same shape.
 Goal: replace src/sampleData.ts with a real database and a CRUD API.
 
 Context: our app is described in docs/SPEC.md (see the Data section). Frontend is Vite + React + TS.
-Use Cloudflare Workers + D1 (one Worker serves the built frontend and the API under /api; use the current
-Cloudflare Vite plugin setup from the docs). Hono for routing is fine.
+Use Cloudflare Workers + D1 (one Worker serves the built frontend and the API under /api; use the current Cloudflare Vite plugin setup from the docs). Hono for routing is fine.
 
 Constraints:
 - Schema as a migration in migrations/0001_init.sql. Every table gets id, created_at, updated_at.

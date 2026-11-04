@@ -60,8 +60,8 @@ Examples to spark ideas, not to copy:
 
 Circle the idea your "fuels" list points to. That's usually the one.
 
-> **Tip:** if all three ideas feel too big, cut each one in half and check again. Smaller and live beats ambitious
-> and stuck on day 64.
+> **Tip:** if all three ideas feel too big, cut each one in half and check again. Small and live is better than
+> ambitious and stuck on day 64.
 
 ## You're done when…
 

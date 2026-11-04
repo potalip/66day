@@ -56,7 +56,7 @@ find . -maxdepth 4 -name .git -type d 2>/dev/null | while read -r g; do git -C "
 ```
 
 Then: how many things you've put online, and how many real people have used or watched your work. Rough counts are
-fine — honest ones only. (On Windows, run it in Git Bash. Or simply ask your agent to count the commits in every repo under your home folder.)
+fine — honest ones only. (On Windows, run it in Git Bash. Or ask your agent to count the commits in every repo under your home folder.)
 
 Now write, briefly and plainly:
 

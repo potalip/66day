@@ -74,11 +74,7 @@ Sections:
 5. The AI at the core — what the model does, which model tier, how I'll eval it (10 cases on day 52).
 6. v1 scope — IN (max 5 items) and OUT (everything else, explicitly listed).
 7. Success metrics — for the day-55 beta (e.g. 10 users, 50% finish the core loop) and day-65 launch.
-8. Milestones — one line per day, using this calendar:
-   51 core loop end to end · 52 core AI + eval + cost per user · 53 onboarding and polish ·
-   54 5 beta testers, fix top 3 · 55 public beta (boss) · 56 rest ·
-   57-60 portfolio and paid-work days: 20-30 min of capstone fixes each · 61 starter kit extracted ·
-   62 launch kit and channels · 63 rest · 64 final polish, tag v1.0 · 65 launch.
+8. Milestones — one line per day, using this calendar: 51 core loop end to end · 52 core AI + eval + cost per user · 53 onboarding and polish · 54 5 beta testers, fix top 3 · 55 public beta (boss) · 56 rest · 57-60 portfolio and paid-work days: 20-30 min of capstone fixes each · 61 starter kit extracted · 62 launch kit and channels · 63 rest · 64 final polish, tag v1.0 · 65 launch.
 Push back if my IN list is too big for this calendar. Keep the whole spec under 1 page.
 ```
 
@@ -110,7 +106,7 @@ Paste your risks and kill criteria.
 
 ### 4. Announce it (15 min)
 
-Saying it publicly is the cheapest motivation hack there is. Post on X, Threads, LinkedIn, Bluesky, a relevant
+Saying it publicly is the cheapest motivation there is. Post on X, Threads, LinkedIn, Bluesky, a relevant
 subreddit or your community — wherever your 5 users or your future clients are:
 
 ```text

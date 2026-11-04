@@ -71,9 +71,7 @@ Try it with 5 inputs that real users would type. Messy ones. Note what's wrong.
 Reuse your day-47 runner. If your capstone is a new repo, copy it over.
 
 ```text
-Create evals/capstone.jsonl with 10 cases for the new AI step: 6 typical (from the inputs I just tried: <paste>),
-2 edge, 2 adversarial. Add deterministic checks (schema, limits, language, must_not) and an LLM-judge rubric of
-3-4 yes/no questions specific to this feature. Run `npm run eval -- capstone-v1` and show the table.
+Create evals/capstone.jsonl with 10 cases for the new AI step: 6 typical (from the inputs I just tried: <paste>), 2 edge, 2 adversarial. Add deterministic checks (schema, limits, language, must_not) and an LLM-judge rubric of 3-4 yes/no questions specific to this feature. Run `npm run eval -- capstone-v1` and show the table.
 ```
 
 Fix the top failure, re-run, and commit. Paste the commit link — the commit should contain the feature, the prompt

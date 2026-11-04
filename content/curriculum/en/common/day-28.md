@@ -52,8 +52,7 @@ Open each keeper with your agent and paste:
 ```text
 Goal: write a README.md for this repo that a stranger understands in 30 seconds.
 Context: read the code and package files first. I'm a beginner showing my work.
-Include: one-sentence what-and-who, a screenshot or GIF placeholder path I'll fill,
-how to run it in 3 commands or fewer, what it's built with, and what I'd do next.
+Include: one-sentence what-and-who, a screenshot or GIF placeholder path I'll fill, how to run it in 3 commands or fewer, what it's built with, and what I'd do next.
 Constraints: plain words, no marketing fluff, no badges wall. Don't change any code.
 Done when: README.md exists and every command in it actually works — run them to check.
 ```

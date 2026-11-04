@@ -88,8 +88,7 @@ Vague feedback ("make it nicer") gets random results. Precise feedback gets prec
 and find three concrete problems, using the five rules as a checklist. Then ask for them one at a time:
 
 ```text
-Look at screenshots/mobile.png. I want exactly one change:
-the "Add job" button is the same weight as the filter chips, so the main action doesn't stand out.
+Look at screenshots/mobile.png. I want exactly one change: the "Add job" button is the same weight as the filter chips, so the main action doesn't stand out.
 Make it the only filled accent button on the screen; make the chips outlined and smaller.
 
 Tell me in 2 lines what you'll change before editing. Afterwards re-run scripts/screenshot.mjs, save the result as screenshots/after-1-mobile.png, look at it and tell me honestly if it's fixed.
@@ -103,7 +102,7 @@ and upload them side by side. Commit after each round that you like:
 git add -A && git commit -m "UI: clearer primary action" && git push
 ```
 
-> **Tip:** Agents can read images. Asking "what is the weakest part of this screen according to the five rules?" is a
+> **Tip:** agents can read images. Asking "what is the weakest part of this screen according to the five rules?" is a
 > great way to get a second opinion — but you make the call.
 
 ## Quiz

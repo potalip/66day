@@ -91,8 +91,7 @@ pause. For each person write: who (initials), what they tried, what worked, wher
 ### 3. A five-line README (10 min)
 
 ```text
-Rewrite README.md as exactly five lines: 1) app name + what it does in one sentence; 2) who it's for;
-3) live link; 4) how to run it locally (one command after cloning, mention .dev.vars.example — create it if missing: variable names only, no values);
+Rewrite README.md as exactly five lines: 1) app name + what it does in one sentence; 2) who it's for; 3) live link; 4) how to run it locally (one command after cloning, mention .dev.vars.example — create it if missing: variable names only, no values);
 5) stack and status ("v1, used by 3 people"). Show it to me before saving.
 ```
 
