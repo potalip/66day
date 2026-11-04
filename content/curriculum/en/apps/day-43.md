@@ -77,19 +77,13 @@ Workbox service worker for you. That's a good choice. Give it the job:
 Goal: make my main app an installable PWA with basic offline support.
 Context: it's a Vite app deployed at <your live URL>; the API lives under /api.
 Do this:
-1. Add a web app manifest: name, short_name (max 12 chars), start_url "/", display "standalone",
-   theme_color and background_color matching our design tokens, icons 192x192 and 512x512 plus a
-   maskable 512 icon generated from our logo (put the source image in /public).
-2. Add a service worker (vite-plugin-pwa with Workbox is fine): precache the app shell; network-first for /api
-   with a 3-second timeout; never cache POST requests or anything with auth headers.
-3. Add an offline fallback: if a page or API call fails offline, show a friendly offline banner/page
-   (in every language the app supports), not a blank screen.
-4. Add an "Install app" button that uses beforeinstallprompt where supported, and on iOS Safari shows a
-   short hint: Share -> Add to Home Screen.
+1. Add a web app manifest: name, short_name (max 12 chars), start_url "/", display "standalone", theme_color and background_color matching our design tokens, icons 192x192 and 512x512 plus a maskable 512 icon generated from our logo (put the source image in /public).
+2. Add a service worker (vite-plugin-pwa with Workbox is fine): precache the app shell; network-first for /api with a 3-second timeout; never cache POST requests or anything with auth headers.
+3. Add an offline fallback: if a page or API call fails offline, show a friendly offline banner/page (in every language the app supports), not a blank screen.
+4. Add an "Install app" button that uses beforeinstallprompt where supported, and on iOS Safari shows a short hint: Share -> Add to Home Screen.
 5. Make sure a new deploy updates the app: show "New version available — reload" instead of serving stale code forever.
 Constraints: don't change existing features; keep the build passing.
-Done when: Chrome DevTools > Application shows a valid manifest and an active service worker,
-and with Network set to Offline the app still opens and shows the offline message.
+Done when: Chrome DevTools > Application shows a valid manifest and an active service worker, and with Network set to Offline the app still opens and shows the offline message.
 ```
 
 Then verify it yourself:
@@ -120,18 +114,16 @@ Screenshot your home screen with the icon visible — that's your proof. Bonus: 
 3. Can a PWA get into Google Play?
 4. Can a PWA read the user's contacts and SMS like a native app?
 
-<details><summary>Answers</summary>
-
-1. Yes, on iOS 16.4+, but only after the user adds it to the home screen and grants permission. In a regular Safari
-   tab — no.
-2. Probably not. You cached the app shell, not the data. Caching API responses (or storing the last result in
-   IndexedDB) is a separate decision.
-3. Yes, by wrapping it as a Trusted Web Activity (tools like Bubblewrap or PWABuilder do this). The App Store is much
-   stricter about thin web wrappers.
-4. No. Web apps get camera, microphone, location, notifications and files — with permission — but not contacts, SMS
-   or deep system access. Some APIs (Bluetooth, USB) work only in Chromium browsers.
-
-</details>
+> **Answers:**
+>
+> 1. Yes, on iOS 16.4+, but only after the user adds it to the home screen and grants permission. In a regular Safari
+>    tab — no.
+> 2. Probably not. You cached the app shell, not the data. Caching API responses (or storing the last result in
+>    IndexedDB) is a separate decision.
+> 3. Yes, by wrapping it as a Trusted Web Activity (tools like Bubblewrap or PWABuilder do this). The App Store is much
+>    stricter about thin web wrappers.
+> 4. No. Web apps get camera, microphone, location, notifications and files — with permission — but not contacts, SMS
+>    or deep system access. Some APIs (Bluetooth, USB) work only in Chromium browsers.
 
 ## Reflect: app store, PWA or bot?
 

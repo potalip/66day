@@ -6,7 +6,7 @@ title: "Capstone build 1: the core loop, end to end"
 summary: "Make your capstone's one core flow work from first click to saved result — ugly is fine, fake is not."
 estMinutes: 120
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://playwright.dev/"
 tasks:
   - id: d51-apps-t1
@@ -57,8 +57,7 @@ done, and it will catch you breaking the loop on days 52–64.
 
 ```text
 Read docs/CAPSTONE.md. Write a Playwright end-to-end test for the core loop described there:
-<paste the 3-6 steps>. It should sign up (or log in as a test user), go through every step, and assert the
-final result is saved and visible after a page reload. Mock the AI call in the test with a fixed fixture.
+<paste the 3-6 steps>. It should sign up (or log in as a test user), go through every step, and assert the final result is saved and visible after a page reload. Mock the AI call in the test with a fixed fixture.
 Don't implement the feature yet — the test should fail now. Show me the test file.
 ```
 
@@ -68,17 +67,14 @@ Ask the agent for a plan before any code. Use your agent's plan mode if it has o
 
 ```text
 Plan how to make this core loop pass end to end with the smallest amount of code: <paste steps>.
-Reuse what already exists in this repo (auth, DB, UI components, AI client). Split the work into 3 slices,
-each one deployable and committed separately. For each slice: files touched, DB migrations, API routes,
-and how I'll test it by hand. List anything you'd cut to fit in about 60 minutes. Wait for my OK.
+Reuse what already exists in this repo (auth, DB, UI components, AI client). Split the work into 3 slices, each one deployable and committed separately. For each slice: files touched, DB migrations, API routes, and how I'll test it by hand. List anything you'd cut to fit in about 60 minutes. Wait for my OK.
 ```
 
 Read the plan. Cut anything that isn't on the loop: settings pages, profile photos, dark-mode tweaks, admin
 screens — all later. Then build slice by slice:
 
 ```text
-Implement slice 1 only. When done: run the tests and the build, show me what to click to check it by hand,
-and commit with a clear message. Then stop and wait.
+Implement slice 1 only. When done: run the tests and the build, show me what to click to check it by hand, and commit with a clear message. Then stop and wait.
 ```
 
 Check each slice yourself — click through it on your phone — before saying "next". Three small working commits

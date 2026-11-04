@@ -33,8 +33,8 @@ tasks:
 ---
 
 Mute any video you love and it loses half its power. Sound is where amateur videos give themselves away: music that
-drowns the voice, effects that make you jump, a track that's twice as loud as the video before it. The fixes are
-three numbers and two ffmpeg filters. Today you learn them once and reuse them for every video after.
+drowns the voice, effects that make you jump, a track that's twice as loud as the video before it. The fixes come
+down to three numbers and two ffmpeg filters. Learn them once today and reuse them on every video after.
 
 ## Three ideas
 
@@ -55,7 +55,7 @@ with effects; on day 22 the key becomes your voiceover.
 - **Freesound** — every sound has its own licence: **CC0** (do anything), **CC BY** (credit the author),
   **CC BY-NC** (non-commercial only — not for client work). It's on each sound's page. Read it every time.
 
-Keep `assets/CREDITS.md`: file name, source URL, author, licence. Future-you, a client and a platform reviewer will
+Keep `assets/CREDITS.md`: file name, source URL, author, licence. Future you, a client and a platform reviewer will
 all ask for it.
 
 ## Step 1 — music + 3 effects, mixed properly
@@ -66,14 +66,10 @@ fill in `CREDITS.md`.
 
 ```text
 Goal: a reusable mixing script that puts music and sound effects under an existing video.
-Context: folder day20/. Video: <path to your previous mp4>. Music: assets/music/<file>. Effects: assets/sfx/*.
-ffmpeg is installed.
+Context: folder day20/. Video: <path to your previous mp4>. Music: assets/music/<file>. Effects: assets/sfx/*. ffmpeg is installed.
 Constraints:
 - day20/mix.py takes --video, --music, and a list of effects with times, e.g. --sfx whoosh.wav@0.5 pop.wav@2.0.
-- Build one ffmpeg filter_complex: music at volume 0.6, trimmed to the video length with a 1 s fade-out;
-  each effect delayed with adelay; effects mixed with amix normalize=0; music ducked under the effects with
-  sidechaincompress (threshold 0.05, ratio 8, attack 5, release 250); if the video already has audio (voice),
-  duck under that too and keep it in the mix; then loudnorm I=-14 TP=-1.5 LRA=11.
+- Build one ffmpeg filter_complex: music at volume 0.6, trimmed to the video length with a 1 s fade-out; each effect delayed with adelay; effects mixed with amix normalize=0; music ducked under the effects with sidechaincompress (threshold 0.05, ratio 8, attack 5, release 250); if the video already has audio (voice), duck under that too and keep it in the mix; then loudnorm I=-14 TP=-1.5 LRA=11.
 - Copy the video stream, encode audio AAC 192k 48 kHz. Print the full ffmpeg command before running it.
 Done when: day20/mixed.mp4 plays with ducked music and three audible effects, and measures -14 LUFS +/- 1.
 ```
@@ -101,10 +97,8 @@ cheap speakers reveal music that's too loud. Upload `mixed.mp4`.
 Goal: detect beats in my music track and cut a montage on them.
 Context: music in assets/music/<file>. Clips: my renders from days 15-19 (list the mp4 files you find).
 Constraints:
-- day20/beats.py uses librosa (install it) to load the track, run beat_track, convert beat frames to seconds,
-  print the tempo and the first 16 beat times, and save day20/beats.json.
-- day20/beatcut.py takes the beats and builds a 15-second montage: a new clip on every 2nd beat, each segment
-  scaled/padded to 1080x1920, re-encoded H.264, joined, with the music under it at -14 LUFS.
+- day20/beats.py uses librosa (install it) to load the track, run beat_track, convert beat frames to seconds, print the tempo and the first 16 beat times, and save day20/beats.json.
+- day20/beatcut.py takes the beats and builds a 15-second montage: a new clip on every 2nd beat, each segment scaled/padded to 1080x1920, re-encoded H.264, joined, with the music under it at -14 LUFS.
 Done when: the montage cuts land on the beat when I watch it, and beats.json exists.
 ```
 
@@ -119,15 +113,13 @@ before the sound.
 3. What's the difference between peak level and LUFS?
 4. A great whoosh on Freesound is CC BY-NC. Can you use it in a paid promo for a café?
 
-<details><summary>Answers</summary>
-
-1. It's turned down to around −14 LUFS. It won't sound louder than others — just more squashed.
-2. It stays quiet: platforms turn loud videos down but generally don't turn quiet ones up. Viewers reach for the
-   volume or scroll away.
-3. Peak is the single loudest instant; LUFS is perceived loudness over the whole piece.
-4. No — NC means non-commercial. Find a CC0 or CC BY alternative (and credit the author for CC BY).
-
-</details>
+> **Answers:**
+>
+> 1. It's turned down to around −14 LUFS. It won't sound louder than others — just more squashed.
+> 2. It stays quiet: platforms turn loud videos down but generally don't turn quiet ones up. Viewers reach for the
+>    volume or scroll away.
+> 3. Peak is the single loudest instant; LUFS is perceived loudness over the whole piece.
+> 4. No — NC means non-commercial. Find a CC0 or CC BY alternative (and credit the author for CC BY).
 
 ## You're done when…
 

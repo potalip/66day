@@ -78,10 +78,7 @@ Goal: a one-page portfolio site that tells a client in 30 seconds what I make an
 Context: I'm a beginner who builds with AI coding agents (my track: apps or video — see the pieces).
 Keep the pieces in projects.json so I can add more later without touching the layout.
 Pieces: (paste your 3–5 pieces: title, one-line result, role, built with, link, image or preview path)
-Constraints: static site (plain HTML/CSS/JS or Vite, your choice, explain why in one line);
-mobile-first; light and dark theme following the system; strongest piece first and largest;
-video previews autoplay muted, loop and have a poster; contact (email + one messenger) in the hero and footer;
-proper title, meta description and an Open Graph image; loads fast — no heavy frameworks for a single page.
+Constraints: static site (plain HTML/CSS/JS or Vite, your choice, explain why in one line); mobile-first; light and dark theme following the system; strongest piece first and largest; video previews autoplay muted, loop and have a poster; contact (email + one messenger) in the hero and footer; proper title, meta description and an Open Graph image; loads fast — no heavy frameworks for a single page.
 Done when: it runs locally, looks right at 390px and 1280px wide, and you tell me how to deploy it.
 ```
 
@@ -109,8 +106,7 @@ Send the link to two people: one who builds (a FlowLeaf peer) and one who could 
 creator, a manager friend). Ask exactly this:
 
 ```text
-Can you open this for 30 seconds and then tell me: what do I do, which piece did you look at,
-and would you know how to contact me? Brutal is fine.
+Can you open this for 30 seconds and then tell me: what do I do, which piece did you look at, and would you know how to contact me? Brutal is fine.
 ```
 
 Change at least one thing based on what they said, then push again.

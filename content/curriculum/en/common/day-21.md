@@ -7,6 +7,7 @@ summary: "Count what three weeks of building added up to, then show your favouri
 estMinutes: 30
 rest: true
 resources:
+  - "https://www.youtube.com/watch?v=7xTGNNLPyMI"
   - "https://news.ycombinator.com/showhn.html"
 tasks:
   - id: d21-t1

@@ -72,8 +72,7 @@ Context: the main app's Worker (Cloudflare Workers + D1) runs this job, not the 
 Secrets BOT_TOKEN and OWNER_CHAT_ID are added to the main app with wrangler secret put (and to .dev.vars locally).
 What to check: <describe it, e.g. count new users and AI calls in the last 24 h from D1>.
 Constraints:
-- Add a cron trigger in the wrangler config and a scheduled() handler; keep the logic in a separate function
-  runDailyReport(env) so it can be unit-tested and triggered by hand.
+- Add a cron trigger in the wrangler config and a scheduled() handler; keep the logic in a separate function runDailyReport(env) so it can be unit-tested and triggered by hand.
 - Send with Telegram's sendMessage to my chat id (env OWNER_CHAT_ID). Short, readable message, numbers first.
 - If nothing changed, still send a one-line "all quiet" message (so I know the job is alive).
 - No secrets in code or config files that get committed.
@@ -117,8 +116,7 @@ A job that works once is a demo. A job that works every day for a year needs thr
 Goal: make runDailyReport reliable.
 Constraints:
 - Wrap network calls in a retry helper: 3 attempts, exponential backoff, respect Telegram's retry_after on 429.
-- Create a job_runs table (run_key UNIQUE, started_at, finished_at, status, details). Insert the run key first;
-  if the insert fails because it exists, log "already sent" and exit.
+- Create a job_runs table (run_key UNIQUE, started_at, finished_at, status, details). Insert the run key first; if the insert fails because it exists, log "already sent" and exit.
 - Log one structured line per run (JSON) with duration and outcome.
 - Vitest tests: retry helper retries then succeeds; a second run with the same key sends nothing.
 Done when: triggering twice in a row sends exactly one message and the tests pass.
@@ -137,14 +135,12 @@ Trigger it twice. One message? Paste task 3: how your retries work, your run key
 3. A site's `robots.txt` disallows the page you want. What do you do?
 4. GitHub's scheduled run started 12 minutes late. Bug?
 
-<details><summary>Answers</summary>
-
-1. At 10:00 your time, since cron runs on UTC.
-2. Idempotency key per run (e.g. date), stored with a unique constraint; skip if it already exists.
-3. Don't scrape it. Look for an API, RSS or ask the owner.
-4. No, scheduled Actions can be delayed under load. Use Workers cron when timing matters.
-
-</details>
+> **Answers:**
+>
+> 1. At 10:00 your time, since cron runs on UTC.
+> 2. Idempotency key per run (e.g. date), stored with a unique constraint; skip if it already exists.
+> 3. Don't scrape it. Look for an API, RSS or ask the owner.
+> 4. No, scheduled Actions can be delayed under load. Use Workers cron when timing matters.
 
 ## You're done when…
 

@@ -9,7 +9,7 @@ boss: true
 badges: [boss-build]
 resources:
   - "https://www.remotion.dev/docs/"
-  - "https://docs.manim.community/"
+  - "https://docs.manim.community/en/stable/"
   - "https://github.com/SYSTRAN/faster-whisper"
   - "https://ffmpeg.org/documentation.html"
 tasks:
@@ -36,7 +36,7 @@ tasks:
 ---
 
 Two weeks ago you turned 90 pictures into a 3-second clip. Since then you've learned easing, kinetic type, Remotion,
-sound, voice, captions, vertical grammar, explainers and data. Today all of it goes into one finished piece: a
+sound, voice, captions, vertical grammar, explainers and data videos. Today all of it goes into one finished piece: a
 60-second explainer where every frame, every word of voice and every caption was made by code you directed. Then real
 people watch it — the only review that counts.
 
@@ -58,7 +58,7 @@ you're starting the pipeline you'll formalise on day 33.
 ## Step 1 — script and storyboard (20 min)
 
 Pick a topic with one clear "aha". Example: **"How noise-cancelling headphones make sound disappear by adding more
-sound."** Another option: re-do your day 13 topic properly.
+sound."** Or redo your day 13 topic properly.
 
 ```text
 Goal: a 60-second explainer script and a 6-frame storyboard as one JSON file.
@@ -77,17 +77,12 @@ Read it aloud with a timer and rewrite every line you stumble on. Paste the fina
 
 ```text
 Goal: render the full 60-second explainer from day27/plan.json by chaining my existing scripts.
-Context: day22/tts.py (cached TTS), day23/transcribe.py + day23/make_ass.py (captions), day20/mix.py (music, ducking,
--14 LUFS), Remotion project in remotion/ with my brand font and colours. Music and licences in assets/.
+Context: day22/tts.py (cached TTS), day23/transcribe.py + day23/make_ass.py (captions), day20/mix.py (music, ducking, -14 LUFS), Remotion project in remotion/ with my brand font and colours. Music and licences in assets/.
 Constraints:
-- day27/make.py runs stages in order and skips any stage whose output already exists unless I pass --force <stage>:
-  1 voice per frame -> durations.json; 2 Remotion composition "Explainer" (1080x1920, 30 fps) with one <Sequence>
-  per frame, lengths from durations.json, visuals following "on_screen" and "animation"; 3 render; 4 transcribe the
-  joined voice and burn word-highlight captions inside the safe zone; 5 mix music ducked under voice to -14 LUFS.
+- day27/make.py runs stages in order and skips any stage whose output already exists unless I pass --force <stage>: 1 voice per frame -> durations.json; 2 Remotion composition "Explainer" (1080x1920, 30 fps) with one <Sequence> per frame, lengths from durations.json, visuals following "on_screen" and "animation"; 3 render; 4 transcribe the joined voice and burn word-highlight captions inside the safe zone; 5 mix music ducked under voice to -14 LUFS.
 - Final file day27/final.mp4. Also write day27/final.srt for upload.
 - Print each stage's time, and at the end a QC report: duration, resolution, codecs, integrated loudness, true peak.
-Done when: `python day27/make.py` produces final.mp4 that passes QC (55-65 s, 1080x1920, h264/aac, -14 +/-1 LUFS,
-peak below -1 dBTP).
+Done when: `python day27/make.py` produces final.mp4 that passes QC (55-65 s, 1080x1920, h264/aac, -14 +/-1 LUFS, peak below -1 dBTP).
 ```
 
 Work frame by frame: get frame 1 looking right in Remotion Studio before asking for frame 2. Then run your own QC:

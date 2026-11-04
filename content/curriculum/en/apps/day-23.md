@@ -72,12 +72,9 @@ Pick the one that fits your spec best:
 Goal: add <photo-to-fields | voice-to-text> to the "add item" flow, feeding the existing extraction from day 18.
 
 Constraints:
-- Photo: file input with accept="image/*" (opens the camera on phones). Resize in the browser to max 1500px,
-  JPEG, before upload. Max 5 MB after resize.
-- Voice: a hold-to-record or tap-to-start/stop button using MediaRecorder; show a timer; max 60 seconds.
-  Handle Safari's different audio format. Ask for microphone permission only when the button is pressed.
-- Server endpoint POST /api/extract-media: send the photo to a vision model with our Zod schema, OR transcribe
-  the audio (use <provider>) and pass the text to the existing extraction. Return the same { ok, fields } shape.
+- Photo: file input with accept="image/*" (opens the camera on phones). Resize in the browser to max 1500px, JPEG, before upload. Max 5 MB after resize.
+- Voice: a hold-to-record or tap-to-start/stop button using MediaRecorder; show a timer; max 60 seconds. Handle Safari's different audio format. Ask for microphone permission only when the button is pressed.
+- Server endpoint POST /api/extract-media: send the photo to a vision model with our Zod schema, OR transcribe the audio (use <provider>) and pass the text to the existing extraction. Return the same { ok, fields } shape.
 - Never store the uploaded file for now; process and discard.
 - Clear errors: file too big, recording too short, permission denied, AI not configured.
 
@@ -99,11 +96,8 @@ Ask the agent to make the cost visible, then do the maths yourself:
 ```text
 Goal: measure and cap the cost of /api/extract-media.
 - Log, per call: input tokens or audio seconds, output tokens, and estimated cost from a prices config I fill in.
-- Add a per-user daily limit (default 20 media calls/day, stored in the database; until we have logins,
-  key it by a random anonymous id cookie) and a global daily limit (default 200) that returns a friendly
-  "daily limit reached, try again tomorrow" message.
-Explain your plan first and wait for my OK. At the end, run 3 calls, show the logged numbers,
-and show me the limit kicking in (temporarily set it to 2).
+- Add a per-user daily limit (default 20 media calls/day, stored in the database; until we have logins, key it by a random anonymous id cookie) and a global daily limit (default 200) that returns a friendly "daily limit reached, try again tomorrow" message.
+Explain your plan first and wait for my OK. At the end, run 3 calls, show the logged numbers, and show me the limit kicking in (temporarily set it to 2).
 ```
 
 Then set a **spend limit** on the provider dashboard too — your code's limit protects against bugs, the provider limit
@@ -122,14 +116,12 @@ Which API (vision, speech-to-text, image generation, or plain text) fits each ca
 3. You want a unique cover picture for each saved recipe.
 4. A user pastes a 300-word email.
 
-<details><summary>Answers</summary>
-
-1. Speech-to-text, then your normal text extraction.
-2. Vision — send the image with your schema directly; no separate OCR step needed.
-3. Image generation — priced per image, so cache the result and generate once per recipe.
-4. Plain text. Don't pay for multimodal when you already have text.
-
-</details>
+> **Answers:**
+>
+> 1. Speech-to-text, then your normal text extraction.
+> 2. Vision — send the image with your schema directly; no separate OCR step needed.
+> 3. Image generation — priced per image, so cache the result and generate once per recipe.
+> 4. Plain text. Don't pay for multimodal when you already have text.
 
 ## You're done when…
 

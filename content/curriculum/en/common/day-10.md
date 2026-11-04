@@ -8,7 +8,7 @@ estMinutes: 75
 resources:
   - "https://missing.csail.mit.edu/2020/debugging-profiling/"
   - "https://git-scm.com/book/en/v2"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
 tasks:
   - id: d10-t1
     type: read
@@ -33,7 +33,7 @@ tasks:
 ---
 
 Sooner or later your agent will say "Fixed it!" for the fourth time while the same error stares back at you. That's
-not a sign you're bad at this — it's Tuesday. The difference between people who give up and people who ship is a
+not a sign you're bad at this. It's a normal day. The difference between people who give up and people who ship is a
 boring, reliable method for finding what's wrong, plus a few moves for pulling an agent out of a loop.
 
 ## The debugging loop
@@ -115,8 +115,7 @@ day 5. Then bring in the agent, but make it follow the loop instead of rewriting
 ```text
 Goal: find the bugs in streak.mjs. Don't edit the file yet.
 
-Context: for this log the correct output is: Total 4.5 h, Current streak 2 days, Best day 2026-11-04,
-Average 54 min/day. The actual output is: <paste what you got>.
+Context: for this log the correct output is: Total 4.5 h, Current streak 2 days, Best day 2026-11-04, Average 54 min/day. The actual output is: <paste what you got>.
 
 Constraints:
 - For each wrong line, point to the exact line of code responsible and explain the cause in one sentence.
@@ -129,15 +128,13 @@ Approve the fixes, run `node streak.mjs` again, and compare with your paper. Tha
 
 **Proof:** three lines, one per bug: where it was and why it was wrong, in your own words.
 
-<details><summary>Check your hunt (open only after you're done)</summary>
-
-1. `totalMinutes` starts at `i = 1`, so it skips the first day. Should start at `0`.
-2. `bestDay` uses `<`, so it finds the *worst* day. Should be `>`.
-3. `log.lenght` is a typo, so it's `undefined` and the average becomes `NaN`. Should be `log.length`.
-
-`currentStreak` was innocent. Suspecting an innocent function and clearing it is also good debugging.
-
-</details>
+> **Check your hunt (open only after you're done):**
+>
+> 1. `totalMinutes` starts at `i = 1`, so it skips the first day. Should start at `0`.
+> 2. `bestDay` uses `<`, so it finds the *worst* day. Should be `>`.
+> 3. `log.lenght` is a typo, so it's `undefined` and the average becomes `NaN`. Should be `log.length`.
+>
+> `currentStreak` was innocent. Suspecting an innocent function and clearing it is also good debugging.
 
 ### 2. Rescue a looping agent (30 min)
 
@@ -187,15 +184,13 @@ What does each message tell you, and where do you look first?
 3. `Error: listen EADDRINUSE: address already in use :::5173`
 4. `ReferenceError: totl is not defined`
 
-<details><summary>Answers</summary>
-
-1. The thing *before* `.temperature_2m` — `data.current` — is undefined, on line 14, column 31. The API probably
-   returned an error object instead of weather. Check the response in the Network tab.
-2. Your code expected JSON but got an HTML page — usually a wrong URL that returned a 404 page.
-3. Another program (often an older dev server) already uses port 5173. Stop it or use another port.
-4. A name that was never declared — here a typo for `total`.
-
-</details>
+> **Answers:**
+>
+> 1. The thing *before* `.temperature_2m` — `data.current` — is undefined, on line 14, column 31. The API probably
+>    returned an error object instead of weather. Check the response in the Network tab.
+> 2. Your code expected JSON but got an HTML page — usually a wrong URL that returned a 404 page.
+> 3. Another program (often an older dev server) already uses port 5173. Stop it or use another port.
+> 4. A name that was never declared — here a typo for `total`.
 
 ## You're done when…
 

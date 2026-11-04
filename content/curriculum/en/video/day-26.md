@@ -34,14 +34,14 @@ tasks:
 
 A number in a sentence is forgettable. A line that climbs while a year counter ticks by is not — that's why
 data videos get shared, quoted and screenshotted. It's also why they're dangerous: an animated chart persuades faster
-than a reader can check it. Today you make one that's both gripping and honest, so you'd be happy if a statistician
-paused on any frame.
+than anyone can check it. Today you make one that's gripping and honest — one a statistician could pause on any
+frame without wincing.
 
 ## Moving without lying
 
-The usual tricks, and how you'll avoid each:
+The usual tricks, and how to avoid each:
 
-- **Truncated axis.** A bar chart whose y-axis starts at 95 makes 96 look twice as big as 95. **Bars always start
+- **Truncated axis.** A bar chart whose y-axis starts at 94 makes 96 look twice as big as 95. **Bars always start
   at zero.** Lines may zoom in, but label the axis clearly.
 - **Cherry-picked range.** Starting the chart in the one bad year makes any trend look dramatic. Use the full
   available range, or say on screen why you chose yours.
@@ -65,22 +65,18 @@ from solar", pick 4–5 countries, Download → CSV. Save it as `day26/data/sour
 Open the CSV and look at it before anything is drawn: columns, units, first and last year, gaps. Ask your agent:
 
 ```text
-Read day26/data/source.csv and tell me: the columns, the units, the year range, which countries/series it has,
-and any missing years. Don't write any chart code yet.
+Read day26/data/source.csv and tell me: the columns, the units, the year range, which countries/series it has, and any missing years. Don't write any chart code yet.
 ```
 
 ## Step 2 — animate it
 
 ```text
 Goal: a 30-second animated chart video from a real CSV.
-Context: day26/data/source.csv (source and licence in SOURCE.md). Python with pandas and matplotlib (install if
-missing), ffmpeg installed. Folder day26/.
+Context: day26/data/source.csv (source and licence in SOURCE.md). Python with pandas and matplotlib (install if missing), ffmpeg installed. Folder day26/.
 Constraints:
 - Question on screen as the title: "<your question>". Source and units visible in a footer the whole time.
-- Line chart: x = year, y = value; each series in its own colour with a label at the line's tip that follows it.
-  Lines draw in over time with a big year counter. TIME MOVES LINEARLY: same number of frames per year.
-- Axis ranges fixed for the whole video (computed from the full data), so the scale never jumps. If I switch to bars,
-  the y-axis starts at 0.
+- Line chart: x = year, y = value; each series in its own colour with a label at the line's tip that follows it. Lines draw in over time with a big year counter. TIME MOVES LINEARLY: same number of frames per year.
+- Axis ranges fixed for the whole video (computed from the full data), so the scale never jumps. If I switch to bars, the y-axis starts at 0.
 - 1920x1080, 30 fps: 2 s title, ~24 s of animation, 4 s hold on the final frame with one sentence of takeaway.
 - Render frames with matplotlib (Agg) and pipe them to ffmpeg, H.264 yuv420p. Large readable fonts (min 28 px).
 Done when: day26/chart.mp4 is ~30 s and a paused frame at any point is a correct, labelled chart.
@@ -117,14 +113,12 @@ What's misleading here?
 3. Total CO₂ emissions comparing China and Denmark to argue who's "more responsible" per person.
 4. A line chart where the years 2000–2015 pass in 3 seconds and 2016–2020 take 10.
 
-<details><summary>Answers</summary>
-
-1. Truncated axis on bars — a 3% difference looks like 300%.
-2. Cherry-picked starting point — the trend may vanish over a longer range.
-3. Totals instead of per-person values for a per-person claim.
-4. Uneven time — slowing down near the end exaggerates the recent change.
-
-</details>
+> **Answers:**
+>
+> 1. Truncated axis on bars — a 3% difference looks like 300%.
+> 2. Cherry-picked starting point — the trend may vanish over a longer range.
+> 3. Totals instead of per-person values for a per-person claim.
+> 4. Uneven time — slowing down near the end exaggerates the recent change.
 
 ## You're done when…
 

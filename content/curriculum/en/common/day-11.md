@@ -9,6 +9,7 @@ resources:
   - "https://developers.cloudflare.com/workers/"
   - "https://vercel.com/docs"
   - "https://owasp.org/www-project-top-10-for-large-language-model-applications/"
+  - "https://developers.cloudflare.com/workers/get-started/guide/"
 tasks:
   - id: d11-t1
     type: read
@@ -64,7 +65,7 @@ One input box, one button, one useful answer. Some that work well:
 - **Plain English** — paste a confusing letter from a bank or landlord, get three bullet points of what it means.
 - **Headline Doctor** — paste a post title, get five sharper versions.
 
-Choose one you'd actually use this week. Real beats impressive.
+Choose one you'd actually use this week. Useful matters more than impressive.
 
 ### 2. Build it (50 min)
 
@@ -80,8 +81,7 @@ Constraints:
 - The key never appears in the front-end, in logs or in any response.
 - Reject inputs longer than 2,000 characters with a friendly message. max_tokens around 500.
 - If the key is missing, the API returns an error, or the call times out, show a calm human message, not a stack trace.
-- Clean, mobile-first page: a title, one sentence explaining the tool, a textarea, a button, a result area with a
-  "Copy" button, and a loading state on the button.
+- Clean, mobile-first page: a title, one sentence explaining the tool, a textarea, a button, a result area with a "Copy" button, and a loading state on the button.
 - For local dev, read the key from .dev.vars and make sure .dev.vars is in .gitignore.
 - Explain the request flow in 5 short bullets when done.
 

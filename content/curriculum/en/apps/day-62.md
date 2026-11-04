@@ -52,16 +52,11 @@ Your README, `docs/CAPSTONE.md` and `docs/BUILDLOG.md` already contain the story
 
 ```text
 Goal: create a launch kit in ./launch for my capstone.
-Context: read README.md, docs/CAPSTONE.md (spec from day 50), docs/BUILDLOG.md (my beta table, quotes and day-55
-metrics) and the git log. The live URL is [url].
+Context: read README.md, docs/CAPSTONE.md (spec from day 50), docs/BUILDLOG.md (my beta table, quotes and day-55 metrics) and the git log. The live URL is [url].
 Make:
-1. launch/copy.md — name, tagline (max 60 chars, 5 options), 2-sentence description, 150-word maker story in first
-   person, 3 social variants (X/Threads, LinkedIn, a community post). Plain words, no hype, no invented numbers:
-   only use metrics and quotes that appear in my notes.
-2. launch/screenshots/ — a Playwright script (launch/shoot.mjs) that signs into a demo account, fills realistic
-   sample data, and captures 3 screens at 1270x760 and 390x844, light theme, plus one dark. Hide dev banners.
-3. launch/demo.webm — a Playwright run with recordVideo that walks first screen → value moment in under 30 s,
-   with short pauses so a viewer can follow. Then convert to mp4 and a GIF with ffmpeg.
+1. launch/copy.md — name, tagline (max 60 chars, 5 options), 2-sentence description, 150-word maker story in first person, 3 social variants (X/Threads, LinkedIn, a community post). Plain words, no hype, no invented numbers: only use metrics and quotes that appear in my notes.
+2. launch/screenshots/ — a Playwright script (launch/shoot.mjs) that signs into a demo account, fills realistic sample data, and captures 3 screens at 1270x760 and 390x844, light theme, plus one dark. Hide dev banners.
+3. launch/demo.webm — a Playwright run with recordVideo that walks first screen → value moment in under 30 s, with short pauses so a viewer can follow. Then convert to mp4 and a GIF with ffmpeg.
 4. launch/faq.md — 8 likely questions with honest short answers. Mark anything you're unsure about with TODO.
 Done when: all files exist, the script re-runs cleanly, and you show me the 5 tagline options.
 ```

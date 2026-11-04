@@ -33,7 +33,7 @@ tasks:
 ---
 
 A large share of people watch short videos with the sound off — on the bus, in bed, in a meeting they're pretending
-to attend. Without captions your beautiful voiceover is silence. With *good* captions, the words become part of the
+to attend. Without captions, your beautiful voiceover is silence. With *good* captions, the words become part of the
 design: the current word lights up and the eye follows the voice. Today you build that, entirely in code.
 
 ## Three pieces
@@ -51,7 +51,7 @@ every word with a start and end time — exactly the data yesterday's line-timin
 **Styles.** For shorts the winning pattern is **chunked word-highlight**: 2–4 words on screen, the current word in the
 accent colour, a thick outline for contrast. For long horizontal videos, classic two-line subtitles at the bottom.
 
-Whisper will mishear some things — names, jargon, your brand. Since you *have* the script, you can keep Whisper's
+Whisper will mishear some things: names, jargon, your brand. But you *have* the script, so you can keep Whisper's
 timings and take the words from your script. Best of both.
 
 ## Step 1 — words with timestamps, then SRT
@@ -67,12 +67,9 @@ The first run downloads the model (a few hundred megabytes for `small`). Then:
 Goal: transcribe my voiceover with word-level timestamps and export captions.
 Context: audio day22/voice.mp3, the original script day22/script.txt. faster-whisper is installed. Folder day23/.
 Constraints:
-- day23/transcribe.py: WhisperModel("small", device="cpu", compute_type="int8"), language="en",
-  word_timestamps=True. Save every word as day23/words.json: [{"word", "start", "end"}].
-- Align recognized words to the script words with difflib.SequenceMatcher: where they differ, keep Whisper's timing
-  but use the script's spelling. Print the words that were corrected.
-- Export day23/captions.srt: cues of at most 4 words / 32 characters, break at punctuation when possible,
-  each cue on screen at least 0.8 s, no gaps under 0.1 s between cues.
+- day23/transcribe.py: WhisperModel("small", device="cpu", compute_type="int8"), language="en", word_timestamps=True. Save every word as day23/words.json: [{"word", "start", "end"}].
+- Align recognized words to the script words with difflib.SequenceMatcher: where they differ, keep Whisper's timing but use the script's spelling. Print the words that were corrected.
+- Export day23/captions.srt: cues of at most 4 words / 32 characters, break at punctuation when possible, each cue on screen at least 0.8 s, no gaps under 0.1 s between cues.
 Done when: words.json and captions.srt exist, and the SRT timings match what I hear.
 ```
 
@@ -93,18 +90,14 @@ Goal: burn animated word-highlight captions into my voiced video.
 Context: day23/words.json, video day22/voiced.mp4 (1080x1920). Font file in assets/fonts/.
 Constraints:
 - day23/make_ass.py writes day23/captions.ass with PlayResX 1080 / PlayResY 1920.
-- Group words into chunks of 2-4 (same rules as the SRT). For every word, one Dialogue event from its start to the
-  next word's start, showing the whole chunk with the current word in my accent colour ({\c&HBBGGRR&}) and
-  slightly bigger ({\fscx110\fscy110}); other words white.
-- Style: my font, size ~72, bold, white, black outline 6, no shadow, centered, MarginV so the text sits around
-  60-65% of the frame height (above the platform buttons).
+- Group words into chunks of 2-4 (same rules as the SRT). For every word, one Dialogue event from its start to the next word's start, showing the whole chunk with the current word in my accent colour ({\c&HBBGGRR&}) and slightly bigger ({\fscx110\fscy110}); other words white.
+- Style: my font, size ~72, bold, white, black outline 6, no shadow, centered, MarginV so the text sits around 60-65% of the frame height (above the platform buttons).
 - Each chunk pops in: {\fad(60,0)} on its first word.
-- Burn in: ffmpeg -i day22/voiced.mp4 -vf "ass=day23/captions.ass:fontsdir=assets/fonts" -c:a copy
-  -c:v libx264 -crf 18 -pix_fmt yuv420p day23/captioned.mp4
+- Burn in: ffmpeg -i day22/voiced.mp4 -vf "ass=day23/captions.ass:fontsdir=assets/fonts" -c:a copy -c:v libx264 -crf 18 -pix_fmt yuv420p day23/captioned.mp4
 Done when: captioned.mp4 plays with the current word lit up exactly as it's spoken.
 ```
 
-Remember ASS colours are written **blue-green-red**: gold `#FFD700` becomes `&H00D7FF&`. Check the result:
+Remember that ASS colours are written **blue-green-red**: gold `#FFD700` becomes `&H00D7FF&`. Check the result:
 
 ```bash
 ffprobe -v error -show_entries stream=codec_type,width,height -show_entries format=duration -of default=noprint_wrappers=1 day23/captioned.mp4
@@ -122,15 +115,13 @@ Then watch it **muted** on your phone. That's the real test. Upload `captioned.m
 3. You burned captions in. Should you still upload an SRT to YouTube? Why?
 4. Roughly how fast can most adults comfortably read captions?
 
-<details><summary>Answers</summary>
-
-1. 2–4 words (one short line). More and people read instead of watching.
-2. The platform's caption bar, username and buttons cover that area.
-3. Yes — uploaded captions are searchable, can be turned off, and can be auto-translated; burned-in ones help the
-   muted scrollers. Do both.
-4. Around 15–20 characters per second. Faster than that and they fall behind the voice.
-
-</details>
+> **Answers:**
+>
+> 1. 2–4 words (one short line). More and people read instead of watching.
+> 2. The platform's caption bar, username and buttons cover that area.
+> 3. Yes — uploaded captions are searchable, can be turned off, and can be auto-translated; burned-in ones help the
+>    muted scrollers. Do both.
+> 4. Around 15–20 characters per second. Faster than that and they fall behind the voice.
 
 ## You're done when…
 

@@ -35,7 +35,7 @@ tasks:
 
 Your pipeline can make ten videos a day now. That also means it can make ten broken videos a day: a scene that renders
 black, music that clips, a caption that hangs on screen after the voice moves on. Broadcasters solved this decades ago
-with automated QC. Today you get your own inspector, plus the boring paperwork that keeps you out of copyright trouble.
+with automated QC. Today you build your own inspector, plus the boring paperwork that keeps you out of copyright trouble.
 
 ## What to check, and why
 
@@ -76,10 +76,8 @@ label. Rules move fast: check each platform's current policy before a client del
 ```text
 Goal: qc.py checks a rendered video and writes a report; it becomes the last stage of my pipeline.
 Input: path to mp4, optional .srt, target spec from my pipeline config (resolution, fps, loudness).
-Checks: ffprobe spec match; ebur128 integrated loudness + true peak; blackdetect; silencedetect;
-freezedetect; caption rules (overlap, min/max duration, characters per second, ends before video end).
-Output: a report next to the video, <video-name>.qc.md (e.g. runs/<slug>/final-9x16.qc.md), with PASS / WARN / FAIL per check, the measured value, and the timestamp of
-every problem. Exit code 1 on any FAIL so the pipeline stops before publishing.
+Checks: ffprobe spec match; ebur128 integrated loudness + true peak; blackdetect; silencedetect; freezedetect; caption rules (overlap, min/max duration, characters per second, ends before video end).
+Output: a report next to the video, <video-name>.qc.md (e.g. runs/<slug>/final-9x16.qc.md), with PASS / WARN / FAIL per check, the measured value, and the timestamp of every problem. Exit code 1 on any FAIL so the pipeline stops before publishing.
 Done when: it runs on my last render, and a deliberately broken copy (add 2 s of black and +6 dB) fails.
 ```
 
@@ -108,16 +106,14 @@ now on. Paste the checklist.
 3. A motion-graphics explainer with an AI voice you generated from a stock voice. Need the synthetic label?
 4. A client sends you their logo and a song "they found online" for the background. Use the song?
 
-<details><summary>Answers</summary>
-
-1. No. NC forbids commercial use, and a business promo is commercial. Find a CC0 or commercially licensed sound.
-2. Yes. Realistic footage of an event that didn't happen is exactly what disclosure rules target.
-3. Usually not as "realistic altered content" on YouTube, but check the current policy, and be honest if asked.
-   Some clients want "AI voice" in the credits anyway.
-4. Not until someone shows a licence for that use. "Found online" means unknown rights, and the strike lands on the
-   channel that publishes it.
-
-</details>
+> **Answers:**
+>
+> 1. No. NC forbids commercial use, and a business promo is commercial. Find a CC0 or commercially licensed sound.
+> 2. Yes. Realistic footage of an event that didn't happen is exactly what disclosure rules target.
+> 3. Usually not as "realistic altered content" on YouTube, but check the current policy, and be honest if asked.
+>    Some clients want "AI voice" in the credits anyway.
+> 4. Not until someone shows a licence for that use. "Found online" means unknown rights, and the strike lands on the
+>    channel that publishes it.
 
 ## You're done when…
 
@@ -126,4 +122,4 @@ now on. Paste the checklist.
 - [ ] A rights checklist covers every asset in your last video.
 - [ ] Quiz done.
 
-Tomorrow: you open-source your template, and strangers can use it.
+**Tomorrow:** you open-source your template, and strangers can use it.

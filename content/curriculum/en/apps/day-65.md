@@ -84,8 +84,7 @@ I'd love feedback on [one specific question].
 
 PRODUCT HUNT
 Tagline (≤ 60 chars): [from launch/copy.md]
-Maker comment: Hey everyone! [Problem in one line]. I built [Name] over the last two weeks as the capstone of
-a 66-day program where I learned to build with AI agents. [What it does, 2 lines]. [Beta quote].
+Maker comment: Hey everyone! [Problem in one line]. I built [Name] over the last two weeks as the capstone of a 66-day program where I learned to build with AI agents. [What it does, 2 lines]. [Beta quote].
 What I'd love to hear: [one question]. Thanks for looking!
 
 X / THREADS / LINKEDIN
@@ -109,11 +108,10 @@ This is the most important block. Reply to every comment within ~15 minutes. Rul
 - A bug report? Reproduce it, fix it if it's small, deploy, and reply "Fixed in v1.0.1, thanks!" That public reply is
   the best marketing of your day.
 
-For hotfixes, keep the agent on a short leash:
+For hotfixes, keep the agent's scope tight:
 
 ```text
-Hotfix during launch. Bug: [what the user said + steps]. Make the smallest possible fix, add a test that fails
-before and passes after, run all tests, then stop and show me the diff. No refactors, no other changes.
+Hotfix during launch. Bug: [what the user said + steps]. Make the smallest possible fix, add a test that fails before and passes after, run all tests, then stop and show me the diff. No refactors, no other changes.
 ```
 
 Then `git tag -a v1.0.1 -m "Hotfix: …"`, `git push origin v1.0.1`, and deploy.
@@ -131,9 +129,7 @@ outperforms any broadcast. At T+6, glance at the numbers — not to judge, just 
 ### T+24 h: The report and the thank-you (30 min)
 
 ```text
-Write a 24-hour launch report from our data. Use the events table / analytics for the last 24 hours:
-visitors by source, sign-ups, activation (reached value ÷ new visitors), returning users, AI calls and cost,
-errors by route. Then summarise the comments and feedback into: top 3 praises, top 3 complaints, top 3 requests.
+Write a 24-hour launch report from our data. Query the events table (day 34, beta events from day 54) for the last 24 hours: visitors by source, sign-ups, activation (reached value ÷ new visitors), returning users, AI calls and cost, errors by route. Then summarise the comments and feedback into: top 3 praises, top 3 complaints, top 3 requests.
 List what broke and how it was fixed. Format: a markdown table + bullets. Don't round small numbers up.
 ```
 

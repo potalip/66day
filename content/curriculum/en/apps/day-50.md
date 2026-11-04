@@ -6,7 +6,7 @@ title: "Capstone: pick it, spec it, say it out loud"
 summary: "Choose the capstone you'll launch on day 65, write a spec with daily milestones and kill criteria, and announce it."
 estMinutes: 90
 resources:
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
   - "https://www.producthunt.com/"
   - "https://news.ycombinator.com/showhn.html"
 tasks:
@@ -65,8 +65,7 @@ it next week?" A quick "yes, and can it also…" is worth more than any scoring.
 ### 2. Write the spec with your agent (40 min)
 
 ```text
-You are a sharp product manager. Interview me with one question at a time (max 10 questions) and then write
-docs/CAPSTONE.md for my capstone: <one-sentence idea>, built <on top of my main app / as a new product>.
+You are a sharp product manager. Interview me with one question at a time (max 10 questions) and then write docs/CAPSTONE.md for my capstone: <one-sentence idea>, built <on top of my main app / as a new product>.
 Sections:
 1. Problem — who, what pain, how they cope today (with a real quote if I have one).
 2. Users — the 5 named people (first names only) and how I'll reach them.
@@ -75,11 +74,7 @@ Sections:
 5. The AI at the core — what the model does, which model tier, how I'll eval it (10 cases on day 52).
 6. v1 scope — IN (max 5 items) and OUT (everything else, explicitly listed).
 7. Success metrics — for the day-55 beta (e.g. 10 users, 50% finish the core loop) and day-65 launch.
-8. Milestones — one line per day, using this calendar:
-   51 core loop end to end · 52 core AI + eval + cost per user · 53 onboarding and polish ·
-   54 5 beta testers, fix top 3 · 55 public beta (boss) · 56 rest ·
-   57-60 portfolio and paid-work days: 20-30 min of capstone fixes each · 61 starter kit extracted ·
-   62 launch kit and channels · 63 rest · 64 final polish, tag v1.0 · 65 launch.
+8. Milestones — one line per day, using this calendar: 51 core loop end to end · 52 core AI + eval + cost per user · 53 onboarding and polish · 54 5 beta testers, fix top 3 · 55 public beta (boss) · 56 rest · 57-60 portfolio and paid-work days: 20-30 min of capstone fixes each · 61 starter kit extracted · 62 launch kit and channels · 63 rest · 64 final polish, tag v1.0 · 65 launch.
 Push back if my IN list is too big for this calendar. Keep the whole spec under 1 page.
 ```
 
@@ -111,7 +106,7 @@ Paste your risks and kill criteria.
 
 ### 4. Announce it (15 min)
 
-Saying it publicly is the cheapest motivation hack there is. Post on X, Threads, LinkedIn, Bluesky, a relevant
+Saying it publicly is the cheapest motivation there is. Post on X, Threads, LinkedIn, Bluesky, a relevant
 subreddit or your community — wherever your 5 users or your future clients are:
 
 ```text

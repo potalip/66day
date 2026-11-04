@@ -8,7 +8,7 @@ estMinutes: 90
 resources:
   - "https://docs.github.com/en/issues"
   - "https://cli.github.com/manual/"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://code.claude.com/docs/en/overview"
 tasks:
   - id: d37-apps-t1
     type: read
@@ -43,7 +43,7 @@ of feedback, ask:
 
 1. **What type is it?** `bug` (something broken), `ux` (works, but confusing), `idea` (new feature), `question`
    (maybe your copy is unclear, which is a `ux` in disguise).
-2. **How many people does it hit, and how badly?** A bug in sign-up beats a typo on the FAQ.
+2. **How many people does it hit, and how badly?** A bug in sign-up matters more than a typo in the FAQ.
 3. **How big is the fix?** Small, medium, large.
 
 Fix **high-impact + small** first. Park big ideas in a `later` label without guilt. And listen for the problem, not
@@ -65,10 +65,8 @@ Issues: read and write permission only, and store it as a secret (`GITHUB_TOKEN_
 Goal: an in-app feedback button that creates a GitHub issue.
 Context: our app (React + Vite front end, API on Cloudflare Workers + D1). Repo is <owner/repo>. Token in env GITHUB_TOKEN_ISSUES.
 Constraints:
-- A small "Feedback" button on every page opens a dialog: type (bug / confusing / idea), message (10–1000 chars).
-  No screenshots in v1 (the GitHub API can't attach images to issues easily); the page URL is enough.
-- POST /api/feedback validates input, rate-limits (3 per user per hour), and creates an issue via the GitHub REST
-  API with a clear title, the message, page URL, app version, browser, and label "feedback" + the type.
+- A small "Feedback" button on every page opens a dialog: type (bug / confusing / idea), message (10–1000 chars). No screenshots in v1 (the GitHub API can't attach images to issues easily); the page URL is enough.
+- POST /api/feedback validates input, rate-limits (3 per user per hour), and creates an issue via the GitHub REST API with a clear title, the message, page URL, app version, browser, and label "feedback" + the type.
 - Never include emails or names in the public issue; store reporter id in our DB, linked to the issue number.
 - Fallback if no token: send the feedback to my Telegram chat (day 31 helper). If that's missing too, store it in the DB.
 - Accessible dialog: focus trapped, closes on Escape, works at 390px, both themes.
@@ -92,8 +90,7 @@ gh issue list --label feedback --limit 30
 ```
 
 ```text
-Here are our open feedback issues (pasted above). Group duplicates, suggest a type and impact/effort for each,
-and propose the 3 best to fix today. Explain each pick in one line. Don't change any code.
+Here are our open feedback issues (pasted above). Group duplicates, suggest a type and impact/effort for each, and propose the 3 best to fix today. Explain each pick in one line. Don't change any code.
 ```
 
 ### 3. Three fixes, three PRs (35 min)
@@ -106,8 +103,7 @@ git switch -c fix/issue-12
 
 ```text
 Goal: fix GitHub issue #12. Read it with: gh issue view 12
-Constraints: change only what this issue needs; add or update a test that fails before your fix and passes after;
-run npm test and npm run build. Then commit, push the branch and open a PR with gh pr create.
+Constraints: change only what this issue needs; add or update a test that fails before your fix and passes after; run npm test and npm run build. Then commit, push the branch and open a PR with gh pr create.
 The PR description says what changed, how to test it, and includes "Fixes #12".
 Done when: the PR is open and CI is green.
 ```

@@ -60,11 +60,8 @@ Claude Code has a built-in `/security-review` command; other agents do fine with
 
 ```text
 Goal: a security review of this repo, as a strict senior reviewer.
-Check: secrets in code or git history; every API route for authentication AND per-record authorization;
-input validation and upload limits; SQL injection; prompt injection paths (user text, uploaded files, tool calls);
-missing rate limits on AI and auth endpoints; error messages that leak internals; webhook signature checks.
-Constraints: don't change code yet. Output a table: issue, file:line, severity (high/med/low), how to exploit it
-in one sentence, suggested fix.
+Check: secrets in code or git history; every API route for authentication AND per-record authorization; input validation and upload limits; SQL injection; prompt injection paths (user text, uploaded files, tool calls); missing rate limits on AI and auth endpoints; error messages that leak internals; webhook signature checks.
+Constraints: don't change code yet. Output a table: issue, file:line, severity (high/med/low), how to exploit it in one sentence, suggested fix.
 Done when: the table is sorted by severity and has no more than 10 rows.
 ```
 
@@ -95,8 +92,7 @@ Goal: harden our AI features against prompt injection.
 Constraints:
 - Keep untrusted content (user text, documents) clearly delimited and labelled as data, not instructions.
 - Validate model output against the schema; reject anything with fields or links we don't expect.
-- Tools: the model can only call tools allowed for this user; every write still requires the confirmation step
-  from day 26; tool arguments are re-checked on the server (ownership, limits).
+- Tools: the model can only call tools allowed for this user; every write still requires the confirmation step from day 26; tool arguments are re-checked on the server (ownership, limits).
 - The model never sees secrets or other users' data, so it can't leak them.
 - Log suspected injections (without the full user text) for review.
 Done when: the four attacks above fail, and you show me a test for the tool-abuse case.
@@ -110,7 +106,7 @@ injection is mitigated, never "solved").
 
 ### 3. Rate limit + spend cap (20 min)
 
-Two belts, both required:
+Two limits, and you need both:
 
 - **Provider side**: in your AI provider's console set a **monthly spend limit** and a usage alert at 50%. This is the
   cap that still works when your code has a bug.
@@ -121,9 +117,7 @@ Two belts, both required:
 Goal: add rate limiting and a daily AI budget.
 Context: Cloudflare Workers + D1. Per-minute limits: the Workers Rate Limiting binding (check current docs).
 Daily limits: extend the D1 counter from day 23.
-Constraints: limit per user id for AI routes (20/day) and per IP for auth (5/min). Return 429 with a friendly
-message and Retry-After. Track estimated tokens per day; above DAILY_TOKEN_BUDGET use the no-AI fallback and
-send me one Telegram alert (reuse the day-31 Telegram helper).
+Constraints: limit per user id for AI routes (20/day) and per IP for auth (5/min). Return 429 with a friendly message and Retry-After. Track estimated tokens per day; above DAILY_TOKEN_BUDGET use the no-AI fallback and send me one Telegram alert (reuse the day-31 Telegram helper).
 Done when: a curl loop gets 429 after the limit, and the config values live in env, not code.
 ```
 

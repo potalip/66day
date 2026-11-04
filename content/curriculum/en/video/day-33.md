@@ -7,7 +7,7 @@ summary: "Wire everything you've built into make-video \"topic\": storyboard, vo
 estMinutes: 150
 badges: [pipeline-architect]
 resources:
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://www.anthropic.com/research/building-effective-agents"
   - "https://www.remotion.dev/docs/"
   - "https://ffmpeg.org/documentation.html"
   - "https://12factor.net/"
@@ -67,7 +67,7 @@ Three ideas make it professional:
 - **Fail loudly, resume cheaply.** If stage 5 crashes, the message names the stage and the file, and the next run
   starts from stage 5 because 1–4 are cached.
 
-One subtle but crucial detail: **real voice durations win.** The storyboard *guessed* that scene 2 lasts 4 s; the TTS
+One small detail matters a lot: **real voice durations win.** The storyboard *guessed* that scene 2 lasts 4 s; the TTS
 file says 4.6 s. Stage 3 writes the real durations back, and every later stage uses those. Otherwise captions and visuals
 drift out of sync.
 
@@ -78,12 +78,8 @@ drift out of sync.
 Don't ask the agent for all eight stages in one go. First the skeleton with fake stages, then real ones:
 
 ```text
-Goal: a CLI `make-video "topic"` that runs an 8-stage video pipeline (brief, storyboard, voice, visuals, edit,
-captions, music, render) and writes everything to runs/<slug>/.
-Context: ~/66/video/pipeline/ (and the dayNN/ folders next to it) already has: day27/make.py (v0 of this — reuse its
-stage logic), storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23),
-edit.py with EDL (day 30), brand kit components (day 32), gen_clips.py (day 29), music mixing (day 20). Read them first
-and list what each one's inputs and outputs are before writing code.
+Goal: a CLI `make-video "topic"` that runs an 8-stage video pipeline (brief, storyboard, voice, visuals, edit, captions, music, render) and writes everything to runs/<slug>/.
+Context: ~/66/video/pipeline/ (and the dayNN/ folders next to it) already has: day27/make.py (v0 of this — reuse its stage logic), storyboard.py (day 31), my TTS script (day 22), Whisper captions (day 23), edit.py with EDL (day 30), brand kit components (day 32), gen_clips.py (day 29), music mixing (day 20). Read them first and list what each one's inputs and outputs are before writing code.
 Step 1 only: build the orchestrator with each stage as a function stub that writes a placeholder file.
 - Each stage declares inputs, outputs, and computes a cache key = sha256(inputs' contents + stage settings + STAGE_VERSION).
 - Keys stored in runs/<slug>/cache.json. Skip a stage if its key matches and outputs exist; print "cached".
@@ -102,7 +98,8 @@ small verified steps.
 > changed it, bump its `STAGE_VERSION`.
 
 > **No API key?** Every stage needs a fallback: a fixture storyboard, the offline voice from your day-22 `tts.py`
-> (`say`, `espeak-ng`) or a pre-recorded VO, template visuals instead of AI clips. The pipeline must finish end to end with zero keys. Print "AI not configured" and carry on.
+> (`say`, `espeak-ng`) or a pre-recorded VO, template visuals instead of AI clips. The pipeline must finish end to end
+> with zero keys. Print "AI not configured" and carry on.
 
 ### 2. The real run
 
@@ -110,8 +107,8 @@ small verified steps.
 make-video "why cats knock things off tables" --seconds 45
 ```
 
-Watch the terminal: which stages take longest? Then watch `final.mp4` once, fully. Upload it. It doesn't have to be your
-best video ever; it has to be made by one command.
+Watch the terminal: which stages take longest? Then watch `final.mp4` once, all the way through, and upload it. It
+doesn't have to be your best video ever. It has to come out of one command.
 
 Now prove the cache works: edit one `vo` line in `runs/<slug>/storyboard.json` and run with `--from voice`. Only a
 handful of stages should do work.
@@ -119,10 +116,7 @@ handful of stages should do work.
 ### 3. README with honest numbers
 
 ```text
-Write README.md for my pipeline: what it does in one sentence; install steps; required and optional env vars (names
-only, never values); the command with all flags and examples; a table of stages with inputs/outputs; where outputs go;
-how caching works and how to force a rerun. Add "Cost per video": read run.json from my last 3 runs and compute
-average time and API cost per stage and in total.
+Write README.md for my pipeline: what it does in one sentence; install steps; required and optional env vars (names only, never values); the command with all flags and examples; a table of stages with inputs/outputs; where outputs go; how caching works and how to force a rerun. Add "Cost per video": read run.json from my last 3 runs and compute average time and API cost per stage and in total.
 ```
 
 Paste the inputs/outputs section and the cost table. A typical finding: *"45-s video in 3 min 40 s; script and voice
@@ -142,4 +136,4 @@ and beyond.
 - [ ] README with inputs, outputs and a measured cost-per-video table is pasted.
 - [ ] Weakest stage named, with a symptom and a fix idea.
 
-You've earned **pipeline-architect**. Tomorrow one master becomes three formats and a thumbnail.
+You've earned the **pipeline-architect** badge. **Tomorrow:** one master becomes three formats and a thumbnail.

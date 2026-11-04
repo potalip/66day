@@ -49,11 +49,8 @@ load, a forgotten dark-mode colour. Not features. Then:
 
 ```text
 Goal: final polish before tagging v1.0.0. Fix these five items: [list them, one line each].
-Constraints: smallest possible change per item, one commit each with a clear message; no new dependencies;
-no refactors. After all five: run the build, all Vitest and Playwright tests, and the launch/shoot.mjs screenshot
-script, and tell me if any screenshot changed in a way I should look at.
-Then create CHANGELOG.md in "Keep a Changelog" style with a v1.0.0 section written for users, not developers:
-group my git history since the first commit into Added / Changed / Fixed, max 12 bullets, plain words.
+Constraints: smallest possible change per item, one commit each with a clear message; no new dependencies; no refactors. After all five: run the build, all Vitest and Playwright tests, and the launch/shoot.mjs screenshot script, and tell me if any screenshot changed in a way I should look at.
+Then create CHANGELOG.md in "Keep a Changelog" style with a v1.0.0 section written for users, not developers: group my git history since the first commit into Added / Changed / Fixed, max 12 bullets, plain words.
 Done when: everything passes and you've shown me the changelog.
 ```
 

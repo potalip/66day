@@ -2,12 +2,14 @@
 day: 4
 track: common
 phase: 1
-title: "Prompting a coding agent like a pro"
+title: "How to brief a coding agent"
 summary: "Learn the four-part prompt, give your project a memory file, and watch a vague request lose to a clear spec."
 estMinutes: 75
 resources:
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
+  - "https://www.youtube.com/watch?v=6eBSHbLKuN0"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://code.claude.com/docs/en/best-practices"
 tasks:
   - id: d04-t1
     type: read
@@ -31,8 +33,8 @@ tasks:
     proof: text
 ---
 
-An agent is only as good as the instructions it gets. The difference between "it made a mess" and "wow, exactly
-that" is rarely the model — it's the prompt. Today you learn the shape of a prompt that works and give your promise
+An agent is only as good as the instructions it gets. The difference between "it made a mess" and "yes, exactly
+that" is rarely the model. It's the prompt. Today you learn the shape of a prompt that works and give your promise
 page a memory, so you never have to explain the project twice.
 
 ## Anatomy of a good agent prompt
@@ -44,7 +46,7 @@ You've already used it on days 1–3. Here it is, named:
 3. **Constraints** — the fences: files to touch or not, no new libraries, mobile first, tone, what to leave alone.
 4. **Done when** — how you'll both know it worked: a check you can actually see or run.
 
-Two power moves on top. **"Ask me up to three questions before you start"** — great when you're unsure what you
+Two extra moves help. **"Ask me up to three questions before you start"** — great when you're unsure what you
 want. **"Plan first, wait for my OK"** — great for anything bigger than a few lines.
 
 Think of briefing a builder for a kitchen. "Make it nicer" gets you whatever they like. "White cabinets, keep the
@@ -98,22 +100,17 @@ Look at the page. Then: `commit this as "vague prompt version" and push`.
 **Round 2 — spec.** Fresh session again, then:
 
 ```text
-Goal: replace the progress counter from the last commit with a proper "Day N of 66"
-counter.
+Goal: replace the progress counter from the last commit with a proper "Day N of 66" counter.
 
-Context: the start date is already on the page. Today should count as the day it
-really is in my local time zone.
+Context: the start date is already on the page. Today should count as the day it really is in my local time zone.
 
 Constraints:
-- N = days since the start date + 1. Before the start date show "Day 1";
-  after day 66 show "66 of 66 — done!".
+- N = days since the start date + 1. Before the start date show "Day 1"; after day 66 show "66 of 66 — done!".
 - Fill the first N squares of the existing grid with the accent color.
 - Put the counter right under the headline, big and calm. No animation.
 - Keep everything in index.html. Don't change any other section.
 
-Done when: you've checked the logic for three example dates (start day, day 10, day 70)
-and told me the results, the page looks right at 390px and 1280px wide, and the change
-is committed as "spec prompt version" and pushed. Print the GitHub link to that commit.
+Done when: you've checked the logic for three example dates (start day, day 10, day 70) and told me the results, the page looks right at 390px and 1280px wide, and the change is committed as "spec prompt version" and pushed. Print the GitHub link to that commit.
 ```
 
 > **If you're stuck:** the agent wanders off and rewrites half the page? Press Esc to stop it, then say "undo

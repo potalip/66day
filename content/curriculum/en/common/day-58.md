@@ -54,12 +54,9 @@ interview you instead of writing for you:
 ```text
 Goal: help me write a case study for my portfolio, about 400 words.
 Context: the project is (one line). Its repo / links: (paste). My portfolio repo is open in this folder.
-Process: first ask me 8 short questions, one at a time, covering problem, who it was for,
-key decisions, what went wrong, result and numbers. Wait for each answer.
-Then draft it as problem → process → result → numbers, in my voice: plain, first person, no hype words
-("revolutionary", "seamless", "cutting-edge"). Mark any number I didn't give you as [CHECK].
-Done when: the case study is a page at /cases/<project-name> linked from the matching portfolio card,
-with one image or preview, and it looks right at 390px and 1280px.
+Process: first ask me 8 short questions, one at a time, covering problem, who it was for, key decisions, what went wrong, result and numbers. Wait for each answer.
+Then draft it as problem → process → result → numbers, in my voice: plain, first person, no hype words ("revolutionary", "seamless", "cutting-edge"). Mark any number I didn't give you as [CHECK].
+Done when: the case study is a page at /cases/<project-name> linked from the matching portfolio card, with one image or preview, and it looks right at 390px and 1280px.
 ```
 
 Read the draft out loud. Delete every sentence that would be true of anyone's project. Replace every `[CHECK]`
@@ -72,10 +69,7 @@ flow, start to value, no settings screens; 60–80 s the result; last 5 s the li
 system recorder (macOS: Cmd+Shift+5; Windows: Win+Alt+R or the Snipping Tool's video mode). Or let code record it:
 
 ```text
-Write a Playwright script that opens my live app at 1280x800 with video recording on,
-walks through the main flow (sign in with the demo account, create one item, run the AI feature),
-pausing 1.5 s on each important screen, and saves the video. Then give me the ffmpeg command
-to trim it to under 90 s and convert it to a web-friendly mp4.
+Write a Playwright script that opens my live app at 1280x800 with video recording on, walks through the main flow (sign in with the demo account, create one item, run the AI feature), pausing 1.5 s on each important screen, and saves the video. Then give me the ffmpeg command to trim it to under 90 s and convert it to a web-friendly mp4.
 ```
 
 Add a voiceover in your own voice or with TTS, or simple on-screen captions.
@@ -87,8 +81,7 @@ If your capstone is a showreel, this reel *is* its centrepiece — it leads your
 ```text
 Goal: a 75-second showreel from my best pieces.
 Context: clips are in ./reel-src; my EDL format from day 30 is in edl.example.json; music is ./music/track.mp3.
-Constraints: open with the strongest moment, 2–5 s per shot, cuts on beats (detect them or I'll give BPM),
-1080p 16:9 plus a 9:16 version, end card with my name and contact, audio around −14 LUFS.
+Constraints: open with the strongest moment, 2–5 s per shot, cuts on beats (detect them or I'll give BPM), 1080p 16:9 plus a 9:16 version, end card with my name and contact, audio around −14 LUFS.
 Done when: both files render with one command and I can change a shot by editing one line.
 ```
 

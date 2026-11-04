@@ -7,8 +7,8 @@ summary: "Two agents fix two issues in parallel, each in its own worktree, and y
 estMinutes: 90
 resources:
   - "https://git-scm.com/docs/git-worktree"
-  - "https://docs.anthropic.com/en/docs/claude-code/overview"
-  - "https://www.anthropic.com/engineering/building-effective-agents"
+  - "https://code.claude.com/docs/en/overview"
+  - "https://www.anthropic.com/research/building-effective-agents"
 tasks:
   - id: d38-apps-t1
     type: read
@@ -46,7 +46,7 @@ change, and `git status` becomes a crime scene. You need separate workspaces.
   checked out. Same history, separate files. Perfect for one agent per folder.
 - **Subagents** are helpers that one agent starts for itself, for example to search the codebase or review a diff,
   each with a fresh context. Claude Code supports them, and so do other agents in some form. Good for research and
-  review inside one task; worktrees are for truly separate tasks.
+  review inside one task; worktrees are for fully separate tasks.
 
 The analogy: worktrees are two desks with two copies of the same blueprint. Subagents are interns your lead engineer
 sends to the archive.
@@ -84,8 +84,7 @@ Give each a complete, self-contained brief:
 
 ```text
 Goal: fix GitHub issue #21 (read it with gh issue view 21).
-Context: you're working in a git worktree on branch fix/issue-21. Another agent is working on a different issue
-in parallel in another folder; don't worry about it, but stay inside this folder and this issue.
+Context: you're working in a git worktree on branch fix/issue-21. Another agent is working on a different issue in parallel in another folder; don't worry about it, but stay inside this folder and this issue.
 Constraints:
 - Touch only files needed for this issue. No dependency upgrades, no formatting changes elsewhere.
 - If you run a dev server, use port 5174 (`npm run dev -- --port 5174`; the other agent uses 5175).
@@ -135,14 +134,12 @@ Paste your 3 comments for task 3.
 3. One task adds a database migration, the other changes the same table's code. Parallel?
 4. What's the difference between a worktree and a subagent?
 
-<details><summary>Answers</summary>
-
-1. One after another. Same file = merge conflicts and each agent working from stale code.
-2. One. Investigation needs one coherent picture; split later once you know the fix. (A subagent searching code is fine.)
-3. No. Schema changes ripple everywhere; land the migration first, then the rest.
-4. A worktree is a separate folder and branch for a separate task; a subagent is a helper one agent spawns inside its own task with a fresh context.
-
-</details>
+> **Answers:**
+>
+> 1. One after another. Same file = merge conflicts and each agent working from stale code.
+> 2. One. Investigation needs one coherent picture; split later once you know the fix. (A subagent searching code is fine.)
+> 3. No. Schema changes ripple everywhere; land the migration first, then the rest.
+> 4. A worktree is a separate folder and branch for a separate task; a subagent is a helper one agent spawns inside its own task with a fresh context.
 
 ## You're done when…
 

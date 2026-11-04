@@ -45,7 +45,7 @@ a phone reminder, or a scheduled message to yourself in your messenger. Somethin
 ```text
 You're launching something you built from nothing in 65 days.
 Ship it before 11:00, then reply to every comment — that's the whole job.
-Whatever the numbers say, day 1 you would be stunned.
+Whatever the numbers say, day-1 you would be stunned.
 ```
 
 ## 2. The 10-minute pre-check (10 min)

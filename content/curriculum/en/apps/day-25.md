@@ -8,7 +8,7 @@ estMinutes: 120
 resources:
   - "https://developers.cloudflare.com/d1/"
   - "https://www.sqlite.org/fts5.html"
-  - "https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/overview"
+  - "https://platform.claude.com/docs/en/build-with-claude/prompt-engineering/overview"
   - "https://supabase.com/docs"
 tasks:
   - id: d25-apps-t1
@@ -70,18 +70,15 @@ Context: Cloudflare Workers + D1 (store files in R2) or Supabase (Storage + Post
 
 Constraints:
 - Upload: PDF only, max 10 MB, max 20 files per user. Store the file; record documents(id, user_id, name, pages, created_at).
-- Extract text per page with a PDF library that works in our runtime (check current docs). If a page has no text
-  (a scan), mark it and tell the user "this looks like a scan"; don't silently skip.
+- Extract text per page with a PDF library that works in our runtime (check current docs). If a page has no text (a scan), mark it and tell the user "this looks like a scan"; don't silently skip.
 - Chunk: ~400 words with ~50 words overlap; chunks(id, user_id, document_id, page, text) plus an FTS5 index.
 - Retrieve: top 5 chunks by FTS5 rank, ONLY from the current user's documents.
-- Answer: prompt in server/prompts/ask.ts — answer only from the numbered excerpts, cite like [1], [2]; if not
-  found, say so plainly; never use outside knowledge. Return { answer, citations: [{ n, document, page, excerpt }] }.
+- Answer: prompt in server/prompts/ask.ts — answer only from the numbered excerpts, cite like [1], [2]; if not found, say so plainly; never use outside knowledge. Return { answer, citations: [{ n, document, page, excerpt }] }.
 - UI: a Documents page (upload, list, delete) and an Ask box. Citations are clickable and show the excerpt and page.
 - Deleting a document deletes its file, chunks and index rows.
 
 Explain your plan first: libraries, tables, the prompt, and how retrieval stays per-user. Wait for my OK.
-When done: upload a test PDF via the UI, ask one question via curl, show the response with citations,
-and prove that user B can't retrieve user A's chunks.
+When done: upload a test PDF via the UI, ask one question via curl, show the response with citations, and prove that user B can't retrieve user A's chunks.
 ```
 
 Upload a real document you have the right to use (your own lease, CV, a public handbook). Ask three normal questions,
@@ -105,8 +102,7 @@ say it)? Fix what failed with one precise prompt:
 ```text
 On the question "<question>" the app answered "<answer>", citing [n], but page <p> doesn't say that.
 Show me the retrieved chunks and the exact prompt sent. Explain the cause before changing anything.
-Then fix it (prompt wording, number of chunks, chunk size or search query) and re-run all three
-trick questions to show the before/after.
+Then fix it (prompt wording, number of chunks, chunk size or search query) and re-run all three trick questions to show the before/after.
 ```
 
 Write down the three questions, what happened, and what you changed.
@@ -121,16 +117,14 @@ Write down the three questions, what happened, and what you changed.
 3. What goes wrong if chunks are huge (20 pages each)?
 4. Why does every chunk store its page number?
 
-<details><summary>Answers</summary>
-
-1. Long documents cost more tokens per question, can exceed the context window, and models get worse at finding one
-   detail in a huge prompt. For short documents, sending everything is fine.
-2. Each chunk loses its context ("it must be paid monthly" — what is "it"?), so retrieval finds fragments that can't
-   answer anything on their own.
-3. Retrieval becomes coarse: you pay for lots of irrelevant text, and the important line gets lost in noise.
-4. So answers can cite the exact page and the user can verify them. Citations are what make the answer trustworthy.
-
-</details>
+> **Answers:**
+>
+> 1. Long documents cost more tokens per question, can exceed the context window, and models get worse at finding one
+>    detail in a huge prompt. For short documents, sending everything is fine.
+> 2. Each chunk loses its context ("it must be paid monthly" — what is "it"?), so retrieval finds fragments that can't
+>    answer anything on their own.
+> 3. Retrieval becomes coarse: you pay for lots of irrelevant text, and the important line gets lost in noise.
+> 4. So answers can cite the exact page and the user can verify them. Citations are what make the answer trustworthy.
 
 ## You're done when…
 

@@ -61,13 +61,10 @@ capstone-v1.0/
 Goal: final masters and delivery files for every launch video, in a clean folder structure.
 Context: formats/<capstone>.json, runs/<capstone>/ (current renders), the day 62 trailer, my channel plan.
 Do:
-1. Re-render every launch video from the pipeline at master quality (ProRes 422 HQ .mov, or H.264 at CRF 16 if
-   ProRes is impractical), with the exact final config. Name them <slug>_master.<ext>.
-2. From each master, export delivery files per platform in the channel plan (16:9, 9:16, 1:1 where needed),
-   loudness-normalised to the target, with SRT captions and the chosen thumbnail.
+1. Re-render every launch video from the pipeline at master quality (ProRes 422 HQ .mov, or H.264 at CRF 16 if ProRes is impractical), with the exact final config. Name them <slug>_master.<ext>.
+2. From each master, export delivery files per platform in the channel plan (16:9, 9:16, 1:1 where needed), loudness-normalised to the target, with SRT captions and the chosen thumbnail.
 3. Run qc.py on every delivery file and save reports into qc/.
-4. Copy all licence files and voice-consent notes into licences/. Write README.md listing every file, its version
-   and its credits. Generate checksums.sha256.
+4. Copy all licence files and voice-consent notes into licences/. Write README.md listing every file, its version and its credits. Generate checksums.sha256.
 5. Commit the pipeline and tag it: git tag -a v1.0.0 -m "Capstone launch masters".
 Done when: every QC report is clean, the folder matches the structure, and you show me the README.
 ```
@@ -83,9 +80,9 @@ The input is the pipeline's own high-quality render, never an already compressed
 good as its source. On macOS use `shasum -a 256` instead of `sha256sum`; on Windows the agent can use PowerShell's
 `Get-FileHash`.
 
-Upload the folder to cloud storage (Google Drive, Dropbox, or an object storage bucket) and share a view link.
-If a launch video changed since day 62, delete that scheduled upload and schedule the new file from `delivery/`:
-most platforms won't let you swap the file under an existing video. Then check every scheduled item one last time in the
+Upload the folder to cloud storage (Google Drive, Dropbox, or an object storage bucket) and share a view link. If a
+launch video has changed since day 62, delete that scheduled upload and schedule the new file from `delivery/`: most
+platforms won't let you swap the file under an existing video. Then check every scheduled item one last time in the
 platform studio.
 
 > **If you're stuck:** ProRes masters are huge and your upload is slow? Keep ProRes on your disk and an external

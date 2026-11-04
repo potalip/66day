@@ -64,19 +64,14 @@ answer it to stop the little loading spinner.
 Goal: make the bot in bot/ friendlier and give it memory.
 
 Constraints:
-- Per-user memory in a D1 table messages(chat_id, role, text, created_at). Send the last 10 messages for that
-  chat to the model as history. Store nothing else about the user.
+- Per-user memory in a D1 table messages(chat_id, role, text, created_at). Send the last 10 messages for that chat to the model as history. Store nothing else about the user.
 - /reset clears that user's history; /forget deletes everything stored about them and confirms.
-- Under each AI reply, inline buttons: "Shorter", "More detail", "Start over". Handle callbacks and always
-  answer the callback query.
+- Under each AI reply, inline buttons: "Shorter", "More detail", "Start over". Handle callbacks and always answer the callback query.
 - Keep /start and /help; update setMyCommands; /help mentions what is stored and how to delete it.
-- Structure the code so the same bot works with polling locally (npm run bot:dev) and with a webhook in production.
-  Plain Node can't reach a D1 binding, so hide storage behind a tiny interface: a local SQLite file
-  (node:sqlite or better-sqlite3) for polling, D1 in production, one shared migration file for both.
+- Structure the code so the same bot works with polling locally (npm run bot:dev) and with a webhook in production. Plain Node can't reach a D1 binding, so hide storage behind a tiny interface: a local SQLite file (node:sqlite or better-sqlite3) for polling, D1 in production, one shared migration file for both.
 
 Explain your plan first (schema, files, how the same code runs both ways) and wait for my OK.
-When done: run it locally with polling, give me a test script of 6 steps proving memory, /reset and the
-buttons work, and tell me what the logs should show.
+When done: run it locally with polling, give me a test script of 6 steps proving memory, /reset and the buttons work, and tell me what the logs should show.
 ```
 
 Run through the test script yourself. Then paste the final command list (what your `/help` shows) as proof.
@@ -89,11 +84,9 @@ Goal: deploy the bot to Cloudflare Workers on a webhook.
 Constraints:
 - The bot is its own Worker with its own wrangler config in bot/ (e.g. name "<app>-bot") and its own D1 database.
 - Use grammY's webhook adapter for Cloudflare Workers (check the current grammY hosting docs).
-- Secrets via wrangler secret put: BOT_TOKEN, ANTHROPIC_API_KEY, WEBHOOK_SECRET. Reject any request
-  whose X-Telegram-Bot-Api-Secret-Token header doesn't match WEBHOOK_SECRET.
+- Secrets via wrangler secret put: BOT_TOKEN, ANTHROPIC_API_KEY, WEBHOOK_SECRET. Reject any request whose X-Telegram-Bot-Api-Secret-Token header doesn't match WEBHOOK_SECRET.
 - Remote D1 database with the migration applied (--remote).
-- A script scripts/set-webhook.mjs that reads bot/.env and calls setWebhook with the URL and secret_token,
-  and one that calls getWebhookInfo. Never print the token.
+- A script scripts/set-webhook.mjs that reads bot/.env and calls setWebhook with the URL and secret_token, and one that calls getWebhookInfo. Never print the token.
 
 List every command you will run before running it, and wait for my OK.
 After deploying: call getWebhookInfo and show me the result (no errors, pending_update_count 0).

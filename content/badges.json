@@ -1,32 +1,392 @@
 [
-  { "id": "first-step", "icon": "🌱", "title": { "ru": "Первый шаг", "en": "First Step" }, "description": { "ru": "Поставил агента и собрал свою первую страницу. Всё большое начинается с маленького файла.", "en": "Installed an agent and built your first page. Everything big starts with one small file." }, "rule": "Awarded on completing day 1." },
-  { "id": "first-ship", "icon": "🚀", "title": { "ru": "Оно живое!", "en": "It's Alive" }, "description": { "ru": "Твоя страница в интернете, и у неё есть адрес. Можно показывать маме.", "en": "Your page is on the internet with a real URL. Go show someone." }, "rule": "Awarded on completing day 2." },
-  { "id": "week-1", "icon": "📅", "title": { "ru": "Первая неделя", "en": "Week One" }, "description": { "ru": "Семь дней подряд. Самая трудная неделя позади.", "en": "Seven days in. The hardest week is behind you." }, "rule": "Awarded on completing day 7." },
-  { "id": "first-ai-call", "icon": "⚡", "title": { "ru": "Позвонил модели", "en": "First AI Call" }, "description": { "ru": "Твой код сам поговорил с ИИ-моделью через API — и ключ при этом не утёк.", "en": "Your code talked to an AI model through an API — and your key stayed secret." }, "rule": "Awarded on completing day 9." },
-  { "id": "track-picked", "icon": "🧭", "title": { "ru": "Курс взят", "en": "Heading Set" }, "description": { "ru": "Попробовал оба трека и выбрал свой. Переключиться можно, но направление уже есть.", "en": "Tasted both tracks and chose yours. You can switch, but now you have a direction." }, "rule": "Awarded on completing day 12." },
-  { "id": "boss-foundation", "icon": "🐉", "title": { "ru": "Первый босс", "en": "First Boss Down" }, "description": { "ru": "Решил настоящую проблему настоящего человека. Это уже не учёба — это работа.", "en": "Solved a real problem for a real person. That's not homework anymore — that's work." }, "rule": "Awarded on completing boss day 13." },
-  { "id": "phase-1", "icon": "🧱", "title": { "ru": "Фундамент заложен", "en": "Foundation Laid" }, "description": { "ru": "Две недели и первая фаза позади: терминал, git, API, деплой и первый заказчик.", "en": "Two weeks and phase one done: terminal, git, APIs, deploys and your first 'client'." }, "rule": "Awarded on completing day 14." },
-  { "id": "bot-builder", "icon": "🤖", "title": { "ru": "Ботодел", "en": "Bot Builder" }, "description": { "ru": "Твой Telegram-бот работает круглосуточно и отвечает людям, пока ты спишь.", "en": "Your Telegram bot runs 24/7 and answers people while you sleep." }, "rule": "Awarded on completing apps day 20." },
-  { "id": "model-whisperer", "icon": "🎛️", "title": { "ru": "Знаток моделей", "en": "Model Whisperer" }, "description": { "ru": "Сравнил несколько моделей на цифрах и выбрал лучшую под задачу, а не под хайп.", "en": "Compared models with real numbers and picked one for the job, not the hype." }, "rule": "Awarded on completing apps day 22." },
-  { "id": "first-render", "icon": "🎞️", "title": { "ru": "Первый рендер", "en": "First Render" }, "description": { "ru": "Сделал видео из кадров, которые нарисовал код. Режиссёр с терминалом.", "en": "Made a video from frames your code drew. A director with a terminal." }, "rule": "Awarded on completing video day 15." },
-  { "id": "voice-on", "icon": "🎙️", "title": { "ru": "Голос в кадре", "en": "Voice On" }, "description": { "ru": "Твоё видео заговорило: сценарий для уха плюс синтез речи.", "en": "Your video speaks: a script written for the ear plus text-to-speech." }, "rule": "Awarded on completing video day 22." },
-  { "id": "boss-build", "icon": "🏆", "title": { "ru": "Настоящая вещь", "en": "The Real Thing" }, "description": { "ru": "Выпустил полноценный продукт: приложение с живыми пользователями или опубликованный объясняющий ролик.", "en": "Shipped a complete piece: an app with real users or a published explainer video." }, "rule": "Awarded on completing boss day 27 (either track)." },
-  { "id": "money-ready", "icon": "💳", "title": { "ru": "Касса открыта", "en": "Open for Business" }, "description": { "ru": "Твоё приложение умеет принимать оплату — пока в тестовом режиме, но по-настоящему.", "en": "Your app can take payments — test mode for now, but wired for real." }, "rule": "Awarded on completing apps day 32." },
-  { "id": "pipeline-architect", "icon": "🏭", "title": { "ru": "Архитектор пайплайна", "en": "Pipeline Architect" }, "description": { "ru": "Одна команда — и из темы получается готовое видео. Своя маленькая студия.", "en": "One command turns a topic into a finished video. Your own tiny studio." }, "rule": "Awarded on completing video day 33." },
-  { "id": "phase-2", "icon": "🔨", "title": { "ru": "Мастерская", "en": "Workshop Open" }, "description": { "ru": "Пять недель и вторая фаза позади. Ты уже умеешь то, за что платят.", "en": "Five weeks and phase two done. You can now do things people pay for." }, "rule": "Awarded on completing day 35." },
-  { "id": "boss-client", "icon": "🤝", "title": { "ru": "Первый бриф", "en": "Client Brief" }, "description": { "ru": "Взял задачу у реального бизнеса или автора, сделал и сдал её. С отзывом.", "en": "Took a brief from a real business or creator, built it and handed it over — with feedback." }, "rule": "Awarded on completing boss day 41 (either track)." },
-  { "id": "helper", "icon": "🫶", "title": { "ru": "Подал руку", "en": "Hand Up" }, "description": { "ru": "Помог новичку. Лучший способ понять что-то — объяснить это другому.", "en": "Helped a beginner. The best way to understand something is to explain it." }, "rule": "Awarded on completing day 42." },
-  { "id": "phase-3", "icon": "📣", "title": { "ru": "На публике", "en": "In Public" }, "description": { "ru": "Третья фаза позади: пользователи, заказчики, публикации и старт финального проекта.", "en": "Phase three done: users, clients, publishing and your capstone underway." }, "rule": "Awarded on completing day 52." },
-  { "id": "boss-beta", "icon": "🧪", "title": { "ru": "Бета в эфире", "en": "Beta Live" }, "description": { "ru": "Финальный проект открыт для людей. Первые цифры и первые отзывы уже есть.", "en": "Your capstone is open to the public. First numbers, first quotes." }, "rule": "Awarded on completing boss day 55 (either track)." },
-  { "id": "portfolio-live", "icon": "🗂️", "title": { "ru": "Витрина", "en": "Portfolio Live" }, "description": { "ru": "У тебя есть сайт-портфолио с лучшими работами. Ссылка, которую не стыдно отправить.", "en": "Your portfolio site is live with your best work. A link you're proud to send." }, "rule": "Awarded on completing day 57." },
-  { "id": "first-pitch", "icon": "✉️", "title": { "ru": "Первый отклик", "en": "First Pitch" }, "description": { "ru": "Отправил пять настоящих откликов на заказы. Страшно было только первые полминуты.", "en": "Sent five real proposals. Only the first thirty seconds were scary." }, "rule": "Awarded on completing day 60." },
-  { "id": "launched", "icon": "🌍", "title": { "ru": "Запущено", "en": "Launched" }, "description": { "ru": "Финальный проект публично запущен. Мир видел — и мир откликнулся.", "en": "Your capstone launched in public. The world saw it — and responded." }, "rule": "Awarded on completing boss day 65 (either track)." },
-  { "id": "graduate", "icon": "🎓", "title": { "ru": "66 из 66", "en": "66 of 66" }, "description": { "ru": "Ты прошёл всю программу. Создавать с ИИ — теперь твоя привычка.", "en": "You finished the whole program. Building with AI is now a habit." }, "rule": "Awarded on completing day 66." },
-  { "id": "streak-7", "icon": "🔥", "title": { "ru": "Неделя без пропусков", "en": "7-Day Streak" }, "description": { "ru": "Семь дней подряд хотя бы одна выполненная задача.", "en": "At least one task done every day for seven days straight." }, "rule": "Game rule: daily streak reaches 7 (freezes count as kept days)." },
-  { "id": "streak-30", "icon": "🌳", "title": { "ru": "Месяц в потоке", "en": "30-Day Streak" }, "description": { "ru": "Тридцать дней подряд. Привычка уже пустила корни.", "en": "Thirty days in a row. The habit has roots now." }, "rule": "Game rule: daily streak reaches 30." },
-  { "id": "streak-66", "icon": "🍃", "title": { "ru": "Непрерывные 66", "en": "Unbroken 66" }, "description": { "ru": "66 дней подряд без единого пропуска. Легенда.", "en": "66 days in a row without a single miss. Legendary." }, "rule": "Game rule: daily streak reaches 66." },
-  { "id": "comeback", "icon": "🔁", "title": { "ru": "Вернулся", "en": "Comeback" }, "description": { "ru": "Пропустил пару дней — и всё равно вернулся. Привычка — это возвращение, а не идеальность.", "en": "Missed a few days and came back anyway. Habits are about returning, not perfection." }, "rule": "Game rule: completes a task after a streak broke (gap of 2+ days)." },
-  { "id": "public-builder", "icon": "📢", "title": { "ru": "Строю публично", "en": "Building in Public" }, "description": { "ru": "Десять публичных постов о своей работе. Тебя уже начинают узнавать.", "en": "Ten public posts about your work. People are starting to recognise you." }, "rule": "Game rule: 10 completed tasks of type share." },
-  { "id": "night-owl", "icon": "🦉", "title": { "ru": "Ночная смена", "en": "Night Shift" }, "description": { "ru": "Секретный значок: задеплоил что-то глубокой ночью. Но завтра всё-таки выспись.", "en": "Secret badge: shipped something in the dead of night. Now go to sleep." }, "rule": "Secret. Game rule: completes a ship task between 00:00 and 04:00 in the user's local time." },
-  { "id": "polyglot", "icon": "🗣️", "title": { "ru": "Полиглот", "en": "Polyglot" }, "description": { "ru": "Секретный значок: прочитал один и тот же урок на двух языках. Сравнил адаптации?", "en": "Secret badge: read the same lesson in both languages. Spotted the differences?" }, "rule": "Secret. Game rule: opens the same day's lesson in both RU and EN." }
+ {
+  "id": "hello-agent",
+  "icon": "🌱",
+  "title": {
+   "ru": "Привет, агент",
+   "en": "Hello, Agent"
+  },
+  "description": {
+   "ru": "Поставил агента и собрал свою первую страницу. Всё большое начинается с маленького файла.",
+   "en": "Installed an agent and built your first page. Everything big starts with one small file."
+  },
+  "rule": "Awarded on completing day 1."
+ },
+ {
+  "id": "first-ship",
+  "icon": "🚀",
+  "title": {
+   "ru": "Оно живое!",
+   "en": "It's Alive"
+  },
+  "description": {
+   "ru": "Твоя страница в интернете, и у неё есть адрес. Можно показывать маме.",
+   "en": "Your page is on the internet with a real URL. Go show someone."
+  },
+  "rule": "Awarded on completing day 2. Also a built-in game rule; this entry provides the copy."
+ },
+ {
+  "id": "week-1",
+  "icon": "📅",
+  "title": {
+   "ru": "Первая неделя",
+   "en": "Week One"
+  },
+  "description": {
+   "ru": "Семь дней подряд. Самая трудная неделя позади.",
+   "en": "Seven days in. The hardest week is behind you."
+  },
+  "rule": "Awarded on completing day 7."
+ },
+ {
+  "id": "first-ai-call",
+  "icon": "⚡",
+  "title": {
+   "ru": "Позвонил модели",
+   "en": "First AI Call"
+  },
+  "description": {
+   "ru": "Твой код сам поговорил с ИИ-моделью через API — и ключ при этом не утёк.",
+   "en": "Your code talked to an AI model through an API — and your key stayed secret."
+  },
+  "rule": "Awarded on completing day 9."
+ },
+ {
+  "id": "track-picked",
+  "icon": "🧭",
+  "title": {
+   "ru": "Курс взят",
+   "en": "Heading Set"
+  },
+  "description": {
+   "ru": "Попробовал оба трека и выбрал свой. Переключиться можно, но направление уже есть.",
+   "en": "Tasted both tracks and chose yours. You can switch, but now you have a direction."
+  },
+  "rule": "Awarded on completing day 12."
+ },
+ {
+  "id": "boss-foundation",
+  "icon": "🐉",
+  "title": {
+   "ru": "Первый босс",
+   "en": "First Boss Down"
+  },
+  "description": {
+   "ru": "Решил настоящую проблему настоящего человека. Это уже не учёба — это работа.",
+   "en": "Solved a real problem for a real person. That's not homework anymore — that's work."
+  },
+  "rule": "Awarded on completing boss day 13."
+ },
+ {
+  "id": "phase-1",
+  "icon": "🧱",
+  "title": {
+   "ru": "Фундамент заложен",
+   "en": "Foundation Laid"
+  },
+  "description": {
+   "ru": "Две недели и первая фаза позади: терминал, git, API, деплой и первый заказчик.",
+   "en": "Two weeks and phase one done: terminal, git, APIs, deploys and your first 'client'."
+  },
+  "rule": "Awarded on completing day 14."
+ },
+ {
+  "id": "bot-builder",
+  "icon": "🤖",
+  "title": {
+   "ru": "Ботодел",
+   "en": "Bot Builder"
+  },
+  "description": {
+   "ru": "Твой Telegram-бот работает круглосуточно и отвечает людям, пока ты спишь.",
+   "en": "Your Telegram bot runs 24/7 and answers people while you sleep."
+  },
+  "rule": "Awarded on completing apps day 20."
+ },
+ {
+  "id": "model-whisperer",
+  "icon": "🎛️",
+  "title": {
+   "ru": "Знаток моделей",
+   "en": "Model Whisperer"
+  },
+  "description": {
+   "ru": "Сравнил несколько моделей на цифрах и выбрал лучшую под задачу, а не под хайп.",
+   "en": "Compared models with real numbers and picked one for the job, not the hype."
+  },
+  "rule": "Awarded on completing apps day 22."
+ },
+ {
+  "id": "first-render",
+  "icon": "🎞️",
+  "title": {
+   "ru": "Первый рендер",
+   "en": "First Render"
+  },
+  "description": {
+   "ru": "Сделал видео из кадров, которые нарисовал код. Режиссёр с терминалом.",
+   "en": "Made a video from frames your code drew. A director with a terminal."
+  },
+  "rule": "Awarded on completing video day 15. Also a built-in game rule; this entry provides the copy."
+ },
+ {
+  "id": "voice-on",
+  "icon": "🎙️",
+  "title": {
+   "ru": "Голос в кадре",
+   "en": "Voice On"
+  },
+  "description": {
+   "ru": "Твоё видео заговорило: сценарий для уха плюс синтез речи.",
+   "en": "Your video speaks: a script written for the ear plus text-to-speech."
+  },
+  "rule": "Awarded on completing video day 22."
+ },
+ {
+  "id": "boss-build",
+  "icon": "🏆",
+  "title": {
+   "ru": "Настоящая вещь",
+   "en": "The Real Thing"
+  },
+  "description": {
+   "ru": "Выпустил полноценный продукт: приложение с живыми пользователями или опубликованный объясняющий ролик.",
+   "en": "Shipped a complete piece: an app with real users or a published explainer video."
+  },
+  "rule": "Awarded on completing boss day 27 (either track)."
+ },
+ {
+  "id": "money-ready",
+  "icon": "💳",
+  "title": {
+   "ru": "Касса открыта",
+   "en": "Open for Business"
+  },
+  "description": {
+   "ru": "Твоё приложение умеет принимать оплату — пока в тестовом режиме, но по-настоящему.",
+   "en": "Your app can take payments — test mode for now, but wired for real."
+  },
+  "rule": "Awarded on completing apps day 32."
+ },
+ {
+  "id": "pipeline-architect",
+  "icon": "🏭",
+  "title": {
+   "ru": "Архитектор пайплайна",
+   "en": "Pipeline Architect"
+  },
+  "description": {
+   "ru": "Одна команда — и из темы получается готовое видео. Своя маленькая студия.",
+   "en": "One command turns a topic into a finished video. Your own tiny studio."
+  },
+  "rule": "Awarded on completing video day 33."
+ },
+ {
+  "id": "phase-2",
+  "icon": "🔨",
+  "title": {
+   "ru": "Мастерская",
+   "en": "Workshop Open"
+  },
+  "description": {
+   "ru": "Пять недель и вторая фаза позади. Ты уже умеешь то, за что платят.",
+   "en": "Five weeks and phase two done. You can now do things people pay for."
+  },
+  "rule": "Awarded on completing day 35."
+ },
+ {
+  "id": "boss-client",
+  "icon": "🤝",
+  "title": {
+   "ru": "Первый бриф",
+   "en": "Client Brief"
+  },
+  "description": {
+   "ru": "Взял задачу у реального бизнеса или автора, сделал и сдал её. С отзывом.",
+   "en": "Took a brief from a real business or creator, built it and handed it over — with feedback."
+  },
+  "rule": "Awarded on completing boss day 41 (either track)."
+ },
+ {
+  "id": "helper",
+  "icon": "🫶",
+  "title": {
+   "ru": "Подал руку",
+   "en": "Hand Up"
+  },
+  "description": {
+   "ru": "Помог новичку. Лучший способ понять что-то — объяснить это другому.",
+   "en": "Helped a beginner. The best way to understand something is to explain it."
+  },
+  "rule": "Awarded on completing day 42."
+ },
+ {
+  "id": "phase-3",
+  "icon": "📣",
+  "title": {
+   "ru": "На публике",
+   "en": "In Public"
+  },
+  "description": {
+   "ru": "Третья фаза позади: пользователи, заказчики, публикации и старт финального проекта.",
+   "en": "Phase three done: users, clients, publishing and your capstone underway."
+  },
+  "rule": "Awarded on completing day 52."
+ },
+ {
+  "id": "boss-beta",
+  "icon": "🧪",
+  "title": {
+   "ru": "Бета в эфире",
+   "en": "Beta Live"
+  },
+  "description": {
+   "ru": "Финальный проект открыт для людей. Первые цифры и первые отзывы уже есть.",
+   "en": "Your capstone is open to the public. First numbers, first quotes."
+  },
+  "rule": "Awarded on completing boss day 55 (either track)."
+ },
+ {
+  "id": "portfolio-live",
+  "icon": "🗂️",
+  "title": {
+   "ru": "Витрина",
+   "en": "Portfolio Live"
+  },
+  "description": {
+   "ru": "У тебя есть сайт-портфолио с лучшими работами. Ссылка, которую не стыдно отправить.",
+   "en": "Your portfolio site is live with your best work. A link you're proud to send."
+  },
+  "rule": "Awarded on completing day 57."
+ },
+ {
+  "id": "first-pitch",
+  "icon": "✉️",
+  "title": {
+   "ru": "Первый отклик",
+   "en": "First Pitch"
+  },
+  "description": {
+   "ru": "Отправил пять настоящих откликов на заказы. Страшно было только первые полминуты.",
+   "en": "Sent five real proposals. Only the first thirty seconds were scary."
+  },
+  "rule": "Awarded on completing day 60."
+ },
+ {
+  "id": "launched",
+  "icon": "🌍",
+  "title": {
+   "ru": "Запущено",
+   "en": "Launched"
+  },
+  "description": {
+   "ru": "Финальный проект публично запущен. Мир видел — и мир откликнулся.",
+   "en": "Your capstone launched in public. The world saw it — and responded."
+  },
+  "rule": "Awarded on completing boss day 65 (either track)."
+ },
+ {
+  "id": "graduate",
+  "icon": "🎓",
+  "title": {
+   "ru": "66 из 66",
+   "en": "66 of 66"
+  },
+  "description": {
+   "ru": "Ты прошёл всю программу. Создавать с ИИ — теперь твоя привычка.",
+   "en": "You finished the whole program. Building with AI is now a habit."
+  },
+  "rule": "Awarded on completing day 66."
+ },
+ {
+  "id": "streak-7",
+  "icon": "🔥",
+  "title": {
+   "ru": "Неделя без пропусков",
+   "en": "7-Day Streak"
+  },
+  "description": {
+   "ru": "Семь дней подряд хотя бы одна выполненная задача.",
+   "en": "At least one task done every day for seven days straight."
+  },
+  "rule": "daily streak reaches 7 (freezes count as kept days). Built-in game rule; this entry only provides the copy."
+ },
+ {
+  "id": "streak-30",
+  "icon": "🌳",
+  "title": {
+   "ru": "Месяц в потоке",
+   "en": "30-Day Streak"
+  },
+  "description": {
+   "ru": "Тридцать дней подряд. Привычка уже пустила корни.",
+   "en": "Thirty days in a row. The habit has roots now."
+  },
+  "rule": "daily streak reaches 30. Built-in game rule; this entry only provides the copy."
+ },
+ {
+  "id": "streak-66",
+  "icon": "🍃",
+  "title": {
+   "ru": "Непрерывные 66",
+   "en": "Unbroken 66"
+  },
+  "description": {
+   "ru": "66 дней подряд без единого пропуска. Легенда.",
+   "en": "66 days in a row without a single miss. Legendary."
+  },
+  "rule": "daily streak reaches 66. Built-in game rule; this entry only provides the copy."
+ },
+ {
+  "id": "comeback",
+  "icon": "🔁",
+  "title": {
+   "ru": "Вернулся",
+   "en": "Comeback"
+  },
+  "description": {
+   "ru": "Пропустил пару дней — и всё равно вернулся. Привычка — это возвращение, а не идеальность.",
+   "en": "Missed a few days and came back anyway. Habits are about returning, not perfection."
+  },
+  "rule": "completes a task after a streak broke (gap of 2+ days). Built-in game rule; this entry only provides the copy."
+ },
+ {
+  "id": "curious",
+  "icon": "📚",
+  "title": {
+   "ru": "Любопытный ум",
+   "en": "Curious Mind"
+  },
+  "description": {
+   "ru": "Изучил десять материалов из библиотеки. Хорошие строители много читают и смотрят.",
+   "en": "Studied ten resources from the library. Good builders read and watch a lot."
+  },
+  "rule": "Built-in game rule (curious): 10 library resources viewed. This entry provides the copy."
+ },
+ {
+  "id": "night-owl",
+  "icon": "🦉",
+  "title": {
+   "ru": "Ночная смена",
+   "en": "Night Shift"
+  },
+  "description": {
+   "ru": "Секретный значок: закрыл задание глубокой ночью. Код подождёт — иди спать.",
+   "en": "Secret badge: finished a task after midnight. The code will wait — go to sleep."
+  },
+  "rule": "Built-in game rule (night-owl): completes a task after midnight in the user's local time. Secret."
+ },
+ {
+  "id": "saved-by-freeze",
+  "icon": "❄️",
+  "title": {
+   "ru": "Спасено морозом",
+   "en": "Saved by Frost"
+  },
+  "description": {
+   "ru": "Заморозка сохранила твою серию. Отдых — тоже часть привычки.",
+   "en": "A streak freeze kept your streak alive. Rest is part of the habit too."
+  },
+  "rule": "Built-in game rule (saved-by-freeze): a streak freeze was used. This entry provides the copy."
+ }
 ]
