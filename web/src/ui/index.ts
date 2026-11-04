@@ -26,3 +26,5 @@ export { uiStrings } from "./strings";
 export { formatters, useFormat } from "./format";
 export { AiNotice } from "./AiNotice";
 export { RouteFallback } from "./RouteFallback";
+// Share card is deliberately NOT re-exported here (keeps it out of the main chunk). Import it directly:
+//   import { ShareDialog, type ShareCardData } from "@web/ui/ShareCard";

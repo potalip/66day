@@ -6,6 +6,7 @@ import {
   Markdown, PageHeader, ProgressBar, ProgressRing, Segmented, Select, Sheet, Skeleton, SkeletonCard, SkeletonText, Stat,
   Switch, Tabs, Textarea, ThemeToggle, Tooltip, useToast, Logo, LeafMark, uiStrings, AiNotice,
 } from "./index";
+import { ShareCard, ShareDialog } from "./ShareCard";
 
 /**
  * Living style guide for the UI kit. Not routed by default — the orchestrator wires `/:lang/ui` → <Showcase />.
@@ -14,6 +15,7 @@ const S = {
   en: {
     eyebrow: "Design system", title: "FlowLeaf UI kit", desc: "Every component, in both themes. Import from @web/ui.",
     buttons: "Buttons", forms: "Forms", feedback: "Feedback", data: "Progress & stats", overlays: "Overlays", nav: "Navigation",
+    share: "Share card", openShare: "Open share dialog", shareTitle: "Taste both tracks, then choose",
     content: "Content", empty: "Empty & loading", colors: "Color tokens", type: "Type scale",
     startDay: "Start Day 12", continue: "Continue", preview: "Preview", skip: "Skip for today", claim: "Claim 50 XP", del: "Delete draft",
     link: "Link to your app", linkHint: "Any public URL — GitHub Pages, Vercel, a Telegram bot.", linkErr: "This doesn't look like a link yet.",
@@ -34,6 +36,7 @@ const S = {
   ru: {
     eyebrow: "Дизайн-система", title: "UI-кит FlowLeaf", desc: "Все компоненты в обеих темах. Импорт из @web/ui.",
     buttons: "Кнопки", forms: "Формы", feedback: "Обратная связь", data: "Прогресс и статистика", overlays: "Окна", nav: "Навигация",
+    share: "Карточка для соцсетей", openShare: "Открыть окно «Поделиться»", shareTitle: "Попробуй оба трека и выбери свой",
     content: "Контент", empty: "Пусто и загрузка", colors: "Цветовые токены", type: "Шкала шрифтов",
     startDay: "Начать день 12", continue: "Продолжить", preview: "Посмотреть", skip: "Пропустить сегодня", claim: "Забрать 50 XP", del: "Удалить черновик",
     link: "Ссылка на твоё приложение", linkHint: "Любой публичный адрес — GitHub Pages, Vercel, Telegram-бот.", linkErr: "Пока не похоже на ссылку.",
@@ -75,6 +78,9 @@ export default function Showcase() {
   const [chips, setChips] = useState<string[]>(["ai"]);
   const [sw, setSw] = useState(true);
   const [url, setUrl] = useState("my-app");
+  const [share, setShare] = useState(false);
+  const lang = t.eyebrow === "Design system" ? "en" : "ru";
+  const shareData = { kind: "day" as const, lang: lang as "en" | "ru", day: 12, title: t.shareTitle, streak: 11, xp: 1240, name: lang === "ru" ? "Аня" : "Alex", track: "apps" as const };
 
   return (
     <div>
@@ -193,6 +199,17 @@ export default function Showcase() {
         </Tabs>
         <div className="mt-6"><Tabs label={t.track} variant="pill" items={[{ value: "week", label: "7d" }, { value: "all", label: "All time" }]} /></div>
         <div className="mt-6 flex items-center gap-6"><Logo /><LeafMark size={40} /><LeafMark size={20} /><Kbd>⌘</Kbd><Kbd>K</Kbd></div>
+      </Section>
+
+      <Section title={t.share}>
+        <div className="grid items-start gap-4 sm:grid-cols-[340px_1fr]">
+          <ShareCard data={shareData} />
+          <div className="grid gap-4">
+            <ShareCard data={{ ...shareData, kind: "streak" }} format="landscape" theme="dark" />
+            <div><Button icon={<Sparkles />} onClick={() => setShare(true)}>{t.openShare}</Button></div>
+          </div>
+        </div>
+        <ShareDialog open={share} onClose={() => setShare(false)} data={shareData} />
       </Section>
 
       <Section title={t.content}>

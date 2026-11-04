@@ -14,3 +14,7 @@ Screens checked: Leaderboard, Profile — EN/RU × light/dark × 390/1280. Solid
 4. **Kit migration** (PR #1 is on main) — see round-1 table above this line in git history: `cx`→`cn`, `Card`, `Segmented`,
    `Button`, `Skeleton`, `Avatar` (`ring="gold"`), `ProgressRing tone="gold"`, `PageHeader`, toasts via `useToast({tone:"reward"})`,
    numbers via `useFormat()`.
+
+## Round 3 — a11y audit
+- axe-core on Leaderboard + Profile: **0 violations** in all 8 configs. 
+- New: share card for streaks — see `docs/requests/design-share-card.md`.

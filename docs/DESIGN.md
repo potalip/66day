@@ -128,3 +128,19 @@ No hype ("revolutionary", "unlock your potential"), no exclamation-mark spam, no
 
 Microcopy rules (both): buttons say what happens ("Finish day", not "OK"); empty states always offer the next step;
 numbers use locale formatting (`1 240` in RU, `1,240` in EN — use `Intl.NumberFormat(lang)`).
+
+## 12. Accessibility checklist (audited with axe-core, round 3)
+- Every page has one `<h1>` (use `PageHeader`). Lists are real `<ul>/<ol>` with `<li>` children — wrappers go *inside* the `<li>`.
+- Don't set `aria-label` on links/buttons that already show text; if you must, the label has to **contain** the visible text
+  (WCAG 2.5.3 label-in-name).
+- Never lower text contrast with opacity (`text-muted/70` fails on `surface-2`). Use `text-muted` — it's AA on every surface.
+- Custom radios/checkboxes: keep the native input (`sr-only`) and show focus on the visible wrapper via `has-[:focus-visible]:outline-*`.
+- Moving between steps: put focus on the new step's heading (`tabIndex={-1}` + `.focus()`), like onboarding does.
+- Run it yourself: Playwright + axe-core (`axe.run(document, { runOnly: ["wcag2a","wcag2aa","wcag21aa","best-practice"] })`).
+
+## 13. Share card
+`ShareDialog` / `ShareCard` in `web/src/ui/ShareCard.tsx` (builder: `shareCardSvg.ts`). One recognisable card for public
+progress: big day number (or streak) + serif-italic "done / пройден", the day's native title, streak + XP, the 66-cell map
+(done = accent, today = ringed, boss = gold crown, rest = dashed), name + #FlowLeaf66. 1080×1350 and 1200×630, light/dark.
+Colours are literal in the builder (exports can't read CSS vars) and a test keeps them equal to the tokens.
+Import it directly from `@web/ui/ShareCard` (not the barrel) so it stays in lazy chunks. Integration guide: `docs/requests/design-share-card.md`.

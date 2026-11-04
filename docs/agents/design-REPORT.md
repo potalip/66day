@@ -104,3 +104,28 @@ no console errors. Also checked:
     kit migration.
   - game: heatmap legend says "darker" (wrong in dark mode), emoji badges → lucide medallions, sparse leaderboard nudge,
     kit migration.
+
+---
+
+## Round 3: accessibility + share card (on main @ f267d27)
+- **axe-core audit:** WCAG 2.1 A/AA + best-practice rules, 13 routes × EN/RU × light/dark × 390/1280. I ran axe from the
+  scratchpad, so it isn't a repo dependency.
+  - Before: 101 unique issues. All were in design files except one.
+  - Fixed: the landing path-map's locked cells used `text-muted/70` (2.9:1 contrast) and now use `text-muted`; the logo
+    link's `aria-label` didn't match its visible text, so I removed it and the wordmark now has a real space before
+    "66"; the landing "how a day works" `<ol>` had `<div>` children, and `Reveal` can now render as an `<li>`.
+  - After: 1 issue left, `/library/my` with no `<h1>`, requested from library. The share dialog is also axe-clean in
+    both themes.
+- **Keyboard-only walkthrough:** fresh onboarding, then Today, then "Mark as done", using Tab, arrows, Space, Enter and
+  typing only. It passes in EN and RU, the task counter reaches 1/4, and all 25 focus stops have a visible indicator.
+  Suggested a skip-to-tasks link to learn.
+- **Share card:**
+  - `ShareCard` preview, a `ShareDialog` that drops straight into learn and game, and `renderShareCardPng` /
+    `shareOrDownload` helpers.
+  - Two formats: 1080×1350 and 1200×630, each in light and dark.
+  - Day and streak variants, with native RU/EN copy and Russian plurals.
+  - Fonts are embedded on first export only.
+  - On phones it opens the OS share sheet; otherwise it downloads and copies the post text.
+  - 31 tests: palette matches the tokens, XML escaping, wrapping, plurals, post text.
+  - I tested the real PNG export in Chromium.
+  - Integration guide: `docs/requests/design-share-card.md`.

@@ -26,7 +26,7 @@ export function Logo({ size = 28, className, short }: { size?: number; className
     <span className={cn("inline-flex items-center gap-2", className)}>
       <LeafMark size={size} />
       <span className="text-[1.0625rem] font-semibold tracking-[-0.02em]">
-        FlowLeaf{!short && <span className="tabular ml-1 font-medium text-accent-ink">66</span>}
+        FlowLeaf{!short && <>{" "}<span className="tabular font-medium text-accent-ink">66</span></>}
       </span>
     </span>
   );
