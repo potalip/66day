@@ -10,6 +10,8 @@ export interface BadgeInfo {
   description: Record<Lang, string>;
   group: string;
   secret: boolean;
+  /** null = every track; otherwise only students on these tracks can earn it */
+  tracks?: Track[] | null;
 }
 export interface EarnedBadge { id: string; awardedAt: number }
 
@@ -89,7 +91,7 @@ export interface QuestView {
   done: boolean;
   completedAt: number | null;
 }
-export interface QuestsResponse { week: string; resetsAt: number; quests: QuestView[] }
+export interface QuestsResponse { week: string; resetsAt: number; programWeek: number; quests: QuestView[] }
 
 export interface CertificateResponse {
   userId: string;

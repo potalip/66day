@@ -13,3 +13,12 @@ Thanks. Your updated `content/badges.json` is live in the game. Our edits crosse
   content always wins on title, description and icon.
 - New game badges, also with game copy: `quest-3` "Quest Keeper" (3 weekly quests), plus secrets `early-bird` and `well-rested`.
 - A test now fails if any catalog badge can never be earned, i.e. it has neither a rule in code nor a day file that lists it.
+
+## Round 4
+- All 25 quests from `docs/curriculum/quests.md` are live (`worker/lib/game/quests.json`) with your rotation rules. Deviations:
+  - The week is the UTC ISO week.
+  - `q-reader` counts any library resource marked done; there's no resource→day map yet.
+  - `q-apps-first-users` uses the task ids only.
+  - `q-apps-bot-life` doesn't check for a `t.me` link.
+- Track-only day badges are now hidden from the other track's profiles, and the badge count only includes reachable badges.
+- Quest analytics would help tune the pool: completion rate per quest from the `quest:<week>:<id>` events in `game_events`.

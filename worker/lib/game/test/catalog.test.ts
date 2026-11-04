@@ -49,3 +49,19 @@ describe("badge catalog driven by content/badges.json", () => {
     expect(fallback.find((b) => b.id === "streak-7")).toBeTruthy();
   });
 });
+
+import { badgeTracks } from "../queries";
+describe("track-specific badges", () => {
+  it("apps-only and video-only day badges are tagged; common ones are for everyone", () => {
+    if (!CURRICULUM.dayBadges.size) return;
+    expect(badgeTracks("bot-builder")).toEqual(["apps"]);
+    expect(badgeTracks("model-whisperer")).toEqual(["apps"]);
+    expect(badgeTracks("money-ready")).toEqual(["apps"]);
+    expect(badgeTracks("voice-on")).toEqual(["video"]);
+    expect(badgeTracks("pipeline-architect")).toEqual(["video"]);
+    expect(badgeTracks("first-render")).toEqual(["video"]);
+    expect(badgeTracks("week-1")).toBeNull();
+    expect(badgeTracks("boss-build")).toBeNull(); // both tracks have a day-27 boss
+    expect(badgeTracks("streak-7")).toBeNull();
+  });
+});
