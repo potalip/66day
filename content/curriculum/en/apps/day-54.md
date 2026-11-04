@@ -65,9 +65,10 @@ You need to know *what* happened, not just what people say. Ask your agent for m
 
 ```text
 Goal: during the beta I can see what each tester did, without collecting anything creepy.
-Context: the app already has [Plausible / PostHog / my own events table from day 45 / nothing yet].
+Context: reuse the events table + track() helper from day 34 (if the capstone is a new app, copy that migration and
+helper over first; an optional Plausible/PostHog mirror is fine).
 Do:
-1. Track 4 events only: visited, started_core_flow, reached_value_moment, gave_feedback (with a timestamp and an
+1. Add 4 beta events to the allow-list: visited, started_core_flow, reached_value_moment, gave_feedback (with a timestamp and an
    anonymous or account id; no message contents, no emails in events).
 2. Make sure every server error is logged with route + time so I can match it to a tester's report.
 3. Write one SQL query (or dashboard view) that shows, per user: the four events in order and the time between them.

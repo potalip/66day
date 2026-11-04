@@ -76,7 +76,6 @@ The learn agent's parser (`origin/agent/learn:scripts/build-content.mjs`) alread
 
 ## Known gaps
 See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
-- Apps day 45 asks for activation numbers before event logging is taught.
 - Testers and clients need lead time; days 52 and 40 now warn about it.
 - Day 65's 150 minutes are spread over 24 hours.
 - No founder media is linked yet.
@@ -95,7 +94,7 @@ See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
 ## Next steps
 1. Founder pass: add own YouTube/Instagram material per day via the library pipeline.
 2. Pilot with 5–10 learners per language on days 1–14. Collect real time-on-task and adjust `estMinutes`.
-3. Add event logging to apps days 36–37 (see gap above).
+3. ~~Add event logging~~ — done: a first-party `events` table on apps day 34, used on days 36, 45, 54 and 65.
 4. Re-verify the fast-moving items in REVIEW.md every quarter. Tool commands and model names will drift.
 5. Later: AI review of submissions against each day's "you're done when…" checklist; the content is already
    structured for it.

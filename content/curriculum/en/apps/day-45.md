@@ -33,7 +33,7 @@ tasks:
 ---
 
 "How many people used it this week?" If your honest answer is "uh, some?", today fixes that. Your app has been
-quietly writing rows for weeks: sign-ups, events, AI calls, payments. Today you learn to ask those rows questions —
+quietly writing rows since day 34: sign-ups, the `events` table, AI calls, payments. Today you learn to ask those rows questions —
 first by hand in SQL, then with charts, then in plain English with an AI that is **not allowed to break anything**.
 
 ## SQL in 15 minutes
@@ -63,9 +63,9 @@ Ask your agent to show you the schema first, then write queries **with** you, no
 Show me the tables and columns of our database (from the migrations), in a short table.
 Then help me write 5 SQL queries against our real data, one at a time, explaining each line in one sentence:
 1. Sign-ups per day, last 14 days.
-2. Daily active users (distinct users with any event), last 14 days.
+2. Daily active users (distinct user_id or anon_id in the events table from day 34), last 14 days.
 3. The top 5 features or actions by usage.
-4. Activation: what % of users who signed up did our key action within 24 hours?
+4. Activation: what % of users with signup_completed also have core_action_done within 24 hours?
 5. AI usage: calls and tokens per user this week (or the closest thing we log).
 Run each read-only against the remote database and show me the result. Never run INSERT, UPDATE or DELETE.
 ```

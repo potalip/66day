@@ -85,7 +85,7 @@ Constraints:
 - Mobile-first: perfect at 390px; the CTA is visible without scrolling on a phone.
 - Light and dark theme; Lighthouse mobile performance 90+; proper <title>, meta description and an Open Graph
   image so the link looks good when shared.
-- Track a "cta_clicked" event with the analytics from day 34.
+- Track a "cta_clicked" event with track() from day 34 (add it to the allow-list of POST /api/events).
 - If the app moves to /app, update every redirect: sign-in callbacks in the auth provider's dashboard (day 24) and
   the Stripe success/cancel URLs (day 32).
 Done when: it's deployed and you show me phone and desktop screenshots in both themes.
