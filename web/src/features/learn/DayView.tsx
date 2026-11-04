@@ -56,7 +56,8 @@ function DayResources({ s, lang, day, track, urls }: { s: LearnStrings; lang: La
   if (!plain.length && !cards.length) return null;
   return (
     <section className="mt-12 max-w-[68ch]" aria-labelledby="res-h">
-      <h2 id="res-h" className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">{s.resources}</h2>
+      <h2 id="res-h" className="text-sm font-semibold tracking-wide text-muted uppercase">{s.resources}</h2>
+      <p className="mt-1 mb-3 text-sm text-muted">{s.resourcesHint}</p>
       {cards.length > 0 && (
         <ul className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {cards.map((c) => <li key={c.id}><ResourceCardView r={c} compact /></li>)}
