@@ -403,6 +403,40 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
         </div>
       );
     }
+    case "question": {
+      const opts = ((f.options as string[]) ?? []).filter(Boolean).slice(0, 4);
+      const ans = Math.max(1, Math.min(opts.length, Number(f.answer) || 1)) - 1;
+      const think = Number(f.think) || 3;
+      const reveal = Math.min(c.dur - 1.2, .9 + think);
+      const rv = ease(t, reveal, reveal + .35);
+      const left = Math.max(0, Math.ceil(reveal - t));
+      const ru = c.sb.lang === "ru";
+      return (
+        <div style={{ position: "absolute", left: v ? 90 : c.wide ? 210 : 90, right: v ? 90 : c.wide ? 210 : 90, top: v ? 230 : 90, bottom: v ? 330 : 150, display: "flex", flexDirection: "column", gap: v ? 40 : 28 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", fontSize: 30, fontWeight: 700, letterSpacing: ".12em", color: P.muted }}>
+            <span>{ru ? "ВОПРОС" : "QUESTION"} {c.nth + 1}{c.count > 1 ? ` / ${c.count}` : ""}</span>
+            {t < reveal && <span style={{ width: 92, height: 92, borderRadius: 99, border: `8px solid ${P.accent2}`, display: "grid", placeItems: "center", color: P.fg, fontSize: 40, fontWeight: 900, letterSpacing: 0 }}>{left}</span>}
+          </div>
+          <Appear t={t} at={.15}><div style={{ fontSize: fitSize(str(f.question), c.W - 260, 300, v ? 80 : 68, 32, 1.12), fontWeight: 800, lineHeight: 1.12, color: P.fg }}>{str(f.question)}</div></Appear>
+          <div style={{ display: "flex", flexDirection: "column", gap: v ? 30 : 20, marginTop: v ? 30 : 10 }}>
+            {opts.map((o, k) => {
+              const good = k === ans;
+              return (
+                <Appear key={k} t={t} at={.5 + k * .12}>
+                  <CardBox c={c} style={{ display: "flex", alignItems: "center", gap: 30, padding: v ? "34px 36px" : "22px 30px", opacity: good ? 1 : 1 - .55 * rv,
+                    border: good && rv > 0 ? `5px solid ${P.accent}` : `2px solid ${P.line}` }}>
+                    <span style={{ width: 70, height: 70, flex: "none", borderRadius: 99, display: "grid", placeItems: "center", fontWeight: 900, fontSize: 36,
+                      background: good && rv > .5 ? P.accent : P.line, color: good && rv > .5 ? P.on_accent : P.fg }}>{good && rv > .5 ? "✓" : "ABCD"[k]}</span>
+                    <span style={{ fontSize: v ? 46 : 38, fontWeight: 600, color: P.fg }}>{o}</span>
+                  </CardBox>
+                </Appear>
+              );
+            })}
+          </div>
+          {str(f.explanation) && <div style={{ opacity: ease(t, reveal + .45, reveal + .85), fontSize: v ? 42 : 34, color: P.muted }}>{str(f.explanation)}</div>}
+        </div>
+      );
+    }
     case "screen": {
       const img = str(f.image), dev = str(f.device) || "phone";
       const title = str(f.title), cap = str(f.caption);

@@ -11,10 +11,10 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   scenes stretch to fit the spoken line), two-pass loudnorm to −14 LUFS, thumbnail + 12-frame contact sheet per render.
 - **Resolution-independent layout**: design units (`f.s`), safe areas for Reels/TikTok/Shorts, every user string is
   wrapped/fitted into its box (`fit()`), so AI- or student-written text never clips.
-- **7 templates × 2–4 styles × 3 formats (9:16, 1:1, 16:9)**, each with natively written EN + RU examples:
+- **8 templates × 2–4 styles × 3 formats (9:16, 1:1, 16:9)**, each with natively written EN + RU examples:
   `kinetic-quote`, `explainer`, `listicle`, `numbers`, `code-walkthrough` (pygments syntax colours, typing, line
   highlights, terminal), `before-after` (swipe reveal, side-by-side, screenshot in phone/browser mockup, features),
-  `day-recap` (66-cell progress grid, XP in gold, streak, tomorrow teaser). 6 palettes: paper, night, forest, sunrise,
+  `quiz` (countdown + answer reveal), `day-recap` (66-cell progress grid, XP in gold, streak, tomorrow teaser). 6 palettes: paper, night, forest, sunrise,
   terminal, ink. Small vector icon set.
 - **Template declarations = the contract**: fields/scene kinds/durations/hints in Python → exported to
   `worker/lib/studio/catalog.generated.json` (`python -m flowleaf_render.cli catalog --out …`), used by the Worker,

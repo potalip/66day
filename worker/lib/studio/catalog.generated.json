@@ -3902,6 +3902,432 @@
      ]
     }
    }
+  },
+  {
+   "id": "quiz",
+   "name": {
+    "en": "Quiz short",
+    "ru": "Квиз"
+   },
+   "description": {
+    "en": "Ask a question, count down, reveal the answer. Great for engagement and revision.",
+    "ru": "Вопрос, обратный отсчёт и ответ. Отлично вовлекает и помогает повторить материал."
+   },
+   "category": "education",
+   "styles": [
+    {
+     "id": "sunrise",
+     "name": {
+      "en": "Sunrise",
+      "ru": "Рассвет"
+     },
+     "palette": {
+      "id": "sunrise",
+      "bg": "#FFF1E3",
+      "bg2": "#FFE0BF",
+      "surface": "#FFFFFF",
+      "fg": "#2A1912",
+      "muted": "#7A5D4F",
+      "accent": "#E2552B",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#F0D3BA",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Tease the quiz: e.g. 'Only 1 in 3 gets this right'."
+    },
+    {
+     "kind": "question",
+     "label": {
+      "en": "Question",
+      "ru": "Вопрос"
+     },
+     "fields": [
+      {
+       "key": "question",
+       "type": "textarea",
+       "label": {
+        "en": "Question",
+        "ru": "Вопрос"
+       },
+       "required": true,
+       "maxLen": 120
+      },
+      {
+       "key": "options",
+       "type": "list",
+       "label": {
+        "en": "Answer options (2-4, one per line)",
+        "ru": "Варианты ответа (2-4, по строке)"
+       },
+       "required": false,
+       "maxLen": 60,
+       "maxItems": 4,
+       "minItems": 2
+      },
+      {
+       "key": "answer",
+       "type": "number",
+       "label": {
+        "en": "Correct option (1-4)",
+        "ru": "Правильный вариант (1-4)"
+       },
+       "required": false,
+       "min": 1,
+       "max": 4,
+       "default": 1
+      },
+      {
+       "key": "think",
+       "type": "number",
+       "label": {
+        "en": "Seconds to think",
+        "ru": "Секунд на размышление"
+       },
+       "required": false,
+       "min": 1,
+       "max": 8,
+       "default": 3
+      },
+      {
+       "key": "explanation",
+       "type": "textarea",
+       "label": {
+        "en": "Why (shown after the reveal)",
+        "ru": "Почему (после ответа)"
+       },
+       "required": false,
+       "maxLen": 130
+      }
+     ],
+     "duration": {
+      "default": 7.0,
+      "min": 4.0,
+      "max": 12.0
+     },
+     "hint": "One clear question, 3 short options, exactly one correct (answer = its number). Explanation = one sentence."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 1,
+   "maxScenes": 8,
+   "defaults": {
+    "style": "sunrise",
+    "music": "uplift",
+    "transition": "wipe"
+   },
+   "aiNotes": "1-4 questions that test one concept from the brief. Options short and plausible; exactly one correct. Narration reads the question, then (after the think time) states the answer.",
+   "examples": {
+    "en": {
+     "template": "quiz",
+     "style": "sunrise",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Quick quiz: AI coding agents",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 2.8,
+       "voiceover": "Quick quiz. Only one in three beginners gets this right.",
+       "fields": {
+        "kicker": "Quiz",
+        "title": "Can you spot the right move?",
+        "subtitle": "2 questions · 3 seconds each"
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Your agent's code throws an error. What's the best first move? ... Paste the full error back to the agent.",
+       "fields": {
+        "question": "Your agent's code throws an error. Best first move?",
+        "options": [
+         "Start over from scratch",
+         "Paste the full error back to the agent",
+         "Ignore it and keep going"
+        ],
+        "answer": 2,
+        "think": 3,
+        "explanation": "The error message is the agent's best clue. Give it all of it."
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "What should you ask for before any code? ... A plan.",
+       "fields": {
+        "question": "What should you ask the agent for before any code?",
+        "options": [
+         "A plan",
+         "A logo",
+         "A longer prompt"
+        ],
+        "answer": 1,
+        "think": 3,
+        "explanation": "Read the plan, push back, then let it build."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.2,
+       "voiceover": "How many did you get? Tell me in the comments.",
+       "fields": {
+        "title": "2 out of 2?",
+        "subtitle": "Tell me in the comments.",
+        "cta": "Follow for more"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "quiz",
+     "style": "sunrise",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Квиз: ИИ-агенты для кода",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 2.8,
+       "voiceover": "Быстрый квиз. Правильно отвечает только каждый третий новичок.",
+       "fields": {
+        "kicker": "Квиз",
+        "title": "Угадаешь правильный ход?",
+        "subtitle": "2 вопроса · по 3 секунды"
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Код агента падает с ошибкой. Что делать первым делом? ... Скопировать ошибку целиком агенту.",
+       "fields": {
+        "question": "Код от агента падает с ошибкой. Первый шаг?",
+        "options": [
+         "Начать всё заново",
+         "Отдать агенту ошибку целиком",
+         "Не обращать внимания"
+        ],
+        "answer": 2,
+        "think": 3,
+        "explanation": "Текст ошибки — лучшая подсказка для агента. Дай его полностью."
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Что попросить у агента до того, как он начнёт писать код? ... План.",
+       "fields": {
+        "question": "Что попросить у агента до любого кода?",
+        "options": [
+         "План",
+         "Логотип",
+         "Промпт подлиннее"
+        ],
+        "answer": 1,
+        "think": 3,
+        "explanation": "Прочитай план, поспорь — и только потом пусть пишет."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.2,
+       "voiceover": "Сколько правильных? Пиши в комментариях.",
+       "fields": {
+        "title": "Два из двух?",
+        "subtitle": "Пиши в комментариях.",
+        "cta": "Подписаться"
+       }
+      }
+     ]
+    }
+   }
   }
  ]
 }

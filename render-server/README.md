@@ -22,7 +22,7 @@ flowleaf_render/
   cli.py         render / stills / catalog / previews from the shell
 ```
 
-## Templates (7 types × 2–4 styles × 3 formats)
+## Templates (8 types × 2–4 styles × 3 formats)
 
 | id | what | scene kinds | styles |
 |---|---|---|---|
@@ -32,6 +32,7 @@ flowleaf_render/
 | `numbers` | counters, bar charts, A-vs-B | intro, stat, bars, compare, outro | night, paper, forest |
 | `code-walkthrough` | code typing with syntax colours + terminal | intro, code, terminal, outro | terminal, paper, night |
 | `before-after` | swipe reveal, side-by-side, screenshot in a device, features | intro, swipe, compare, screen, feature, outro | paper, night, sunrise |
+| `quiz` | question → countdown → answer reveal + explanation | intro, question, outro | sunrise, night, forest |
 | `day-recap` | 66-day progress card, XP, streak, tomorrow | recap, screen, next, outro | paper, night, forest |
 
 `screen` scenes show an uploaded screenshot in a phone / browser frame (tall phone screenshots scroll slowly).
