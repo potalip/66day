@@ -5,7 +5,7 @@ phase: 1
 title: "Hello, agent: your first page in 30 minutes"
 summary: "Install a coding agent and have it build your personal 66-day promise page — on your own computer, today."
 estMinutes: 75
-badges: [first-step]
+badges: [hello-agent]
 resources:
   - "https://docs.anthropic.com/en/docs/claude-code/overview"
   - "https://developer.mozilla.org/en-US/docs/Learn"

@@ -10,7 +10,7 @@
 | Validator | `docs/curriculum/tools/validate.mjs` | Done. Zero dependencies. Checks every file against OUTLINE and CONTENT-FORMAT, and prints XP totals. |
 | Programs | `content/curriculum/{ru,en}/program.json` | Done. 4 phases: Foundation 1–14, Build 15–35, Ship 36–52, Portfolio & Earn 53–66. |
 | Day files | `content/curriculum/{ru,en}/{common,apps,video}/day-NN.md` | **All 66 days in both languages.** 106 files per language: 26 common, 40 apps, 40 video. About 94k words in EN and 85k in RU. |
-| Badges | `content/badges.json` | 30 badges. 23 are awarded on finishing a day (milestones, phases, bosses, track skills). 7 are game rules: streak-7, streak-30, streak-66, comeback, public-builder, and the secret night-owl and polyglot. |
+| Badges | `content/badges.json` | 30 badges. 23 are awarded on finishing a day (milestones, phases, bosses, track skills). 7 reuse the game's built-in rules with our copy: streak-7, streak-30, streak-66, comeback, curious, saved-by-freeze, and the secret night-owl. |
 | Self-review | `docs/curriculum/REVIEW.md` | Done. Five slice reviews (student + editor), fixes applied, outline changes, known gaps, and a quarterly list of facts to re-verify. |
 
 ### Program at a glance

@@ -5,7 +5,7 @@ phase: 1
 title: "Привет, агент: первая страница за полчаса"
 summary: "Ставишь ИИ-агента для кода и вместе с ним собираешь свою страницу-обещание на 66 дней. Прямо сегодня."
 estMinutes: 75
-badges: [first-step]
+badges: [hello-agent]
 resources:
   - "https://docs.anthropic.com/en/docs/claude-code/overview"
   - "https://developer.mozilla.org/ru/docs/Learn"
