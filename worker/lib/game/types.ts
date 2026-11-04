@@ -57,6 +57,8 @@ export interface PublicProfile extends LevelInfo {
   badges: EarnedBadge[];
   activity: ActivityCell[];
   shipped: ShippedItem[];
+  /** program days completed (0..66) */
+  daysDone: number;
   /** only for your own profile */
   recap: WeeklyRecap | null;
 }

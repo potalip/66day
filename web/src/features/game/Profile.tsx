@@ -1,7 +1,7 @@
 // OWNER: game agent. Profile: own (/:lang/me) or public (/:lang/u/:userId; legacy /:lang/me?u=<id>).
 import { useMemo, useState } from "react";
 import { Link, useParams, useSearchParams } from "react-router";
-import { ArrowLeft, ExternalLink, Flag, Flame, Pencil, Rocket, Snowflake, TrendingDown, TrendingUp, UserRoundX } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, ScrollText, Flag, Flame, Pencil, Rocket, Snowflake, TrendingDown, TrendingUp, UserRoundX } from "lucide-react";
 import { api } from "@web/api";
 import { useLang, useStrings } from "@web/i18n";
 import { Button, ButtonLink, Card, EmptyState, Input, SectionTitle, Skeleton, Stat, cn, useFormat } from "@web/ui";
@@ -9,7 +9,7 @@ import { notifyGameChanged, useApiData, useBadgeCatalog, useGameMe, type BadgeIn
 import { fmtDate, fmtDay } from "./format";
 import { Heatmap } from "./Heatmap";
 import { strings } from "./strings";
-import { Avatar, BadgeMedal, displayName, GameLayer, LevelRing, streakMessage, XpBar } from "./widgets";
+import { Avatar, BadgeMedal, displayName, GameLayer, LevelRing, streakMessage, WeeklyQuests, XpBar } from "./widgets";
 import type { WeeklyRecap } from "../../../../worker/lib/game/types";
 
 export default function Profile() {
@@ -97,6 +97,8 @@ function ProfileView({ p, today }: { p: PublicProfile; today: string }) {
       </Card>
 
       {p.isMe && p.recap && <RecapCard r={p.recap} catalog={catalog} />}
+      {p.isMe && <WeeklyQuests />}
+      <CertificateLink p={p} />
 
       <Card padding="lg" as="section" aria-labelledby="g-activity">
         <SectionTitle title={<span id="g-activity">{P.activity}</span>} description={P.activityHint} />
@@ -114,6 +116,22 @@ function ProfileView({ p, today }: { p: PublicProfile; today: string }) {
         )}
       </Card>
     </div>
+  );
+}
+
+function CertificateLink({ p }: { p: PublicProfile }) {
+  const s = useStrings(strings);
+  const lang = useLang();
+  return (
+    <Link to={`/${lang}/certificate/${encodeURIComponent(p.userId)}`}
+      className="group flex items-center gap-4 rounded-[var(--radius)] border border-line bg-surface p-4 transition-colors hover:border-line-strong sm:p-5">
+      <span className="grid size-11 shrink-0 place-items-center rounded-full bg-gold-soft text-gold-ink"><ScrollText aria-hidden className="size-5" /></span>
+      <span className="min-w-0 flex-1">
+        <span className="block font-semibold">{p.isMe ? s.cert.yours : s.cert.eyebrow}</span>
+        <span className="block text-sm text-muted">{s.cert.yoursHint(p.daysDone)}</span>
+      </span>
+      <ArrowRight aria-hidden className="size-5 text-muted transition-transform group-hover:translate-x-0.5" />
+    </Link>
   );
 }
 

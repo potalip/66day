@@ -96,6 +96,7 @@ export async function getProfile(db: D1Database, userId: string, viewerId: strin
     activity: await activityOf(db, u, tz, today),
     shipped: await shippedOf(db, userId, u.track ?? ((s?.track as Track | null) || null)),
     recap: userId === viewerId ? await weeklyRecap(db, userId, today, now) : null,
+    daysDone: Math.min(66, ((await db.prepare("SELECT COUNT(*) n FROM game_events WHERE user_id = ? AND type = 'day.completed'").bind(userId).first<{ n: number }>())?.n ?? 0)),
   };
 }
 

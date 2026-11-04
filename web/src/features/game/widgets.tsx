@@ -9,11 +9,12 @@
 import { useEffect, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import { createRoot } from "react-dom/client";
 import { Link } from "react-router";
-import { Flame, Snowflake, Sparkles } from "lucide-react";
+import { Check, Compass, Flame, Snowflake, Sparkles } from "lucide-react";
 import type { Award } from "@shared/types";
 import { LangContext, useLang, useStrings, type Lang } from "@web/i18n";
 import { Avatar as UiAvatar, Button, ButtonLink, Card, Dialog, ProgressBar, ProgressRing, Skeleton, ToastProvider, cn, useFormat, useToast } from "@web/ui";
-import { notifyGameChanged, useBadgeCatalog, useGameMe, type BadgeInfo, type GameMe, type StreakInfo } from "./api";
+import { notifyGameChanged, useApiData, useBadgeCatalog, useGameMe, type BadgeInfo, type GameMe, type QuestsResponse, type StreakInfo } from "./api";
+import { fmtRelative } from "./format";
 import { handleOf, localHour } from "./format";
 import { GameIcon } from "./icons";
 import { strings, type GameStrings } from "./strings";
@@ -145,6 +146,60 @@ export function StreakNudge({ streak, href, className }: { streak?: StreakInfo |
 }
 
 // ---------------------------------------------------------------------------------------------
+/**
+ * This week's quests (1–3, rotating per track every Monday UTC) with progress and bonus XP.
+ * Self-fetching; refreshes after any award. Put it on Today: <WeeklyQuests />.
+ */
+export function WeeklyQuests({ className, compact }: { className?: string; compact?: boolean }) {
+  const s = useStrings(strings);
+  const Q = s.quests;
+  const lang = useLang();
+  const { data, error } = useApiData<QuestsResponse>("/game/quests");
+  if (error && !data) return null; // quests are a bonus: never block the page
+  const allDone = !!data?.quests.length && data.quests.every((q) => q.done);
+  return (
+    <Card padding={compact ? "sm" : "md"} as="section" aria-labelledby="g-quests" className={className}>
+      <GameLayer />
+      <div className="mb-3 flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-3">
+        <div className="min-w-0">
+          <h2 id="g-quests" className="flex items-center gap-2 text-base font-semibold"><Compass aria-hidden className="size-[18px] text-gold-bright" />{Q.title}</h2>
+          {!compact && <p className="mt-0.5 text-sm text-muted">{Q.subtitle}</p>}
+        </div>
+        {data && <span className="shrink-0 text-xs text-muted sm:pt-0.5">{Q.resets(fmtRelative(data.resetsAt, lang))}</span>}
+      </div>
+      {!data ? (
+        <div className="space-y-3">{[0, 1, 2].map((i) => <Skeleton key={i} className="h-12" />)}</div>
+      ) : !data.quests.length ? (
+        <p className="text-sm text-muted">{Q.empty}</p>
+      ) : (
+        <ul className="space-y-2.5">
+          {data.quests.map((q) => (
+            <li key={q.id} className={cn("flex items-center gap-3 rounded-[var(--radius-sm)] border px-3 py-2.5",
+              q.done ? "border-gold-bright/40 bg-gold-soft" : "border-line bg-surface")}>
+              <span aria-hidden className={cn("grid size-9 shrink-0 place-items-center rounded-full text-lg", q.done ? "bg-surface" : "bg-surface-2")}>
+                {q.done ? <Check className="size-[18px] text-gold-bright" /> : q.icon}
+              </span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-baseline justify-between gap-2">
+                  <p className={cn("truncate text-sm font-medium", q.done ? "text-fg" : "text-fg")}>{q.title[lang]}</p>
+                  <span className={cn("shrink-0 text-xs font-semibold tabular", q.done ? "text-gold-ink" : "text-muted")}>+{q.xp} XP</span>
+                </div>
+                {!compact && <p className="mt-0.5 text-xs text-muted">{q.description[lang]}</p>}
+                <div className="mt-1.5 flex items-center gap-2">
+                  <ProgressBar value={q.progress} max={q.target} tone="gold" size="sm" label={`${q.title[lang]}: ${q.progress} / ${q.target}`} className="flex-1" />
+                  <span className="text-[11px] tabular text-muted">{q.done ? Q.done : `${q.progress} / ${q.target}`}</span>
+                </div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+      {allDone && <p className="mt-3 text-sm text-muted">{Q.allDone}</p>}
+    </Card>
+  );
+}
+
+// ---------------------------------------------------------------------------------------------
 const isEmoji = (s: string) => /\p{Extended_Pictographic}/u.test(s);
 
 /** Badge medallion: gold ring when earned, quiet dashed silhouette when locked, "?" for unearned secrets. */
@@ -176,7 +231,10 @@ export function describeAwards(awards: Award[], s: GameStrings, lang: Lang, cata
   let level: { n: number; rank: RankKey } | null = null;
   const lines: AwardLine[] = [];
   for (const a of awards) {
-    if (a.kind === "xp") xp += a.amount ?? 0;
+    if (a.kind === "xp") {
+      xp += a.amount ?? 0;
+      if (a.id?.startsWith("quest:")) lines.push({ key: a.id, icon: "🧭", text: a.label ?? a.id });
+    }
     else if (a.kind === "level") {
       level = { n: a.amount ?? 1, rank: (a.id as RankKey) ?? "seed" };
       lines.push({ key: `l${a.amount}`, icon: "⭐", text: s.awards.level(a.amount ?? 0, s.ranks[(a.id as RankKey) ?? "seed"] ?? "") });
