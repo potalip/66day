@@ -5,6 +5,15 @@
  */
 import type { Lang, Storyboard } from "./api";
 
+/** Shorten to `max` chars on a word boundary, with an ellipsis. */
+export function clip(s: string, max: number): string {
+  const t = s.trim();
+  if (t.length <= max) return t;
+  const cut = t.slice(0, max - 1);
+  const sp = cut.lastIndexOf(" ");
+  return `${(sp > max * 0.5 ? cut.slice(0, sp) : cut).replace(/[\s,.;:–—-]+$/, "")}…`;
+}
+
 export interface RecapData { day: number; title: string; done: string[]; xp: number; streak: number; next?: string }
 
 async function get(path: string): Promise<any> {
@@ -24,13 +33,13 @@ export async function loadRecapData(lang: Lang): Promise<RecapData | null> {
   const dv = await get(`/progress/day/${day}?lang=${lang}`);
   const states: Record<string, { done?: boolean }> = dv?.tasks ?? {};
   const tasks: any[] = dv?.day?.tasks ?? [];
-  const done = tasks.filter((t) => states[t.id]?.done).map((t) => String(t.title)).filter(Boolean).slice(0, 4);
+  const done = tasks.filter((t) => states[t.id]?.done).map((t) => clip(String(t.title), 50)).filter(Boolean).slice(0, 4);
   const game = await get("/game/me");
   const streakRaw = game?.streak;
   const streak = typeof streakRaw === "number" ? streakRaw : Number(streakRaw?.streak ?? streakRaw?.current ?? 0) || 0;
   const xp = Number(last.xp) || tasks.filter((t) => states[t.id]?.done).reduce((a, t) => a + (Number(t.xp) || 0), 0);
   const next = dv?.next?.title ?? cells.find((c) => c.day === day + 1)?.title;
-  return { day, title: String(last.title ?? dv?.day?.title ?? "").slice(0, 60), done, xp, streak, next: next ? String(next).slice(0, 60) : undefined };
+  return { day, title: clip(String(last.title ?? dv?.day?.title ?? ""), 60), done, xp, streak, next: next ? clip(String(next), 60) : undefined };
 }
 
 /** Apply recap data to a day-recap storyboard (pure; tested). */

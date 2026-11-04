@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { exampleStoryboard, getTemplate } from "../../../../worker/lib/studio/storyboard";
-import { applyRecap } from "./prefill";
+import { applyRecap, clip } from "./prefill";
 
 describe("day-recap prefill", () => {
   it("fills day, tasks, XP, streak and tomorrow into the template", () => {
@@ -12,5 +12,10 @@ describe("day-recap prefill", () => {
     expect(out.scenes.find((s) => s.kind === "next")!.fields.title).toBe("Память бота");
     expect(out.scenes.find((s) => s.kind === "outro")!.fields.title).toBe("Ещё 45 дней.");
     expect(sb.fields.day).toBe(12); // input untouched
+  });
+
+  it("clips long task titles on a word boundary", () => {
+    expect(clip("Install a coding agent and say hello in a new folder", 50)).toBe("Install a coding agent and say hello in a new…");
+    expect(clip("short", 50)).toBe("short");
   });
 });

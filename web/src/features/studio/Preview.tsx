@@ -489,7 +489,7 @@ export function Stage({ sb, T, t, className }: { sb: Storyboard; T: TemplateDef;
   const cover = Math.max(edgeIn, edgeOut);
   return (
     <div ref={box} className={cx("relative w-full overflow-hidden", className)} style={{ aspectRatio: `${W} / ${H}`, background: P.bg }}>
-      <div style={{ width: W, height: H, transform: `scale(${k})`, transformOrigin: "0 0", position: "absolute", left: 0, top: 0, fontFamily: "Inter, var(--font-sans)",
+      <div style={{ width: W, height: H, transform: `scale(${k})`, transformOrigin: "0 0", position: "absolute", left: 0, top: 0, fontFamily: "Inter, var(--font-sans)", textAlign: "left",
         background: `radial-gradient(ellipse at 50% 38%, ${P.bg2} 0%, ${P.bg} 70%)`, color: P.fg }}>
         {sc ? <>{sceneBody(c, sc)}<Handle c={c} /></> : null}
         {cue && (
