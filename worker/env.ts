@@ -10,6 +10,9 @@ export interface Env {
   ANTHROPIC_API_KEY?: string;
   ADMIN_TOKEN?: string;
   RENDER_SERVER_TOKEN?: string;
+  MEDIA_WORKER_URL?: string;   // external transcription service (worker/lib/library/MEDIA-WORKER.md)
+  MEDIA_WORKER_TOKEN?: string;
+  PUBLIC_BASE_URL?: string;    // public origin, used for callback URLs
 }
 
 /** Every async job goes through one queue; `kind` routes it. Add kinds, never rename. */

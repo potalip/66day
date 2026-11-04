@@ -13,6 +13,7 @@ import ResourcePage from "./features/library/ResourcePage";
 import Admin from "./features/admin/Admin";
 import Studio from "./features/studio/Studio";
 import StudioProject from "./features/studio/StudioProject";
+import Showcase from "./ui/Showcase";
 
 // Route table. OWNER: orchestrator. Routes are pre-registered so feature agents only edit their own folders.
 const router = createBrowserRouter([
@@ -28,6 +29,8 @@ const router = createBrowserRouter([
       { path: "day/:day", element: <DayPage /> },
       { path: "leaderboard", element: <Leaderboard /> },
       { path: "me", element: <Profile /> },
+      { path: "u/:userId", element: <Profile /> },
+      { path: "ui", element: <Showcase /> },
       { path: "library", element: <Library /> },
       { path: "library/:id", element: <ResourcePage /> },
       { path: "admin/*", element: <Admin /> },

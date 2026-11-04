@@ -1,9 +1,11 @@
 import type { Env, JobMessage } from "./env";
+import { libraryJobHandlers } from "./lib/library/pipeline";
 import { studioJobs } from "./routes/studio";
 
 // Each area registers its handler here. Owners: resource.* → library agent, studio.* → studio agent.
 type Handler = (env: Env, msg: JobMessage) => Promise<void>;
 export const jobHandlers: Partial<Record<JobMessage["kind"], Handler>> = {};
+Object.assign(jobHandlers, libraryJobHandlers); // library: resource.ingest + resource.build_lesson
 jobHandlers["studio.plan"] = studioJobs.plan;
 jobHandlers["studio.render"] = studioJobs.render;
 

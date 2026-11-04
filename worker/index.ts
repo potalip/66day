@@ -13,16 +13,21 @@ import { studio } from "./routes/studio";
 const app = new Hono<AppEnv>().basePath("/api");
 
 app.get("/health", (c) => c.json({ ok: true, env: c.env.APP_ENV }));
-app.use("*", anonUser);
+// Server-to-server callbacks carry their own bearer auth and must not mint anonymous users.
+const NO_USER = new Set(["/api/studio/render-callback", "/api/pipeline/media-worker/callback"]);
+app.use("*", (c, next) => (NO_USER.has(c.req.path) ? next() : anonUser(c, next)));
 app.get("/me", async (c) => {
   const u = await c.env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(c.get("userId")).first();
   return c.json(u);
 });
 app.patch("/me", async (c) => {
-  const body = await c.req.json<{ lang?: "ru" | "en"; track?: "apps" | "video"; display_name?: string }>();
+  const body = await c.req.json<{ lang?: "ru" | "en"; track?: "apps" | "video"; display_name?: string; timezone?: string }>();
   const id = c.get("userId");
   if (body.lang) await c.env.DB.prepare("UPDATE users SET lang = ? WHERE id = ?").bind(body.lang, id).run();
   if (body.track) await c.env.DB.prepare("UPDATE users SET track = ?, started_at = COALESCE(started_at, unixepoch()) WHERE id = ?").bind(body.track, id).run();
+  if (body.timezone) {
+    try { new Intl.DateTimeFormat("en", { timeZone: body.timezone }); await c.env.DB.prepare("UPDATE users SET timezone = ? WHERE id = ?").bind(body.timezone, id).run(); } catch { /* invalid tz: ignore */ }
+  }
   if (body.display_name) await c.env.DB.prepare("UPDATE users SET display_name = ? WHERE id = ?").bind(body.display_name.slice(0, 40), id).run();
   return c.json(await c.env.DB.prepare("SELECT * FROM users WHERE id = ?").bind(id).first());
 });
