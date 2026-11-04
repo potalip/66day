@@ -1,0 +1,4333 @@
+{
+ "version": 1,
+ "templates": [
+  {
+   "id": "kinetic-quote",
+   "name": {
+    "en": "Kinetic hook & quote",
+    "ru": "Кинетический текст"
+   },
+   "description": {
+    "en": "Big bold words that pop in on beat. Hooks, statements and quotes for shorts.",
+    "ru": "Крупные слова, которые появляются в ритм. Хуки, тезисы и цитаты для коротких видео."
+   },
+   "category": "typography",
+   "styles": [
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "ink",
+     "name": {
+      "en": "Ink",
+      "ru": "Тушь"
+     },
+     "palette": {
+      "id": "ink",
+      "bg": "#FFFFFF",
+      "bg2": "#F4F4F1",
+      "surface": "#FFFFFF",
+      "fg": "#0B0B0C",
+      "muted": "#5C5F66",
+      "accent": "#0B0B0C",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#DCDCD6",
+      "dark": false,
+      "grain": 0.06,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "hook",
+     "label": {
+      "en": "Hook",
+      "ru": "Хук"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Small label",
+        "ru": "Метка"
+       },
+       "required": false,
+       "maxLen": 28
+      },
+      {
+       "key": "text",
+       "type": "textarea",
+       "label": {
+        "en": "Big words",
+        "ru": "Крупный текст"
+       },
+       "required": true,
+       "maxLen": 90
+      },
+      {
+       "key": "emphasis",
+       "type": "text",
+       "label": {
+        "en": "Words to highlight (comma-separated)",
+        "ru": "Слова для акцента (через запятую)"
+       },
+       "required": false,
+       "maxLen": 60
+      }
+     ],
+     "duration": {
+      "default": 3.0,
+      "min": 1.8,
+      "max": 6.0
+     },
+     "hint": "One punchy sentence, 3-10 words. Put 1-2 key words in emphasis."
+    },
+    {
+     "kind": "statement",
+     "label": {
+      "en": "Statement",
+      "ru": "Утверждение"
+     },
+     "fields": [
+      {
+       "key": "label",
+       "type": "text",
+       "label": {
+        "en": "Small label",
+        "ru": "Метка"
+       },
+       "required": false,
+       "maxLen": 28
+      },
+      {
+       "key": "text",
+       "type": "textarea",
+       "label": {
+        "en": "Text",
+        "ru": "Текст"
+       },
+       "required": true,
+       "maxLen": 160
+      },
+      {
+       "key": "emphasis",
+       "type": "text",
+       "label": {
+        "en": "Words to highlight",
+        "ru": "Слова для акцента"
+       },
+       "required": false,
+       "maxLen": 60
+      }
+     ],
+     "duration": {
+      "default": 3.6,
+      "min": 2.0,
+      "max": 7.0
+     },
+     "hint": "One idea in 1-3 short lines (max ~25 words)."
+    },
+    {
+     "kind": "quote",
+     "label": {
+      "en": "Quote",
+      "ru": "Цитата"
+     },
+     "fields": [
+      {
+       "key": "quote",
+       "type": "textarea",
+       "label": {
+        "en": "Quote",
+        "ru": "Цитата"
+       },
+       "required": true,
+       "maxLen": 180
+      },
+      {
+       "key": "author",
+       "type": "text",
+       "label": {
+        "en": "Author",
+        "ru": "Автор"
+       },
+       "required": false,
+       "maxLen": 48
+      }
+     ],
+     "duration": {
+      "default": 4.4,
+      "min": 2.5,
+      "max": 8.0
+     },
+     "hint": "A real, correctly attributed quote, or the creator's own line (author = handle)."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 1,
+   "maxScenes": 8,
+   "defaults": {
+    "style": "night",
+    "music": "drive",
+    "transition": "wipe"
+   },
+   "aiNotes": "Short-form typographic video. Every scene is text-only, so keep lines short and rhythmic. Start with a hook, then 1-4 statements or a quote, end with an outro.",
+   "examples": {
+    "en": {
+     "template": "kinetic-quote",
+     "style": "night",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Habits beat motivation",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "hook",
+       "duration": 2.8,
+       "voiceover": "Motivation gets you started. Habits keep you going.",
+       "fields": {
+        "kicker": "Day 1 of 66",
+        "text": "Motivation fades. Habits ship.",
+        "emphasis": "habits, ship"
+       }
+      },
+      {
+       "kind": "statement",
+       "duration": 3.6,
+       "voiceover": "Most people quit learning to code in the first two weeks.",
+       "fields": {
+        "label": "The problem",
+        "text": "Most beginners quit in the first two weeks.",
+        "emphasis": "two weeks"
+       }
+      },
+      {
+       "kind": "statement",
+       "duration": 3.6,
+       "voiceover": "So don't rely on willpower. Show up for one focused hour, every day.",
+       "fields": {
+        "label": "The fix",
+        "text": "Don't rely on willpower. Show up for one focused hour. Every day.",
+        "emphasis": "every day"
+       }
+      },
+      {
+       "kind": "quote",
+       "duration": 4.4,
+       "voiceover": "We are what we repeatedly do.",
+       "fields": {
+        "quote": "We are what we repeatedly do.",
+        "author": "Will Durant, on Aristotle"
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Sixty-six days. Let's build the habit together.",
+       "fields": {
+        "title": "66 days. One habit.",
+        "subtitle": "Building with AI, every day.",
+        "cta": "Start Day 1"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "kinetic-quote",
+     "style": "night",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Привычка сильнее мотивации",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "hook",
+       "duration": 2.8,
+       "voiceover": "Мотивация помогает начать. Привычка — не бросить.",
+       "fields": {
+        "kicker": "День 1 из 66",
+        "text": "Мотивация кончится. Привычка — останется.",
+        "emphasis": "привычка, останется"
+       }
+      },
+      {
+       "kind": "statement",
+       "duration": 3.6,
+       "voiceover": "Большинство бросает учиться программировать в первые две недели.",
+       "fields": {
+        "label": "Проблема",
+        "text": "Большинство новичков сдаются в первые две недели.",
+        "emphasis": "две недели"
+       }
+      },
+      {
+       "kind": "statement",
+       "duration": 3.6,
+       "voiceover": "Поэтому не надейся на силу воли. Просто приходи на один час. Каждый день.",
+       "fields": {
+        "label": "Решение",
+        "text": "Не надейся на силу воли. Один час фокуса. Каждый день.",
+        "emphasis": "каждый день"
+       }
+      },
+      {
+       "kind": "quote",
+       "duration": 4.4,
+       "voiceover": "Мы — то, что мы делаем постоянно.",
+       "fields": {
+        "quote": "Мы — то, что мы делаем постоянно.",
+        "author": "Уилл Дюрант об Аристотеле"
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Шестьдесят шесть дней. Давай вместе.",
+       "fields": {
+        "title": "66 дней. Одна привычка.",
+        "subtitle": "Создаём с ИИ — каждый день.",
+        "cta": "Начать день 1"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "explainer",
+   "name": {
+    "en": "Step-by-step explainer",
+    "ru": "Пошаговый explainer"
+   },
+   "description": {
+    "en": "Animated how-to: numbered steps with icons and a progress bar.",
+    "ru": "Анимированная инструкция: шаги с иконками и прогресс-баром."
+   },
+   "category": "explainer",
+   "styles": [
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "sunrise",
+     "name": {
+      "en": "Sunrise",
+      "ru": "Рассвет"
+     },
+     "palette": {
+      "id": "sunrise",
+      "bg": "#FFF1E3",
+      "bg2": "#FFE0BF",
+      "surface": "#FFFFFF",
+      "fg": "#2A1912",
+      "muted": "#7A5D4F",
+      "accent": "#E2552B",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#F0D3BA",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Hook the viewer in under 3 seconds: a short, concrete promise."
+    },
+    {
+     "kind": "step",
+     "label": {
+      "en": "Step",
+      "ru": "Шаг"
+     },
+     "fields": [
+      {
+       "key": "icon",
+       "type": "select",
+       "label": {
+        "en": "Icon",
+        "ru": "Иконка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "idea",
+         "label": {
+          "en": "Idea",
+          "ru": "Идея"
+         }
+        },
+        {
+         "value": "code",
+         "label": {
+          "en": "Code",
+          "ru": "Код"
+         }
+        },
+        {
+         "value": "rocket",
+         "label": {
+          "en": "Launch",
+          "ru": "Запуск"
+         }
+        },
+        {
+         "value": "chat",
+         "label": {
+          "en": "Chat",
+          "ru": "Чат"
+         }
+        },
+        {
+         "value": "check",
+         "label": {
+          "en": "Done",
+          "ru": "Готово"
+         }
+        },
+        {
+         "value": "gear",
+         "label": {
+          "en": "Settings",
+          "ru": "Настройка"
+         }
+        },
+        {
+         "value": "chart",
+         "label": {
+          "en": "Growth",
+          "ru": "Рост"
+         }
+        },
+        {
+         "value": "play",
+         "label": {
+          "en": "Video",
+          "ru": "Видео"
+         }
+        },
+        {
+         "value": "book",
+         "label": {
+          "en": "Learn",
+          "ru": "Учёба"
+         }
+        },
+        {
+         "value": "bolt",
+         "label": {
+          "en": "Fast",
+          "ru": "Быстро"
+         }
+        },
+        {
+         "value": "target",
+         "label": {
+          "en": "Goal",
+          "ru": "Цель"
+         }
+        },
+        {
+         "value": "clock",
+         "label": {
+          "en": "Time",
+          "ru": "Время"
+         }
+        },
+        {
+         "value": "heart",
+         "label": {
+          "en": "Love",
+          "ru": "Любовь"
+         }
+        },
+        {
+         "value": "star",
+         "label": {
+          "en": "Star",
+          "ru": "Звезда"
+         }
+        },
+        {
+         "value": "user",
+         "label": {
+          "en": "Person",
+          "ru": "Человек"
+         }
+        },
+        {
+         "value": "leaf",
+         "label": {
+          "en": "Leaf",
+          "ru": "Лист"
+         }
+        },
+        {
+         "value": "search",
+         "label": {
+          "en": "Search",
+          "ru": "Поиск"
+         }
+        },
+        {
+         "value": "lock",
+         "label": {
+          "en": "Secure",
+          "ru": "Защита"
+         }
+        }
+       ],
+       "default": "idea"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Step title",
+        "ru": "Название шага"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "body",
+       "type": "textarea",
+       "label": {
+        "en": "Explanation",
+        "ru": "Пояснение"
+       },
+       "required": false,
+       "maxLen": 160
+      }
+     ],
+     "duration": {
+      "default": 4.2,
+      "min": 2.5,
+      "max": 8.0
+     },
+     "hint": "One action per step. Title = imperative, 2-6 words. Body = 1-2 short sentences."
+    },
+    {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Optional: show the result as a screenshot."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 2,
+   "maxScenes": 9,
+   "defaults": {
+    "style": "paper",
+    "music": "calm",
+    "transition": "wipe"
+   },
+   "aiNotes": "Teach one process in 3-5 steps. Intro states the outcome; each step is one action with a fitting icon; outro gives a next action.",
+   "examples": {
+    "en": {
+     "template": "explainer",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Ship your first app with an AI agent",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.2,
+       "voiceover": "Here's how to ship your first app with an AI coding agent, in four steps.",
+       "fields": {
+        "kicker": "4 steps",
+        "title": "Ship your first app with an AI agent",
+        "subtitle": "No coding background needed."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "First, describe the problem in one sentence. Who is it for, and what does it fix?",
+       "fields": {
+        "icon": "idea",
+        "title": "Describe the problem",
+        "body": "One sentence: who it's for and what it fixes."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Ask the agent for a plan before any code. Read it and push back.",
+       "fields": {
+        "icon": "chat",
+        "title": "Ask for a plan first",
+        "body": "Read the plan, push back, then let it write code."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Run it, click everything, and paste errors straight back to the agent.",
+       "fields": {
+        "icon": "code",
+        "title": "Run it and break it",
+        "body": "Paste every error back to the agent."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Deploy it and send the link to one real person today.",
+       "fields": {
+        "icon": "rocket",
+        "title": "Ship it today",
+        "body": "Deploy and send the link to one real person."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Follow for day two.",
+       "fields": {
+        "title": "Your turn.",
+        "subtitle": "Share your link in the comments.",
+        "cta": "Follow for Day 2"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "explainer",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Первое приложение с ИИ-агентом",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.2,
+       "voiceover": "Как выпустить первое приложение с ИИ-агентом — за четыре шага.",
+       "fields": {
+        "kicker": "4 шага",
+        "title": "Первое приложение с ИИ-агентом",
+        "subtitle": "Опыт в программировании не нужен."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Сначала опиши проблему одним предложением. Для кого это и что это решает?",
+       "fields": {
+        "icon": "idea",
+        "title": "Опиши проблему",
+        "body": "Одно предложение: для кого и что решает."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Попроси у агента план, а не код. Прочитай и поспорь.",
+       "fields": {
+        "icon": "chat",
+        "title": "Сначала — план",
+        "body": "Прочитай план, поспорь — и только потом код."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Запусти, потыкай всё подряд и отправляй ошибки обратно агенту.",
+       "fields": {
+        "icon": "code",
+        "title": "Запусти и сломай",
+        "body": "Каждую ошибку — обратно агенту."
+       }
+      },
+      {
+       "kind": "step",
+       "duration": 4.2,
+       "voiceover": "Задеплой и отправь ссылку одному живому человеку сегодня.",
+       "fields": {
+        "icon": "rocket",
+        "title": "Выпусти сегодня",
+        "body": "Задеплой и отправь ссылку живому человеку."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Подпишись — завтра день второй.",
+       "fields": {
+        "title": "Твоя очередь.",
+        "subtitle": "Кидай ссылку в комментарии.",
+        "cta": "Подписаться"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "listicle",
+   "name": {
+    "en": "Top-N list",
+    "ru": "Топ-N список"
+   },
+   "description": {
+    "en": "Ranked countdown with big numbers. Tools, tips, mistakes, ideas.",
+    "ru": "Рейтинг с крупными номерами: инструменты, советы, ошибки, идеи."
+   },
+   "category": "list",
+   "styles": [
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "sunrise",
+     "name": {
+      "en": "Sunrise",
+      "ru": "Рассвет"
+     },
+     "palette": {
+      "id": "sunrise",
+      "bg": "#FFF1E3",
+      "bg2": "#FFE0BF",
+      "surface": "#FFFFFF",
+      "fg": "#2A1912",
+      "muted": "#7A5D4F",
+      "accent": "#E2552B",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#F0D3BA",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "topic",
+     "type": "text",
+     "label": {
+      "en": "List topic (small header on every item)",
+      "ru": "Тема списка (мелко над пунктами)"
+     },
+     "required": false,
+     "maxLen": 40
+    },
+    {
+     "key": "order",
+     "type": "select",
+     "label": {
+      "en": "Order",
+      "ru": "Порядок"
+     },
+     "required": false,
+     "options": [
+      {
+       "value": "countdown",
+       "label": {
+        "en": "Countdown (5 → 1)",
+        "ru": "Обратный отсчёт (5 → 1)"
+       }
+      },
+      {
+       "value": "countup",
+       "label": {
+        "en": "Count up (1 → 5)",
+        "ru": "По порядку (1 → 5)"
+       }
+      }
+     ],
+     "default": "countdown"
+    },
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Hook the viewer in under 3 seconds: a short, concrete promise."
+    },
+    {
+     "kind": "item",
+     "label": {
+      "en": "List item",
+      "ru": "Пункт"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Item",
+        "ru": "Пункт"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "note",
+       "type": "textarea",
+       "label": {
+        "en": "Why it's on the list",
+        "ru": "Почему он в списке"
+       },
+       "required": false,
+       "maxLen": 150
+      }
+     ],
+     "duration": {
+      "default": 3.8,
+      "min": 2.2,
+      "max": 7.0
+     },
+     "hint": "Item title 1-5 words; note = one concrete reason or tip."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 2,
+   "maxScenes": 12,
+   "defaults": {
+    "style": "forest",
+    "music": "uplift",
+    "transition": "wipe"
+   },
+   "aiNotes": "3-7 items. In countdown order the best item comes last. Keep item titles short and specific (real tool names, concrete habits).",
+   "examples": {
+    "en": {
+     "template": "listicle",
+     "style": "forest",
+     "format": "9x16",
+     "lang": "en",
+     "title": "5 habits of people who actually ship",
+     "fields": {
+      "topic": "Habits that ship",
+      "order": "countdown",
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Five habits of people who actually ship.",
+       "fields": {
+        "kicker": "Top 5",
+        "title": "Habits of people who actually ship"
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Five: they write the README first.",
+       "fields": {
+        "title": "Write the README first",
+        "note": "If you can't explain it in 3 lines, you can't build it."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Four: they commit every small win.",
+       "fields": {
+        "title": "Commit every small win",
+        "note": "Small commits make every mistake cheap to undo."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Three: they ask the AI to explain before it edits.",
+       "fields": {
+        "title": "Ask \"why\" before \"do\"",
+        "note": "Make the agent explain its plan before it edits code."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Two: they show unfinished work.",
+       "fields": {
+        "title": "Show unfinished work",
+        "note": "Feedback on day 3 beats applause on day 30."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.8,
+       "voiceover": "And number one: they ship something every single day.",
+       "fields": {
+        "title": "Ship something daily",
+        "note": "A tiny deploy a day compounds into a portfolio."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Which one are you starting today?",
+       "fields": {
+        "title": "Pick one. Start today.",
+        "cta": "Save this list"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "listicle",
+     "style": "forest",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "5 привычек тех, кто доводит до релиза",
+     "fields": {
+      "topic": "Привычки для релиза",
+      "order": "countdown",
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Пять привычек людей, которые реально доводят проекты до релиза.",
+       "fields": {
+        "kicker": "Топ-5",
+        "title": "Привычки тех, кто доводит до релиза"
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Пятое: сначала пишут README.",
+       "fields": {
+        "title": "Сначала README",
+        "note": "Не можешь объяснить в трёх строках — не сможешь и сделать."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Четвёртое: коммитят каждую маленькую победу.",
+       "fields": {
+        "title": "Коммит на каждую победу",
+        "note": "Маленькие коммиты — дешёвые ошибки."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Третье: просят ИИ объяснить, прежде чем править.",
+       "fields": {
+        "title": "Сначала «почему»",
+        "note": "Пусть агент объяснит план, прежде чем трогать код."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.6,
+       "voiceover": "Второе: показывают недоделанное.",
+       "fields": {
+        "title": "Показывают черновики",
+        "note": "Отзыв на третий день ценнее лайков на тридцатый."
+       }
+      },
+      {
+       "kind": "item",
+       "duration": 3.8,
+       "voiceover": "И первое: выпускают что-то каждый день.",
+       "fields": {
+        "title": "Релиз каждый день",
+        "note": "Маленький деплой в день складывается в портфолио."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "С какой начнёшь сегодня?",
+       "fields": {
+        "title": "Выбери одну. Начни сегодня.",
+        "cta": "Сохрани список"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "numbers",
+   "name": {
+    "en": "Data & number reveal",
+    "ru": "Цифры и данные"
+   },
+   "description": {
+    "en": "Counters that roll up, bar charts that grow, A-vs-B comparisons.",
+    "ru": "Счётчики, растущие диаграммы и сравнение «было — стало»."
+   },
+   "category": "data",
+   "styles": [
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Hook the viewer in under 3 seconds: a short, concrete promise."
+    },
+    {
+     "kind": "stat",
+     "label": {
+      "en": "Big number",
+      "ru": "Большое число"
+     },
+     "fields": [
+      {
+       "key": "value",
+       "type": "number",
+       "label": {
+        "en": "Number",
+        "ru": "Число"
+       },
+       "required": true,
+       "min": -1000000000000.0,
+       "max": 1000000000000.0
+      },
+      {
+       "key": "decimals",
+       "type": "number",
+       "label": {
+        "en": "Decimals",
+        "ru": "Знаков после запятой"
+       },
+       "required": false,
+       "min": 0,
+       "max": 2,
+       "default": 0
+      },
+      {
+       "key": "prefix",
+       "type": "text",
+       "label": {
+        "en": "Prefix (e.g. $)",
+        "ru": "Префикс (например, $)"
+       },
+       "required": false,
+       "maxLen": 4
+      },
+      {
+       "key": "suffix",
+       "type": "text",
+       "label": {
+        "en": "Suffix (e.g. %, k, ×)",
+        "ru": "Суффикс (например, %, тыс, ×)"
+       },
+       "required": false,
+       "maxLen": 6
+      },
+      {
+       "key": "label",
+       "type": "text",
+       "label": {
+        "en": "What it measures",
+        "ru": "Что это за число"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "context",
+       "type": "textarea",
+       "label": {
+        "en": "Context / source",
+        "ru": "Контекст / источник"
+       },
+       "required": false,
+       "maxLen": 120
+      }
+     ],
+     "duration": {
+      "default": 4.2,
+      "min": 2.8,
+      "max": 7.0
+     },
+     "hint": "Use only real, verifiable numbers or the creator's own data. Name the source in context."
+    },
+    {
+     "kind": "bars",
+     "label": {
+      "en": "Bar chart",
+      "ru": "Столбчатая диаграмма"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Chart title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 60
+      },
+      {
+       "key": "items",
+       "type": "list",
+       "label": {
+        "en": "Bars: one per line, “Label: 42”",
+        "ru": "Столбцы: по одному в строке, «Название: 42»"
+       },
+       "required": false,
+       "maxLen": 48,
+       "maxItems": 7,
+       "minItems": 2
+      },
+      {
+       "key": "source",
+       "type": "text",
+       "label": {
+        "en": "Source",
+        "ru": "Источник"
+       },
+       "required": false,
+       "maxLen": 80
+      }
+     ],
+     "duration": {
+      "default": 5.0,
+      "min": 3.0,
+      "max": 9.0
+     },
+     "hint": "2-6 bars, each 'Label: number' with an optional unit (e.g. 'Python: 48%')."
+    },
+    {
+     "kind": "compare",
+     "label": {
+      "en": "A vs B",
+      "ru": "Сравнение"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 60
+      },
+      {
+       "key": "left_label",
+       "type": "text",
+       "label": {
+        "en": "Left label",
+        "ru": "Слева: подпись"
+       },
+       "required": true,
+       "maxLen": 30
+      },
+      {
+       "key": "left_value",
+       "type": "number",
+       "label": {
+        "en": "Left value",
+        "ru": "Слева: число"
+       },
+       "required": false,
+       "min": -1000000000000.0,
+       "max": 1000000000000.0
+      },
+      {
+       "key": "right_label",
+       "type": "text",
+       "label": {
+        "en": "Right label",
+        "ru": "Справа: подпись"
+       },
+       "required": true,
+       "maxLen": 30
+      },
+      {
+       "key": "right_value",
+       "type": "number",
+       "label": {
+        "en": "Right value",
+        "ru": "Справа: число"
+       },
+       "required": false,
+       "min": -1000000000000.0,
+       "max": 1000000000000.0
+      },
+      {
+       "key": "prefix",
+       "type": "text",
+       "label": {
+        "en": "Prefix",
+        "ru": "Префикс"
+       },
+       "required": false,
+       "maxLen": 4
+      },
+      {
+       "key": "suffix",
+       "type": "text",
+       "label": {
+        "en": "Suffix",
+        "ru": "Суффикс"
+       },
+       "required": false,
+       "maxLen": 8
+      },
+      {
+       "key": "caption",
+       "type": "text",
+       "label": {
+        "en": "Takeaway",
+        "ru": "Вывод"
+       },
+       "required": false,
+       "maxLen": 80
+      }
+     ],
+     "duration": {
+      "default": 4.8,
+      "min": 3.0,
+      "max": 8.0
+     },
+     "hint": "Two comparable numbers with the same unit; caption = the takeaway."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 2,
+   "maxScenes": 8,
+   "defaults": {
+    "style": "night",
+    "music": "drive",
+    "transition": "wipe"
+   },
+   "aiNotes": "Data story: intro question, 2-4 data scenes, outro takeaway. NEVER invent statistics: if the brief has no numbers, use the creator's own progress numbers (days, hours, apps shipped) or clearly hypothetical examples labelled as such in context.",
+   "examples": {
+    "en": {
+     "template": "numbers",
+     "style": "night",
+     "format": "9x16",
+     "lang": "en",
+     "title": "My first 30 days of building with AI",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Thirty days of building with AI. Here are my real numbers.",
+       "fields": {
+        "kicker": "Day 30",
+        "title": "30 days of building with AI",
+        "subtitle": "My real numbers"
+       }
+      },
+      {
+       "kind": "stat",
+       "duration": 4.2,
+       "voiceover": "Forty-two hours of focused practice. About eighty-four minutes a day.",
+       "fields": {
+        "value": 42,
+        "suffix": "h",
+        "label": "of focused practice",
+        "context": "≈ 84 minutes a day, tracked daily"
+       }
+      },
+      {
+       "kind": "bars",
+       "duration": 5.0,
+       "voiceover": "Most of that time went into building, not watching tutorials.",
+       "fields": {
+        "title": "Where the hours went",
+        "items": [
+         "Building: 24h",
+         "Debugging: 9h",
+         "Lessons: 6h",
+         "Shipping: 3h"
+        ],
+        "source": "My own time log"
+       }
+      },
+      {
+       "kind": "compare",
+       "duration": 4.8,
+       "voiceover": "And I went from zero to five deployed apps.",
+       "fields": {
+        "title": "Apps deployed",
+        "left_label": "Day 1",
+        "left_value": 0,
+        "right_label": "Day 30",
+        "right_value": 5,
+        "caption": "Small daily reps add up."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Thirty-six days to go.",
+       "fields": {
+        "title": "36 days to go.",
+        "cta": "Follow the journey"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "numbers",
+     "style": "night",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "30 дней создания с ИИ в цифрах",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Тридцать дней создаю с ИИ. Вот мои настоящие цифры.",
+       "fields": {
+        "kicker": "День 30",
+        "title": "30 дней с ИИ в цифрах",
+        "subtitle": "Мои реальные данные"
+       }
+      },
+      {
+       "kind": "stat",
+       "duration": 4.2,
+       "voiceover": "Сорок два часа практики. Это примерно восемьдесят четыре минуты в день.",
+       "fields": {
+        "value": 42,
+        "suffix": " ч",
+        "label": "сфокусированной практики",
+        "context": "≈ 84 минуты в день, по трекеру"
+       }
+      },
+      {
+       "kind": "bars",
+       "duration": 5.0,
+       "voiceover": "Больше всего времени ушло на создание, а не на просмотр уроков.",
+       "fields": {
+        "title": "Куда ушли часы",
+        "items": [
+         "Создание: 24 ч",
+         "Отладка: 9 ч",
+         "Уроки: 6 ч",
+         "Релизы: 3 ч"
+        ],
+        "source": "Мой личный трекер"
+       }
+      },
+      {
+       "kind": "compare",
+       "duration": 4.8,
+       "voiceover": "И я прошёл путь от нуля до пяти запущенных приложений.",
+       "fields": {
+        "title": "Запущено приложений",
+        "left_label": "День 1",
+        "left_value": 0,
+        "right_label": "День 30",
+        "right_value": 5,
+        "caption": "Маленькие шаги каждый день складываются."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Осталось тридцать шесть дней.",
+       "fields": {
+        "title": "Ещё 36 дней.",
+        "cta": "Следи за путём"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "code-walkthrough",
+   "name": {
+    "en": "Code walkthrough",
+    "ru": "Разбор кода"
+   },
+   "description": {
+    "en": "Code types itself in an editor, key lines light up, then it runs in a terminal.",
+    "ru": "Код набирается в редакторе, важные строки подсвечиваются, потом запуск в терминале."
+   },
+   "category": "code",
+   "styles": [
+    {
+     "id": "terminal",
+     "name": {
+      "en": "Terminal",
+      "ru": "Терминал"
+     },
+     "palette": {
+      "id": "terminal",
+      "bg": "#0A0D10",
+      "bg2": "#121A20",
+      "surface": "#11161B",
+      "fg": "#E6EDF3",
+      "muted": "#8B949E",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#262D34",
+      "dark": true,
+      "grain": 0.15,
+      "vignette": 0.3,
+      "code_bg": "#0D1216",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Hook the viewer in under 3 seconds: a short, concrete promise."
+    },
+    {
+     "kind": "code",
+     "label": {
+      "en": "Code",
+      "ru": "Код"
+     },
+     "fields": [
+      {
+       "key": "filename",
+       "type": "text",
+       "label": {
+        "en": "File name",
+        "ru": "Имя файла"
+       },
+       "required": false,
+       "maxLen": 40
+      },
+      {
+       "key": "language",
+       "type": "select",
+       "label": {
+        "en": "Language",
+        "ru": "Язык"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "python",
+         "label": {
+          "en": "Python",
+          "ru": "Python"
+         }
+        },
+        {
+         "value": "javascript",
+         "label": {
+          "en": "Javascript",
+          "ru": "Javascript"
+         }
+        },
+        {
+         "value": "typescript",
+         "label": {
+          "en": "Typescript",
+          "ru": "Typescript"
+         }
+        },
+        {
+         "value": "html",
+         "label": {
+          "en": "Html",
+          "ru": "Html"
+         }
+        },
+        {
+         "value": "css",
+         "label": {
+          "en": "Css",
+          "ru": "Css"
+         }
+        },
+        {
+         "value": "bash",
+         "label": {
+          "en": "Bash",
+          "ru": "Bash"
+         }
+        },
+        {
+         "value": "json",
+         "label": {
+          "en": "Json",
+          "ru": "Json"
+         }
+        },
+        {
+         "value": "sql",
+         "label": {
+          "en": "Sql",
+          "ru": "Sql"
+         }
+        },
+        {
+         "value": "text",
+         "label": {
+          "en": "Plain text",
+          "ru": "Текст"
+         }
+        }
+       ],
+       "default": "python"
+      },
+      {
+       "key": "code",
+       "type": "code",
+       "label": {
+        "en": "Code",
+        "ru": "Код"
+       },
+       "required": true,
+       "maxLen": 900,
+       "maxLines": 16
+      },
+      {
+       "key": "highlight",
+       "type": "lines",
+       "label": {
+        "en": "Lines to highlight (e.g. 2, 4-5)",
+        "ru": "Подсветить строки (например 2, 4-5)"
+       },
+       "required": false
+      },
+      {
+       "key": "note",
+       "type": "textarea",
+       "label": {
+        "en": "Explanation shown after typing",
+        "ru": "Пояснение после набора"
+       },
+       "required": false,
+       "maxLen": 140
+      }
+     ],
+     "duration": {
+      "default": 6.0,
+      "min": 3.5,
+      "max": 12.0
+     },
+     "hint": "Real, runnable code, max ~12 lines and ~44 characters per line. Highlight the 1-3 lines that matter."
+    },
+    {
+     "kind": "terminal",
+     "label": {
+      "en": "Terminal",
+      "ru": "Терминал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Heading above the terminal",
+        "ru": "Заголовок над терминалом"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "command",
+       "type": "text",
+       "label": {
+        "en": "Command",
+        "ru": "Команда"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "output",
+       "type": "code",
+       "label": {
+        "en": "Output",
+        "ru": "Вывод"
+       },
+       "required": false,
+       "maxLen": 500,
+       "maxLines": 10
+      }
+     ],
+     "duration": {
+      "default": 4.6,
+      "min": 3.0,
+      "max": 9.0
+     },
+     "hint": "One shell command and its short, realistic output (lines starting with ✓ are green)."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 2,
+   "maxScenes": 8,
+   "defaults": {
+    "style": "terminal",
+    "music": "focus",
+    "transition": "fade"
+   },
+   "aiNotes": "Teach one small, real snippet. Keep code short (<= 12 lines, <= 44 chars wide) so it stays readable on a phone. Use the note to explain the highlighted lines in plain words. Code identifiers stay in English even in the Russian version; comments and notes follow the language.",
+   "examples": {
+    "en": {
+     "template": "code-walkthrough",
+     "style": "terminal",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Call Claude from Python in 6 lines",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Here's how to call Claude from Python in six lines.",
+       "fields": {
+        "kicker": "Python",
+        "title": "Call Claude in 6 lines",
+        "subtitle": "Your first AI API call"
+       }
+      },
+      {
+       "kind": "code",
+       "duration": 6.5,
+       "voiceover": "Import the SDK, create a client, send one message, and print the reply.",
+       "fields": {
+        "filename": "hello_claude.py",
+        "language": "python",
+        "code": "import anthropic\n\nclient = anthropic.Anthropic()\nmsg = client.messages.create(\n    model=\"claude-sonnet-5-5\",\n    max_tokens=300,\n    messages=[{\"role\": \"user\",\n               \"content\": \"Hi!\"}],\n)\nprint(msg.content[0].text)",
+        "highlight": "4-6",
+        "note": "One call: pick a model, cap the length, send your message."
+       }
+      },
+      {
+       "kind": "terminal",
+       "duration": 4.4,
+       "voiceover": "Run it, and the model answers.",
+       "fields": {
+        "title": "Run it",
+        "command": "python hello_claude.py",
+        "output": "Hi! How can I help you today?\n✓ done in 1.2s"
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Tomorrow: give it tools.",
+       "fields": {
+        "title": "Next: give it tools.",
+        "cta": "Follow for part 2"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "code-walkthrough",
+     "style": "terminal",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Вызов Claude из Python за 6 строк",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Как вызвать Claude из Python за шесть строк.",
+       "fields": {
+        "kicker": "Python",
+        "title": "Claude за 6 строк",
+        "subtitle": "Твой первый запрос к ИИ по API"
+       }
+      },
+      {
+       "kind": "code",
+       "duration": 6.5,
+       "voiceover": "Импортируем SDK, создаём клиент, отправляем сообщение и печатаем ответ.",
+       "fields": {
+        "filename": "hello_claude.py",
+        "language": "python",
+        "code": "import anthropic\n\nclient = anthropic.Anthropic()\nmsg = client.messages.create(\n    model=\"claude-sonnet-5-5\",\n    max_tokens=300,\n    messages=[{\"role\": \"user\",\n               \"content\": \"Привет!\"}],\n)\nprint(msg.content[0].text)",
+        "highlight": "4-6",
+        "note": "Один вызов: выбираем модель, ограничиваем длину, отправляем сообщение."
+       }
+      },
+      {
+       "kind": "terminal",
+       "duration": 4.4,
+       "voiceover": "Запускаем — и модель отвечает.",
+       "fields": {
+        "title": "Запускаем",
+        "command": "python hello_claude.py",
+        "output": "Привет! Чем могу помочь?\n✓ готово за 1,2 с"
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Завтра — дадим ему инструменты.",
+       "fields": {
+        "title": "Дальше — инструменты.",
+        "cta": "Подпишись на часть 2"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "before-after",
+   "name": {
+    "en": "Before / after showcase",
+    "ru": "До / после"
+   },
+   "description": {
+    "en": "Show a transformation or a product: side-by-side, swipe reveal, feature highlights.",
+    "ru": "Покажи трансформацию или продукт: сравнение, шторка «было/стало», фичи."
+   },
+   "category": "showcase",
+   "styles": [
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "sunrise",
+     "name": {
+      "en": "Sunrise",
+      "ru": "Рассвет"
+     },
+     "palette": {
+      "id": "sunrise",
+      "bg": "#FFF1E3",
+      "bg2": "#FFE0BF",
+      "surface": "#FFFFFF",
+      "fg": "#2A1912",
+      "muted": "#7A5D4F",
+      "accent": "#E2552B",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#F0D3BA",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Hook the viewer in under 3 seconds: a short, concrete promise."
+    },
+    {
+     "kind": "swipe",
+     "label": {
+      "en": "Swipe reveal",
+      "ru": "Шторка «было/стало»"
+     },
+     "fields": [
+      {
+       "key": "before_label",
+       "type": "text",
+       "label": {
+        "en": "Before label",
+        "ru": "Подпись «было»"
+       },
+       "required": false,
+       "maxLen": 20
+      },
+      {
+       "key": "before",
+       "type": "textarea",
+       "label": {
+        "en": "Before",
+        "ru": "Было"
+       },
+       "required": true,
+       "maxLen": 80
+      },
+      {
+       "key": "after_label",
+       "type": "text",
+       "label": {
+        "en": "After label",
+        "ru": "Подпись «стало»"
+       },
+       "required": false,
+       "maxLen": 20
+      },
+      {
+       "key": "after",
+       "type": "textarea",
+       "label": {
+        "en": "After",
+        "ru": "Стало"
+       },
+       "required": true,
+       "maxLen": 80
+      }
+     ],
+     "duration": {
+      "default": 4.4,
+      "min": 3.0,
+      "max": 7.0
+     },
+     "hint": "Two punchy contrasting statements, 2-7 words each."
+    },
+    {
+     "kind": "compare",
+     "label": {
+      "en": "Side by side",
+      "ru": "Рядом"
+     },
+     "fields": [
+      {
+       "key": "before_title",
+       "type": "text",
+       "label": {
+        "en": "Before: label",
+        "ru": "До: подпись"
+       },
+       "required": false,
+       "maxLen": 24
+      },
+      {
+       "key": "before_points",
+       "type": "list",
+       "label": {
+        "en": "Before: points (one per line)",
+        "ru": "До: пункты (по одному в строке)"
+       },
+       "required": false,
+       "maxLen": 60,
+       "maxItems": 4,
+       "minItems": 1
+      },
+      {
+       "key": "after_title",
+       "type": "text",
+       "label": {
+        "en": "After: label",
+        "ru": "После: подпись"
+       },
+       "required": false,
+       "maxLen": 24
+      },
+      {
+       "key": "after_points",
+       "type": "list",
+       "label": {
+        "en": "After: points (one per line)",
+        "ru": "После: пункты (по одному в строке)"
+       },
+       "required": false,
+       "maxLen": 60,
+       "maxItems": 4,
+       "minItems": 1
+      }
+     ],
+     "duration": {
+      "default": 5.5,
+      "min": 3.5,
+      "max": 9.0
+     },
+     "hint": "2-4 short, parallel points per side (same order, same length)."
+    },
+    {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Show the finished product: a screenshot in a phone or browser frame."
+    },
+    {
+     "kind": "feature",
+     "label": {
+      "en": "Feature",
+      "ru": "Фича"
+     },
+     "fields": [
+      {
+       "key": "icon",
+       "type": "select",
+       "label": {
+        "en": "Icon",
+        "ru": "Иконка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "idea",
+         "label": {
+          "en": "Idea",
+          "ru": "Идея"
+         }
+        },
+        {
+         "value": "code",
+         "label": {
+          "en": "Code",
+          "ru": "Код"
+         }
+        },
+        {
+         "value": "rocket",
+         "label": {
+          "en": "Launch",
+          "ru": "Запуск"
+         }
+        },
+        {
+         "value": "chat",
+         "label": {
+          "en": "Chat",
+          "ru": "Чат"
+         }
+        },
+        {
+         "value": "check",
+         "label": {
+          "en": "Done",
+          "ru": "Готово"
+         }
+        },
+        {
+         "value": "gear",
+         "label": {
+          "en": "Settings",
+          "ru": "Настройка"
+         }
+        },
+        {
+         "value": "chart",
+         "label": {
+          "en": "Growth",
+          "ru": "Рост"
+         }
+        },
+        {
+         "value": "play",
+         "label": {
+          "en": "Video",
+          "ru": "Видео"
+         }
+        },
+        {
+         "value": "book",
+         "label": {
+          "en": "Learn",
+          "ru": "Учёба"
+         }
+        },
+        {
+         "value": "bolt",
+         "label": {
+          "en": "Fast",
+          "ru": "Быстро"
+         }
+        },
+        {
+         "value": "target",
+         "label": {
+          "en": "Goal",
+          "ru": "Цель"
+         }
+        },
+        {
+         "value": "clock",
+         "label": {
+          "en": "Time",
+          "ru": "Время"
+         }
+        },
+        {
+         "value": "heart",
+         "label": {
+          "en": "Love",
+          "ru": "Любовь"
+         }
+        },
+        {
+         "value": "star",
+         "label": {
+          "en": "Star",
+          "ru": "Звезда"
+         }
+        },
+        {
+         "value": "user",
+         "label": {
+          "en": "Person",
+          "ru": "Человек"
+         }
+        },
+        {
+         "value": "leaf",
+         "label": {
+          "en": "Leaf",
+          "ru": "Лист"
+         }
+        },
+        {
+         "value": "search",
+         "label": {
+          "en": "Search",
+          "ru": "Поиск"
+         }
+        },
+        {
+         "value": "lock",
+         "label": {
+          "en": "Secure",
+          "ru": "Защита"
+         }
+        }
+       ],
+       "default": "star"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Feature",
+        "ru": "Фича"
+       },
+       "required": true,
+       "maxLen": 50
+      },
+      {
+       "key": "body",
+       "type": "textarea",
+       "label": {
+        "en": "Description",
+        "ru": "Описание"
+       },
+       "required": false,
+       "maxLen": 130
+      }
+     ],
+     "duration": {
+      "default": 3.8,
+      "min": 2.5,
+      "max": 7.0
+     },
+     "hint": "One benefit per scene; title = the benefit, body = how."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 2,
+   "maxScenes": 10,
+   "defaults": {
+    "style": "paper",
+    "music": "uplift",
+    "transition": "wipe"
+   },
+   "aiNotes": "Transformation story: intro, a swipe reveal or side-by-side comparison, 1-3 feature scenes, outro. Points on both sides should mirror each other.",
+   "examples": {
+    "en": {
+     "template": "before-after",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "en",
+     "title": "My habit tracker: before and after AI",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "I rebuilt my habit tracker with an AI agent. Here's the difference.",
+       "fields": {
+        "kicker": "Project",
+        "title": "My habit tracker, rebuilt with AI"
+       }
+      },
+      {
+       "kind": "swipe",
+       "duration": 4.4,
+       "voiceover": "From a messy spreadsheet to an app I actually open.",
+       "fields": {
+        "before": "A spreadsheet I forgot about",
+        "after": "An app I open every morning"
+       }
+      },
+      {
+       "kind": "compare",
+       "duration": 5.5,
+       "voiceover": "Before: manual, slow, no reminders. After: one tap, instant, and it nudges me.",
+       "fields": {
+        "before_title": "Before",
+        "before_points": [
+         "Manual entries",
+         "No reminders",
+         "Charts by hand"
+        ],
+        "after_title": "After",
+        "after_points": [
+         "One-tap check-in",
+         "Morning nudge",
+         "Live streak chart"
+        ]
+       }
+      },
+      {
+       "kind": "screen",
+       "duration": 4.5,
+       "voiceover": "Here's the morning check-in screen.",
+       "fields": {
+        "device": "phone",
+        "title": "One tap a day",
+        "caption": "The whole app is one screen."
+       }
+      },
+      {
+       "kind": "feature",
+       "duration": 3.8,
+       "voiceover": "The best part: it took one weekend.",
+       "fields": {
+        "icon": "clock",
+        "title": "Built in one weekend",
+        "body": "Planned with Claude, shipped on Sunday night."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Want the prompt I used?",
+       "fields": {
+        "title": "Want my prompt?",
+        "cta": "Comment “prompt”"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "before-after",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Трекер привычек: до и после ИИ",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 3.0,
+       "voiceover": "Я пересобрал свой трекер привычек с ИИ-агентом. Вот разница.",
+       "fields": {
+        "kicker": "Проект",
+        "title": "Трекер привычек, пересобранный с ИИ"
+       }
+      },
+      {
+       "kind": "swipe",
+       "duration": 4.4,
+       "voiceover": "Из забытой таблицы — в приложение, которое я реально открываю.",
+       "fields": {
+        "before": "Таблица, про которую я забыл",
+        "after": "Приложение, которое я открываю каждое утро"
+       }
+      },
+      {
+       "kind": "compare",
+       "duration": 5.5,
+       "voiceover": "Было: вручную, медленно, без напоминаний. Стало: одно касание, и оно само напоминает.",
+       "fields": {
+        "before_title": "Было",
+        "before_points": [
+         "Ручной ввод",
+         "Нет напоминаний",
+         "Графики руками"
+        ],
+        "after_title": "Стало",
+        "after_points": [
+         "Отметка в одно касание",
+         "Утреннее напоминание",
+         "Живой график серии"
+        ]
+       }
+      },
+      {
+       "kind": "screen",
+       "duration": 4.5,
+       "voiceover": "Вот экран утренней отметки.",
+       "fields": {
+        "device": "phone",
+        "title": "Одно касание в день",
+        "caption": "Всё приложение — один экран."
+       }
+      },
+      {
+       "kind": "feature",
+       "duration": 3.8,
+       "voiceover": "Самое приятное: всё заняло одни выходные.",
+       "fields": {
+        "icon": "clock",
+        "title": "Готово за выходные",
+        "body": "План — с Claude, релиз — в воскресенье вечером."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Хочешь мой промпт?",
+       "fields": {
+        "title": "Нужен мой промпт?",
+        "cta": "Напиши «промпт»"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "day-recap",
+   "name": {
+    "en": "Day N recap",
+    "ru": "Итог дня N"
+   },
+   "description": {
+    "en": "Your 66-day progress card: what you shipped today, XP, streak, and tomorrow's teaser.",
+    "ru": "Карточка прогресса 66 дней: что сделал сегодня, XP, серия и анонс завтра."
+   },
+   "category": "course",
+   "styles": [
+    {
+     "id": "paper",
+     "name": {
+      "en": "Paper",
+      "ru": "Бумага"
+     },
+     "palette": {
+      "id": "paper",
+      "bg": "#F5F3EC",
+      "bg2": "#FFFFFF",
+      "surface": "#FFFFFF",
+      "fg": "#16181D",
+      "muted": "#5E646C",
+      "accent": "#1F8A5B",
+      "accent2": "#B8892B",
+      "on_accent": "#FFFFFF",
+      "line": "#E1DED4",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "day",
+     "type": "number",
+     "label": {
+      "en": "Day (1-66)",
+      "ru": "День (1-66)"
+     },
+     "required": false,
+     "min": 1,
+     "max": 66,
+     "default": 1
+    },
+    {
+     "key": "track",
+     "type": "select",
+     "label": {
+      "en": "Track",
+      "ru": "Трек"
+     },
+     "required": false,
+     "options": [
+      {
+       "value": "apps",
+       "label": {
+        "en": "Apps",
+        "ru": "Приложения"
+       }
+      },
+      {
+       "value": "video",
+       "label": {
+        "en": "Video",
+        "ru": "Видео"
+       }
+      }
+     ],
+     "default": "apps"
+    },
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "recap",
+     "label": {
+      "en": "Day recap card",
+      "ru": "Итог дня"
+     },
+     "fields": [
+      {
+       "key": "day",
+       "type": "number",
+       "label": {
+        "en": "Day (1-66)",
+        "ru": "День (1-66)"
+       },
+       "required": false,
+       "min": 1,
+       "max": 66,
+       "default": 1
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "What today was about",
+        "ru": "О чём был день"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "done",
+       "type": "list",
+       "label": {
+        "en": "Done today (one per line)",
+        "ru": "Сделано сегодня (по строке)"
+       },
+       "required": false,
+       "maxLen": 50,
+       "maxItems": 4,
+       "minItems": 0
+      },
+      {
+       "key": "xp",
+       "type": "number",
+       "label": {
+        "en": "XP earned",
+        "ru": "Заработано XP"
+       },
+       "required": false,
+       "min": 0,
+       "max": 10000,
+       "default": 0
+      },
+      {
+       "key": "streak",
+       "type": "number",
+       "label": {
+        "en": "Streak (days)",
+        "ru": "Серия (дней)"
+       },
+       "required": false,
+       "min": 0,
+       "max": 999,
+       "default": 0
+      }
+     ],
+     "duration": {
+      "default": 6.0,
+      "min": 4.0,
+      "max": 10.0
+     },
+     "hint": "Use the student's real day number, tasks, XP and streak."
+    },
+    {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Optional: a screenshot of what you built today."
+    },
+    {
+     "kind": "next",
+     "label": {
+      "en": "Tomorrow teaser",
+      "ru": "Анонс завтра"
+     },
+     "fields": [
+      {
+       "key": "label",
+       "type": "text",
+       "label": {
+        "en": "Label (default: Tomorrow · Day N+1)",
+        "ru": "Метка (по умолчанию: Завтра · день N+1)"
+       },
+       "required": false,
+       "maxLen": 30
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Tomorrow's topic",
+        "ru": "Тема завтра"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "text",
+       "type": "textarea",
+       "label": {
+        "en": "One line about it",
+        "ru": "Пара слов о нём"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.6,
+      "min": 2.5,
+      "max": 6.0
+     },
+     "hint": "Tease the next day's topic in a few words."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Invite people to follow the 66-day journey."
+    }
+   ],
+   "minScenes": 1,
+   "maxScenes": 5,
+   "defaults": {
+    "style": "paper",
+    "music": "uplift",
+    "transition": "wipe"
+   },
+   "aiNotes": "A daily build-in-public post: one recap scene with the real numbers, an optional tomorrow teaser and an optional outro. Keep the day number consistent in fields.day and the recap scene.",
+   "examples": {
+    "en": {
+     "template": "day-recap",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Day 12 recap",
+     "fields": {
+      "day": 12,
+      "track": "apps",
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "recap",
+       "duration": 6.0,
+       "voiceover": "Day twelve done. I connected my first API and shipped a weather bot.",
+       "fields": {
+        "day": 12,
+        "title": "First API, first bot",
+        "xp": 140,
+        "streak": 12,
+        "done": [
+         "Called a weather API",
+         "Built a Telegram bot",
+         "Deployed it",
+         "Wrote 3 lines of notes"
+        ]
+       }
+      },
+      {
+       "kind": "next",
+       "duration": 3.6,
+       "voiceover": "Tomorrow: giving the bot a memory.",
+       "fields": {
+        "title": "Giving the bot a memory",
+        "text": "Databases, but the friendly kind."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Follow along, fifty-four days to go.",
+       "fields": {
+        "title": "54 days to go.",
+        "cta": "Follow the 66"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "day-recap",
+     "style": "paper",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Итог дня 12",
+     "fields": {
+      "day": 12,
+      "track": "apps",
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "recap",
+       "duration": 6.0,
+       "voiceover": "День двенадцатый готов. Подключил первый API и запустил бота погоды.",
+       "fields": {
+        "day": 12,
+        "title": "Первый API, первый бот",
+        "xp": 140,
+        "streak": 12,
+        "done": [
+         "Вызвал API погоды",
+         "Собрал бота в Telegram",
+         "Задеплоил",
+         "Записал три мысли"
+        ]
+       }
+      },
+      {
+       "kind": "next",
+       "duration": 3.6,
+       "voiceover": "Завтра — даём боту память.",
+       "fields": {
+        "title": "Даём боту память",
+        "text": "Базы данных, но дружелюбные."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.4,
+       "voiceover": "Подписывайся, осталось пятьдесят четыре дня.",
+       "fields": {
+        "title": "Ещё 54 дня.",
+        "cta": "Следить за 66"
+       }
+      }
+     ]
+    }
+   }
+  },
+  {
+   "id": "quiz",
+   "name": {
+    "en": "Quiz short",
+    "ru": "Квиз"
+   },
+   "description": {
+    "en": "Ask a question, count down, reveal the answer. Great for engagement and revision.",
+    "ru": "Вопрос, обратный отсчёт и ответ. Отлично вовлекает и помогает повторить материал."
+   },
+   "category": "education",
+   "styles": [
+    {
+     "id": "sunrise",
+     "name": {
+      "en": "Sunrise",
+      "ru": "Рассвет"
+     },
+     "palette": {
+      "id": "sunrise",
+      "bg": "#FFF1E3",
+      "bg2": "#FFE0BF",
+      "surface": "#FFFFFF",
+      "fg": "#2A1912",
+      "muted": "#7A5D4F",
+      "accent": "#E2552B",
+      "accent2": "#1F8A5B",
+      "on_accent": "#FFFFFF",
+      "line": "#F0D3BA",
+      "dark": false,
+      "grain": 0.1,
+      "vignette": 0,
+      "code_bg": "#FFFFFF",
+      "syntax": [
+       "#CF222E",
+       "#0A3069",
+       "#0550AE",
+       "#6E7781",
+       "#8250DF"
+      ]
+     }
+    },
+    {
+     "id": "night",
+     "name": {
+      "en": "Night",
+      "ru": "Ночь"
+     },
+     "palette": {
+      "id": "night",
+      "bg": "#0C0F11",
+      "bg2": "#16231D",
+      "surface": "#161A1D",
+      "fg": "#F1F2EE",
+      "muted": "#9AA1A9",
+      "accent": "#3FBF85",
+      "accent2": "#E0B55A",
+      "on_accent": "#06120C",
+      "line": "#2A3034",
+      "dark": true,
+      "grain": 0.22,
+      "vignette": 0.35,
+      "code_bg": "#0F1417",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    },
+    {
+     "id": "forest",
+     "name": {
+      "en": "Forest",
+      "ru": "Лес"
+     },
+     "palette": {
+      "id": "forest",
+      "bg": "#0D3A2B",
+      "bg2": "#18573F",
+      "surface": "#124633",
+      "fg": "#F6F2E7",
+      "muted": "#A8C7B7",
+      "accent": "#C6F16A",
+      "accent2": "#FFD27A",
+      "on_accent": "#0D3A2B",
+      "line": "#2B6A54",
+      "dark": true,
+      "grain": 0.18,
+      "vignette": 0.3,
+      "code_bg": "#0A2E22",
+      "syntax": [
+       "#FF7B72",
+       "#A5D6FF",
+       "#79C0FF",
+       "#7D8590",
+       "#D2A8FF"
+      ]
+     }
+    }
+   ],
+   "formats": [
+    "9x16",
+    "1x1",
+    "16x9"
+   ],
+   "fields": [
+    {
+     "key": "handle",
+     "type": "text",
+     "label": {
+      "en": "Your handle (shown in the corner)",
+      "ru": "Твой ник (в углу кадра)"
+     },
+     "required": false,
+     "maxLen": 32,
+     "help": {
+      "en": "e.g. @yourname — leave empty to hide",
+      "ru": "например @tvoy_nik — оставь пустым, чтобы скрыть"
+     }
+    }
+   ],
+   "sceneKinds": [
+    {
+     "kind": "intro",
+     "label": {
+      "en": "Intro",
+      "ru": "Начало"
+     },
+     "fields": [
+      {
+       "key": "kicker",
+       "type": "text",
+       "label": {
+        "en": "Kicker (small label above)",
+        "ru": "Надзаголовок"
+       },
+       "required": false,
+       "maxLen": 32
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": true,
+       "maxLen": 70
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Subtitle",
+        "ru": "Подзаголовок"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 3.2,
+      "min": 2.0,
+      "max": 6.0
+     },
+     "hint": "Tease the quiz: e.g. 'Only 1 in 3 gets this right'."
+    },
+    {
+     "kind": "question",
+     "label": {
+      "en": "Question",
+      "ru": "Вопрос"
+     },
+     "fields": [
+      {
+       "key": "question",
+       "type": "textarea",
+       "label": {
+        "en": "Question",
+        "ru": "Вопрос"
+       },
+       "required": true,
+       "maxLen": 120
+      },
+      {
+       "key": "options",
+       "type": "list",
+       "label": {
+        "en": "Answer options (2-4, one per line)",
+        "ru": "Варианты ответа (2-4, по строке)"
+       },
+       "required": false,
+       "maxLen": 60,
+       "maxItems": 4,
+       "minItems": 2
+      },
+      {
+       "key": "answer",
+       "type": "number",
+       "label": {
+        "en": "Correct option (1-4)",
+        "ru": "Правильный вариант (1-4)"
+       },
+       "required": false,
+       "min": 1,
+       "max": 4,
+       "default": 1
+      },
+      {
+       "key": "think",
+       "type": "number",
+       "label": {
+        "en": "Seconds to think",
+        "ru": "Секунд на размышление"
+       },
+       "required": false,
+       "min": 1,
+       "max": 8,
+       "default": 3
+      },
+      {
+       "key": "explanation",
+       "type": "textarea",
+       "label": {
+        "en": "Why (shown after the reveal)",
+        "ru": "Почему (после ответа)"
+       },
+       "required": false,
+       "maxLen": 130
+      }
+     ],
+     "duration": {
+      "default": 7.0,
+      "min": 4.0,
+      "max": 12.0
+     },
+     "hint": "One clear question, 3 short options, exactly one correct (answer = its number). Explanation = one sentence."
+    },
+    {
+     "kind": "outro",
+     "label": {
+      "en": "Outro",
+      "ru": "Финал"
+     },
+     "fields": [
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Closing line",
+        "ru": "Финальная фраза"
+       },
+       "required": true,
+       "maxLen": 60
+      },
+      {
+       "key": "subtitle",
+       "type": "text",
+       "label": {
+        "en": "Small text under it",
+        "ru": "Текст под ней"
+       },
+       "required": false,
+       "maxLen": 90
+      },
+      {
+       "key": "cta",
+       "type": "text",
+       "label": {
+        "en": "Button text",
+        "ru": "Текст кнопки"
+       },
+       "required": false,
+       "maxLen": 28
+      }
+     ],
+     "duration": {
+      "default": 3.4,
+      "min": 2.4,
+      "max": 6.0
+     },
+     "hint": "Closing line + call to action (follow, try it, comment)."
+    }
+   ],
+   "minScenes": 1,
+   "maxScenes": 8,
+   "defaults": {
+    "style": "sunrise",
+    "music": "uplift",
+    "transition": "wipe"
+   },
+   "aiNotes": "1-4 questions that test one concept from the brief. Options short and plausible; exactly one correct. Narration reads the question, then (after the think time) states the answer.",
+   "examples": {
+    "en": {
+     "template": "quiz",
+     "style": "sunrise",
+     "format": "9x16",
+     "lang": "en",
+     "title": "Quick quiz: AI coding agents",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 2.8,
+       "voiceover": "Quick quiz. Only one in three beginners gets this right.",
+       "fields": {
+        "kicker": "Quiz",
+        "title": "Can you spot the right move?",
+        "subtitle": "2 questions · 3 seconds each"
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Your agent's code throws an error. What's the best first move? ... Paste the full error back to the agent.",
+       "fields": {
+        "question": "Your agent's code throws an error. Best first move?",
+        "options": [
+         "Start over from scratch",
+         "Paste the full error back to the agent",
+         "Ignore it and keep going"
+        ],
+        "answer": 2,
+        "think": 3,
+        "explanation": "The error message is the agent's best clue. Give it all of it."
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "What should you ask for before any code? ... A plan.",
+       "fields": {
+        "question": "What should you ask the agent for before any code?",
+        "options": [
+         "A plan",
+         "A logo",
+         "A longer prompt"
+        ],
+        "answer": 1,
+        "think": 3,
+        "explanation": "Read the plan, push back, then let it build."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.2,
+       "voiceover": "How many did you get? Tell me in the comments.",
+       "fields": {
+        "title": "2 out of 2?",
+        "subtitle": "Tell me in the comments.",
+        "cta": "Follow for more"
+       }
+      }
+     ]
+    },
+    "ru": {
+     "template": "quiz",
+     "style": "sunrise",
+     "format": "9x16",
+     "lang": "ru",
+     "title": "Квиз: ИИ-агенты для кода",
+     "fields": {
+      "handle": "@flowleaf66"
+     },
+     "scenes": [
+      {
+       "kind": "intro",
+       "duration": 2.8,
+       "voiceover": "Быстрый квиз. Правильно отвечает только каждый третий новичок.",
+       "fields": {
+        "kicker": "Квиз",
+        "title": "Угадаешь правильный ход?",
+        "subtitle": "2 вопроса · по 3 секунды"
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Код агента падает с ошибкой. Что делать первым делом? ... Скопировать ошибку целиком агенту.",
+       "fields": {
+        "question": "Код от агента падает с ошибкой. Первый шаг?",
+        "options": [
+         "Начать всё заново",
+         "Отдать агенту ошибку целиком",
+         "Не обращать внимания"
+        ],
+        "answer": 2,
+        "think": 3,
+        "explanation": "Текст ошибки — лучшая подсказка для агента. Дай его полностью."
+       }
+      },
+      {
+       "kind": "question",
+       "duration": 7.0,
+       "voiceover": "Что попросить у агента до того, как он начнёт писать код? ... План.",
+       "fields": {
+        "question": "Что попросить у агента до любого кода?",
+        "options": [
+         "План",
+         "Логотип",
+         "Промпт подлиннее"
+        ],
+        "answer": 1,
+        "think": 3,
+        "explanation": "Прочитай план, поспорь — и только потом пусть пишет."
+       }
+      },
+      {
+       "kind": "outro",
+       "duration": 3.2,
+       "voiceover": "Сколько правильных? Пиши в комментариях.",
+       "fields": {
+        "title": "Два из двух?",
+        "subtitle": "Пиши в комментариях.",
+        "cta": "Подписаться"
+       }
+      }
+     ]
+    }
+   }
+  }
+ ]
+}

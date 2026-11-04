@@ -4,3 +4,5 @@ RENDER_SERVER_TOKEN=
 # library: optional external media worker (download + Whisper). See worker/lib/library/MEDIA-WORKER.md
 MEDIA_WORKER_URL=
 MEDIA_WORKER_TOKEN=
+# Studio: URL of the Python render server (render-server/README.md). Overrides the wrangler var in dev.
+RENDER_SERVER_URL=
