@@ -1,3 +1,5 @@
 ANTHROPIC_API_KEY=
 ADMIN_TOKEN=dev-admin
 RENDER_SERVER_TOKEN=
+# Studio: URL of the Python render server (render-server/README.md). Overrides the wrangler var in dev.
+RENDER_SERVER_URL=
