@@ -14,3 +14,6 @@
    one mints a different `fl_uid` and the last `Set-Cookie` wins, so data created by an earlier request can end up
    owned by a "lost" user. Studio sequences its first request to dodge it, but a fix in `worker/lib/user.ts` (or the
    SPA calling `/api/me` once before anything else) would protect every area.
+6. **Public share links** `GET /api/studio/s/<slug>.mp4|.jpg` are opened by anonymous visitors (portfolio viewers);
+   please skip `anonUser` for the `/api/studio/s/` prefix too, so viewers don't get `users` rows, e.g.
+   `NO_USER.has(c.req.path) || c.req.path.startsWith("/api/studio/s/")`.

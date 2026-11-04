@@ -16,7 +16,7 @@ export interface RenderRow {
   id: string; project_id: string; user_id: string; job_id: string | null; quality: "final" | "draft"; status: string;
   progress: number; stage: string | null; error: string | null; storyboard: string; callback_origin: string | null;
   duration: number | null; width: number | null; height: number | null; video_key: string | null; thumb_key: string | null;
-  contact_key: string | null; remote_video_url: string | null; remote_thumb_url: string | null;
+  contact_key: string | null; remote_video_url: string | null; remote_thumb_url: string | null; share_slug: string | null;
   created_at: number; updated_at: number; finished_at: number | null;
 }
 
@@ -243,5 +243,6 @@ export function renderView(r: RenderRow | null) {
     videoUrl: r.status === "done" ? media(r.video_key, "video.mp4", r.remote_video_url) : null,
     thumbUrl: r.status === "done" ? media(r.thumb_key, "thumbnail.jpg", r.remote_thumb_url) : null,
     contactUrl: r.status === "done" && r.contact_key ? `/api/studio/media/${r.id}/contact.png` : null,
+    shareUrl: r.share_slug ? `/api/studio/s/${r.share_slug}.mp4` : null,
   };
 }

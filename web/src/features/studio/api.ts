@@ -21,7 +21,7 @@ export interface Project {
 export interface Render {
   id: string; status: string; progress: number; stage: string | null; error: string | null; quality: "final" | "draft";
   duration: number | null; width: number | null; height: number | null; createdAt: number; finishedAt: number | null;
-  videoUrl: string | null; thumbUrl: string | null; contactUrl: string | null;
+  videoUrl: string | null; thumbUrl: string | null; contactUrl: string | null; shareUrl: string | null;
 }
 export interface ProjectDetail { project: Project; render: Render | null; renders: Render[]; capabilities: Capabilities }
 
@@ -41,6 +41,8 @@ export const studioApi = {
     api<{ project: Project; errors: SbError[] }>(`/studio/projects/${id}`, { method: "PATCH", json: body }),
   remove: (id: string) => api<{ ok: true }>(`/studio/projects/${id}`, { method: "DELETE" }),
   plan: (id: string, brief: string) => api<{ ok: true }>(`/studio/projects/${id}/plan`, { method: "POST", json: { brief } }),
+  share: (id: string, renderId: string) => api<{ render: Render }>(`/studio/projects/${id}/share`, { method: "POST", json: { renderId } }),
+  unshare: (id: string, renderId: string) => api<{ render: Render }>(`/studio/projects/${id}/share?renderId=${encodeURIComponent(renderId)}`, { method: "DELETE" }),
   render: (id: string, quality: "final" | "draft") =>
     api<{ ok: true; render: Render }>(`/studio/projects/${id}/render`, { method: "POST", json: { quality } }),
 };

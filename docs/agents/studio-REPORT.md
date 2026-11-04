@@ -28,10 +28,12 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   fixed (examples in `render-server/samples/*.jpg`). Speed on 4 vCPU: ~23 s 1080×1920 video in ~27 s; draft ~8 s.
 
 ### Worker
-- `migrations/0400_studio_init.sql`: `studio_projects`, `studio_renders` (render history, R2 keys).
+- `migrations/0400_studio_init.sql`: `studio_projects`, `studio_renders` (render history, R2 keys);
+  `0401_studio_share.sql`: public share slugs.
 - `worker/routes/studio.ts`: catalog, status (render-server health), projects CRUD, `plan` (queue `studio.plan`),
   `render` (queue `studio.render`), `render-callback` (Bearer `RENDER_SERVER_TOKEN`), image uploads
-  (`POST /projects/:id/assets` → R2, public unguessable URLs), media from R2 with HTTP Range (seekable `<video>`).
+  (`POST /projects/:id/assets` → R2, public unguessable URLs), media from R2 with HTTP Range (seekable `<video>`),
+  public share links (`POST|DELETE /projects/:id/share` → `/api/studio/s/<slug>.mp4|.jpg`).
   Queue handlers registered with two lines in `worker/queue.ts`; falls back to `waitUntil` if the queue is unavailable.
 - `worker/lib/studio/`: `storyboard.ts` (types + validation port), `plan.ts` (Claude prompt with template schema,
   example and language rules; JSON extraction; one repair round-trip; pins the student's style/format/lang),
@@ -48,7 +50,10 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   select/image inputs with counters and inline validation, narration with "will stretch to N s" hint, length slider,
   reorder/duplicate/delete, add scene); **live in-browser preview** (animated HTML/CSS sketch of every scene kind,
   scaled stage, captions, transitions, scrubber, scene timeline; jumps to the scene you edit); render panel
-  (final / quick draft, progress + stage, video player, download, frame overview, history).
+  (final / quick draft, progress + stage, video player, download, frame overview, public share link, history).
+- "Day N recap" is prefilled from the student's real progress (`/api/progress`, `/api/game/me`): latest finished
+  day, its completed tasks, XP, streak and tomorrow's title.
+- Captions highlight word by word (karaoke style) in both the render and the preview.
 - States: "AI not configured" (start from example), "render server not connected / not responding" (plan + edit +
   preview still work), loading skeletons, errors with retry, not-found.
 - Built on the shared design system (`@web/ui`: Button, Card, Badge, Input/Textarea/Select, Switch, Segmented,
@@ -77,11 +82,10 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
   first request; a shared fix is requested in `docs/requests/studio-to-orchestrator.md`.
 - In-browser preview is a sketch (icons are simplified, fonts are the web fonts); the rendered video is the truth.
 - Jobs queue in-process on the render server: scale vertically or run one service per URL; SQS is the next step.
-- Day-recap doesn't auto-fill from the student's real progress yet (game/learn APIs weren't merged).
 
 ## Next steps
-1. Prefill `day-recap` from `/api/progress` + `/api/game` (day, tasks done, XP, streak) — one-click daily post.
-2. Add a toast on render finished; share link for finished videos (public R2 key).
+1. A small public share *page* (`/:lang/v/:slug` with title, player, "made in FlowLeaf 66") — needs a route in App.tsx.
+2. Toast on render finished; link a finished video to a day's task proof (learn) in one click.
 3. More templates (talking-points over an uploaded clip, AI-image slideshow with Ken Burns, quiz/poll short),
    per-word karaoke captions from ElevenLabs timestamps, brand kits (student's own colours/logo).
 4. Render server: SQS-backed queue for horizontal scale, per-user rate limits, webhook signature (HMAC) instead of

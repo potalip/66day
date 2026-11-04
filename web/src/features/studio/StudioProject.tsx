@@ -196,7 +196,7 @@ export default function StudioProject() {
             {sb.scenes.length ? <PreviewPlayer sb={validation?.storyboard ?? sb} T={T} labels={labels} focusScene={focus} /> : <p className="text-sm text-muted">{s.emptyScenes}</p>}
             <p className="mt-3 text-xs leading-relaxed text-muted">{s.previewNote}</p>
           </Card>
-          <RenderPanel render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />
+          <RenderPanel projectId={project.id} onChanged={() => load()} render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />
         </aside>
 
         <fieldset disabled={planning} aria-busy={planning} className="min-w-0 space-y-6 lg:order-1 disabled:opacity-70">
@@ -309,8 +309,9 @@ function AddScene({ T, onAdd }: { T: TemplateDef; onAdd: (kind: string) => void 
   );
 }
 
-function RenderPanel({ render, renders, renderer, busy, onRender, disabled }: {
-  render: Render | null; renders: Render[]; renderer: boolean; busy: string | null; onRender: (q: "final" | "draft") => void; disabled: boolean;
+function RenderPanel({ projectId, render, renders, renderer, busy, onRender, disabled, onChanged }: {
+  projectId: string; render: Render | null; renders: Render[]; renderer: boolean; busy: string | null; onRender: (q: "final" | "draft") => void;
+  disabled: boolean; onChanged: () => void;
 }) {
   const s = useStrings(strings);
   const active = !!render && ["queued", "submitted", "rendering", "ingesting"].includes(render.status);
@@ -337,6 +338,7 @@ function RenderPanel({ render, renders, renderer, busy, onRender, disabled }: {
               className="inline-flex h-9 items-center gap-1.5 rounded-[10px] bg-accent px-3 text-sm font-medium text-accent-fg hover:brightness-110"><Icon name="download" />{s.download}</a>
             {render.contactUrl && <a href={render.contactUrl} target="_blank" rel="noreferrer" className="inline-flex h-9 items-center rounded-[10px] border border-line px-3 text-sm hover:bg-surface-2">{s.contactSheet}</a>}
           </div>
+          <ShareBox projectId={projectId} render={render} onChanged={onChanged} />
         </div>
       )}
       <div className="flex flex-col gap-2 sm:flex-row lg:flex-col xl:flex-row">
@@ -364,3 +366,44 @@ function RenderPanel({ render, renders, renderer, busy, onRender, disabled }: {
     </Card>
   );
 }
+
+function ShareBox({ projectId, render, onChanged }: { projectId: string; render: Render; onChanged: () => void }) {
+  const s = useStrings(strings);
+  const [busy, setBusy] = useState(false);
+  const [copied, setCopied] = useState(false);
+  const [err, setErr] = useState(false);
+  const inputId = useId();
+  const url = render.shareUrl ? new URL(render.shareUrl, window.location.origin).toString() : null;
+  const act = async (fn: () => Promise<unknown>) => {
+    setBusy(true); setErr(false);
+    try { await fn(); onChanged(); } catch { setErr(true); }
+    setBusy(false);
+  };
+  const copy = async () => {
+    if (!url) return;
+    try { await navigator.clipboard.writeText(url); setCopied(true); setTimeout(() => setCopied(false), 1800); } catch { /* select fallback */ }
+  };
+  return (
+    <div className="space-y-2 rounded-[12px] border border-line p-3">
+      <p className="text-sm font-medium">{s.share}</p>
+      {url ? (
+        <>
+          <label htmlFor={inputId} className="sr-only">{s.shareLink}</label>
+          <div className="flex gap-2">
+            <input id={inputId} readOnly value={url} onFocus={(e) => e.target.select()}
+              className="h-9 min-w-0 flex-1 rounded-[10px] border border-line bg-surface-2 px-2.5 font-mono text-xs text-fg" />
+            <Button size="sm" onClick={copy}>{copied ? s.copied : s.copy}</Button>
+          </div>
+          <Button size="sm" variant="ghost" loading={busy} onClick={() => act(() => studioApi.unshare(projectId, render.id))}>{s.stopSharing}</Button>
+        </>
+      ) : (
+        <>
+          <p className="text-xs text-muted">{s.shareHint}</p>
+          <Button size="sm" loading={busy} onClick={() => act(() => studioApi.share(projectId, render.id))}>{s.createShare}</Button>
+        </>
+      )}
+      {err && <p className="text-xs text-danger" role="alert">{s.loadError}</p>}
+    </div>
+  );
+}
+

@@ -229,15 +229,11 @@ studio.get("/assets/:pid/:name", async (c) => {
 
 const MEDIA_FILES: Record<string, keyof RenderRow> = { "video.mp4": "video_key", "thumbnail.jpg": "thumb_key", "contact.png": "contact_key" };
 
-/** Finished media from R2, with Range support so <video> can seek. Owner-only. */
-studio.get("/media/:renderId/:file", async (c) => {
-  const col = MEDIA_FILES[c.req.param("file")];
-  const r = col ? await getRender(c.env, c.req.param("renderId")) : null;
-  if (!r || r.user_id !== c.get("userId") || !r[col]) return c.json({ error: "not_found" }, 404);
-  const key = r[col] as string;
+/** Stream an R2 object with HTTP Range support so <video> can seek. */
+async function serveR2(c: C, key: string, opts: { cache: string; download?: string }) {
   const range = c.req.header("range");
   const m = range ? /bytes=(\d*)-(\d*)/.exec(range) : null;
-  if (m) {
+  if (m && (m[1] || m[2])) {
     const head = await c.env.MEDIA.head(key);
     if (!head) return c.json({ error: "not_found" }, 404);
     const size = head.size;
@@ -250,7 +246,7 @@ studio.get("/media/:renderId/:file", async (c) => {
       status: 206,
       headers: {
         "content-type": head.httpMetadata?.contentType ?? "application/octet-stream", "accept-ranges": "bytes",
-        "content-range": `bytes ${start}-${end}/${size}`, "content-length": String(end - start + 1), "cache-control": "private, max-age=86400",
+        "content-range": `bytes ${start}-${end}/${size}`, "content-length": String(end - start + 1), "cache-control": opts.cache,
       },
     });
   }
@@ -258,10 +254,52 @@ studio.get("/media/:renderId/:file", async (c) => {
   if (!obj) return c.json({ error: "not_found" }, 404);
   const headers: Record<string, string> = {
     "content-type": obj.httpMetadata?.contentType ?? "application/octet-stream", "accept-ranges": "bytes",
-    "content-length": String(obj.size), "cache-control": "private, max-age=86400",
+    "content-length": String(obj.size), "cache-control": opts.cache,
   };
-  if (c.req.query("download")) headers["content-disposition"] = `attachment; filename="flowleaf-${r.project_id}-${c.req.param("file")}"`;
+  if (opts.download) headers["content-disposition"] = `attachment; filename="${opts.download}"`;
   return new Response(obj.body, { headers });
+}
+
+/** Finished media from R2. Owner-only. */
+studio.get("/media/:renderId/:file", async (c) => {
+  const col = MEDIA_FILES[c.req.param("file")];
+  const r = col ? await getRender(c.env, c.req.param("renderId")) : null;
+  if (!r || r.user_id !== c.get("userId") || !r[col]) return c.json({ error: "not_found" }, 404);
+  return serveR2(c, r[col] as string, {
+    cache: "private, max-age=86400",
+    download: c.req.query("download") ? `flowleaf-${r.project_id}-${c.req.param("file")}` : undefined,
+  });
+});
+
+/** Share a finished render publicly (portfolio link). Body { renderId? } — defaults to the current render. */
+studio.post("/projects/:id/share", async (c) => {
+  const p = await ownProject(c);
+  if (!p) return c.json({ error: "not_found" }, 404);
+  const body = await c.req.json<{ renderId?: string }>().catch(() => ({} as { renderId?: string }));
+  const r = await getRender(c.env, body.renderId ?? p.current_render_id ?? "");
+  if (!r || r.project_id !== p.id || r.status !== "done" || !r.video_key) return c.json({ error: "no_finished_video" }, 409);
+  const slug = r.share_slug ?? crypto.randomUUID().replace(/-/g, "").slice(0, 16);
+  if (!r.share_slug) await c.env.DB.prepare("UPDATE studio_renders SET share_slug = ? WHERE id = ?").bind(slug, r.id).run();
+  return c.json({ render: renderView((await getRender(c.env, r.id))!) });
+});
+
+studio.delete("/projects/:id/share", async (c) => {
+  const p = await ownProject(c);
+  if (!p) return c.json({ error: "not_found" }, 404);
+  const renderId = c.req.query("renderId") ?? p.current_render_id ?? "";
+  await c.env.DB.prepare("UPDATE studio_renders SET share_slug = NULL WHERE id = ? AND project_id = ?").bind(renderId, p.id).run();
+  const r = await getRender(c.env, renderId);
+  return c.json({ render: renderView(r) });
+});
+
+/** Public shared media: /api/studio/s/<slug>.mp4 (video) and /api/studio/s/<slug>.jpg (poster). */
+studio.get("/s/:file", async (c) => {
+  const m = /^([a-f0-9]{16})\.(mp4|jpg)$/.exec(c.req.param("file"));
+  if (!m) return c.json({ error: "not_found" }, 404);
+  const r = await c.env.DB.prepare("SELECT * FROM studio_renders WHERE share_slug = ?").bind(m[1]).first<RenderRow>();
+  const key = r ? (m[2] === "mp4" ? r.video_key : r.thumb_key) : null;
+  if (!key) return c.json({ error: "not_found" }, 404);
+  return serveR2(c, key, { cache: "public, max-age=3600" });
 });
 
 // Queue handlers (registered in worker/queue.ts)
