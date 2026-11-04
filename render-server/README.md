@@ -58,14 +58,14 @@ into a box (never assume length); ease every motion; colours only from the palet
 
 ```bash
 sudo apt-get install -y ffmpeg libcairo2-dev pkg-config     # (already present in the dev container)
-pip install --break-system-packages -r render-server/requirements.txt
+pip install --break-system-packages -r render-server/requirements-dev.txt   # runtime deps + pytest/httpx/hadolint
 cd render-server
 
 python -m flowleaf_render.cli render explainer --fmt 9x16 --lang ru     # → data/out/renders/…/video.mp4 + contact.png
 python -m flowleaf_render.cli stills listicle --fmt 16x9 --draft        # layout check, no encoding
 python -m flowleaf_render.cli samples                                    # stills for every template/format/lang
 
-RENDER_SERVER_TOKEN=dev-render FLR_ALLOW_PRIVATE_FETCH=1 uvicorn flowleaf_render.server:app --port 8080
+RENDER_SERVER_TOKEN=dev-render FLR_ALLOW_PRIVATE_FETCH=1 python -m flowleaf_render   # or: uvicorn flowleaf_render.server:app --port 8080
 pytest -q tests
 ```
 
@@ -93,6 +93,13 @@ Speed (4 vCPU): a 23 s 1080×1920 video renders in ~30 s; `draft` quality in ~8 
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | | standard boto3 credentials (or an IAM task role on AWS) |
 
 ## Deploy on AWS
+
+**Exact, copy-paste runbook: [`deploy/AWS.md`](deploy/AWS.md)** (S3 bucket, secrets, IAM roles, ECR push via
+`deploy/build-and-push.sh`, Fargate task definition `deploy/ecs-task-definition.json`, HTTPS ALB, Worker wiring).
+The Dockerfile is a multi-stage build (wheels compiled in a builder stage, slim runtime with ffmpeg + libcairo,
+non-root uid 10001, healthcheck) and passes `hadolint`.
+
+Summary:
 
 The image is self-contained: `docker build -t flowleaf-render render-server/`.
 
