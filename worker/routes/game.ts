@@ -77,6 +77,27 @@ game.post("/dev/event", async (c) => {
   return c.json({ awards: await onGameEvent(c.env, c.get("userId"), ev) });
 });
 
+/**
+ * Move the current user's game history N days into the past (pair with POST /api/progress/dev/time-travel)
+ * so the next action happens on a "new day" — for demoing streaks, freezes and recaps.
+ */
+game.post("/dev/time-travel", async (c) => {
+  if (!isDev(c.env)) return c.json({ error: "not_found" }, 404);
+  const b = await c.req.json<{ days?: number }>().catch(() => ({}) as { days?: number });
+  const days = Math.max(1, Math.min(66, Math.round(Number(b.days) || 1)));
+  const id = c.get("userId");
+  const shift = `-${days} days`;
+  const db = c.env.DB;
+  await db.batch([
+    db.prepare("UPDATE game_events SET created_at = created_at - ?, local_day = date(local_day, ?) WHERE user_id = ?").bind(days * 86400, shift, id),
+    db.prepare("UPDATE game_activity SET day = 'x' || day WHERE user_id = ?").bind(id),
+    db.prepare("UPDATE game_activity SET day = date(substr(day, 2), ?) WHERE user_id = ?").bind(shift, id),
+    db.prepare("UPDATE game_stats SET streak_last_day = date(streak_last_day, ?) WHERE user_id = ? AND streak_last_day IS NOT NULL").bind(shift, id),
+    db.prepare("UPDATE game_badges SET awarded_at = awarded_at - ? WHERE user_id = ?").bind(days * 86400, id),
+  ]);
+  return c.json(await getMe(db, id));
+});
+
 game.post("/dev/seed", async (c) => {
   if (!isDev(c.env)) return c.json({ error: "not_found" }, 404);
   return c.json(await seedDemo(c.env.DB));
