@@ -26,14 +26,19 @@ export default function StudioProject() {
   const [focus, setFocus] = useState<number | null>(null);
   const [actionErr, setActionErr] = useState<string | null>(null);
   const [busy, setBusy] = useState<"plan" | "final" | "draft" | null>(null);
-  const dirty = useRef(false);
+  // edit generations: every local edit bumps `gen`; a save records the generation it carried. Dirty = gen > saved.
+  const gen = useRef(0), savedGen = useRef(0);
+  const latest = useRef({ sb, title, brief });
+  latest.current = { sb, title, brief };
+  const isDirty = () => gen.current > savedGen.current;
+  const [tick, setTick] = useState(0);
   const briefId = useId(), titleId = useId();
 
   const load = useCallback(async (initial = false) => {
     try {
       const [c, d] = await Promise.all([loadCatalog(), studioApi.get(id)]);
       setCat(c); setDetail(d);
-      if (initial || !dirty.current) {
+      if (initial || gen.current === savedGen.current) {
         setSb(d.project.storyboard); setBrief(d.project.brief); setTitle(d.project.title);
       }
       setLoadErr(null);
@@ -49,7 +54,7 @@ export default function StudioProject() {
   const planning = project?.status === "planning";
   const renderActive = !!render && ["queued", "submitted", "rendering", "ingesting"].includes(render.status);
 
-  // poll while something is happening server-side
+  // poll while something is happening server-side (a failed poll schedules another one)
   useEffect(() => {
     if (!planning && !renderActive) return;
     const t = setTimeout(async () => {
@@ -57,41 +62,53 @@ export default function StudioProject() {
       try {
         const d = await studioApi.get(id);
         setDetail(d);
-        if (wasPlanning && d.project.status !== "planning") { dirty.current = false; setSb(d.project.storyboard); setTitle(d.project.title); }
-      } catch { /* keep polling */ }
+        // editing is locked while planning, so local state is clean: take the AI's storyboard
+        if (wasPlanning && d.project.status !== "planning" && !isDirty()) { setSb(d.project.storyboard); setTitle(d.project.title); }
+      } catch { setTick((x) => x + 1); }
     }, 2000);
     return () => clearTimeout(t);
-  }, [detail, planning, renderActive, id]);
+  }, [detail, tick, planning, renderActive, id]);
 
   // validation (same rules as the server)
   const validation = useMemo(() => (sb ? validateStoryboard(sb) : null), [sb]);
   const errors: SbError[] = validation?.errors ?? [];
   const hardErrors = errors.filter((e) => !e.soft);
 
-  // autosave (debounced)
+  const saveNow = useCallback(async () => {
+    const g = gen.current;
+    const cur = latest.current;
+    if (!cur.sb) return;
+    const r = await studioApi.patch(id, { storyboard: { ...cur.sb, title: cur.title }, title: cur.title, brief: cur.brief });
+    if (savedGen.current < g) savedGen.current = g;
+    setSave(isDirty() ? "saving" : "saved");
+    setDetail((d) => (d ? { ...d, project: { ...r.project, storyboard: d.project.storyboard } } : d));
+  }, [id]);
+
+  // autosave (debounced; retries after an error)
   useEffect(() => {
-    if (!dirty.current || !sb) return;
+    if (!isDirty() || !sb) return;
     setSave("saving");
-    const t = setTimeout(async () => {
-      try {
-        const r = await studioApi.patch(id, { storyboard: { ...sb, title }, brief });
-        dirty.current = false; setSave("saved");
-        setDetail((d) => (d ? { ...d, project: { ...r.project, storyboard: d.project.storyboard } } : d));
-      } catch { setSave("error"); }
+    const t = setTimeout(() => {
+      saveNow().catch(() => { setSave("error"); setTimeout(() => setTick((x) => x + 1), 3000); });
     }, 700);
     return () => clearTimeout(t);
-  }, [sb, title, brief, id]);
+  }, [sb, title, brief, saveNow, tick]);
 
-  const edit = (next: Storyboard) => { dirty.current = true; setSb(next); };
-  const editScenes = (fn: (sc: Storyboard["scenes"]) => Storyboard["scenes"]) => sb && edit({ ...sb, scenes: fn([...sb.scenes]) });
+  const touch = () => { gen.current++; };
+  const edit = (fn: (p: Storyboard) => Storyboard) => { touch(); setSb((p) => (p ? fn(p) : p)); };
+  const editScenes = (fn: (sc: Storyboard["scenes"]) => Storyboard["scenes"]) => edit((p) => ({ ...p, scenes: fn([...p.scenes]) }));
+  const flush = async () => { if (isDirty()) await saveNow(); };
 
   const plan = async () => {
     setActionErr(null); setBusy("plan");
     try {
-      if (dirty.current && sb) { await studioApi.patch(id, { storyboard: { ...sb, title }, brief }); dirty.current = false; }
+      await flush();
       await studioApi.plan(id, brief);
       await load();
-    } catch (e) { setActionErr(errorCode(e) === "ai_not_configured" ? s.aiOffLong : s.planFailed); }
+    } catch (e) {
+      const code = errorCode(e);
+      setActionErr(code === "ai_not_configured" ? s.aiOffLong : code === "busy_rendering" ? s.busyRendering : s.planFailed);
+    }
     setBusy(null);
   };
   const doRender = async (quality: "final" | "draft") => {
@@ -99,7 +116,7 @@ export default function StudioProject() {
     if (hardErrors.length) { setActionErr(s.fixErrors); return; }
     setBusy(quality);
     try {
-      if (dirty.current && sb) { await studioApi.patch(id, { storyboard: { ...sb, title }, brief }); dirty.current = false; }
+      await flush();
       await studioApi.render(id, quality);
       await load();
     } catch (e) {
@@ -154,7 +171,7 @@ export default function StudioProject() {
       <header className="space-y-3">
         <label htmlFor={titleId} className="sr-only">{s.titlePlaceholder}</label>
         <textarea id={titleId} value={title} maxLength={120} placeholder={s.titlePlaceholder} rows={1}
-          onChange={(e) => { dirty.current = true; setTitle(e.target.value.replace(/\n/g, " ")); setSb({ ...sb }); }}
+          onChange={(e) => { touch(); setTitle(e.target.value.replace(/\n/g, " ")); }}
           className="field-sizing-content w-full resize-none rounded-lg bg-transparent leading-tight text-2xl font-semibold tracking-tight outline-none placeholder:text-muted/60 focus-visible:ring-2 focus-visible:ring-accent sm:text-3xl" />
         <div className="flex flex-wrap items-center gap-2">
           <StatusChip status={project.status} label={s.status[project.status]} />
@@ -182,11 +199,11 @@ export default function StudioProject() {
           <RenderPanel render={render} renders={detail.renders} renderer={caps.renderer} busy={busy} onRender={doRender} disabled={planning || renderActive} />
         </aside>
 
-        <div className="min-w-0 space-y-6 lg:order-1">
+        <fieldset disabled={planning} aria-busy={planning} className="min-w-0 space-y-6 lg:order-1 disabled:opacity-70">
           {/* brief + AI */}
           <Card as="section" className="p-4 sm:p-5">
             <Label htmlFor={briefId} hint={caps.ai ? s.briefHelpAi : s.briefHelpNoAi} right={`${brief.length}/2000`}>{s.brief}</Label>
-            <TextArea id={briefId} value={brief} onChange={(v) => { dirty.current = true; setBrief(v); setSb({ ...sb }); }} rows={3} maxLength={2000} placeholder={s.briefPlaceholder} />
+            <TextArea id={briefId} value={brief} onChange={(v) => { touch(); setBrief(v); }} rows={3} maxLength={2000} placeholder={s.briefPlaceholder} />
             <div className="mt-3 flex flex-wrap items-center gap-3">
               <Button variant="primary" onClick={plan} loading={busy === "plan" || planning} disabled={!caps.ai || planning || renderActive}>
                 {!planning && <Icon name="sparkle" />}{planning ? s.planning : project.planSource === "ai" ? s.replan : s.planWithAi}
@@ -204,7 +221,7 @@ export default function StudioProject() {
               <Label>{s.styles}</Label>
               <div className="flex flex-wrap gap-2" role="radiogroup" aria-label={s.styles}>
                 {T.styles.map((st) => (
-                  <button key={st.id} type="button" role="radio" aria-checked={sb.style === st.id} onClick={() => edit({ ...sb, style: st.id })}
+                  <button key={st.id} type="button" role="radio" aria-checked={sb.style === st.id} onClick={() => edit((p) => ({ ...p, style: st.id }))}
                     className={cx("flex items-center gap-2 rounded-full border py-1 pl-1 pr-3 text-sm transition focus-visible:outline-2 focus-visible:outline-accent",
                       sb.style === st.id ? "border-accent bg-accent-soft font-medium" : "border-line hover:bg-surface-2")}>
                     <span className="size-6 rounded-full border border-line" style={{ background: `linear-gradient(135deg, ${st.palette.bg} 50%, ${st.palette.accent} 50%)` }} />{st.name[lang]}
@@ -215,31 +232,31 @@ export default function StudioProject() {
             <div className="grid gap-5 sm:grid-cols-2">
               <div>
                 <Label>{s.format}</Label>
-                <Segmented label={s.format} value={sb.format} onChange={(f: Format) => edit({ ...sb, format: f })}
+                <Segmented label={s.format} value={sb.format} onChange={(f: Format) => edit((p) => ({ ...p, format: f }))}
                   options={(["9x16", "1x1", "16x9"] as Format[]).map((f) => ({ value: f, label: <span className="inline-flex items-center gap-1.5"><FormatIcon format={f} />{f.replace("x", ":")}</span> }))} />
               </div>
               <div>
                 <Label>{s.videoLang}</Label>
-                <Segmented label={s.videoLang} value={sb.lang} onChange={(l: Lang) => edit({ ...sb, lang: l })} options={[{ value: "ru", label: s.langs.ru }, { value: "en", label: s.langs.en }]} />
+                <Segmented label={s.videoLang} value={sb.lang} onChange={(l: Lang) => edit((p) => ({ ...p, lang: l }))} options={[{ value: "ru", label: s.langs.ru }, { value: "en", label: s.langs.en }]} />
               </div>
               <div>
                 <Label>{s.music}</Label>
-                <SelectInput aria-label={s.music} value={sb.music} onChange={(m) => edit({ ...sb, music: m as Storyboard["music"] })}
+                <SelectInput aria-label={s.music} value={sb.music} onChange={(m) => edit((p) => ({ ...p, music: m as Storyboard["music"] }))}
                   options={Object.entries(s.musics).map(([value, label]) => ({ value, label }))} />
               </div>
               <div>
                 <Label>{s.transition}</Label>
-                <SelectInput aria-label={s.transition} value={sb.transition} onChange={(m) => edit({ ...sb, transition: m as Storyboard["transition"] })}
+                <SelectInput aria-label={s.transition} value={sb.transition} onChange={(m) => edit((p) => ({ ...p, transition: m as Storyboard["transition"] }))}
                   options={Object.entries(s.transitions).map(([value, label]) => ({ value, label }))} />
               </div>
-              <Toggle checked={sb.voiceover} onChange={(v) => edit({ ...sb, voiceover: v })} label={s.voiceover} hint={s.voiceoverHint} />
-              <Toggle checked={sb.captions} onChange={(v) => edit({ ...sb, captions: v })} label={s.captions} />
+              <Toggle checked={sb.voiceover} onChange={(v) => edit((p) => ({ ...p, voiceover: v }))} label={s.voiceover} hint={s.voiceoverHint} />
+              <Toggle checked={sb.captions} onChange={(v) => edit((p) => ({ ...p, captions: v }))} label={s.captions} />
             </div>
             {T.fields.length > 0 && (
               <div className="grid gap-4 border-t border-line pt-5 sm:grid-cols-2">
                 {T.fields.map((f) => (
                   <FieldInput key={f.key} f={f} value={sb.fields[f.key]} error={errors.find((e) => e.path === `fields.${f.key}`)}
-                    onChange={(v) => edit({ ...sb, fields: { ...sb.fields, [f.key]: v } })} />
+                    onChange={(v) => edit((p) => ({ ...p, fields: { ...p.fields, [f.key]: v } }))} />
                 ))}
               </div>
             )}
@@ -255,9 +272,9 @@ export default function StudioProject() {
             {sb.scenes.map((sc, i) => (
               <SceneCard key={i} T={T} scene={sc} voice={sb.voiceover} index={i} count={sb.scenes.length} onFocus={() => setFocus(i)}
                 errors={errors.filter((e) => e.path.startsWith(`scenes[${i}]`))}
-                onChange={(n) => editScenes((a) => { a[i] = n; return a; })}
+                onChange={(fn) => editScenes((a) => { a[i] = fn(a[i]); return a; })}
                 onMove={(d) => editScenes((a) => { const j = i + d; [a[i], a[j]] = [a[j], a[i]]; return a; })}
-                onDuplicate={() => editScenes((a) => { a.splice(i + 1, 0, structuredClone(sc)); return a; })}
+                onDuplicate={() => editScenes((a) => { a.splice(i + 1, 0, structuredClone(a[i])); return a; })}
                 onRemove={() => editScenes((a) => { a.splice(i, 1); return a; })} />
             ))}
             {sb.scenes.length < T.maxScenes && (
@@ -268,7 +285,7 @@ export default function StudioProject() {
           <div className="border-t border-line pt-6">
             <Button variant="danger" size="sm" onClick={remove}><Icon name="trash" />{s.deleteProject}</Button>
           </div>
-        </div>
+        </fieldset>
       </div>
     </div>
     </ProjectIdCtx.Provider>

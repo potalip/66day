@@ -84,7 +84,7 @@ export function FieldInput({ f, value, onChange, error }: { f: FieldDef; value: 
 
 export function SceneCard({ T, scene, index, count, errors, onChange, onMove, onDuplicate, onRemove, onFocus, voice }: {
   T: TemplateDef; scene: Scene; voice: boolean; index: number; count: number; errors: SbError[];
-  onChange: (s: Scene) => void; onMove: (d: -1 | 1) => void; onDuplicate: () => void; onRemove: () => void; onFocus: () => void;
+  onChange: (fn: (s: Scene) => Scene) => void; onMove: (d: -1 | 1) => void; onDuplicate: () => void; onRemove: () => void; onFocus: () => void;
 }) {
   const lang = useLang();
   const s = useStrings(strings);
@@ -93,12 +93,15 @@ export function SceneCard({ T, scene, index, count, errors, onChange, onMove, on
   const err = (key: string) => errors.find((e) => e.path === `scenes[${index}].fields.${key}`);
   const words = scene.voiceover.trim() ? scene.voiceover.trim().split(/\s+/).length : 0;
   const need = Math.round((words / WPS[lang === "ru" ? "ru" : "en"] + .6) * 10) / 10;
-  const setField = (k: string, v: FieldValue) => onChange({ ...scene, fields: { ...scene.fields, [k]: v } });
+  // functional updates: an upload that finishes later must not resurrect a stale copy of the scene
+  const setField = (k: string, v: FieldValue) => onChange((sc) => ({ ...sc, fields: { ...sc.fields, [k]: v } }));
   const changeKind = (kind: string) => {
     const NK = T.sceneKinds.find((k) => k.kind === kind)!;
-    const fields: Record<string, FieldValue> = {};
-    for (const f of NK.fields) fields[f.key] = scene.fields[f.key] ?? (f.default as FieldValue) ?? (f.type === "list" ? [] : "");
-    onChange({ ...scene, kind, fields, duration: Math.min(NK.duration.max, Math.max(NK.duration.min, scene.duration)) });
+    onChange((sc) => {
+      const fields: Record<string, FieldValue> = {};
+      for (const f of NK.fields) fields[f.key] = sc.fields[f.key] ?? (f.default as FieldValue) ?? (f.type === "list" ? [] : "");
+      return { ...sc, kind, fields, duration: Math.min(NK.duration.max, Math.max(NK.duration.min, sc.duration)) };
+    });
   };
   return (
     <Card as="article" className="p-4 sm:p-5">
@@ -119,13 +122,13 @@ export function SceneCard({ T, scene, index, count, errors, onChange, onMove, on
           {K.fields.map((f) => <FieldInput key={f.key} f={f} value={scene.fields[f.key]} onChange={(v) => setField(f.key, v)} error={err(f.key)} />)}
           <div className="sm:col-span-2">
             <Label htmlFor={voId} hint={s.narrationHint} right={`${scene.voiceover.length}/260`}>{s.narration}</Label>
-            <TextArea id={voId} value={scene.voiceover} onChange={(v) => onChange({ ...scene, voiceover: v })} maxLength={260} rows={2} />
+            <TextArea id={voId} value={scene.voiceover} onChange={(v) => onChange((sc) => ({ ...sc, voiceover: v }))} maxLength={260} rows={2} />
             {voice && need > scene.duration + .3 && <p className="mt-1 text-xs text-muted">{s.narrationTooLong(need)}</p>}
           </div>
           <div className="sm:col-span-2">
             <Label htmlFor={durId} right={s.seconds(scene.duration)}>{s.duration}</Label>
             <input id={durId} type="range" min={K.duration.min} max={K.duration.max} step={0.1} value={scene.duration}
-              onChange={(e) => onChange({ ...scene, duration: +e.target.value })} className="w-full accent-[var(--accent)]" />
+              onChange={(e) => { const d = +e.target.value; onChange((sc) => ({ ...sc, duration: d })); }} className="w-full accent-[var(--accent)]" />
           </div>
         </div>
       </div>

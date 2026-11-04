@@ -2,7 +2,7 @@ import { Hono, type Context } from "hono";
 import type { AppEnv, Env, JobMessage } from "../env";
 import {
   ACTIVE, type ProjectRow, type RenderRow, applyJob, getProject, getRender, newId, renderServerHealth, renderView,
-  rendererConfigured, runPlan, startRender, submitRender, syncRender,
+  rendererConfigured, runPlan, startRender, submitRender, syncRender, unstickPlan,
 } from "../lib/studio/service";
 import { FORMATS, type Format, type Lang, catalog, exampleStoryboard, getTemplate, validateStoryboard } from "../lib/studio/storyboard";
 
@@ -87,8 +87,9 @@ studio.post("/projects", async (c) => {
 studio.get("/projects/:id", async (c) => {
   const p = await ownProject(c);
   if (!p) return c.json({ error: "not_found" }, 404);
+  await unstickPlan(c.env, p);
   let current: RenderRow | null = p.current_render_id ? await getRender(c.env, p.current_render_id) : null;
-  if (current && ["queued", "submitted", "rendering"].includes(current.status)) current = await syncRender(c.env, current);
+  if (current && ACTIVE.includes(current.status)) current = await syncRender(c.env, current);
   const fresh = (await getProject(c.env, p.id))!;
   const { results } = await c.env.DB.prepare("SELECT * FROM studio_renders WHERE project_id = ? ORDER BY created_at DESC LIMIT 10")
     .bind(p.id).all<RenderRow>();
@@ -105,7 +106,13 @@ studio.patch("/projects/:id", async (c) => {
   const T = getTemplate(p.template)!;
   let sb = JSON.parse(p.storyboard);
   let sbChanged = false;
-  if (body.storyboard && typeof body.storyboard === "object") { sb = body.storyboard; sbChanged = true; }
+  if (body.storyboard && typeof body.storyboard === "object") {
+    // the AI is rewriting the storyboard; edits now would be overwritten (the editor is read-only meanwhile)
+    if (p.status === "planning") return c.json({ error: "busy_planning" }, 409);
+    sb = body.storyboard; sbChanged = true;
+    const t = (body.storyboard as { title?: unknown }).title;
+    if (typeof t === "string" && typeof body.title !== "string") body.title = t;
+  }
   if (typeof body.title === "string") { sets.push("title = ?"); vals.push(body.title.trim().slice(0, 120)); sb.title = body.title.trim().slice(0, 120); sbChanged = true; }
   if (typeof body.brief === "string") { sets.push("brief = ?"); vals.push(body.brief.slice(0, 2000)); }
   for (const k of ["style", "format", "lang"] as const) {
@@ -146,7 +153,11 @@ studio.post("/projects/:id/plan", async (c) => {
   const p = await ownProject(c);
   if (!p) return c.json({ error: "not_found" }, 404);
   if (!c.env.ANTHROPIC_API_KEY) return c.json({ error: "ai_not_configured" }, 409);
-  if (p.status === "planning") return c.json({ ok: true, status: "planning" }, 202);
+  if (p.status === "planning" && !(await unstickPlan(c.env, p))) return c.json({ ok: true, status: "planning" }, 202);
+  if (p.current_render_id) {
+    const r = await getRender(c.env, p.current_render_id);
+    if (r && ACTIVE.includes(r.status)) return c.json({ error: "busy_rendering" }, 409);
+  }
   const body = await c.req.json<{ brief?: string }>().catch(() => ({} as { brief?: string }));
   if (typeof body.brief === "string") {
     await c.env.DB.prepare("UPDATE studio_projects SET brief = ? WHERE id = ?").bind(body.brief.slice(0, 2000), p.id).run();
@@ -184,7 +195,8 @@ studio.post("/render-callback", async (c) => {
   let r = job.external_id ? await getRender(c.env, job.external_id) : null;
   if (!r) r = await c.env.DB.prepare("SELECT * FROM studio_renders WHERE job_id = ?").bind(job.id).first<RenderRow>();
   if (!r) return c.json({ error: "unknown_job" }, 404);
-  if (!r.job_id) await c.env.DB.prepare("UPDATE studio_renders SET job_id = ? WHERE id = ?").bind(job.id, r.id).run();
+  if (r.job_id && r.job_id !== job.id) return c.json({ ok: true, ignored: "stale_job" });
+  if (!r.job_id) await c.env.DB.prepare("UPDATE studio_renders SET job_id = ? WHERE id = ? AND job_id IS NULL").bind(job.id, r.id).run();
   await applyJob(c.env, r, job as never);
   return c.json({ ok: true });
 });

@@ -32,7 +32,7 @@ export default function Studio() {
   // keep rendering/planning cards fresh
   useEffect(() => {
     if (!projects?.some((p) => p.status === "rendering" || p.status === "planning")) return;
-    const id = setTimeout(() => studioApi.projects().then((p) => setProjects(p.projects)).catch(() => undefined), 3000);
+    const id = setTimeout(() => studioApi.projects().then((p) => setProjects(p.projects)).catch(() => setProjects((x) => (x ? [...x] : x))), 3000);
     return () => clearTimeout(id);
   }, [projects]);
 

@@ -117,13 +117,17 @@ export function normalizeField(f: FieldDef, v: unknown, path: string, errs: SbEr
       // absolute http(s) URL, or one of our own uploaded assets (/api/studio/assets/...), made absolute at render time
       const u = typeof v === "string" ? v.trim() : "";
       if (u && !/^(https?:\/\/|\/api\/studio\/assets\/)/.test(u)) { errs.push({ path, code: "url", message: "image must be an uploaded file or an http(s) URL", soft: true }); return ""; }
+      if (u.length > 1900) { errs.push({ path, code: "too_long", message: "image URL too long", soft: true }); return ""; }
       if (f.required && !u) errs.push({ path, code: "required", message: "required" });
-      return u.slice(0, 2000);
+      return u;
     }
     case "lines":
       return parseLines(Array.isArray(v) ? v.join(",") : v).join(", ");
     case "number": {
-      if ((v == null || v === "") && !f.required) return (f.default as number) ?? 0;
+      if (v == null || v === "") {
+        if (f.required) { errs.push({ path, code: "required", message: "required" }); return (f.default as number) ?? 0; }
+        return (f.default as number) ?? 0;
+      }
       const x = Number(String(v).replace(",", ".").replace(/[\s ]/g, ""));
       if (!Number.isFinite(x)) { errs.push({ path, code: "type", message: "expected a number" }); return (f.default as number) ?? 0; }
       let y = x;

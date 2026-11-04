@@ -1,5 +1,6 @@
 # FlowLeaf render server: Python + cairo + ffmpeg. ~600 MB image.
-FROM python:3.12-slim
+ARG BASE_IMAGE=python:3.12-slim
+FROM ${BASE_IMAGE}
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
         ffmpeg libcairo2 libcairo2-dev pkg-config gcc \

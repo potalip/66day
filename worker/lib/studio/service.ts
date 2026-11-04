@@ -39,20 +39,38 @@ export async function runPlan(env: Env, projectId: string) {
   const T = getTemplate(p.template);
   if (!T) return;
   const current = JSON.parse(p.storyboard) as Storyboard;
-  const res = await planStoryboard(env, {
-    template: T, lang: p.lang, style: p.style, format: p.format, brief: p.brief,
-    handle: (current.fields?.handle as string) || undefined,
-    current: p.plan_source === "manual" ? current : undefined,
-  });
+  let res: Awaited<ReturnType<typeof planStoryboard>>;
+  try {
+    res = await planStoryboard(env, {
+      template: T, lang: p.lang, style: p.style, format: p.format, brief: p.brief,
+      handle: (current.fields?.handle as string) || undefined,
+      current: p.plan_source === "manual" ? current : undefined,
+    });
+  } catch (e) {
+    res = { ok: false, reason: "api_error", message: String(e).slice(0, 300) };
+  }
+  // only land the result if the project is still planning (edits are locked meanwhile)
   if (res.ok) {
     const title = res.storyboard.title || p.title;
     await env.DB.prepare(
-      "UPDATE studio_projects SET storyboard = ?, title = ?, status = 'draft', plan_source = 'ai', plan_error = NULL, updated_at = unixepoch() WHERE id = ?",
+      "UPDATE studio_projects SET storyboard = ?, title = ?, status = 'draft', plan_source = 'ai', plan_error = NULL, updated_at = unixepoch() WHERE id = ? AND status = 'planning'",
     ).bind(JSON.stringify(res.storyboard), title, p.id).run();
   } else {
-    await env.DB.prepare("UPDATE studio_projects SET status = 'draft', plan_error = ?, updated_at = unixepoch() WHERE id = ?")
-      .bind(`${res.reason}: ${res.message}`.slice(0, 500), p.id).run();
+    await failPlan(env, p.id, `${res.reason}: ${res.message}`);
   }
+}
+
+export async function failPlan(env: Env, projectId: string, msg: string) {
+  await env.DB.prepare("UPDATE studio_projects SET status = 'draft', plan_error = ?, updated_at = unixepoch() WHERE id = ? AND status = 'planning'")
+    .bind(msg.slice(0, 500), projectId).run();
+}
+
+/** A plan that never came back (killed background task, dropped queue message) unlocks the project. */
+export const PLAN_STALE_S = 300;
+export async function unstickPlan(env: Env, p: ProjectRow): Promise<boolean> {
+  if (p.status !== "planning" || Date.now() / 1000 - p.updated_at < PLAN_STALE_S) return false;
+  await failPlan(env, p.id, "timeout: planning took too long");
+  return true;
 }
 
 // ------------------------------------------------------------------------------------------------ rendering
@@ -86,6 +104,11 @@ export async function submitRender(env: Env, projectId: string) {
   const r = await getRender(env, p.current_render_id);
   if (!r || r.status !== "queued") return;
   if (!rendererConfigured(env)) return failRender(env, r, "Render server is not configured");
+  // claim the submission so the queue consumer, its retries and the polling fallback can't double-submit
+  const claim = await env.DB.prepare(
+    "UPDATE studio_renders SET stage = 'submitting', updated_at = unixepoch() WHERE id = ? AND status = 'queued' AND (stage IS NULL OR stage <> 'submitting' OR updated_at < unixepoch() - 60)",
+  ).bind(r.id).run();
+  if (!claim.meta.changes) return;
   // A local Worker can't be called back by a remote render server; polling (syncRender) covers that case.
   const local = (u: string) => /\/\/(localhost|127\.0\.0\.1)/.test(u);
   const callback = r.callback_origin && (!local(r.callback_origin) || local(env.RENDER_SERVER_URL))
@@ -98,7 +121,10 @@ export async function submitRender(env: Env, projectId: string) {
     }),
   });
   if (!res.ok) {
-    if (res.status >= 500) throw new Error(`render server ${res.status}`); // queue retries
+    if (res.status >= 500) {
+      await env.DB.prepare("UPDATE studio_renders SET stage = NULL WHERE id = ? AND status = 'queued'").bind(r.id).run();
+      throw new Error(`render server ${res.status}`); // queue retries
+    }
     return failRender(env, r, res.json?.message ?? `render server said ${res.status}`);
   }
   await env.DB.prepare("UPDATE studio_renders SET job_id = ?, status = 'submitted', stage = 'queued', updated_at = unixepoch() WHERE id = ? AND status = 'queued'")
@@ -130,6 +156,7 @@ interface Job {
 export async function applyJob(env: Env, r: RenderRow, job: Job): Promise<void> {
   if (["done", "failed", "canceled"].includes(r.status)) return;
   if (job.status === "failed" || job.status === "canceled") return failRender(env, r, job.error || job.status);
+  if (job.status === "done" && !job.outputs?.video_url) return failRender(env, r, "Render finished without output files");
   if (job.status !== "done") {
     await env.DB.prepare("UPDATE studio_renders SET status = 'rendering', progress = ?, stage = ?, updated_at = unixepoch() WHERE id = ? AND status IN ('submitted','rendering','queued')")
       .bind(Math.min(.99, job.progress ?? 0), job.stage ?? job.status, r.id).run();
@@ -139,7 +166,7 @@ export async function applyJob(env: Env, r: RenderRow, job: Job): Promise<void> 
   const claim = await env.DB.prepare("UPDATE studio_renders SET status = 'ingesting', stage = 'saving', progress = .97, updated_at = unixepoch() WHERE id = ? AND status IN ('queued','submitted','rendering')")
     .bind(r.id).run();
   if (!claim.meta.changes) return;
-  const o = job.outputs!;
+  const o = job.outputs!;  // checked above
   const keys: Record<string, string | null> = { video: null, thumb: null, contact: null };
   const copy = async (url: string, name: string, type: string) => {
     try {
@@ -172,6 +199,11 @@ export async function syncRender(env: Env, r: RenderRow): Promise<RenderRow> {
   if (ACTIVE.includes(r.status) && now - r.created_at > 45 * 60) {
     await failRender(env, r, "Render timed out. Please try again.");
     return (await getRender(env, r.id))!;
+  }
+  // ingest interrupted (request killed mid-copy): release the claim so it runs again
+  if (r.status === "ingesting" && now - r.updated_at > 120) {
+    await env.DB.prepare("UPDATE studio_renders SET status = 'rendering', updated_at = 0 WHERE id = ? AND status = 'ingesting'").bind(r.id).run();
+    r = (await getRender(env, r.id))!;
   }
   // queue message never processed (e.g. a local setup without a consumer): submit directly
   if (r.status === "queued" && !r.job_id && now - r.created_at > 20) {
