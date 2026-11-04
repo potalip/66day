@@ -204,3 +204,37 @@ Branch `agent/learn` was rebased onto `main`. Requests in `docs/requests/*-to-le
 - The portfolio header links to game's certificate (`/:lang/certificate/:userId`).
 - Heads-up: on main, `worker/lib/game/test/catalog.test.ts` fails ("first-ship: expected … function"). That's a content vs game rule
   mismatch in `content/badges.json` / `worker/lib/game`, not learn code. The other 206 tests pass.
+
+---
+
+## Round 4: share card, a11y skip link, mobile performance
+
+**Share card (design's `@web/ui/ShareCard`, `design-share-card.md`)**
+- The celebration footer has a "Share Day N" / «Поделиться днём N» button (`variant="soft"`, next to the primary next/path action).
+- A completed day's page has a quiet ghost "Share" button in the hero.
+- Boss days open the share dialog automatically, once, when the celebration closes (tracked per day in localStorage), and it can be dismissed.
+  Navigation buttons in the celebration ("Continue to day N", "My path", "My portfolio") skip the auto-open.
+- The card shows the real day number, its native title, the track, and the current streak, XP and name from the game, fetched only when the dialog opens.
+- `ShareDay.tsx` and `ShareCard` are loaded with `React.lazy` (0.4 kB + 6.8 kB gzip chunks), so nothing is added to Today's initial load.
+- The parent refresh (Today → "done for today") waits until the share dialog closes, so the dialog isn't unmounted mid-share.
+
+**A11y (design round-3 audit)**
+- Keyboard users get a "Skip to tasks" / «К заданиям» link as the first stop of the lesson. It becomes visible on focus, and it plus the mobile
+  "Tasks · 0/4 ↓" chip now move **focus** to the tasks heading (`tabIndex=-1`), not just scroll. Smooth scrolling is off under reduced motion.
+  Verified: `document.activeElement.id === "tasks-h"` after Enter.
+
+**Mobile performance (Playwright on `vite preview`, 390px, 400 kB/s + 150 ms RTT, 4× CPU)**
+| Page | Before (CLS / network idle) | After |
+|---|---|---|
+| /en/today | 0.12 / 5.3 s | **0 / 4.4 s** (LCP 3.6 s) |
+| /en/day/3 | 0.049 / 3.6 s | **0 / 3.6 s** |
+| /ru/path | 0 / 3.6 s | 0 / 3.5 s |
+
+Fixes:
+- **No more waterfall on Today:** `GET /api/progress?withDay=1` returns the overview and today's day in one response, where the page used to wait for the overview before requesting the day.
+- **Layout-matching skeletons:** `TodaySkeleton` and `DaySkeleton` have the same shape as the real header, hero and task grid.
+- **Game state with the page:** Today fetches `/api/game/me` in parallel and renders `StreakChip`, `XpBar` and `StreakNudge` from that data
+  in the first paint. The nudge no longer pushes the lesson down after it appears, and `useGameMe` still refreshes on `fl:game-changed`.
+- **Day page:** prev/next navigation renders only once the day has loaded, so it no longer jumps.
+- What's left of LCP is the shared main chunk (`index-*.js`, ~127 kB gzip) and font loading. Both belong to the orchestrator and design.
+  Learn's route chunks are DayView 11.6 kB, Today 2.1 kB and Path 2.2 kB gzip.
