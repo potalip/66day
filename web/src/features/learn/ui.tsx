@@ -46,3 +46,19 @@ export function ErrorState({ title, body, retry, onRetry }: { title: string; bod
     </Card>
   );
 }
+
+/** Day hero + lesson lines + task card, matching DayView's grid so the swap doesn't shift layout. */
+export function DaySkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)] lg:gap-12" aria-hidden>
+      <div className="min-w-0">
+        <Skeleton className="mb-3 h-4 w-40" />
+        <Skeleton className="h-9 w-4/5 max-w-[24ch]" /><Skeleton className="mt-2 h-9 w-3/5 max-w-[18ch]" />
+        <Skeleton className="mt-4 h-5 w-full max-w-[60ch]" /><Skeleton className="mt-2 h-5 w-2/3 max-w-[40ch]" />
+        <Skeleton className="mt-5 h-4 w-40" />
+        <SkeletonText lines={6} className="mt-10 max-w-[68ch]" />
+      </div>
+      <div className="hidden lg:block"><Skeleton className="h-96 w-full rounded-[var(--radius)]" /></div>
+    </div>
+  );
+}

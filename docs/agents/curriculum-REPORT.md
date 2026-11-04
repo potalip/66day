@@ -110,3 +110,16 @@ See `docs/curriculum/REVIEW.md` → "Known gaps". The main ones:
 - **Second language pass:** RU and EN, 189 files edited. Russian address is now gender-neutral and terms are unified.
 - **Requests updated:** `curriculum-to-learn.md` (collapsible answers, resolve resources), `curriculum-to-game.md`,
   `curriculum-to-library.md`.
+
+## Round 3 (pedagogy moderation across the product)
+- **Walked the student journey in the running app** as a RU (video) and an EN (apps) beginner at 390 px: landing → onboarding → today → path →
+  day 1 → library → profile → leaderboard. Earlier rounds covered lesson pages across phases.
+  - Then reviewed all UI copy files.
+  - Precise, line-level requests filed:
+    - `curriculum-to-design.md`: 10 landing items, e.g. "Discord bots" the program doesn't teach, a badge that doesn't exist, the "average 66 days" claim, the cost FAQ.
+    - `curriculum-to-learn.md` round 3: onboarding says "days 1–10 shared" (it's 1–14), "an hour or so" undersells, the 30-min option, a key-safety hint on proofs, a day-12 track prompt.
+    - `curriculum-to-library.md` round 3: «ИИ» terminology, the "Foundation" track label, an Instagram note for RU.
+    - `curriculum-to-game.md` round 3: hide the other track's badges on the profile.
+- **Fixed on my side:** day 1's title promised "30 minutes" against a 75-minute estimate. Now "your first page, built today".
+- **`docs/curriculum/FOUNDER-GUIDE.md` (EN + RU):** program structure, adding YouTube/Instagram material through the admin onto the right days, a day → topic map, editing day files safely, a 2-week pilot plan with metrics and SQL, and a weekly founder routine.
+- **`docs/curriculum/quests.md`:** 5 shared quests, 10 apps quests and 10 video quests. Each has a measurable rule (all referenced task ids verified), target, XP, program-week window and native RU/EN copy, plus rotation rules.

@@ -1,30 +1,35 @@
 // OWNER: learn. Today: the day you should work on now, or a calm "done for today" / "finished" state.
 import { Link, Navigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
-import { Badge, ButtonLink, Card, EmptyState, ProgressBar } from "@web/ui";
-import { StreakChip, XpBar } from "@web/features/game/widgets";
-import { useDay, useOverview, type Overview } from "./data";
+import { Badge, ButtonLink, Card, EmptyState, ProgressBar, Skeleton } from "@web/ui";
+import { StreakChip, StreakNudge, WeeklyQuests, XpBar } from "@web/features/game/widgets";
+import { useGameMe, type GameMe } from "@web/features/game/api";
+import { useOverview, type Overview } from "./data";
 import { DayView } from "./DayView";
 import { strings, type LearnStrings } from "./strings";
-import { ErrorState, Icon, PageSkeleton } from "./ui";
+import { DaySkeleton, ErrorState, Icon } from "./ui";
 
 export default function Today() {
   const lang = useLang();
   const s = useStrings(strings);
-  const ov = useOverview(lang);
+  // One request: overview + today's day (withDay) — no waterfall on slow mobile networks.
+  const ov = useOverview(lang, true);
+  // Game state is fetched in parallel and rendered with the page (not after it), so the streak nudge and the
+  // XP/streak widgets never push the lesson down once it's visible. useGameMe refetches on "fl:game-changed".
+  const game = useGameMe();
+  const gameReady = !!game.data || !!game.error;
   const o = ov.data;
   const lastDone = o ? Math.max(0, ...o.cells.filter((c) => c.access === "done").map((c) => c.day)) : 0;
-  const dayNum = !o || !o.onboarded ? null : o.status === "open" ? o.nextDay : null;
   const nextCell = o && o.nextDay ? o.cells[o.nextDay - 1] : null;
-  const day = useDay(lang, dayNum && nextCell?.available ? dayNum : null);
 
-  if (ov.loading && !o) return <PageSkeleton />;
+  if ((ov.loading && !o) || (o?.onboarded && !gameReady)) return <TodaySkeleton />;
   if (ov.error || !o) return <ErrorState title={s.errorTitle} body={s.errorBody} retry={s.retry} onRetry={() => ov.reload()} />;
   if (!o.onboarded) return <Navigate to={`/${lang}/start`} replace />;
 
   return (
     <div className="mx-auto max-w-6xl">
-      <TodayHeader s={s} o={o} lang={lang} />
+      <StreakNudge streak={game.data?.streak ?? null} className="mb-6" />
+      <TodayHeader s={s} o={o} lang={lang} game={game.data} />
       {o.status === "finished" ? (
         <Finished s={s} lang={lang} />
       ) : o.status === "waiting" ? (
@@ -32,18 +37,34 @@ export default function Today() {
       ) : nextCell && !nextCell.available ? (
         <EmptyState icon={<Icon.pen />} title={s.unwrittenTitle(nextCell.day)} description={s.unwrittenBody}
           action={<ButtonLink to={`/${lang}/path`} variant="outline" icon={<Icon.map />}>{s.seePath}</ButtonLink>} />
-      ) : day.loading && !day.data ? (
-        <PageSkeleton />
-      ) : day.error || !day.data?.day ? (
-        <ErrorState title={s.errorTitle} body={s.errorBody} retry={s.retry} onRetry={() => day.reload()} />
+      ) : !o.today?.day ? (
+        <ErrorState title={s.errorTitle} body={s.errorBody} retry={s.retry} onRetry={() => ov.reload()} />
       ) : (
-        <DayView lang={lang} data={day.data} onChanged={() => { void ov.reload(true); void day.reload(true); }} />
+        <DayView lang={lang} data={o.today} onChanged={() => void ov.reload(true)} />
       )}
+      {/* Below the day content: it loads on its own, so it must not push the lesson around. */}
+      <WeeklyQuests className="mt-14" />
     </div>
   );
 }
 
-function TodayHeader({ s, o, lang }: { s: LearnStrings; o: Overview; lang: "ru" | "en" }) {
+/** Same shape as header + day hero + tasks, so swapping in the real page doesn't shift layout. */
+function TodaySkeleton() {
+  return (
+    <div className="mx-auto max-w-6xl" role="status" aria-busy="true">
+      <div className="mb-8 border-b border-line pb-6">
+        <div className="flex flex-wrap items-start justify-between gap-x-6 gap-y-4">
+          <div><Skeleton className="h-4 w-48" /><Skeleton className="mt-2 h-6 w-56" /></div>
+          <div className="flex w-full items-center gap-3 sm:w-auto"><Skeleton className="h-8 w-16 rounded-full" /><Skeleton className="h-6 flex-1 sm:w-56" /></div>
+        </div>
+        <Skeleton className="mt-5 h-[34px] w-full" />
+      </div>
+      <DaySkeleton />
+    </div>
+  );
+}
+
+function TodayHeader({ s, o, lang, game }: { s: LearnStrings; o: Overview; lang: "ru" | "en"; game: GameMe | null }) {
   const phase = o.program.phases.find((p) => o.nextDay && o.nextDay >= p.days[0] && o.nextDay <= p.days[1]);
   return (
     <section className="mb-8 border-b border-line pb-6" aria-label={s.todayTitle}>
@@ -59,8 +80,8 @@ function TodayHeader({ s, o, lang }: { s: LearnStrings; o: Overview; lang: "ru" 
           </p>
         </div>
         <div className="flex w-full items-center gap-3 sm:w-auto">
-          <StreakChip />
-          <XpBar compact className="min-w-0 flex-1 sm:w-56 sm:flex-none" />
+          {game && <StreakChip streak={game.streak} />}
+          {game && <XpBar me={game} compact className="min-w-0 flex-1 sm:w-56 sm:flex-none" />}
         </div>
       </div>
       <ProgressBar value={o.completedCount} max={o.totalDays} label={s.progressLabel(o.completedCount, o.totalDays)} showValue={`${o.percent}%`} className="mt-5" />

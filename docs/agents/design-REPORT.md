@@ -129,3 +129,19 @@ no console errors. Also checked:
   - 31 tests: palette matches the tokens, XML escaping, wrapping, plurals, post text.
   - I tested the real PNG export in Chromium.
   - Integration guide: `docs/requests/design-share-card.md`.
+- **GameLayer in the Shell** (per `game-to-design.md`): the Shell lazy-loads it on every page except the landing page,
+  so visitors make no game API calls and the main chunk stays at ~401 kB. Verified: completing a task shows exactly one
+  reward toast, placed above the mobile tab bar.
+- **Public pages:** I reviewed the portfolio logged out, as a stranger or recruiter would see it. The Shell now gives shared
+  `/portfolio/:id` and `/certificate/:id` links visitor chrome: a CTA, no app nav, no tab bar, the full footer and no game
+  calls. Shell chrome is hidden when printing. Recruiter-facing requests went to learn (portfolio); certificate guidance
+  went to game, because game's certificate page is still a placeholder.
+- **Studio QA** with the real render server. Gallery → create → edit → quick-draft render produced a playable MP4 in
+  17 s. Checked in EN/RU × light/dark × 390/1280, plus axe. Requests are in `docs/requests/design-to-studio.md`. The P1 is
+  that the finished video is hidden below the fold on desktop, because the sticky right column is taller than the
+  viewport. The project page also has no `<h1>`, and the project title is the brief cut mid-word. No design-file changes
+  were needed.
+- **Landing copy aligned with the curriculum.** I applied all 10 items in `curriculum-to-design.md`: no Discord; "median",
+  not "average", with an honest range; only badges that exist; the profile mock shows real badges with matching icons;
+  an honest cost FAQ, with no "from Russia" promise; Day 1 ≈ 75 min; RU «эксплейнер» and «значки»; a new RU day-section
+  title; the day-13 real person. I also removed the gendered RU verbs in my own copy («Пропустил день?», showcase samples).

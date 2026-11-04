@@ -71,7 +71,7 @@ describe("applyEvent", () => {
     expect((await loadState(db, U)).state.streak.streak).toBe(1);
   });
 
-  it("boss days, ship tasks, day badges and the night-owl secret (ship task 00–04 local)", async () => {
+  it("boss days, ship tasks, day badges and the night-owl secret (task after midnight local)", async () => {
     await applyEvent(db, U, { type: "task.completed", taskId: "d14-t1", day: 14, xp: 80 }, at("2026-11-04T22:30:00Z")); // 01:30 MSK
     const a = await applyEvent(db, U, { type: "day.completed", day: 14 }, at("2026-11-04T22:31:00Z"));
     const ids = (await loadState(db, U)).state.badges;
@@ -83,9 +83,11 @@ describe("applyEvent", () => {
     expect(got).not.toContain("BAD ID!");
   });
 
-  it("an ordinary task after midnight is not night-owl", async () => {
-    await applyEvent(db, U, { type: "task.completed", taskId: "x", day: 1, xp: 10 }, at("2026-11-04T22:30:00Z"));
+  it("night-owl needs a task after midnight local time (not 23:00)", async () => {
+    await applyEvent(db, U, { type: "task.completed", taskId: "x", day: 1, xp: 10 }, at("2026-11-04T20:30:00Z")); // 23:30 MSK
     expect((await loadState(db, U)).state.badges.has("night-owl")).toBe(false);
+    await applyEvent(db, U, { type: "task.completed", taskId: "y", day: 1, xp: 10 }, at("2026-11-04T21:30:00Z")); // 00:30 MSK
+    expect((await loadState(db, U)).state.badges.has("night-owl")).toBe(true);
   });
 
   it("day badges fall back to the day file of the student's own track", async () => {

@@ -10,12 +10,13 @@ import { Player } from "./Player";
 import { ResourceCardView } from "./ResourceCardView";
 import { ArrowIcon, Button, Card, CheckIcon, ClockIcon, Empty, Pill, Skeleton, TypeIcon, hostOf } from "./ui";
 import MyList from "./MyList";
+import { ButtonLink } from "@web/ui";
 import { showAwards } from "@web/features/game/widgets";
 import type { Award } from "@shared/types";
 
 export default function ResourcePage() {
   const { id = "" } = useParams();
-  if (id === "me") return <MyList />;
+  if (id === "me" || id === "my") return <MyList />;
   return <Resource id={id} />;
 }
 
@@ -45,9 +46,15 @@ function Resource({ id }: { id: string }) {
     </Link>
   );
 
-  if (err) return <div className="space-y-6">{back}<Empty title={err === "404" ? s.notFound : s.error} /></div>;
+  // Every state has exactly one <h1> (axe page-has-heading-one): visible on errors, screen-reader-only while loading.
+  if (err) return (
+    <div className="space-y-6">{back}
+      <h1 className="text-2xl font-semibold tracking-tight">{err === "404" ? s.notFound : s.error}</h1>
+      <Empty title={s.notFoundTitle} body={err === "404" ? s.notFoundBody : undefined} action={<ButtonLink to={`/${lang}/library`} variant="primary">{s.toLibrary}</ButtonLink>} />
+    </div>
+  );
   if (!d) return (
-    <div className="space-y-6">{back}<Skeleton className="h-9 w-3/4" /><Skeleton className="aspect-video w-full max-w-4xl" /><Skeleton className="h-4 w-2/3" /><Skeleton className="h-4 w-1/2" /></div>
+    <div className="space-y-6" aria-busy="true">{back}<h1 className="sr-only">{s.title}</h1><Skeleton className="h-9 w-3/4" /><Skeleton className="aspect-video w-full max-w-4xl" /><Skeleton className="h-4 w-2/3" /><Skeleton className="h-4 w-1/2" /></div>
   );
 
   const r = d.resource, m = d.material;

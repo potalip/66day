@@ -186,6 +186,7 @@ const reOrdered = /^( *)(\d{1,9})[.)]\s+(.*)$/;
 const reDetailsOpen = /^ {0,3}<details(?:\s+open)?>\s*(?:<summary>(.*?)<\/summary>)?\s*$/i;
 const reDetailsClose = /^ {0,3}<\/details>\s*$/i;
 const reSummary = /^\s*<summary>(.*?)<\/summary>\s*$/i;
+const reAnswers = /^(answers?|ответы?|ответ к тесту|answer key)[:：.]?$/i;
 const reAlert = /^\[!(TIP|NOTE|WARNING|IMPORTANT|CAUTION)\]\s*/i;
 const reTableSep = /^\s*\|?\s*:?-+:?\s*(\|\s*:?-+:?\s*)*\|?\s*$/;
 
@@ -290,7 +291,17 @@ function parseBlocks(lines: string[], ids: Map<string, number>): Block[] {
       const c = parseBlocks(inner, ids);
       const first = c[0];
       if (!callout && first?.t === "p" && first.c[0]?.t === "strong") {
-        callout = calloutKind(inlineText(first.c[0].c));
+        const label = inlineText(first.c[0].c);
+        // "> **Answers:** …" quiz callouts are collapsed like <details> (curriculum request): no spoilers.
+        if (reAnswers.test(label.trim())) {
+          const rest = first.c.slice(1);
+          while (rest[0]?.t === "text" && !rest[0].v.trim()) rest.shift();
+          if (rest[0]?.t === "text") rest[0] = { t: "text", v: rest[0].v.replace(/^\s*[:—–-]?\s*/, "") };
+          const body: Block[] = rest.length ? [{ t: "p", c: rest }, ...c.slice(1)] : c.slice(1);
+          out.push({ t: "details", summary: [{ t: "text", v: label.replace(/[:：.]+$/, "") }], c: body });
+          continue;
+        }
+        callout = calloutKind(label);
       }
       out.push({ t: "quote", callout, c });
       continue;

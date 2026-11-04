@@ -21,7 +21,10 @@ export interface PortfolioItem {
   day: number;
   track: DayTrack;
   kind: PortfolioKind;
+  /** The student's title if they set one, else the day title (an achievement, not the task instruction). */
   title: string;
+  /** What `title` falls back to when the student clears it. */
+  defaultTitle: string;
   description: string | null;
   /** Curriculum title of the task / day, for context ("Day 13 · Boss: …"). */
   taskTitle: string;
@@ -96,7 +99,8 @@ export function toItem(r: Row, lang: Lang, userId: string): PortfolioItem | null
     day: m.day,
     track: m.track,
     kind,
-    title: r.title?.trim() || m.task.title,
+    title: r.title?.trim() || m.dayTitle,
+    defaultTitle: m.dayTitle,
     description: r.description?.trim() || null,
     taskTitle: m.task.title,
     dayTitle: m.dayTitle,

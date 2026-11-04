@@ -9,6 +9,7 @@ import {
   reviewSubmission, saveOnboarding, submitTask, uncheckTask, updateProfile, type ProofInput,
 } from "../lib/learn/store";
 import { requireAdmin } from "../lib/user";
+import { onLessonViewed } from "../lib/game";
 import { getPortfolio, getPublicFile, updateItem, type ItemPatch } from "../lib/learn/portfolio";
 
 // OWNER: learn. Student progress: onboarding, overview (today + path), day pages, task proofs, day completion.
@@ -40,7 +41,15 @@ const cleanText = (v: unknown, max: number) => (typeof v === "string" && v.trim(
 /** GET /api/progress?lang= — everything Today + Path need. */
 progress.get("/", async (c) => {
   const ctx = await loadCtx(c.env, c.get("userId"));
-  return c.json(await overview(ctx, langOf(c)));
+  const lang = langOf(c);
+  const ov = await overview(ctx, lang);
+  // ?withDay=1 (Today page): include today's day in the same response — saves a round trip on slow mobile networks.
+  if (c.req.query("withDay") === "1" && ov.onboarded && ov.status === "open" && ov.nextDay && ov.cells[ov.nextDay - 1]?.available) {
+    const today = await dayView(ctx, lang, ov.nextDay);
+    if (today.day) c.executionCtx.waitUntil(onLessonViewed(c.env, c.get("userId"), today.day.day, lang));
+    return c.json({ ...ov, today });
+  }
+  return c.json(ov);
 });
 
 /** POST /api/progress/onboarding { lang, track, dailyMinutes, goal, goalNote?, name?, timezone? } */
@@ -82,7 +91,10 @@ progress.patch("/profile", async (c) => {
 /** GET /api/progress/day/:day?lang= — day content + access + task states + next-day teaser. */
 progress.get("/day/:day", async (c) => {
   const ctx = await loadCtx(c.env, c.get("userId"));
-  return c.json(await dayView(ctx, langOf(c), dayParam(c)));
+  const view = await dayView(ctx, langOf(c), dayParam(c));
+  // Game's secret "polyglot" badge: lesson opened in both languages. Zero XP, idempotent, never throws.
+  if (view.day) c.executionCtx.waitUntil(onLessonViewed(c.env, c.get("userId"), view.day.day, langOf(c)));
+  return c.json(view);
 });
 
 /**
@@ -180,7 +192,8 @@ progress.post("/dev/reset", async (c) => {
     c.env.DB.prepare("DELETE FROM learn_profiles WHERE user_id = ?").bind(id),
     c.env.DB.prepare("UPDATE users SET track = NULL, started_at = NULL WHERE id = ?").bind(id),
   ]);
-  return c.json({ ok: true });
+  // Game state (XP, badges, streak) is kept on purpose — see docs/requests/game-to-learn.md.
+  return c.json({ ok: true, note: "learn progress reset; game XP/badges/streak are kept" });
 });
 
 // ---- public portfolio (no login needed to read) ---------------------------------------------------------------------

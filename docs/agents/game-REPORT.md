@@ -1,5 +1,63 @@
 # Game agent — report
 
+## Final state (round 4)
+- **Curriculum's 25 weekly quests** (from `docs/curriculum/quests.md`) are loaded into `worker/lib/game/quests.json`
+  with their copy, targets, XP and program-week filters. Every referenced task id is checked against the curriculum in a test.
+  - New rule types:
+    - task-id lists
+    - proof conditions (link required, URL pattern, ≥ N words or lines, video file), read-only from `learn_submissions`
+    - `anyOf` filters, composite `parts` (summed) and `alternatives` (any)
+    - counts: `task_days` and `boss_days`
+  - **Rotation, as curriculum suggested:**
+    - Program week 1 gets the onboarding set (Five of seven, Say it out loud, The honest mirror).
+    - Later weeks get one shared quest plus two track quests eligible for the student's program week. When a week has
+      fewer track quests, the empty slots are filled with shared quests.
+    - Last week's quests aren't repeated when there's an alternative.
+    - Students who are 4 or more days behind get Five of seven or Read around it first.
+    - The program week is measured at the start of the ISO week, so the set never changes mid-week.
+  - **Deviations, on purpose:**
+    - The week is the UTC ISO week (the same as the weekly leaderboard), not the student's local week.
+    - `q-reader` counts any library resources marked done, because there's no resource→day mapping yet.
+    - `q-apps-first-users` uses the task-id alternative only, because "mentions 3 people" can't be verified.
+    - `q-apps-bot-life` counts its three task ids without checking for a `t.me` link.
+- **Per-track badges:** badges that only one track's day files award (apps: bot-builder, model-whisperer,
+  money-ready; video: voice-on, pipeline-architect, first-render) are hidden from the other track's profiles unless
+  already earned. The "N of M" count now counts only badges the student can reach. `GET /api/game/badges` exposes `tracks`.
+- **Totals:** 284 tests pass (`npm test`); the build passes.
+
+### Known gaps
+- The certificate id is derived from the user id, so it isn't stored and can't be looked up from the id alone.
+- Leaderboard rows show an approximate streak; the profile streak is exact.
+- learn has not yet placed `<StreakNudge/>` / `<WeeklyQuests/>` on Today or called `onLessonViewed`
+  (see `docs/requests/game-to-learn.md`). Every widget works the moment it's imported.
+- Real auth will replace the anonymous `fl_uid`. The game uses only `c.get("userId")`, so nothing changes here.
+
+### Next steps
+Friends/cohort boards, quest analytics (completion rate per quest, to tune the pool with curriculum), and a server-rendered OG image for the certificate.
+
+
+## Round 3
+- **Completion certificate** at `/:lang/certificate/:userId` (public), backed by `GET /api/game/certificate/:userId`.
+  - Shows name, track, days done, best streak, level and rank, milestone (boss) projects, up to 6 highlight badges
+    (graduation, boss days and long streaks first), completion date, and a stable certificate id derived from the user id
+    (`FL66-XXXX-XXXX`) with a verify URL.
+  - Three states: not started / in progress (with a progress bar and an "In progress" chip) / complete (gold seal).
+  - Print or save as PDF gives one A4 landscape page. While printing, the page switches to the light theme tokens, so it
+    prints cleanly even from dark mode (checked by rendering the PDF). There's also a copy-link button, a link to learn's
+    portfolio, and a link from the profile.
+- **Weekly quests.** The pool lives in `worker/lib/game/quests.json` (11 quests, RU and EN, with per-track filters).
+  - Each UTC ISO week picks one quest per slot (up to 3), rotating deterministically.
+  - Goal kinds: `active_days`, `days_completed`, `tasks`, `task_type`, `consecutive_days`, `resources`, `renders`.
+  - Progress is computed from the event ledger, so no extra table is needed.
+  - Completion is an idempotent `quest:<week>:<id>` event that awards bonus XP. The award comes back with the
+    triggering response and a localised label; 3 completed quests earn "Quest Keeper".
+  - `GET /api/game/quests`; widget `<WeeklyQuests/>` (on your own profile; learn has a one-line request to place it on Today).
+  - Verified live through learn's API: a third consecutive build day completed "Build three days in a row" (+60 XP).
+- **Sharing:** design's ShareCard (`@web/ui/ShareCard`, lazy-loaded, not restyled) in three places:
+  "Share streak" on your own profile (only from a 3-day streak), a share action on 7/14/30/66 streak-milestone reward
+  toasts, and "Share" on the certificate page. `completedDays` was added to `/me`, the profile and the certificate APIs for the card's grid.
+- The seed now includes a graduate (`seed-01`, all 66 days → level 22, a complete certificate).
+
 ## Round 2 (after the first merge)
 - **The real `content/badges.json` (30 badges) drives awards.** Its 23 day badges arrive via `day.completed`; if the
   caller sends no `badges`, the day file of the student's own track is used. Its 7 game-rule badges are evaluated in code:
@@ -80,7 +138,7 @@ query is an ordered index scan with no temp B-tree.
 npm run db:migrate:local && npm run dev
 curl -X POST localhost:5173/api/game/dev/seed
 # /en/leaderboard  /ru/leaderboard?period=all&track=video  /en/me  /ru/me?u=seed-16
-npm test    # game: 46 tests; real SQL + migrations via node:sqlite
+npm test    # game: 55 tests; real SQL + migrations via node:sqlite
 ```
 
 ## Known gaps / decisions

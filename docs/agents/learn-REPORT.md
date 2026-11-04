@@ -191,3 +191,77 @@ Branch `agent/learn` was rebased onto `main`. Requests in `docs/requests/*-to-le
   no page errors and no horizontal overflow.
 - Tests: `worker/lib/learn/portfolio.test.ts` covers visibility defaults, kinds, overrides, file URLs and image detection (SVG is
   excluded), tasks removed from the curriculum, and language-independent ids. `npm test` passes 189/189.
+
+**Round 3: game's requests (`game-to-learn.md`, round 2)**
+1. `showAwards(res.awards, { toast: false })` runs after day completion (auto and manual) and after onboarding, so the level-up moment fires and the widgets refresh.
+   Single-task completions keep `showAwards(res.awards)` with the toast.
+2. `<StreakNudge />` sits at the top of Today and only renders when the streak needs today's action.
+3. `onLessonViewed(env, userId, day, lang)` runs through `waitUntil` in `GET /api/progress/day/:day` (when the lesson is visible) and in
+   `GET /api/curriculum/day/:day`. This feeds the secret "polyglot" badge.
+4. Dev time-travel: run `await __flTimeTravel(N)` in the browser console (dev builds only, defined in `data.ts`). It shifts learn and game
+   history together. The plain `POST /api/progress/dev/time-travel` still shifts learn tables only.
+5. `POST /api/progress/dev/reset` now says in its response that game XP, badges and streak are kept.
+- The portfolio header links to game's certificate (`/:lang/certificate/:userId`).
+- Heads-up: on main, `worker/lib/game/test/catalog.test.ts` fails ("first-ship: expected … function"). That's a content vs game rule
+  mismatch in `content/badges.json` / `worker/lib/game`, not learn code. The other 206 tests pass.
+
+---
+
+## Round 4: share card, a11y skip link, mobile performance
+
+**Share card (design's `@web/ui/ShareCard`, `design-share-card.md`)**
+- The celebration footer has a "Share Day N" / «Поделиться днём N» button (`variant="soft"`, next to the primary next/path action).
+- A completed day's page has a quiet ghost "Share" button in the hero.
+- Boss days open the share dialog automatically, once, when the celebration closes (tracked per day in localStorage), and it can be dismissed.
+  Navigation buttons in the celebration ("Continue to day N", "My path", "My portfolio") skip the auto-open.
+- The card shows the real day number, its native title, the track, and the current streak, XP and name from the game, fetched only when the dialog opens.
+- `ShareDay.tsx` and `ShareCard` are loaded with `React.lazy` (0.4 kB + 6.8 kB gzip chunks), so nothing is added to Today's initial load.
+- The parent refresh (Today → "done for today") waits until the share dialog closes, so the dialog isn't unmounted mid-share.
+
+**A11y (design round-3 audit)**
+- Keyboard users get a "Skip to tasks" / «К заданиям» link as the first stop of the lesson. It becomes visible on focus, and it plus the mobile
+  "Tasks · 0/4 ↓" chip now move **focus** to the tasks heading (`tabIndex=-1`), not just scroll. Smooth scrolling is off under reduced motion.
+  Verified: `document.activeElement.id === "tasks-h"` after Enter.
+
+**Mobile performance (Playwright on `vite preview`, 390px, 400 kB/s + 150 ms RTT, 4× CPU)**
+| Page | Before (CLS / network idle) | After |
+|---|---|---|
+| /en/today | 0.12 / 5.3 s | **0 / 4.4 s** (LCP 3.6 s) |
+| /en/day/3 | 0.049 / 3.6 s | **0 / 3.6 s** |
+| /ru/path | 0 / 3.6 s | 0 / 3.5 s |
+
+Fixes:
+- **No more waterfall on Today:** `GET /api/progress?withDay=1` returns the overview and today's day in one response, where the page used to wait for the overview before requesting the day.
+- **Layout-matching skeletons:** `TodaySkeleton` and `DaySkeleton` have the same shape as the real header, hero and task grid.
+- **Game state with the page:** Today fetches `/api/game/me` in parallel and renders `StreakChip`, `XpBar` and `StreakNudge` from that data
+  in the first paint. The nudge no longer pushes the lesson down after it appears, and `useGameMe` still refreshes on `fl:game-changed`.
+- **Day page:** prev/next navigation renders only once the day has loaded, so it no longer jumps.
+- What's left of LCP is the shared main chunk (`index-*.js`, ~127 kB gzip) and font loading. Both belong to the orchestrator and design.
+  Learn's route chunks are DayView 11.6 kB, Today 2.1 kB and Path 2.2 kB gzip.
+
+**Round 4: design's recruiter-view review of the portfolio (`design-to-learn.md` 3b)**
+1. A card's title now defaults to the **day title**, which reads as an achievement ("Hello, agent: your first page in 30 minutes"). The task
+   instruction moves to a small meta line. The student's own title still wins; the edit dialog shows the default as a placeholder and suggests naming it like a project.
+2. When a portfolio has no boss or ship items, the remaining section is titled "Work" / «Работы» rather than "More work".
+3. Text items have no thumbnail; the quote is the card, shown with a 3px accent border at 1.0625rem.
+4. Visitors no longer see zero-value or in-app stats. "Milestone projects" appears only when at least 1 is done, best streak only when it's at least 3,
+   "Level" only to the owner, and visitors get "Started <date>". Owners still see everything.
+5. The 404 page now offers "Start your 66 days" / «Начать свои 66 дней».
+6. At 390px the 56px avatar sits inline next to the name, and the 72px avatar shows from `sm:` up.
+
+**Round 4b: game items 6–7 + curriculum round-3 copy (`curriculum-to-learn.md`)**
+- `<WeeklyQuests />` sits on Today below the day content. It loads on its own, so placing it there can't shift the lesson.
+  Quest awards come back as extra `xp` awards with `label`s, and the celebration already shows them.
+- Certificate: the portfolio header links to `/:lang/certificate/:userId` (verified).
+- Onboarding copy:
+  - "Days 1–14 are shared; on day 12 you try both tracks…" (both languages).
+  - "Most days take 1–2 hours; every 7th day is a short rest day."
+  - The 30-min option now says some days take two or three sittings.
+  - 90 min is labelled "Recommended" and is the default.
+  - The finish screen says "Find about 75 minutes today" / «около полутора часов».
+- Text and link proof inputs show "Never paste passwords or API keys." / «Никогда не вставляй пароли и API-ключи.»
+- RU uses «Босс-день» everywhere in learn.
+- The day 12 celebration asks "Day 12 is your track decision — staying on X?" with two buttons: "Keep my track" and
+  "Switch track: Y" (`PATCH /api/progress/profile`).
+- `> **Answers:**` / `> **Ответы:**` callouts collapse like `<details>`, so answers aren't spoiled (test added).
+- Item 11: only day 65 shows "spread over the day". The curriculum confirms it's the only day that truly spans 24 hours.

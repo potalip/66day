@@ -4,14 +4,24 @@ import { CATALOG } from "./badges";
 import { bossTitle, CURRICULUM, isBossDay } from "./curriculum";
 import { levelProgress, rankFor } from "./levels";
 import { loadStats, type StatsRow } from "./store";
+import { loadWeek, pickQuests, questProgress, questTarget } from "./quests";
+import { CATALOG_BY_ID, LEGACY_BADGES } from "./badges";
 import { MAX_FREEZES, viewStreak } from "./streak";
 import { addDays, daysBetween, isoWeek, localDay, safeTz, weekResetsAt } from "./time";
-import type { ActivityCell, BadgeInfo, EarnedBadge, GameMe, LeaderboardResponse, LeaderRow, LevelInfo, PublicProfile, ShippedItem, StreakInfo, WeeklyRecap } from "./types";
+import type { CertificateResponse, QuestsResponse, ActivityCell, BadgeInfo, EarnedBadge, GameMe, LeaderboardResponse, LeaderRow, LevelInfo, PublicProfile, ShippedItem, StreakInfo, WeeklyRecap } from "./types";
 
 interface UserRow { id: string; display_name: string | null; track: Track | null; timezone: string | null; started_at: number | null; created_at: number }
 
+/** Which track(s) can earn a badge: only-apps / only-video day badges are track-specific; everything else is for all. */
+export function badgeTracks(id: string): Track[] | null {
+  const tracks = new Set<string>();
+  for (const [key, ids] of CURRICULUM.dayBadges) if (ids.includes(id)) tracks.add(key.split(":")[0]);
+  if (!tracks.size || tracks.has("common") || (tracks.has("apps") && tracks.has("video"))) return null;
+  return [...tracks] as Track[];
+}
+
 export const badgeCatalog = (): BadgeInfo[] =>
-  CATALOG.map(({ id, icon, title, description, group, secret }) => ({ id, icon, title, description, group, secret: !!secret }));
+  CATALOG.map(({ id, icon, title, description, group, secret }) => ({ id, icon, title, description, group, secret: !!secret, tracks: badgeTracks(id) }));
 
 function levelInfo(xp: number): LevelInfo {
   const p = levelProgress(xp);
@@ -25,7 +35,14 @@ function streakInfo(s: StatsRow | null, today: string): StreakInfo {
 
 async function badgesOf(db: D1Database, userId: string): Promise<EarnedBadge[]> {
   const r = await db.prepare("SELECT badge_id, awarded_at FROM game_badges WHERE user_id = ? ORDER BY awarded_at").bind(userId).all<{ badge_id: string; awarded_at: number }>();
-  return r.results.map((b) => ({ id: b.badge_id, awardedAt: b.awarded_at }));
+  // Map legacy ids to their current badge; drop retired/unknown ids instead of rendering raw ids.
+  const out = new Map<string, number>();
+  for (const b of r.results) {
+    const id = b.badge_id in LEGACY_BADGES ? LEGACY_BADGES[b.badge_id] : b.badge_id;
+    if (!id || !CATALOG_BY_ID.has(id)) continue;
+    if (!out.has(id)) out.set(id, b.awarded_at);
+  }
+  return [...out].map(([id, awardedAt]) => ({ id, awardedAt }));
 }
 
 /** 66 cells starting at the student's first day (start date, else first activity, else today). */
@@ -73,6 +90,7 @@ export async function getMe(db: D1Database, userId: string, now = new Date()): P
     ranks: { all: allRank ? allRank.n + 1 : null, week: weekRank ? weekRank.n + 1 : null },
     activity: await activityOf(db, u, tz, today),
     recap: await weeklyRecap(db, userId, today, now),
+    completedDays: (await daysOf(db, userId)).completedDays,
   };
 }
 
@@ -94,6 +112,7 @@ export async function getProfile(db: D1Database, userId: string, viewerId: strin
     activity: await activityOf(db, u, tz, today),
     shipped: await shippedOf(db, userId, u.track ?? ((s?.track as Track | null) || null)),
     recap: userId === viewerId ? await weeklyRecap(db, userId, today, now) : null,
+    ...(await daysOf(db, userId)),
   };
 }
 
@@ -236,4 +255,89 @@ export async function getLeaderboard(
     rows,
     me,
   };
+}
+
+export async function getQuests(db: D1Database, userId: string, now = new Date()): Promise<QuestsResponse> {
+  const wk = await loadWeek(db, userId, now);
+  return {
+    week: wk.week,
+    resetsAt: wk.end,
+    programWeek: wk.ctx.programWeek,
+    quests: pickQuests(wk.week, wk.ctx).map((q) => {
+      const done = wk.done.has(q.id);
+      const target = questTarget(q);
+      return {
+        id: q.id, icon: q.icon, title: q.title, description: q.description, xp: q.xp, target,
+        progress: done ? target : questProgress(q, wk.events, wk.ctx.track), done, completedAt: wk.done.get(q.id) ?? null,
+      };
+    }),
+  };
+}
+
+/** Badges worth printing on a certificate: boss/phase/graduation milestones first, then the rest, max 6. */
+const CERT_PRIORITY = ["graduate", "launched", "boss-beta", "boss-client", "boss-build", "boss-foundation", "streak-66", "streak-30", "portfolio-live", "public-builder"];
+
+/** Stable, human-friendly certificate id derived from the user id (verifiable: same page always shows it). */
+export async function certIdFor(userId: string): Promise<string> {
+  const h = new Uint8Array(await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`flowleaf66:${userId}`)));
+  const A = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
+  const chars = Array.from(h.slice(0, 8), (b) => A[b % A.length]).join("");
+  return `FL66-${chars.slice(0, 4)}-${chars.slice(4, 8)}`;
+}
+
+export async function getCertificate(db: D1Database, userId: string): Promise<CertificateResponse | null> {
+  const u = await getUser(db, userId);
+  if (!u) return null;
+  const s = await loadStats(db, userId);
+  const [days, last, badges, shipped] = await db.batch([
+    db.prepare("SELECT COUNT(*) n, MIN(created_at) first FROM game_events WHERE user_id = ? AND type = 'day.completed'").bind(userId),
+    db.prepare("SELECT created_at FROM game_events WHERE user_id = ? AND event_key = 'day:66'").bind(userId),
+    db.prepare("SELECT badge_id, awarded_at FROM game_badges WHERE user_id = ?").bind(userId),
+    db.prepare(`SELECT COUNT(*) n FROM game_events WHERE user_id = ? AND type = 'day.completed' AND event_key IN (${bossKeys()})`).bind(userId),
+  ]);
+  const d = days.results[0] as { n: number; first: number | null };
+  const completedAt = (last.results[0] as { created_at: number } | undefined)?.created_at ?? null;
+  const earned = badges.results as { badge_id: string; awarded_at: number }[];
+  const ranked = [...earned].sort((a, b) => {
+    const pa = CERT_PRIORITY.indexOf(a.badge_id), pb = CERT_PRIORITY.indexOf(b.badge_id);
+    return (pa < 0 ? 99 : pa) - (pb < 0 ? 99 : pb) || b.awarded_at - a.awarded_at;
+  });
+  const lvl = levelInfo(s?.xp ?? 0);
+  return {
+    userId,
+    certId: await certIdFor(userId),
+    name: u.display_name,
+    track: u.track ?? ((s?.track as Track | null) || null),
+    status: completedAt ? "complete" : d.n > 0 ? "in_progress" : "not_started",
+    daysDone: Math.min(66, d.n),
+    totalDays: 66,
+    startedAt: u.started_at ?? d.first ?? null,
+    completedAt,
+    issuedAt: completedAt,
+    level: lvl.level,
+    rank: lvl.rank,
+    xp: lvl.xp,
+    bestStreak: s?.streak_best ?? 0,
+    badges: ranked.slice(0, 6).flatMap((b) => {
+      const c = CATALOG_BY_ID.get(b.badge_id);
+      return c ? [{ id: b.badge_id, icon: c.icon, title: c.title, awardedAt: b.awarded_at }] : [];
+    }),
+    badgeCount: earned.length,
+    shippedCount: (shipped.results[0] as { n: number }).n,
+    completedDays: (await daysOf(db, userId)).completedDays,
+  };
+}
+
+/** Boss-day event keys from the curriculum (fallback: the program's boss days). */
+function bossKeys() {
+  const days = new Set([...CURRICULUM.boss].map((k) => Number(k.split(":")[1])));
+  const list = days.size ? [...days] : [13, 27, 41, 55, 65];
+  return list.map((d) => `'day:${Math.trunc(d)}'`).join(",");
+}
+
+/** Completed program days from the ledger ("day:<n>" keys). */
+async function daysOf(db: D1Database, userId: string) {
+  const r = await db.prepare("SELECT event_key FROM game_events WHERE user_id = ? AND type = 'day.completed'").bind(userId).all<{ event_key: string }>();
+  const completedDays = r.results.map((x) => Number(x.event_key.slice(4))).filter((n) => n >= 1 && n <= 66).sort((a, b) => a - b);
+  return { daysDone: completedDays.length, completedDays };
 }

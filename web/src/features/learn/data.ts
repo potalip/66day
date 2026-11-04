@@ -50,8 +50,8 @@ function useResource<T>(key: string | null, fetcher: () => Promise<T>) {
   return { data, error, loading, reload: load, setData };
 }
 
-export function useOverview(lang: Lang) {
-  return useResource(`ov:${lang}`, () => call<Overview>(`/progress?lang=${lang}`));
+export function useOverview(lang: Lang, withDay = false) {
+  return useResource(`ov:${lang}:${withDay}`, () => call<Overview>(`/progress?lang=${lang}${withDay ? "&withDay=1" : ""}`));
 }
 
 export function useDay(lang: Lang, day: number | null) {
@@ -140,3 +140,13 @@ export const portfolioApi = {
   update: (lang: Lang, taskId: string, patch: { visibility?: Visibility; title?: string | null; description?: string | null }) =>
     call<PortfolioResponse>(`/progress/portfolio/items/${encodeURIComponent(taskId)}?lang=${lang}`, { method: "PATCH", json: patch }),
 };
+
+// ---- dev only: move learn AND game history back N days together (demo streaks / catching up). ----
+// In the browser console (APP_ENV=dev): `await __flTimeTravel(1)` then reload.
+export async function devTimeTravel(days: number) {
+  const post = (u: string) => fetch(u, { method: "POST", credentials: "include", headers: { "content-type": "application/json" }, body: JSON.stringify({ days }) });
+  await post("/api/progress/dev/time-travel");
+  await post("/api/game/dev/time-travel");
+  window.dispatchEvent(new Event("fl:game-changed"));
+}
+if (typeof window !== "undefined" && import.meta.env.DEV) (window as unknown as { __flTimeTravel: typeof devTimeTravel }).__flTimeTravel = devTimeTravel;

@@ -27,3 +27,23 @@ Overall: clean, on-token, reads well. No overflow, no console errors. Fix list, 
   "Skip to tasks" / «К заданиям», targeting the tasks list (the mobile "Tasks · 0/4 ↓" chip already does this for pointer users —
   just make sure it moves *focus* to the tasks heading, not only scroll).
 - New: share card for the day-completion moment — see `docs/requests/design-share-card.md`.
+
+## Round 3b — public portfolio, reviewed as a stranger/recruiter (`/:lang/portfolio/:id`)
+Seeded a real user (onboarded, Day 1 done, 2 items public) and opened the link logged-out, EN/RU, light/dark, 390/1280.
+Works well: title/OG meta, "Copy link", the CTA band, owner banner + "Preview as visitor", per-item Public switches, 404 state.
+The Shell now gives `/portfolio/:id` and `/certificate/:id` (not `/me`) **visitor chrome**: header CTA "Start free", no app
+nav, no tab bar, full footer, no game API calls. Requests, most important first:
+
+1. **Card titles are instructions, not achievements.** "Install a coding agent and say hello in a new folder" /
+   «Установи агента и поздоровайся с ним в новой папке» reads like homework to a recruiter. Use the **day title** as the card
+   title ("Hello, agent: your first page in 30 minutes") and show the task as the small meta line, or let the default
+   `title` be the user's edited title when set (you already support editing — nudge owners to rename on boss/ship items).
+2. **"More work" / «Другие работы» with nothing above it.** When there are no highlighted (boss/ship) items, title the section
+   "Work" / «Работы».
+3. **Text-proof thumbnail** shows a chip with an icon and a dash ("📄 –"). For text items drop the thumbnail entirely and let the
+   quote be the card (`text-[1.0625rem]` italic-free, with a 3px accent left border), or show the first ~120 chars large.
+4. **Early-days stats read negative to strangers:** "Milestone projects 0/5", "Level 2". For visitors hide zero-value stats and
+   "Level" (it means nothing outside the app); keep "Day 1 of 66" + "Started 4 Nov" + best streak ≥ 3. Owners can still see all.
+5. **404 state:** the only action is a button labelled "FlowLeaf 66". Make it "Start your 66 days" / «Начать свои 66 дней» →
+   `/:lang` and keep the explanation line.
+6. On 390px the avatar sits on its own row above the name — put it inline (56px) left of the name to save a screen of scroll.

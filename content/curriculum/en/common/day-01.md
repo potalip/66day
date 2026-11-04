@@ -2,7 +2,7 @@
 day: 1
 track: common
 phase: 1
-title: "Hello, agent: your first page in 30 minutes"
+title: "Hello, agent: your first page, built today"
 summary: "Install a coding agent and have it build your personal 66-day promise page — on your own computer, today."
 estMinutes: 75
 badges: [hello-agent]

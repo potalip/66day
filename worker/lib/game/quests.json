@@ -1,0 +1,702 @@
+{
+ "$comment": "OWNER: game agent. Loaded from docs/curriculum/quests.md (curriculum, round 3). Rotation per UTC ISO week: 1 shared + 2 track quests filtered by the student's program week (week 1: shared only), never the same as last week; catching-up students get q-five-of-seven / q-reader first. goal: {count: tasks|task_days|boss_days|resources|renders, target, filters...} | {parts:[...]} (sum) | {alternatives:[...]} (any). Task filters: types, ids, requireUrl, urlPattern, minWords, minLines, videoFile, anyOf.",
+ "quests": [
+  {
+   "id": "q-five-of-seven",
+   "track": "common",
+   "weeks": "all",
+   "xp": 50,
+   "icon": "📅",
+   "goal": {
+    "count": "task_days",
+    "target": 5
+   },
+   "title": {
+    "en": "Five of seven",
+    "ru": "Пять из семи"
+   },
+   "description": {
+    "en": "Show up on any five days this week. Rest days are yours.",
+    "ru": "Появись в любые пять дней этой недели. Дни отдыха — твои."
+   }
+  },
+  {
+   "id": "q-say-it-out-loud",
+   "track": "common",
+   "weeks": "all",
+   "xp": 40,
+   "icon": "📣",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "types": [
+     "share"
+    ]
+   },
+   "title": {
+    "en": "Say it out loud",
+    "ru": "Скажи вслух"
+   },
+   "description": {
+    "en": "Post your work twice. Building in public is a skill too.",
+    "ru": "Дважды покажи свою работу. Строить публично — тоже навык."
+   }
+  },
+  {
+   "id": "q-honest-mirror",
+   "track": "common",
+   "weeks": "all",
+   "xp": 40,
+   "icon": "🪞",
+   "goal": {
+    "count": "tasks",
+    "target": 3,
+    "types": [
+     "reflect"
+    ],
+    "minWords": 40
+   },
+   "title": {
+    "en": "The honest mirror",
+    "ru": "Честное зеркало"
+   },
+   "description": {
+    "en": "Three reflections, 40 words or more. Future you will thank you.",
+    "ru": "Три рефлексии по 40+ слов. Ты через месяц скажешь спасибо."
+   }
+  },
+  {
+   "id": "q-reader",
+   "track": "common",
+   "weeks": "all",
+   "xp": 40,
+   "icon": "📚",
+   "goal": {
+    "count": "resources",
+    "target": 2
+   },
+   "title": {
+    "en": "Read around it",
+    "ru": "Почитай вокруг"
+   },
+   "description": {
+    "en": "Finish two library resources from this week's days.",
+    "ru": "Пройди два материала библиотеки из дней этой недели."
+   }
+  },
+  {
+   "id": "q-perfect-boss",
+   "track": "common",
+   "weeks": [
+    2,
+    4,
+    6,
+    8,
+    10
+   ],
+   "xp": 60,
+   "icon": "🐉",
+   "goal": {
+    "count": "boss_days",
+    "target": 1
+   },
+   "title": {
+    "en": "Boss without shortcuts",
+    "ru": "Босс без поблажек"
+   },
+   "description": {
+    "en": "Beat this week's boss with proof on every task.",
+    "ru": "Пройди босса недели с доказательством в каждом задании."
+   }
+  },
+  {
+   "id": "q-apps-ship-twice",
+   "track": "apps",
+   "weeks": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "xp": 50,
+   "icon": "🚀",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "types": [
+     "ship"
+    ],
+    "requireUrl": true
+   },
+   "title": {
+    "en": "Ship it twice",
+    "ru": "Выпусти дважды"
+   },
+   "description": {
+    "en": "Two live links this week: a deploy, a bot, a merged PR.",
+    "ru": "Две живые ссылки за неделю: деплой, бот или влитый PR."
+   }
+  },
+  {
+   "id": "q-apps-first-users",
+   "track": "apps",
+   "weeks": [
+    3,
+    4,
+    8
+   ],
+   "xp": 50,
+   "icon": "👥",
+   "goal": {
+    "count": "tasks",
+    "target": 1,
+    "ids": [
+     "d20-apps-t4",
+     "d27-apps-t2",
+     "d54-apps-t1"
+    ]
+   },
+   "title": {
+    "en": "Three humans",
+    "ru": "Три живых человека"
+   },
+   "description": {
+    "en": "Put your app in front of three real people.",
+    "ru": "Покажи приложение трём живым людям."
+   }
+  },
+  {
+   "id": "q-apps-model-taster",
+   "track": "apps",
+   "weeks": [
+    4
+   ],
+   "xp": 40,
+   "icon": "🎛️",
+   "goal": {
+    "count": "tasks",
+    "target": 1,
+    "ids": [
+     "d22-apps-t2",
+     "d22-apps-t3"
+    ],
+    "requireUrl": true
+   },
+   "title": {
+    "en": "Model taster",
+    "ru": "Дегустатор моделей"
+   },
+   "description": {
+    "en": "Try one more model provider and compare honestly.",
+    "ru": "Попробуй ещё одного провайдера моделей и честно сравни."
+   }
+  },
+  {
+   "id": "q-apps-green-ci",
+   "track": "apps",
+   "weeks": [
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "xp": 40,
+   "icon": "✅",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "anyOf": [
+     {
+      "ids": [
+       "d29-apps-t3"
+      ]
+     },
+     {
+      "types": [
+       "build"
+      ],
+      "urlPattern": "github\\.com/.+/actions/runs/"
+     }
+    ]
+   },
+   "title": {
+    "en": "Green build",
+    "ru": "Зелёная сборка"
+   },
+   "description": {
+    "en": "Two green CI runs. Tests that pass are tests that count.",
+    "ru": "Два зелёных прогона CI. Считаются только тесты, которые проходят."
+   }
+  },
+  {
+   "id": "q-apps-bug-squasher",
+   "track": "apps",
+   "weeks": [
+    6,
+    8,
+    10
+   ],
+   "xp": 50,
+   "icon": "🐛",
+   "goal": {
+    "count": "tasks",
+    "target": 1,
+    "ids": [
+     "d37-apps-t3",
+     "d54-apps-t2",
+     "d64-apps-t1"
+    ],
+    "requireUrl": true
+   },
+   "title": {
+    "en": "Bug squasher",
+    "ru": "Охотник за багами"
+   },
+   "description": {
+    "en": "Turn real feedback into a merged fix.",
+    "ru": "Преврати живой отзыв во влитое исправление."
+   }
+  },
+  {
+   "id": "q-apps-safe-keys",
+   "track": "apps",
+   "weeks": [
+    5
+   ],
+   "xp": 40,
+   "icon": "🔐",
+   "goal": {
+    "count": "tasks",
+    "target": 3,
+    "ids": [
+     "d33-apps-t2",
+     "d33-apps-t3",
+     "d33-apps-t4"
+    ]
+   },
+   "title": {
+    "en": "Keys stay home",
+    "ru": "Ключи — дома"
+   },
+   "description": {
+    "en": "Lock down keys, limits and spend caps this week.",
+    "ru": "Закрой ключи, лимиты и потолок трат на этой неделе."
+   }
+  },
+  {
+   "id": "q-apps-bot-life",
+   "track": "apps",
+   "weeks": [
+    3
+   ],
+   "xp": 50,
+   "icon": "🤖",
+   "goal": {
+    "count": "tasks",
+    "target": 3,
+    "ids": [
+     "d19-apps-t2",
+     "d19-apps-t3",
+     "d20-apps-t3"
+    ]
+   },
+   "title": {
+    "en": "Bot on duty",
+    "ru": "Бот на смене"
+   },
+   "description": {
+    "en": "Your bot is live and answering. Prove it with a t.me link.",
+    "ru": "Бот работает и отвечает. Докажи ссылкой t.me."
+   }
+  },
+  {
+   "id": "q-apps-explain-the-diff",
+   "track": "apps",
+   "weeks": [
+    6
+   ],
+   "xp": 40,
+   "icon": "🔍",
+   "goal": {
+    "count": "tasks",
+    "target": 1,
+    "ids": [
+     "d38-apps-t3"
+    ],
+    "minLines": 3
+   },
+   "title": {
+    "en": "Read the diff",
+    "ru": "Прочитай дифф"
+   },
+   "description": {
+    "en": "Review an agent's PR like a senior: three real comments.",
+    "ru": "Сделай ревью PR агента как сеньор: три настоящих комментария."
+   }
+  },
+  {
+   "id": "q-apps-launch-crew",
+   "track": "apps",
+   "weeks": [
+    9,
+    10
+   ],
+   "xp": 60,
+   "icon": "🛫",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "ids": [
+     "d62-apps-t1",
+     "d60-t2"
+    ]
+   },
+   "title": {
+    "en": "Launch crew",
+    "ru": "Команда запуска"
+   },
+   "description": {
+    "en": "Launch kit ready and one pitch sent — same week.",
+    "ru": "Набор к запуску готов и один отклик отправлен — за одну неделю."
+   }
+  },
+  {
+   "id": "q-apps-helper",
+   "track": "apps",
+   "weeks": [
+    6
+   ],
+   "xp": 40,
+   "icon": "🫶",
+   "goal": {
+    "parts": [
+     {
+      "count": "tasks",
+      "target": 1,
+      "ids": [
+       "d42-t1"
+      ]
+     },
+     {
+      "count": "tasks",
+      "target": 1,
+      "types": [
+       "share"
+      ]
+     }
+    ]
+   },
+   "title": {
+    "en": "Pay it forward",
+    "ru": "Помоги новичку"
+   },
+   "description": {
+    "en": "Help a newer student and share what you learned.",
+    "ru": "Помоги новичку: объяснять — лучший способ понять."
+   }
+  },
+  {
+   "id": "q-video-three-renders",
+   "track": "video",
+   "weeks": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "xp": 50,
+   "icon": "🎞️",
+   "goal": {
+    "count": "tasks",
+    "target": 3,
+    "videoFile": true
+   },
+   "title": {
+    "en": "Three renders",
+    "ru": "Три рендера"
+   },
+   "description": {
+    "en": "Three finished renders uploaded this week.",
+    "ru": "Три готовых рендера за неделю."
+   }
+  },
+  {
+   "id": "q-video-studio-spin",
+   "track": "video",
+   "weeks": [
+    3,
+    4,
+    5,
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "xp": 40,
+   "icon": "🎬",
+   "goal": {
+    "count": "renders",
+    "target": 1
+   },
+   "title": {
+    "en": "Studio spin",
+    "ru": "Круг по Студии"
+   },
+   "description": {
+    "en": "Make one video in the built-in Studio.",
+    "ru": "Сделай одно видео во встроенной Студии."
+   }
+  },
+  {
+   "id": "q-video-hook-battle",
+   "track": "video",
+   "weeks": [
+    4,
+    5
+   ],
+   "xp": 50,
+   "icon": "🪝",
+   "goal": {
+    "alternatives": [
+     {
+      "count": "tasks",
+      "target": 2,
+      "ids": [
+       "d24-video-t2",
+       "d24-video-t3"
+      ]
+     },
+     {
+      "count": "tasks",
+      "target": 1,
+      "ids": [
+       "d31-video-t3"
+      ]
+     }
+    ]
+   },
+   "title": {
+    "en": "Hook battle",
+    "ru": "Битва крючков"
+   },
+   "description": {
+    "en": "Three hooks enter, one gets published.",
+    "ru": "Три крючка выходят на ринг, публикуется один."
+   }
+  },
+  {
+   "id": "q-video-loud-enough",
+   "track": "video",
+   "weeks": [
+    3,
+    7
+   ],
+   "xp": 40,
+   "icon": "🔊",
+   "goal": {
+    "count": "tasks",
+    "target": 1,
+    "ids": [
+     "d20-video-t2",
+     "d47-video-t2"
+    ]
+   },
+   "title": {
+    "en": "−14 LUFS club",
+    "ru": "Клуб −14 LUFS"
+   },
+   "description": {
+    "en": "Hit −14 LUFS and pass your own QC gate.",
+    "ru": "Попади в −14 LUFS и пройди свой контроль качества."
+   }
+  },
+  {
+   "id": "q-video-captions-on",
+   "track": "video",
+   "weeks": [
+    4
+   ],
+   "xp": 50,
+   "icon": "💬",
+   "goal": {
+    "parts": [
+     {
+      "count": "tasks",
+      "target": 1,
+      "ids": [
+       "d23-video-t3"
+      ]
+     },
+     {
+      "count": "tasks",
+      "target": 1,
+      "types": [
+       "ship",
+       "share"
+      ],
+      "requireUrl": true
+     }
+    ]
+   },
+   "title": {
+    "en": "Captions on",
+    "ru": "Субтитры включены"
+   },
+   "description": {
+    "en": "Burn in captions and publish the captioned cut.",
+    "ru": "Вшей субтитры и опубликуй версию с ними."
+   }
+  },
+  {
+   "id": "q-video-one-command",
+   "track": "video",
+   "weeks": [
+    5
+   ],
+   "xp": 60,
+   "icon": "⚙️",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "ids": [
+     "d33-video-t2",
+     "d34-video-t2"
+    ]
+   },
+   "title": {
+    "en": "One command",
+    "ru": "Одной командой"
+   },
+   "description": {
+    "en": "Two topics, one command, two finished videos.",
+    "ru": "Две темы, одна команда — два готовых ролика."
+   }
+  },
+  {
+   "id": "q-video-publish-week",
+   "track": "video",
+   "weeks": [
+    6,
+    7,
+    8,
+    9,
+    10
+   ],
+   "xp": 50,
+   "icon": "📺",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "types": [
+     "ship",
+     "share"
+    ],
+    "urlPattern": "(youtube\\.com|youtu\\.be|vk\\.com|vkvideo\\.ru|rutube\\.ru|t\\.me)/"
+   },
+   "title": {
+    "en": "Publishing week",
+    "ru": "Неделя публикаций"
+   },
+   "description": {
+    "en": "Two videos out in public this week.",
+    "ru": "Два ролика в открытом доступе за неделю."
+   }
+  },
+  {
+   "id": "q-video-numbers",
+   "track": "video",
+   "weeks": [
+    6
+   ],
+   "xp": 40,
+   "icon": "📈",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "ids": [
+     "d37-video-t2",
+     "d37-video-t3"
+    ]
+   },
+   "title": {
+    "en": "Read the numbers",
+    "ru": "Смотри на цифры"
+   },
+   "description": {
+    "en": "Read the retention curve and re-cut the opening.",
+    "ru": "Посмотри на удержание и перемонтируй начало."
+   }
+  },
+  {
+   "id": "q-video-two-languages",
+   "track": "video",
+   "weeks": [
+    7
+   ],
+   "xp": 50,
+   "icon": "🗣️",
+   "goal": {
+    "parts": [
+     {
+      "count": "tasks",
+      "target": 1,
+      "ids": [
+       "d45-video-t2"
+      ]
+     },
+     {
+      "count": "tasks",
+      "target": 1,
+      "types": [
+       "share"
+      ]
+     }
+    ]
+   },
+   "title": {
+    "en": "Two voices",
+    "ru": "Два голоса"
+   },
+   "description": {
+    "en": "One video, two languages — share both.",
+    "ru": "Один ролик, два языка — поделись обоими."
+   }
+  },
+  {
+   "id": "q-video-client-ready",
+   "track": "video",
+   "weeks": [
+    6
+   ],
+   "xp": 60,
+   "icon": "🤝",
+   "goal": {
+    "count": "tasks",
+    "target": 2,
+    "ids": [
+     "d41-video-t2",
+     "d41-video-t4"
+    ]
+   },
+   "title": {
+    "en": "Client-ready",
+    "ru": "Готово для клиента"
+   },
+   "description": {
+    "en": "Deliver the client pack and write the case study.",
+    "ru": "Сдай клиенту пакет роликов и напиши кейс."
+   }
+  }
+ ]
+}

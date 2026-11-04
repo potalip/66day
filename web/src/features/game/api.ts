@@ -4,7 +4,7 @@ import { api } from "@web/api";
 import type { BadgeInfo, GameMe, LeaderboardResponse, PublicProfile } from "../../../../worker/lib/game/types";
 
 export type { BadgeInfo, GameMe, LeaderboardResponse, PublicProfile };
-export type { LeaderRow, ActivityCell, EarnedBadge, ShippedItem, StreakInfo } from "../../../../worker/lib/game/types";
+export type { LeaderRow, ActivityCell, EarnedBadge, ShippedItem, StreakInfo, QuestsResponse, QuestView, CertificateResponse } from "../../../../worker/lib/game/types";
 
 const EVT = "fl:game-changed";
 /** Call after any action that may have changed XP/streak/badges; all game widgets refetch. */

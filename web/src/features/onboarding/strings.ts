@@ -9,7 +9,7 @@ const en = {
     title: "66 days. One small build a day.",
     body: "You'll learn to make real things with AI coding agents — not by watching, but by building something every single day.",
     points: [
-      ["One day at a time", "A short lesson and 1–4 concrete tasks. Most days take an hour or so."],
+      ["One day at a time", "A short lesson and 1–4 concrete tasks. Most days take 1–2 hours; every 7th day is a short rest day."],
       ["Proof, not promises", "Every task ends with something you can show: a link, a file, a few honest sentences."],
       ["A portfolio by day 66", "Boss days become portfolio projects. The last one ships publicly."],
     ] as [string, string][],
@@ -25,7 +25,7 @@ const en = {
   },
   track: {
     title: "What do you want to build?",
-    body: "Days 1–10 are shared. After that, your track decides the projects. You can switch later.",
+    body: "Days 1–14 are shared; on day 12 you try both tracks. After that, your track decides the projects. You can switch later.",
     apps: {
       name: "Apps",
       tagline: "Solve real problems with web apps, bots and tools.",
@@ -45,10 +45,10 @@ const en = {
     title: "How much time a day?",
     body: "Be realistic. A small daily habit beats a heroic weekend.",
     options: [
-      [30, "30 min", "Tight days. You'll do the core task."],
-      [60, "1 hour", "The sweet spot for most people."],
-      [90, "1.5 hours", "Room for the optional extras."],
-      [120, "2 hours", "Go deep, ship more."],
+      [30, "30 min", "Some days will take two or three sittings — that's fine."],
+      [60, "1 hour", "Enough for lighter days; bigger ones spill over."],
+      [90, "1.5 hours", "Recommended: fits most days in one sitting."],
+      [120, "2 hours", "Room for boss days and the optional extras."],
     ] as [number, string, string][],
     goalTitle: "What's your goal?",
     goals: {
@@ -69,7 +69,7 @@ const en = {
   },
   done: {
     title: (name: string | null) => (name ? `You're in, ${name}.` : "You're in."),
-    body: "Your Day 1 is ready. Find an hour today — that's all it takes to start.",
+    body: "Your Day 1 is ready. Find about 75 minutes today — that's all it takes to start.",
     day1: "Day 1",
     start: "Start day 1",
     saving: "Setting things up…",
@@ -90,7 +90,7 @@ const ru: S = {
     title: "66 дней. Каждый день — маленький проект.",
     body: "Ты научишься делать настоящие вещи с ИИ-агентами. Не просмотром роликов, а тем, что каждый день что-то собираешь.",
     points: [
-      ["По одному дню", "Короткий урок и 1–4 конкретных задания. Обычно уходит около часа."],
+      ["По одному дню", "Короткий урок и 1–4 конкретных задания. Обычно 1–2 часа; каждый седьмой день — короткий день отдыха."],
       ["Доказательства, а не обещания", "Каждое задание заканчивается тем, что можно показать: ссылкой, файлом или парой честных предложений."],
       ["Портфолио к 66-му дню", "Дни-боссы превращаются в проекты для портфолио. Финальный выходит в публичный доступ."],
     ],
@@ -106,7 +106,7 @@ const ru: S = {
   },
   track: {
     title: "Что хочешь создавать?",
-    body: "Дни 1–10 общие. Дальше трек определяет проекты. Сменить можно в любой момент.",
+    body: "Дни 1–14 общие, на 12-й день попробуешь оба трека. Дальше трек определяет проекты. Сменить можно в любой момент.",
     apps: {
       name: "Приложения",
       tagline: "Решаешь реальные задачи: веб-приложения, боты, инструменты.",
@@ -126,10 +126,10 @@ const ru: S = {
     title: "Сколько времени в день?",
     body: "Будь реалистом. Маленькая ежедневная привычка лучше героических выходных.",
     options: [
-      [30, "30 мин", "Плотные дни. Делаешь главное задание."],
-      [60, "1 час", "Золотая середина для большинства."],
-      [90, "1,5 часа", "Хватит и на дополнительные задания."],
-      [120, "2 часа", "Глубже погружаешься, больше выпускаешь."],
+      [30, "30 мин", "Некоторые дни растянутся на два-три подхода — это нормально."],
+      [60, "1 час", "Хватит на лёгкие дни, большие растянутся."],
+      [90, "1,5 часа", "Рекомендуем: большинство дней — за один заход."],
+      [120, "2 часа", "Запас на дни-боссы и дополнительные задания."],
     ],
     goalTitle: "Какая у тебя цель?",
     goals: {
@@ -150,7 +150,7 @@ const ru: S = {
   },
   done: {
     title: (name) => (name ? `${name}, ты в деле.` : "Ты в деле."),
-    body: "Первый день уже ждёт. Найди сегодня час — больше для старта ничего не нужно.",
+    body: "Первый день уже ждёт. Найди сегодня около полутора часов — больше для старта ничего не нужно.",
     day1: "День 1",
     start: "Начать первый день",
     saving: "Всё настраиваем…",

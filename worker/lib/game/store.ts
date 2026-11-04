@@ -5,6 +5,7 @@ import { CATALOG_BY_ID } from "./badges";
 import { CURRICULUM, type CurriculumIndex } from "./curriculum";
 import { eventKey, reduce, type AnyGameEvent, type GameState } from "./engine";
 import { isoWeek, safeTz } from "./time";
+import { loadWeek, pickQuests, questProgress, questTarget } from "./quests";
 
 export interface StatsRow {
   user_id: string;
@@ -25,6 +26,8 @@ export interface ApplyOptions {
   curriculum?: CurriculumIndex;
   /** max optimistic retries when two events for the same user race */
   retries?: number;
+  /** don't evaluate weekly quests after this event (seeding / internal) */
+  skipQuests?: boolean;
 }
 
 export async function loadStats(db: D1Database, userId: string): Promise<StatsRow | null> {
@@ -120,13 +123,32 @@ export async function applyEvent(db: D1Database, userId: string, ev: AnyGameEven
 
     try {
       await db.batch(stmts);
-      return out.awards;
+      if (ev.type === "quest.completed" || ev.type === "lesson.viewed" || opts.skipQuests) return out.awards;
+      return [...out.awards, ...(await checkQuests(db, userId, now, opts))];
     } catch (e) {
       if (!isConflict(e) || attempt >= retries) throw e;
       // Lost a race (or a concurrent duplicate): back off with jitter, reload and try again;
       // the dedupe check at the top handles duplicates.
       await new Promise((r) => setTimeout(r, Math.random() * 15 * (attempt + 1)));
     }
+  }
+}
+
+/** Complete any weekly quest whose goal is now met. Each completion is its own idempotent event. */
+export async function checkQuests(db: D1Database, userId: string, now: Date, opts: ApplyOptions = {}): Promise<Award[]> {
+  try {
+    const u = await db.prepare("SELECT lang FROM users WHERE id = ?").bind(userId).first<{ lang: string | null }>();
+    const lang = u?.lang === "ru" ? "ru" : "en";
+    const wk = await loadWeek(db, userId, now, opts.curriculum);
+    const awards: Award[] = [];
+    for (const q of pickQuests(wk.week, wk.ctx)) {
+      if (wk.done.has(q.id) || questProgress(q, wk.events, wk.ctx.track, opts.curriculum) < questTarget(q)) continue;
+      awards.push(...(await applyEvent(db, userId, { type: "quest.completed", questId: q.id, week: wk.week, xp: q.xp, title: q.title[lang] }, { ...opts, now })));
+    }
+    return awards;
+  } catch (e) {
+    console.error("game: quest check failed", e);
+    return [];
   }
 }
 

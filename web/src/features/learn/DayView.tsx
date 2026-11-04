@@ -1,7 +1,7 @@
 // OWNER: learn. Day hero + lesson + task checklist with proofs + completion moment. Used by Today and DayPage.
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useNavigate } from "react-router";
-import type { Award, CurriculumTask, Lang } from "@shared/types";
+import type { Award, CurriculumTask, Lang, Track } from "@shared/types";
 import { useStrings } from "@web/i18n";
 import { Badge, Button, ButtonLink, Card, Dialog, Field, Input, Textarea, useToast } from "@web/ui";
 import { showAwards } from "@web/features/game/widgets";
@@ -12,6 +12,10 @@ import { strings, type LearnStrings } from "./strings";
 import { Icon, cx, taskTypeIcon } from "./ui";
 
 const MAX_FILE = 50 * 1024 * 1024;
+const ShareDay = lazy(() => import("./ShareDay"));
+/** Day 12: the curriculum lets students try both tracks, then decide (curriculum request). */
+const TRACK_DECISION_DAY = 12;
+const BOSS_SHARE_KEY = (day: number) => `fl-learn-share-boss-${day}`;
 /** Days whose time is spread over a whole day rather than one sitting (curriculum request: boss day 65 = launch day). */
 export const SPREAD_DAYS = new Set([65]);
 
@@ -52,7 +56,8 @@ function DayResources({ s, lang, day, track, urls }: { s: LearnStrings; lang: La
   if (!plain.length && !cards.length) return null;
   return (
     <section className="mt-12 max-w-[68ch]" aria-labelledby="res-h">
-      <h2 id="res-h" className="mb-3 text-sm font-semibold tracking-wide text-muted uppercase">{s.resources}</h2>
+      <h2 id="res-h" className="text-sm font-semibold tracking-wide text-muted uppercase">{s.resources}</h2>
+      <p className="mt-1 mb-3 text-sm text-muted">{s.resourcesHint}</p>
       {cards.length > 0 && (
         <ul className="mb-3 grid grid-cols-1 gap-3 sm:grid-cols-2">
           {cards.map((c) => <li key={c.id}><ResourceCardView r={c} compact /></li>)}
@@ -86,9 +91,31 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
   const [tasks, setTasks] = useState<Record<string, TaskState>>(data.tasks);
   const [dayDone, setDayDone] = useState(data.access === "done");
   const [celebrate, setCelebrate] = useState<{ awards: Award[]; xp: number; result: TaskResult | null } | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareMounted, setShareMounted] = useState(false);
+  const openShare = () => { setShareMounted(true); setShareOpen(true); };
+  // Closing the celebration refreshes the parent (Today then shows "done for today"), so the refresh waits until the
+  // share dialog is closed too — otherwise it would unmount mid-share.
+  const closeCelebration = (mode: "close" | "share" | "nav" = "close") => {
+    setCelebrate(null);
+    if (mode === "nav") return onChanged();
+    let share = mode === "share";
+    if (!share && data.summary.boss) {
+      // Boss days are portfolio moments: offer the share card once, automatically (design request).
+      try { if (!localStorage.getItem(BOSS_SHARE_KEY(day.day))) { localStorage.setItem(BOSS_SHARE_KEY(day.day), "1"); share = true; } } catch { /* no storage */ }
+    }
+    if (share) openShare(); else onChanged();
+  };
 
   useEffect(() => { setTasks(data.tasks); setDayDone(data.access === "done"); }, [data]);
 
+  const toTasks = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const h = document.getElementById("tasks-h");
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    h?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    h?.focus({ preventScroll: true });
+  };
   const required = day.tasks.filter((t) => !t.optional);
   const doneCount = day.tasks.filter((t) => tasks[t.id]?.done).length;
   const requiredDone = required.every((t) => tasks[t.id]?.done);
@@ -100,6 +127,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
       setDayDone(true);
       const xp = day.tasks.reduce((a, t) => a + ((t.id === task.id || tasks[t.id]?.done) ? t.xp : 0), 0);
       setCelebrate({ awards: r.awards, xp, result: r });
+      showAwards(r.awards, { toast: false }); // level-up moment + live widgets; our dialog shows XP/badges
     } else if (!wasDone) {
       // The game toast (XP, badges, level) when the game returned awards; otherwise a plain reward toast.
       if (r.awards.length) showAwards(r.awards);
@@ -113,6 +141,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
     try {
       const r = await learnApi.completeDay(lang, day.day);
       setDayDone(true);
+      showAwards(r.awards, { toast: false });
       setCelebrate({ awards: r.awards, xp: day.tasks.reduce((a, t) => a + (tasks[t.id]?.done ? t.xp : 0), 0), result: { ...r, taskId: "", task: { done: true, completedAt: null, submission: null } } });
     } catch (e) { error(e); }
   };
@@ -126,10 +155,18 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
   return (
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)] lg:gap-12">
       <article className="min-w-0">
+        {/* Keyboard users: first stop on the page jumps to the task list (design a11y audit). */}
+        <a href="#tasks-h" onClick={toTasks}
+          className="sr-only focus:not-sr-only focus:mb-4 focus:inline-flex focus:h-9 focus:items-center focus:rounded-full focus:border focus:border-line focus:bg-surface focus:px-3.5 focus:text-sm focus:font-medium focus:outline-2 focus:outline-ring">
+          {s.skipToTasks}
+        </a>
         <DayHero s={s} summary={data.summary}
-          extra={dayDone ? <Badge tone="accent" icon={<Icon.check />}>{data.completedAt ? s.dayDoneOn(formatDate(data.completedAt, lang)) : s.dayDone}</Badge> : null} />
-        <a href="#tasks-h" className="-mt-2 mb-6 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-sm font-medium hover:bg-surface-2 lg:hidden"
-          onClick={(e) => { e.preventDefault(); document.getElementById("tasks-h")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>
+          extra={dayDone ? <>
+            <Badge tone="accent" icon={<Icon.check />}>{data.completedAt ? s.dayDoneOn(formatDate(data.completedAt, lang)) : s.dayDone}</Badge>
+            <Button size="sm" variant="ghost" icon={<Icon.share />} onClick={openShare} className="-my-1">{s.share}</Button>
+          </> : null} />
+        <a href="#tasks-h" className="-mt-2 mb-6 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-sm font-medium hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-ring lg:hidden"
+          onClick={toTasks}>
           <Icon.check size={15} className="text-accent" />{s.tasks} · {s.tasksProgress(doneCount, day.tasks.length)}<Icon.arrowRight size={14} className="rotate-90 text-muted" />
         </a>
         <h2 className="sr-only">{s.lesson}</h2>
@@ -140,7 +177,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
       <aside className="lg:sticky lg:top-24 lg:self-start" aria-labelledby="tasks-h">
         <Card padding="sm" className="sm:p-5">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <h2 id="tasks-h" className="scroll-mt-24 text-lg font-semibold">{s.tasks}</h2>
+            <h2 id="tasks-h" tabIndex={-1} className="scroll-mt-24 text-lg font-semibold outline-none">{s.tasks}</h2>
             <span className="tabular text-sm text-muted" aria-live="polite">{s.tasksProgress(doneCount, day.tasks.length)}</span>
           </div>
           <ol className="grid grid-cols-1 gap-3">
@@ -177,9 +214,15 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
         )}
       </aside>
 
-      <Celebration open={!!celebrate} s={s} lang={lang} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next}
+      <Celebration open={!!celebrate} s={s} lang={lang} userTrack={data.userTrack} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next}
         xp={celebrate?.xp ?? 0} awards={celebrate?.awards ?? []} result={celebrate?.result ?? null}
-        onClose={() => { setCelebrate(null); onChanged(); }} />
+        onClose={(mode) => closeCelebration(mode)} onShare={() => closeCelebration("share")} />
+      {shareMounted && (
+        <Suspense fallback={null}>
+          <ShareDay open={shareOpen} lang={lang} day={day.day} title={day.title}
+            onClose={() => { setShareOpen(false); onChanged(); }} />
+        </Suspense>
+      )}
     </div>
   );
 }
@@ -329,12 +372,12 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   return (
     <form onSubmit={onFormSubmit} className="mt-2 grid grid-cols-1 gap-2" noValidate>
       {task.proof === "text" && (
-        <Field label={label} error={shownErr ?? undefined}>
+        <Field label={label} error={shownErr ?? undefined} hint={s.secretsHint}>
           <Textarea value={text} onChange={(e) => setText(e.target.value)} rows={3} maxLength={5000} placeholder={s.textPlaceholder} className="min-h-[84px] text-[0.9375rem]" />
         </Field>
       )}
       {task.proof === "link" && (
-        <Field label={label} error={shownErr ?? undefined}>
+        <Field label={label} error={shownErr ?? undefined} hint={s.secretsHint}>
           <Input type="url" inputMode="url" autoComplete="url" value={url} onChange={(e) => setUrl(e.target.value)} placeholder={s.linkPlaceholder} />
         </Field>
       )}
@@ -367,9 +410,9 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   );
 }
 
-function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, result, onClose }: {
-  open: boolean; s: LearnStrings; lang: Lang; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null;
-  xp: number; awards: Award[]; result: TaskResult | null; onClose: () => void;
+function Celebration({ open, s, lang, userTrack, badges, dayBadges, day, next, xp, awards, result, onClose, onShare }: {
+  open: boolean; s: LearnStrings; lang: Lang; userTrack: Track; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null;
+  xp: number; awards: Award[]; result: TaskResult | null; onClose: (mode?: "close" | "nav") => void; onShare: () => void;
 }) {
   const nav = useNavigate();
   // One XP chip (task XP and any day bonus merged), then badges/level/streak. Day badges come from content until the
@@ -393,12 +436,13 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
   };
 
   return (
-    <Dialog open={open} onClose={onClose} title={s.celebrateTitle(day.day)} hideTitle size="sm"
+    <Dialog open={open} onClose={() => onClose()} title={s.celebrateTitle(day.day)} hideTitle size="sm"
       footer={<>
-        <Button variant="outline" onClick={onClose}>{s.close}</Button>
+        <Button variant="outline" onClick={() => onClose()}>{s.close}</Button>
+        <Button variant="soft" icon={<Icon.share />} onClick={onShare}>{s.shareDay(day.day)}</Button>
         {openNow
-          ? <Button onClick={() => { onClose(); nav(`/${lang}/day/${next!.day}`); }} iconRight={<Icon.arrowRight />}>{s.continueNext(next!.day)}</Button>
-          : <Button onClick={() => { onClose(); nav(`/${lang}/path`); }} icon={<Icon.map />}>{s.seePath}</Button>}
+          ? <Button onClick={() => { onClose("nav"); nav(`/${lang}/day/${next!.day}`); }} iconRight={<Icon.arrowRight />}>{s.continueNext(next!.day)}</Button>
+          : <Button onClick={() => { onClose("nav"); nav(`/${lang}/path`); }} icon={<Icon.map />}>{s.seePath}</Button>}
       </>}>
       {open && (
         <div className="text-center">
@@ -423,10 +467,11 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
               </li>
             ))}
           </ul>
+          {day.day === TRACK_DECISION_DAY && <TrackCheck s={s} lang={lang} track={userTrack} />}
           {day.boss && (
             <div className="mt-6 flex flex-col items-center gap-2 rounded-[var(--radius-sm)] border border-gold-bright/40 bg-gold-soft p-4 text-sm">
               <p className="text-gold-ink">{s.bossInPortfolio}</p>
-              <Button size="sm" variant="gold" icon={<Icon.crown />} onClick={() => { onClose(); nav(`/${lang}/portfolio/me`); }}>{s.openPortfolio}</Button>
+              <Button size="sm" variant="gold" icon={<Icon.crown />} onClick={() => { onClose("nav"); nav(`/${lang}/portfolio/me`); }}>{s.openPortfolio}</Button>
             </div>
           )}
           {next && next.available && (
@@ -440,6 +485,33 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
       )}
       <LearnKeyframes />
     </Dialog>
+  );
+}
+
+function TrackCheck({ s, lang, track }: { s: LearnStrings; lang: Lang; track: Track }) {
+  const { toast } = useToast();
+  const [current, setCurrent] = useState(track);
+  const [state, setState] = useState<"ask" | "busy" | "done">("ask");
+  const other: Track = current === "apps" ? "video" : "apps";
+  const switchTrack = async () => {
+    setState("busy");
+    try {
+      await learnApi.updateProfile(lang, { track: other });
+      setCurrent(other); setState("done");
+      toast({ title: s.track[other], tone: "success", duration: 2500 });
+    } catch (e) { setState("ask"); toast({ title: s.errors[(e as ApiError).code] ?? s.errors.generic, tone: "error", duration: 4000 }); }
+  };
+  return (
+    <div className="mt-6 rounded-[var(--radius-sm)] border border-line bg-bg p-4 text-left">
+      <p className="text-xs font-semibold tracking-wide text-muted uppercase">{s.trackCheckTitle}</p>
+      <p className="mt-1 font-medium">{s.trackCheckBody(s.track[current])}</p>
+      {state !== "done" && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          <Button size="sm" variant="outline" onClick={() => setState("done")} disabled={state === "busy"}>{s.trackStay}</Button>
+          <Button size="sm" variant="ghost" onClick={switchTrack} loading={state === "busy"}>{s.trackSwitch}: {s.track[other]}</Button>
+        </div>
+      )}
+    </div>
   );
 }
 

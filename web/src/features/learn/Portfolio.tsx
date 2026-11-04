@@ -49,7 +49,7 @@ export default function Portfolio() {
   if (pf.loading && !p) return <PortfolioSkeleton />;
   if (pf.error instanceof ApiError && pf.error.status === 404) {
     return <EmptyState icon={<Icon.alert />} title={s.notFoundTitle} description={s.notFoundBody}
-      action={<ButtonLink to={`/${lang}`} variant="outline">FlowLeaf 66</ButtonLink>} />;
+      action={<ButtonLink to={`/${lang}`} iconRight={<Icon.arrowRight />}>{s.ctaButton}</ButtonLink>} />;
   }
   if (pf.error || !p) return <ErrorState title={s.loadErrorTitle} body={s.loadErrorBody} retry={s.retry} onRetry={() => pf.reload()} />;
 
@@ -98,7 +98,7 @@ export default function Portfolio() {
           </Section>
         )}
         {groups.other.length > 0 && (
-          <Section title={s.other}>
+          <Section title={groups.boss.length || groups.ship.length ? s.other : s.work}>
             <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
               {groups.other.map((i) => <li key={i.taskId}><ProjectCard s={s} lang={lang} item={i} editable={editable} onChange={pf.setData} /></li>)}
             </ul>
@@ -135,17 +135,23 @@ function Header({ s, p, name, lang, shareUrl }: { s: PortfolioStrings; p: Portfo
   return (
     <header>
       <div className="flex flex-col gap-6 sm:flex-row sm:items-start">
-        <Avatar name={name} size={72} ring="accent" className="shrink-0" />
+        <span className="hidden shrink-0 sm:block"><Avatar name={name} size={72} ring="accent" /></span>
         <div className="min-w-0 flex-1">
           <p className="text-sm text-muted">{s.program}</p>
-          <h1 className="mt-1 text-[clamp(1.9rem,5vw,2.8rem)] leading-[1.08] font-semibold tracking-tight text-balance">{name}</h1>
+          <div className="mt-2 flex items-center gap-3 sm:mt-1">
+            <span className="shrink-0 sm:hidden"><Avatar name={name} size={56} ring="accent" /></span>
+            <h1 className="min-w-0 text-[clamp(1.9rem,5vw,2.8rem)] leading-[1.08] font-semibold tracking-tight text-balance">{name}</h1>
+          </div>
           <p className="mt-2 text-lg text-muted">{s.tagline(p.user.track)}</p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {p.user.track && <Badge tone="accent">{s.trackLabel[p.user.track]}</Badge>}
             {p.stats.lastActive && <Badge tone="outline">{s.lastActive(formatDate(Date.parse(`${p.stats.lastActive}T12:00:00Z`) / 1000, lang))}</Badge>}
           </div>
         </div>
-        <Button variant="outline" onClick={copy} icon={<Icon.link />} className="w-full sm:w-auto">{s.copyLink}</Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto">
+          <Button variant="outline" onClick={copy} icon={<Icon.link />} className="w-full sm:w-auto">{s.copyLink}</Button>
+          <ButtonLink to={`/${lang}/certificate/${p.user.id}`} variant="ghost" size="sm" icon={<Icon.crown className="text-gold-bright" />} className="w-full sm:w-auto">{s.certificate}</ButtonLink>
+        </div>
       </div>
 
       <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">
@@ -155,9 +161,11 @@ function Header({ s, p, name, lang, shareUrl }: { s: PortfolioStrings; p: Portfo
           </ProgressRing>
           <div><dt className="text-xs text-muted">{s.stats.days}</dt><dd className="tabular text-lg font-semibold">{p.stats.completedDays}/{p.stats.totalDays}</dd></div>
         </Card>
-        <StatCard label={s.stats.boss} value={`${p.stats.bossDone}/${p.stats.bossTotal}`} icon={<Icon.crown className="text-gold-bright" />} />
-        <StatCard label={s.stats.level} value={p.game ? String(p.game.level) : "—"} icon={<Icon.sparkle className="text-gold-bright" />} />
-        <StatCard label={s.stats.streak} value={p.game ? s.streakDays(p.game.streak.best) : "—"} icon={<Icon.check />} />
+        {/* Visitors only see stats that read as achievements; early zeros and "Level" (an in-app notion) stay owner-only. */}
+        {(p.isMe || p.stats.bossDone > 0) && <StatCard label={s.stats.boss} value={`${p.stats.bossDone}/${p.stats.bossTotal}`} icon={<Icon.crown className="text-gold-bright" />} />}
+        {p.isMe && <StatCard label={s.stats.level} value={p.game ? String(p.game.level) : "—"} icon={<Icon.sparkle className="text-gold-bright" />} />}
+        {(p.isMe || (p.game?.streak.best ?? 0) >= 3) && <StatCard label={s.stats.streak} value={p.game ? s.streakDays(p.game.streak.best) : "—"} icon={<Icon.check />} />}
+        {!p.isMe && p.user.joinedAt && <StatCard label={s.stats.started} value={formatDate(p.user.joinedAt, lang)} icon={<Icon.clock />} />}
       </dl>
 
       {badges.length > 0 && (
@@ -189,7 +197,7 @@ function StatCard({ label, value, icon }: { label: string; value: string; icon: 
   return (
     <Card padding="sm" className="flex items-center gap-3">
       <span className="grid size-12 shrink-0 place-items-center rounded-full bg-surface-2 [&_svg]:size-5">{icon}</span>
-      <div className="min-w-0"><dt className="text-xs text-muted">{label}</dt><dd className="tabular truncate text-lg font-semibold">{value}</dd></div>
+      <div className="min-w-0"><dt className="text-xs text-muted">{label}</dt><dd className="tabular text-lg leading-tight font-semibold text-balance">{value}</dd></div>
     </Card>
   );
 }
@@ -231,7 +239,7 @@ function ProjectCard({ s, lang, item, featured, editable, onChange }: {
   const desc = item.description ?? (item.url || item.file ? item.text : item.text);
   return (
     <Card padding="none" className={cx("flex h-full flex-col overflow-hidden", featured && "border-gold-bright/40")}>
-      <Preview item={item} featured={featured} />
+      {(item.url || item.file) && <Preview item={item} featured={featured} />}
       <div className="flex flex-1 flex-col p-4 sm:p-5">
         <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-muted">
           <span className="font-medium text-fg">{s.dayLabel(item.day)}</span>
@@ -239,7 +247,12 @@ function ProjectCard({ s, lang, item, featured, editable, onChange }: {
           {item.kind === "boss" && <Badge size="sm" tone="gold" icon={<Icon.crown />}>{s.boss}</Badge>}
         </p>
         <h3 className={cx("mt-1.5 font-semibold leading-snug text-pretty", featured ? "text-lg" : "text-base")}>{item.title}</h3>
-        {desc && <p className={cx("mt-1.5 text-sm text-muted text-pretty whitespace-pre-line", featured ? "line-clamp-4" : "line-clamp-3")}>{desc}</p>}
+        <p className="mt-1 text-xs text-muted line-clamp-2">{item.taskTitle}</p>
+        {!item.url && !item.file && item.text ? (
+          <blockquote className="mt-3 border-l-[3px] border-accent pl-3 text-[1.0625rem] leading-relaxed text-fg/90 line-clamp-6 whitespace-pre-line">
+            {item.description ?? item.text}
+          </blockquote>
+        ) : desc && <p className={cx("mt-2 text-sm text-muted text-pretty whitespace-pre-line", featured ? "line-clamp-4" : "line-clamp-3")}>{desc}</p>}
         <div className="mt-auto flex flex-wrap items-center gap-2 pt-4">
           {item.url && (
             <a href={item.url} target="_blank" rel="noopener noreferrer nofollow"
@@ -292,7 +305,7 @@ function EditDialog({ s, lang, item, open, onClose, onChange }: {
   const save = async () => {
     setBusy(true);
     try {
-      onChange(await portfolioApi.update(lang, item.taskId, { title: title.trim() === item.taskTitle ? null : title, description: desc }));
+      onChange(await portfolioApi.update(lang, item.taskId, { title: !title.trim() || title.trim() === item.defaultTitle ? null : title, description: desc }));
       toast({ title: s.saved, tone: "success", duration: 2000 });
       onClose();
     } catch { toast({ title: s.saveError, tone: "error", duration: 4000 }); }
@@ -302,7 +315,7 @@ function EditDialog({ s, lang, item, open, onClose, onChange }: {
     <Dialog open={open} onClose={onClose} title={s.editTitle} description={`${s.dayLabel(item.day)} · ${item.dayTitle}`}
       footer={<><Button variant="outline" onClick={onClose}>{s.cancel}</Button><Button onClick={save} loading={busy}>{s.save}</Button></>}>
       <div className="grid gap-4">
-        <Field label={s.titleLabel}><Input value={title} maxLength={120} onChange={(e) => setTitle(e.target.value)} /></Field>
+        <Field label={s.titleLabel} hint={s.titleHint}><Input value={title} maxLength={120} placeholder={item.defaultTitle} onChange={(e) => setTitle(e.target.value)} /></Field>
         <Field label={s.descLabel} hint={s.descHint}><Textarea value={desc} maxLength={600} rows={4} onChange={(e) => setDesc(e.target.value)} /></Field>
       </div>
     </Dialog>
