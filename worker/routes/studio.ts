@@ -2,7 +2,7 @@ import { Hono, type Context } from "hono";
 import type { AppEnv, Env, JobMessage } from "../env";
 import {
   ACTIVE, type ProjectRow, type RenderRow, applyJob, getProject, getRender, newId, renderServerHealth, renderView,
-  rendererConfigured, runPlan, startRender, submitRender, syncRender, unstickPlan,
+  listVoices, rendererConfigured, runPlan, startRender, submitRender, syncRender, unstickPlan,
 } from "../lib/studio/service";
 import { FORMATS, type Format, type Lang, catalog, exampleStoryboard, getTemplate, validateStoryboard } from "../lib/studio/storyboard";
 
@@ -28,6 +28,8 @@ studio.get("/catalog", (c) => {
   c.header("cache-control", "public, max-age=300");
   return c.json({ ...catalog, capabilities: caps(c.env) });
 });
+
+studio.get("/voices", async (c) => c.json(await listVoices(c.env)));
 
 studio.get("/status", async (c) => c.json({ ...caps(c.env), rendererHealth: await renderServerHealth(c.env) }));
 
@@ -182,8 +184,8 @@ studio.post("/projects/:id/render", async (c) => {
             SUM(CASE WHEN created_at > unixepoch() - 86400 THEN 1 ELSE 0 END) AS today
      FROM studio_renders WHERE user_id = ?`,
   ).bind(c.get("userId")).first<{ active: number | null; today: number | null }>();
-  const maxActive = Number((c.env as unknown as Record<string, string>).STUDIO_MAX_ACTIVE ?? 2);
-  const maxDaily = Number((c.env as unknown as Record<string, string>).STUDIO_MAX_DAILY ?? 40);
+  const maxActive = Number(c.env.STUDIO_MAX_ACTIVE ?? 2);
+  const maxDaily = Number(c.env.STUDIO_MAX_DAILY ?? 40);
   if ((limits?.active ?? 0) >= maxActive) return c.json({ error: "too_many_active", limit: maxActive }, 429);
   if ((limits?.today ?? 0) >= maxDaily) return c.json({ error: "daily_limit", limit: maxDaily }, 429);
   const body = await c.req.json<{ quality?: string }>().catch(() => ({} as { quality?: string }));
@@ -212,29 +214,42 @@ studio.post("/render-callback", async (c) => {
 });
 
 const IMAGE_TYPES: Record<string, string> = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" };
+const VIDEO_TYPES: Record<string, string> = { "video/mp4": "mp4", "video/quicktime": "mov", "video/webm": "webm" };
+const MAX_VIDEO_BYTES = 100 * 1024 * 1024;
 
 /** Upload an image (screenshot) for a project's scenes. Stored in R2; served publicly by unguessable key so the
  *  render server can fetch it. */
 studio.post("/projects/:id/assets", async (c) => {
   const p = await ownProject(c);
   if (!p) return c.json({ error: "not_found" }, 404);
+  const ct = (c.req.header("content-type") ?? "").split(";")[0].trim();
+  const id = crypto.randomUUID().replace(/-/g, "");
+  // Raw upload (body = the file): streamed straight to R2 — used for videos, which must not be buffered in memory.
+  if (IMAGE_TYPES[ct] || VIDEO_TYPES[ct]) {
+    const len = Number(c.req.header("content-length") ?? 0);
+    const max = VIDEO_TYPES[ct] ? MAX_VIDEO_BYTES : 8 * 1024 * 1024;
+    if (!len) return c.json({ error: "length_required" }, 411);
+    if (len > max) return c.json({ error: "too_large" }, 413);
+    const name = `${id}.${IMAGE_TYPES[ct] ?? VIDEO_TYPES[ct]}`;
+    await c.env.MEDIA.put(`studio/assets/${p.id}/${name}`, c.req.raw.body!, { httpMetadata: { contentType: ct } });
+    return c.json({ url: `/api/studio/assets/${p.id}/${name}` }, 201);
+  }
+  // multipart/form-data { file } — small images
   const form = await c.req.formData().catch(() => null);
   const file = form?.get("file");
   if (!file || typeof file === "string") return c.json({ error: "no_file" }, 400);
   const ext = IMAGE_TYPES[file.type];
   if (!ext) return c.json({ error: "unsupported_type" }, 415);
   if (file.size > 8 * 1024 * 1024) return c.json({ error: "too_large" }, 413);
-  const name = `${crypto.randomUUID().replace(/-/g, "")}.${ext}`;
-  await c.env.MEDIA.put(`studio/assets/${p.id}/${name}`, file.stream(), { httpMetadata: { contentType: file.type } });
+  const name = `${id}.${ext}`;
+  await c.env.MEDIA.put(`studio/assets/${p.id}/${name}`, file, { httpMetadata: { contentType: file.type } });
   return c.json({ url: `/api/studio/assets/${p.id}/${name}` }, 201);
 });
 
 studio.get("/assets/:pid/:name", async (c) => {
   const name = c.req.param("name");
-  if (!/^[a-f0-9]{32}\.(png|jpg|webp)$/.test(name)) return c.json({ error: "not_found" }, 404);
-  const obj = await c.env.MEDIA.get(`studio/assets/${c.req.param("pid")}/${name}`);
-  if (!obj) return c.json({ error: "not_found" }, 404);
-  return new Response(obj.body, { headers: { "content-type": obj.httpMetadata?.contentType ?? "image/png", "cache-control": "public, max-age=31536000, immutable" } });
+  if (!/^[a-f0-9]{32}\.(png|jpg|webp|mp4|mov|webm)$/.test(name)) return c.json({ error: "not_found" }, 404);
+  return serveR2(c, `studio/assets/${c.req.param("pid")}/${name}`, { cache: "public, max-age=31536000, immutable" });
 });
 
 const MEDIA_FILES: Record<string, keyof RenderRow> = { "video.mp4": "video_key", "thumbnail.jpg": "thumb_key", "contact.png": "contact_key" };

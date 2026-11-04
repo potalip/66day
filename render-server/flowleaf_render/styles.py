@@ -5,14 +5,14 @@ GH_DARK = ("#FF7B72", "#A5D6FF", "#79C0FF", "#7D8590", "#D2A8FF")
 GH_LIGHT = ("#CF222E", "#0A3069", "#0550AE", "#6E7781", "#8250DF")
 
 STYLES: dict[str, Palette] = {
-    # Calm, editorial, matches the FlowLeaf web app in light mode.
-    "paper": Palette("paper", bg="#F5F3EC", bg2="#FFFFFF", surface="#FFFFFF", fg="#16181D", muted="#5E646C",
-                     accent="#1F8A5B", accent2="#B8892B", on_accent="#FFFFFF", line="#E1DED4",
+    # Calm, editorial: the FlowLeaf web app's light tokens (web/src/styles.css · SHARE_PALETTE), so videos match the app.
+    "paper": Palette("paper", bg="#FAFAF7", bg2="#FFFFFF", surface="#FFFFFF", fg="#15171A", muted="#5D636B",
+                     accent="#187A4E", accent2="#B8892B", on_accent="#FFFFFF", line="#E4E4DC",
                      dark=False, grain=.10, vignette=0, code_bg="#FFFFFF", syntax=GH_LIGHT),
-    # FlowLeaf dark mode: charcoal, leaf green and gold.
-    "night": Palette("night", bg="#0C0F11", bg2="#16231D", surface="#161A1D", fg="#F1F2EE", muted="#9AA1A9",
-                     accent="#3FBF85", accent2="#E0B55A", on_accent="#06120C", line="#2A3034",
-                     dark=True, grain=.22, vignette=.35, code_bg="#0F1417", syntax=GH_DARK),
+    # FlowLeaf dark mode: same tokens as the web app (web/src/styles.css), leaf green and gold.
+    "night": Palette("night", bg="#0E1012", bg2="#14221B", surface="#15181B", fg="#ECEEEF", muted="#9BA2AA",
+                     accent="#43C38A", accent2="#E3B95E", on_accent="#04140C", line="#262B30",
+                     dark=True, grain=.22, vignette=.35, code_bg="#101316", syntax=GH_DARK),
     # Bold: deep forest green with lime — punchy for shorts.
     "forest": Palette("forest", bg="#0D3A2B", bg2="#18573F", surface="#124633", fg="#F6F2E7", muted="#A8C7B7",
                       accent="#C6F16A", accent2="#FFD27A", on_accent="#0D3A2B", line="#2B6A54",

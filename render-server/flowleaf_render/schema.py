@@ -13,6 +13,7 @@ A *storyboard* is the JSON the Studio (or Claude) fills and the render server re
       ],
       "music": "calm",            # calm | uplift | drive | focus | none
       "voiceover": true,          # ElevenLabs if the server has a key; otherwise captions only
+      "voice": "",                # optional ElevenLabs voice id (GET /v1/voices); default voice when empty
       "captions": true,
       "transition": "wipe"        # wipe | fade | cut
     }
@@ -30,7 +31,7 @@ from typing import Any, Callable
 from .core import FORMATS
 from .styles import STYLES, STYLE_NAMES
 
-FIELD_TYPES = ("text", "textarea", "list", "code", "number", "select", "lines", "image")
+FIELD_TYPES = ("text", "textarea", "list", "code", "number", "select", "lines", "image", "video")
 MUSIC = ("calm", "uplift", "drive", "focus", "none")
 TRANSITIONS = ("wipe", "fade", "cut")
 LANGS = ("en", "ru")
@@ -158,7 +159,7 @@ def normalize_field(f: Field, v, path, errs):
             errs.append({"path": path, "code": "too_long", "message": f"max {f.max_lines} lines", "soft": True})
             v = "\n".join(lines[: f.max_lines])
         return v
-    if f.type == "image":
+    if f.type in ("image", "video"):
         v = (v or "").strip() if isinstance(v, str) else ""
         if v and not re.match(r"^https?://", v):
             errs.append({"path": path, "code": "url", "message": "image must be an http(s) URL", "soft": True}); v = ""
@@ -220,6 +221,8 @@ def validate(sb: dict, templates: dict[str, Template], strict=True) -> tuple[dic
     out["music"] = sb.get("music") if sb.get("music") in MUSIC else T.music
     out["transition"] = sb.get("transition") if sb.get("transition") in TRANSITIONS else T.transition
     out["voiceover"] = bool(sb.get("voiceover", True))
+    v = sb.get("voice") or ""
+    out["voice"] = v if isinstance(v, str) and re.fullmatch(r"[A-Za-z0-9_-]{1,64}", v) else ""
     out["captions"] = bool(sb.get("captions", True))
     gf = sb.get("fields") or {}
     if not isinstance(gf, dict): gf = {}; errs.append({"path": "fields", "code": "type", "message": "expected object"})

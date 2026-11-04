@@ -33,8 +33,14 @@ durations are clamped to the scene kind's `[min, max]` — these come back as *s
 fields, unknown templates/scene kinds and too few scenes are *hard* errors (HTTP 422).
 
 Field types: `text`, `textarea`, `list` (array of strings), `code` (multi-line, `maxLines`), `number` (`min`/`max`),
-`select` (`options[].value`), `lines` (`"2, 4-6"`), `image` (absolute http(s) URL fetched at render time; public hosts
-only unless `FLR_ALLOW_PRIVATE_FETCH=1`; unreachable images render as a neutral placeholder).
+`select` (`options[].value`), `lines` (`"2, 4-6"`), `image` / `video` (absolute http(s) URL fetched at render time;
+public hosts only unless `FLR_ALLOW_PRIVATE_FETCH=1`; unreachable media render as a neutral placeholder).
+
+Top-level `voice`: optional ElevenLabs voice id from `GET /v1/voices`.
+
+### `GET /v1/voices`
+`{ available: bool, voices: [{ id, name, gender, style, preview_url }] }` — curated multilingual premade voices plus the
+account's own voices; `available=false` (empty list) without `ELEVENLABS_API_KEY`.
 
 ## Endpoints
 

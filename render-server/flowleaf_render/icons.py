@@ -8,14 +8,14 @@ import cairo
 from .core import src
 
 ICONS = ("idea", "code", "rocket", "chat", "check", "gear", "chart", "play", "book", "bolt", "target", "clock",
-         "heart", "star", "user", "leaf", "search", "lock")
+         "heart", "star", "user", "leaf", "search", "lock", "repeat")
 
 ICON_LABELS = {
     "idea": ("Idea", "Идея"), "code": ("Code", "Код"), "rocket": ("Launch", "Запуск"), "chat": ("Chat", "Чат"),
     "check": ("Done", "Готово"), "gear": ("Settings", "Настройка"), "chart": ("Growth", "Рост"),
     "play": ("Video", "Видео"), "book": ("Learn", "Учёба"), "bolt": ("Fast", "Быстро"), "target": ("Goal", "Цель"),
     "clock": ("Time", "Время"), "heart": ("Love", "Любовь"), "star": ("Star", "Звезда"), "user": ("Person", "Человек"),
-    "leaf": ("Leaf", "Лист"), "search": ("Search", "Поиск"), "lock": ("Secure", "Защита"),
+    "leaf": ("Leaf", "Лист"), "search": ("Search", "Поиск"), "lock": ("Secure", "Защита"), "repeat": ("Repost", "Репост"),
 }
 
 
@@ -81,6 +81,9 @@ def _paths(ctx, name):
     elif name == "lock":
         rr(4, 10.5, 16, 11, 2.5); m(7.5, 10.5); l(7.5, 7.5); c(7.5, 2.5, 16.5, 2.5, 16.5, 7.5); l(16.5, 10.5)
         m(12, 14.5); l(12, 17.5)
+    elif name == "repeat":
+        m(4, 11); l(4, 8.5); c(4, 7.1, 5.1, 6, 6.5, 6); l(19, 6); m(16, 3); l(19, 6); l(16, 9)
+        m(20, 13); l(20, 15.5); c(20, 16.9, 18.9, 18, 17.5, 18); l(5, 18); m(8, 21); l(5, 18); l(8, 15)
     else:
         circ(12, 12, 9)
 

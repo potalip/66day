@@ -1,0 +1,42 @@
+{
+  "family": "flowleaf-render",
+  "requiresCompatibilities": ["FARGATE"],
+  "networkMode": "awsvpc",
+  "cpu": "4096",
+  "memory": "8192",
+  "runtimePlatform": { "cpuArchitecture": "X86_64", "operatingSystemFamily": "LINUX" },
+  "executionRoleArn": "arn:aws:iam::${ACCOUNT_ID}:role/flowleaf-render-execution",
+  "taskRoleArn": "arn:aws:iam::${ACCOUNT_ID}:role/flowleaf-render-task",
+  "ephemeralStorage": { "sizeInGiB": 50 },
+  "containerDefinitions": [
+    {
+      "name": "render",
+      "image": "${ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/flowleaf-render:${IMAGE_TAG}",
+      "essential": true,
+      "portMappings": [{ "containerPort": 8080, "protocol": "tcp" }],
+      "environment": [
+        { "name": "PORT", "value": "8080" },
+        { "name": "PUBLIC_BASE_URL", "value": "https://${RENDER_DOMAIN}" },
+        { "name": "FLR_DATA_DIR", "value": "/data" },
+        { "name": "FLR_CONCURRENCY", "value": "1" },
+        { "name": "FLR_RETENTION_DAYS", "value": "3" },
+        { "name": "S3_BUCKET", "value": "${S3_BUCKET}" },
+        { "name": "S3_REGION", "value": "${AWS_REGION}" },
+        { "name": "S3_PREFIX", "value": "flowleaf-renders" }
+      ],
+      "secrets": [
+        { "name": "RENDER_SERVER_TOKEN", "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${ACCOUNT_ID}:secret:flowleaf/render-token" },
+        { "name": "ELEVENLABS_API_KEY", "valueFrom": "arn:aws:secretsmanager:${AWS_REGION}:${ACCOUNT_ID}:secret:flowleaf/elevenlabs" }
+      ],
+      "mountPoints": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": { "awslogs-group": "/ecs/flowleaf-render", "awslogs-region": "${AWS_REGION}", "awslogs-stream-prefix": "render", "awslogs-create-group": "true" }
+      },
+      "healthCheck": {
+        "command": ["CMD", "python", "-c", "import urllib.request;urllib.request.urlopen('http://127.0.0.1:8080/health', timeout=4)"],
+        "interval": 30, "timeout": 5, "retries": 3, "startPeriod": 30
+      }
+    }
+  ]
+}

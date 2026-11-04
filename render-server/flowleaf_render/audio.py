@@ -243,10 +243,10 @@ def music(dur, mood="drive", prompt=None):
     return synth_music(dur, mood)
 
 # --------------------------------------------------------------------------- voiceover
-def voiceover(text, max_dur=None):
+def voiceover(text, max_dur=None, voice=None):
     """Returns mono float32 VO or None when no key (captions still carry the message)."""
     if not have_eleven(): return None
-    x = eleven_tts(text)
+    x = eleven_tts(text, voice=voice or None)
     x = _trim_silence(x)
     if max_dur and len(x) / SR > max_dur:
         x = _speed(x, len(x) / SR / max_dur)
@@ -264,6 +264,41 @@ def _speed(x, factor):
         write_wav(a, x)
         subprocess.run(["ffmpeg", "-loglevel", "error", "-y", "-i", a, "-filter:a", f"atempo={factor:.4f}", b], check=True)
         return _decode(b)
+
+# --------------------------------------------------------------------------- voices
+# Premade ElevenLabs voices that read both English and Russian well with eleven_multilingual_v2.
+CURATED_VOICES = [
+    {"id": "nPczCjzI2devNBz1zQrb", "name": "Brian", "gender": "male", "style": "deep, confident narrator"},
+    {"id": "onwK4e9ZLuTAKqWW03F9", "name": "Daniel", "gender": "male", "style": "calm, clear explainer"},
+    {"id": "pNInz6obpgDQGcFmaJgB", "name": "Adam", "gender": "male", "style": "energetic, punchy"},
+    {"id": "21m00Tcm4TlvDq8ikWAM", "name": "Rachel", "gender": "female", "style": "warm, friendly"},
+    {"id": "EXAVITQu4vr4xnSDxMaL", "name": "Sarah", "gender": "female", "style": "soft, upbeat"},
+    {"id": "XB0fDUnXU5powFXDhCwa", "name": "Charlotte", "gender": "female", "style": "bright, lively"},
+]
+_VOICES_CACHE: dict = {}
+
+def list_voices():
+    """Voices for the Studio picker: the account's own voices (incl. clones) when a key is set, merged over the
+    curated premade list. Cached for an hour."""
+    import time as _time
+    if not have_eleven(): return []
+    hit = _VOICES_CACHE.get("v")
+    if hit and _time.time() - hit[0] < 3600: return hit[1]
+    voices = {v["id"]: dict(v, preview_url=None) for v in CURATED_VOICES}
+    try:
+        import requests
+        r = requests.get(API + "/v1/voices", headers={"xi-api-key": api_key()}, timeout=15)
+        if r.ok:
+            for v in r.json().get("voices", []):
+                lab = v.get("labels") or {}
+                voices[v["voice_id"]] = {"id": v["voice_id"], "name": v.get("name", "?"), "gender": lab.get("gender", ""),
+                                         "style": ", ".join(x for x in (lab.get("description"), lab.get("accent"), lab.get("use_case")) if x),
+                                         "preview_url": v.get("preview_url")}
+    except Exception as e:  # noqa: BLE001
+        print(f"  [voices] list failed: {e}")
+    out = sorted(voices.values(), key=lambda v: (v["id"] not in {c["id"] for c in CURATED_VOICES}, v["name"]))
+    _VOICES_CACHE["v"] = (_time.time(), out)
+    return out
 
 # --------------------------------------------------------------------------- mixing
 def fit(x, dur, fade=0.0):
@@ -292,12 +327,24 @@ def build_mix(spec, dur, outdir: Path):
     used = have_eleven()
     for cue in spec.get("vo", []):
         a, b, line = cue[:3]
-        x = voiceover(line, max_dur=b - a)
+        x = voiceover(line, max_dur=b - a, voice=spec.get("voice"))
         if x is not None: place(vo_t, x, a, db(-1))
     for cue in spec.get("sfx", []):
         t, name, o = cue[0], cue[1], (cue[2] if len(cue) > 2 else {})
         x = sfx(name, o.get("dur"), o.get("prompt"))
         place(sfx_t, x, t, db(o.get("gain", -6)))
+    clip_t = np.zeros(n, np.float32)
+    for t0, path, src_start, seg, gain in spec.get("clips", []):
+        try:
+            p = subprocess.run(["ffmpeg", "-loglevel", "error", "-ss", f"{src_start:.3f}", "-t", f"{seg:.3f}", "-i", str(path),
+                                "-vn", "-f", "f32le", "-ac", "1", "-ar", str(SR), "-"], capture_output=True, check=True)
+            x = np.frombuffer(p.stdout, np.float32).copy()
+            if len(x):
+                f = min(len(x), int(.05 * SR)); x[:f] *= np.linspace(0, 1, f); x[-f:] *= np.linspace(1, 0, f)
+                place(clip_t, x, t0, db(gain))
+        except subprocess.CalledProcessError:
+            pass  # clip without an audio stream
+    vo_t = vo_t + clip_t
     m = spec.get("music", {"mood": "drive"})
     if m:
         mus_t = fit(music(dur, m.get("mood", "drive"), m.get("prompt")), dur, fade=1.0) * db(m.get("gain", -8))

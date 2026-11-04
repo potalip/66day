@@ -31,7 +31,10 @@ export function loadCatalog() {
   return catalogPromise;
 }
 
+export interface Voice { id: string; name: string; gender: string; style: string; preview_url: string | null }
+
 export const studioApi = {
+  voices: () => api<{ available: boolean; voices: Voice[] }>("/studio/voices"),
   status: () => api<StatusInfo>("/studio/status"),
   projects: () => api<{ projects: ProjectSummary[] }>("/studio/projects"),
   create: (body: { template: string; style: string; format: Format; lang: Lang; brief: string }) =>

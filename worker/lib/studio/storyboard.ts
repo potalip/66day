@@ -13,7 +13,7 @@ export type L10n = { en: string; ru: string };
 
 export interface FieldDef {
   key: string;
-  type: "text" | "textarea" | "list" | "code" | "number" | "select" | "lines" | "image";
+  type: "text" | "textarea" | "list" | "code" | "number" | "select" | "lines" | "image" | "video";
   label: L10n;
   required: boolean;
   maxLen?: number;
@@ -64,6 +64,8 @@ export interface Storyboard {
   scenes: Scene[];
   music: Music;
   voiceover: boolean;
+  /** Optional ElevenLabs voice id (from /api/studio/voices); empty = the render server's default voice. */
+  voice?: string;
   captions: boolean;
   transition: Transition;
 }
@@ -113,7 +115,7 @@ export function normalizeField(f: FieldDef, v: unknown, path: string, errs: SbEr
       if (lines.length > ml) { errs.push({ path, code: "too_long", message: `max ${ml} lines`, soft: true }); s = lines.slice(0, ml).join("\n"); }
       return s;
     }
-    case "image": {
+    case "image": case "video": {
       // absolute http(s) URL, or one of our own uploaded assets (/api/studio/assets/...), made absolute at render time
       const u = typeof v === "string" ? v.trim() : "";
       if (u && !/^(https?:\/\/|\/api\/studio\/assets\/)/.test(u)) { errs.push({ path, code: "url", message: "image must be an uploaded file or an http(s) URL", soft: true }); return ""; }
@@ -176,6 +178,7 @@ export function validateStoryboard(input: unknown): { storyboard: Storyboard | n
     music: MUSIC.includes(sb.music) ? sb.music : T.defaults.music,
     transition: TRANSITIONS.includes(sb.transition) ? sb.transition : T.defaults.transition,
     voiceover: sb.voiceover === undefined ? true : !!sb.voiceover,
+    voice: typeof sb.voice === "string" && /^[A-Za-z0-9_-]{1,64}$/.test(sb.voice) ? sb.voice : "",
     captions: sb.captions === undefined ? true : !!sb.captions,
     fields: Object.fromEntries(T.fields.map((f) => [f.key, normalizeField(f, gf[f.key] ?? f.default, `fields.${f.key}`, errs)])),
     scenes: [],

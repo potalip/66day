@@ -22,7 +22,7 @@ flowleaf_render/
   cli.py         render / stills / catalog / previews from the shell
 ```
 
-## Templates (8 types × 2–4 styles × 3 formats)
+## Templates (13 types × 2–4 styles × 3 formats)
 
 | id | what | scene kinds | styles |
 |---|---|---|---|
@@ -33,7 +33,16 @@ flowleaf_render/
 | `code-walkthrough` | code typing with syntax colours + terminal | intro, code, terminal, outro | terminal, paper, night |
 | `before-after` | swipe reveal, side-by-side, screenshot in a device, features | intro, swipe, compare, screen, feature, outro | paper, night, sunrise |
 | `quiz` | question → countdown → answer reveal + explanation | intro, question, outro | sunrise, night, forest |
+| `footage` | **your own clip** (phone video / screen recording) with title, headlines, lower-third points; keeps the clip's sound | title, clip, outro | night, forest, sunrise |
+| `compare` | AI tool A vs B: versus card, score bars per criterion, verdict | intro, versus, criterion, verdict, outro | night, paper, forest |
+| `journey` | "my 66 days": milestone timeline, progress ring, highlight | intro, timeline, progress, highlight, outro | paper, night, forest |
+| `post-card` | neutral social post card (typed text, counting reactions) + thread | intro, post, thread, outro | paper, night, ink, sunrise |
+| `split` | split-screen tutorial: steps + code / screenshot / screen recording | intro, split, outro | paper, terminal, night |
 | `day-recap` | 66-day progress card, XP, streak, tomorrow | recap, screen, next, outro | paper, night, forest |
+
+Video clips (`video` fields) are decoded by an ffmpeg pipe straight into the frame loop (`core.VideoClip`, cover-fit,
+per-scene start second); their audio is mixed in under the music (`keep_audio`). Clips are fetched with the same
+SSRF guard as images (max `FLR_MAX_VIDEO_MB`, default 200, probed with ffprobe).
 
 `screen` scenes show an uploaded screenshot in a phone / browser frame (tall phone screenshots scroll slowly).
 Images are fetched by URL at render time (`assets.py`): http(s) only, public IPs only (no loopback/private/link-local,
@@ -58,14 +67,14 @@ into a box (never assume length); ease every motion; colours only from the palet
 
 ```bash
 sudo apt-get install -y ffmpeg libcairo2-dev pkg-config     # (already present in the dev container)
-pip install --break-system-packages -r render-server/requirements.txt
+pip install --break-system-packages -r render-server/requirements-dev.txt   # runtime deps + pytest/httpx/hadolint
 cd render-server
 
 python -m flowleaf_render.cli render explainer --fmt 9x16 --lang ru     # → data/out/renders/…/video.mp4 + contact.png
 python -m flowleaf_render.cli stills listicle --fmt 16x9 --draft        # layout check, no encoding
 python -m flowleaf_render.cli samples                                    # stills for every template/format/lang
 
-RENDER_SERVER_TOKEN=dev-render FLR_ALLOW_PRIVATE_FETCH=1 uvicorn flowleaf_render.server:app --port 8080
+RENDER_SERVER_TOKEN=dev-render FLR_ALLOW_PRIVATE_FETCH=1 python -m flowleaf_render   # or: uvicorn flowleaf_render.server:app --port 8080
 pytest -q tests
 ```
 
@@ -86,6 +95,7 @@ Speed (4 vCPU): a 23 s 1080×1920 video renders in ~30 s; `draft` quality in ~8 
 | `FLR_ALLOW_PRIVATE_FETCH` | — | `1` lets image fields point at private/localhost URLs. **Dev only** (Worker on localhost) |
 | `ELEVENLABS_API_KEY` | — | enables voiceover (+ AI SFX/music). Without it: synth music + SFX, captions carry the words |
 | `ELEVEN_VOICE_ID`, `ELEVEN_TTS_MODEL` | Brian, `eleven_multilingual_v2` | voice; the multilingual model speaks Russian |
+| `FLR_MAX_VIDEO_MB` | `200` | max size of a fetched footage clip |
 | `ELEVEN_MUSIC` | `1` | set `0` to keep synth music even with a key |
 | `S3_BUCKET` | — | enables S3-compatible upload of outputs |
 | `S3_ENDPOINT_URL` | AWS | e.g. `https://<account>.r2.cloudflarestorage.com` for R2 |
@@ -93,6 +103,13 @@ Speed (4 vCPU): a 23 s 1080×1920 video renders in ~30 s; `draft` quality in ~8 
 | `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | | standard boto3 credentials (or an IAM task role on AWS) |
 
 ## Deploy on AWS
+
+**Exact, copy-paste runbook: [`deploy/AWS.md`](deploy/AWS.md)** (S3 bucket, secrets, IAM roles, ECR push via
+`deploy/build-and-push.sh`, Fargate task definition `deploy/ecs-task-definition.json`, HTTPS ALB, Worker wiring).
+The Dockerfile is a multi-stage build (wheels compiled in a builder stage, slim runtime with ffmpeg + libcairo,
+non-root uid 10001, healthcheck) and passes `hadolint`.
+
+Summary:
 
 The image is self-contained: `docker build -t flowleaf-render render-server/`.
 

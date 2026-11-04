@@ -62,3 +62,12 @@ def test_image_fields_and_ssrf_guard(monkeypatch):
     monkeypatch.delenv("FLR_ALLOW_PRIVATE_FETCH", raising=False)
     for url in ("http://169.254.169.254/latest/meta-data/", "http://127.0.0.1:1/x.png", "http://10.0.0.1/a.png"):
         assert fetch_image(url, log=lambda *_: None) is None
+
+
+def test_voice_field():
+    from flowleaf_render.schema import deep
+    sb = deep(TEMPLATES["explainer"].examples["en"])
+    sb["voice"] = "nPczCjzI2devNBz1zQrb"
+    assert validate(sb, TEMPLATES)[0]["voice"] == "nPczCjzI2devNBz1zQrb"
+    sb["voice"] = "../../etc"
+    assert validate(sb, TEMPLATES)[0]["voice"] == ""

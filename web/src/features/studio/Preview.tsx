@@ -409,6 +409,214 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
         </div>
       );
     }
+    case "title": case "clip": {
+      const src = str(c.sb.fields.video);
+      const start = Number(f.start) || 0;
+      const framed = sc.kind === "clip" && f.layout === "framed";
+      const pts = ((f.points as string[]) ?? []).filter(Boolean).slice(0, 3);
+      const vid = (style: CSSProperties) => src
+        ? <ClipVideo src={src} at={start + t} style={style} />
+        : <div style={{ ...style, background: `linear-gradient(135deg, ${P.accent}, ${P.accent2})`, display: "grid", placeItems: "center", color: "#fff", fontSize: 40, fontWeight: 600 }}>{c.sb.lang === "ru" ? "▶ Твоё видео здесь" : "▶ Your clip here"}</div>;
+      if (sc.kind === "title") return (
+        <>
+          {vid({ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" })}
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,.55)" }} />
+          <Center c={c} gap={40}>
+            {str(f.kicker) && <Pill bg={P.accent} fg={P.on_accent}>{str(f.kicker).toUpperCase()}</Pill>}
+            <Words text={str(f.title)} t={t} start={.2} size={fitSize(str(f.title), colW, 500, v ? 118 : 100, 40)} color="#fff" />
+          </Center>
+        </>
+      );
+      if (framed && c.wide) return (
+        <div style={{ position: "absolute", left: 130, right: 130, top: 140, bottom: 140, display: "flex", gap: 70, alignItems: "center" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 34 }}>
+            {str(f.headline) && <Words text={str(f.headline)} t={t} start={.2} size={68} color={P.fg} align="left" />}
+            {pts.map((p, k) => <Appear key={k} t={t} at={.7 + k * .6}><div style={{ fontSize: 38, fontWeight: 600, color: P.fg }}>{k + 1}. {p}</div></Appear>)}
+          </div>
+          <div style={{ flex: "0 0 60%" }}>{vid({ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 26 })}</div>
+        </div>
+      );
+      if (framed) return (
+        <Center c={c} gap={50}>
+          {str(f.headline) && <Words text={str(f.headline)} t={t} start={.2} size={v ? 76 : 60} color={P.fg} />}
+          {vid({ width: "100%", aspectRatio: "16 / 9", objectFit: "cover", borderRadius: 26, boxShadow: "0 20px 50px rgba(0,0,0,.3)" })}
+          <div style={{ alignSelf: "stretch", display: "flex", flexDirection: "column", gap: 30, textAlign: "left" }}>
+            {pts.map((p, k) => <Appear key={k} t={t} at={.7 + k * .6}><div style={{ display: "flex", gap: 24, alignItems: "center", fontSize: v ? 46 : 38, fontWeight: 600, color: P.fg }}>
+              <span style={{ width: 48, height: 48, flex: "none", borderRadius: 99, background: P.accent, color: P.on_accent, display: "grid", placeItems: "center", fontSize: 26, fontWeight: 900 }}>{k + 1}</span>{p}</div></Appear>)}
+          </div>
+        </Center>
+      );
+      return (
+        <>
+          {vid({ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" })}
+          <div style={{ position: "absolute", inset: 0, background: "linear-gradient(rgba(0,0,0,.6), transparent 35%, transparent 50%, rgba(0,0,0,.75))" }} />
+          {str(f.headline) && <div style={{ position: "absolute", left: v ? 90 : 130, right: v ? 90 : 130, top: v ? 240 : 100 }}><Words text={str(f.headline)} t={t} start={.15} size={v ? 84 : 68} color="#fff" align="left" /></div>}
+          <div style={{ position: "absolute", left: v ? 90 : 130, bottom: v ? 340 : 150, display: "flex", flexDirection: "column", gap: 24, alignItems: "flex-start" }}>
+            {pts.map((p, k) => <Appear key={k} t={t} at={.5 + k * .7}><span style={{ display: "inline-block", background: P.accent, color: P.on_accent, fontSize: v ? 44 : 36, fontWeight: 700, padding: "18px 34px", borderRadius: 18 }}>{p}</span></Appear>)}
+          </div>
+        </>
+      );
+    }
+    case "versus": {
+      const names = [str(c.sb.fields.a_name) || "A", str(c.sb.fields.b_name) || "B"], tags = [str(f.a_tag), str(f.b_tag)];
+      return (
+        <div style={{ position: "absolute", left: v ? 90 : 130, right: v ? 90 : 130, top: v ? 250 : 200, bottom: v ? 350 : 200, display: "flex", flexDirection: v ? "column" : "row", gap: 120, alignItems: "stretch", justifyContent: "center" }}>
+          {[0, 1].map((k) => (
+            <Appear key={k} t={t} at={.1 + k * .25} style={{ flex: 1 }}>
+              <CardBox c={c} style={{ height: "100%", display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center", gap: 30, textAlign: "center", borderTop: `18px solid ${k ? P.accent2 : P.accent}`, padding: 40 }}>
+                <div style={{ fontSize: v ? 100 : 84, fontWeight: 900, color: P.fg, lineHeight: 1 }}>{names[k]}</div>
+                {tags[k] && <div style={{ fontSize: 38, color: P.muted }}>{tags[k]}</div>}
+              </CardBox>
+            </Appear>
+          ))}
+          <div style={{ position: "absolute", left: "50%", top: "50%", transform: `translate(-50%,-50%) scale(${outBack(prog(t, .7, 1.1))})`, width: 150, height: 150, borderRadius: 99, background: P.fg, color: P.bg, display: "grid", placeItems: "center", fontSize: 52, fontWeight: 900 }}>VS</div>
+        </div>
+      );
+    }
+    case "criterion": {
+      const rows = [[str(c.sb.fields.a_name) || "A", Number(f.a_score) || 0, str(f.a_note), P.accent], [str(c.sb.fields.b_name) || "B", Number(f.b_score) || 0, str(f.b_note), P.accent2]] as const;
+      return (
+        <Center c={c} align="left" gap={50}>
+          <div style={{ fontSize: 30, fontWeight: 700, letterSpacing: ".12em", color: P.muted }}>{c.sb.lang === "ru" ? `КРИТЕРИЙ ${c.nth + 1}` : `ROUND ${c.nth + 1}`}</div>
+          <Words text={str(f.label)} t={t} start={.1} size={v ? 92 : 80} color={P.fg} align="left" />
+          {rows.map(([name, score, note, col], k) => {
+            const u = ease(t, .6 + k * .2, 1.8 + k * .2);
+            return (
+              <div key={k} style={{ width: "100%" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", fontSize: 46, fontWeight: 800, color: P.fg }}><span>{name}</span><span>{Math.round(score * u * 10) / 10}/10</span></div>
+                <div style={{ height: 38, borderRadius: 19, background: P.line, marginTop: 14 }}><div style={{ height: "100%", borderRadius: 19, background: col, width: `${Math.min(1, score / 10) * u * 100}%` }} /></div>
+                {note && <div style={{ fontSize: 36, color: P.muted, marginTop: 14 }}>{note}</div>}
+              </div>
+            );
+          })}
+        </Center>
+      );
+    }
+    case "verdict": {
+      const w = str(f.winner) || "a";
+      const a = str(c.sb.fields.a_name) || "A", b = str(c.sb.fields.b_name) || "B";
+      const col = w === "a" ? P.accent : w === "b" ? P.accent2 : P.fg;
+      const ru = c.sb.lang === "ru";
+      return (
+        <Center c={c} gap={40}>
+          <div style={{ width: 260, height: 260, borderRadius: 999, background: col, transform: `scale(${outBack(prog(t, .05, .6))})`, display: "grid", placeItems: "center", fontSize: 130, color: P.dark ? P.bg : "#fff" }}>★</div>
+          <div style={{ fontSize: 32, fontWeight: 700, letterSpacing: ".14em", color: P.muted }}>{str(f.label) || (w === "tie" ? (ru ? "НИЧЬЯ" : "IT'S A TIE") : (ru ? "ПОБЕДИТЕЛЬ" : "WINNER"))}</div>
+          <Words text={w === "a" ? a : w === "b" ? b : `${a} = ${b}`} t={t} start={.45} size={v ? 120 : 100} color={P.fg} />
+          {str(f.reason) && <Appear t={t} at={.9}><div style={{ fontSize: 44, color: P.muted }}>{str(f.reason)}</div></Appear>}
+        </Center>
+      );
+    }
+    case "timeline": {
+      const ms = ((f.milestones as string[]) ?? []).filter(Boolean).slice(0, 6).map((m) => { const r = /^\s*(?:day|день)?\s*(\d{1,3})\s*[:.—–\-|]\s*(.+)$/i.exec(m); return r ? [r[1], r[2]] : ["", m]; });
+      const step = Math.min(.7, (c.dur - 1.2) / Math.max(1, ms.length));
+      const ru = c.sb.lang === "ru";
+      return (
+        <Center c={c} align="left" gap={v ? 40 : 24}>
+          {str(f.title) && <Words text={str(f.title)} t={t} start={.05} size={v ? 84 : 68} color={P.fg} align="left" />}
+          <div style={{ position: "relative", paddingLeft: 90, display: "flex", flexDirection: "column", gap: v ? 70 : 30 }}>
+            <div style={{ position: "absolute", left: 30, top: 20, bottom: 20, width: 8, borderRadius: 4, background: P.line }} />
+            {ms.map(([d, txt], k) => {
+              const last = k === ms.length - 1;
+              return (
+                <Appear key={k} t={t} at={.3 + step * k}>
+                  <div style={{ display: "flex", gap: 40, alignItems: "flex-start", marginLeft: -90 }}>
+                    <span style={{ width: 68, flex: "none", display: "grid", placeItems: "center", paddingTop: 14 }}>
+                      <span style={{ width: last ? 40 : 32, height: last ? 40 : 32, borderRadius: 99, background: last ? P.accent2 : P.accent, boxShadow: last ? `0 0 40px ${P.accent2}` : undefined }} />
+                    </span>
+                    <div>
+                      <div style={{ fontSize: 28, fontWeight: 700, letterSpacing: ".1em", color: P.muted }}>{d ? (ru ? `ДЕНЬ ${d}` : `DAY ${d}`) : ""}</div>
+                      <div style={{ fontSize: v ? 56 : 44, fontWeight: 700, color: P.fg }}>{txt}</div>
+                    </div>
+                  </div>
+                </Appear>
+              );
+            })}
+          </div>
+        </Center>
+      );
+    }
+    case "progress": {
+      const total = Number(c.sb.fields.total) || 66, day = Math.min(total, Number(f.day) || 0);
+      const u = ease(t, .2, 1.8), R = v ? 320 : 250, circ = 2 * Math.PI * R;
+      return (
+        <Center c={c} gap={60}>
+          <div style={{ position: "relative", width: R * 2 + 40, height: R * 2 + 40 }}>
+            <svg viewBox={`0 0 ${R * 2 + 40} ${R * 2 + 40}`} width="100%" height="100%" style={{ position: "absolute", inset: 0 }}>
+              <circle cx={R + 20} cy={R + 20} r={R} fill="none" stroke={P.line} strokeWidth="34" />
+              <circle cx={R + 20} cy={R + 20} r={R} fill="none" stroke={P.accent} strokeWidth="34" strokeLinecap="round" strokeDasharray={`${circ * day / total * u} ${circ}`} transform={`rotate(-90 ${R + 20} ${R + 20})`} />
+            </svg>
+            <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center" }}>
+              <div><div style={{ fontSize: v ? 190 : 150, fontWeight: 900, color: P.fg, lineHeight: 1 }}>{Math.round(day * u)}</div><div style={{ fontSize: 40, color: P.muted }}>{c.sb.lang === "ru" ? `из ${total} дней` : `of ${total} days`}</div></div>
+            </div>
+          </div>
+          {str(f.label) && <Words text={str(f.label)} t={t} start={1.2} size={v ? 76 : 64} color={P.fg} />}
+        </Center>
+      );
+    }
+    case "highlight": {
+      const ru = c.sb.lang === "ru";
+      return (
+        <Center c={c} gap={40}>
+          <Pill bg={P.accent2} fg={P.dark ? P.bg : "#fff"}>{(str(f.label) || (ru ? "ВЕХА" : "MILESTONE")).toUpperCase()}</Pill>
+          <div style={{ fontSize: v ? 260 : 220, fontWeight: 900, color: P.accent, lineHeight: 1, transform: `scale(${.8 + .2 * outBack(prog(t, .1, .7))})` }}>{ru ? "День" : "Day"} {Number(f.day) || 1}</div>
+          <Appear t={t} at={.6}><div style={{ fontSize: v ? 76 : 62, fontWeight: 800, color: P.fg }}>{str(f.title)}</div></Appear>
+          {str(f.text) && <Appear t={t} at={1}><div style={{ fontSize: 44, color: P.muted }}>{str(f.text)}</div></Appear>}
+        </Center>
+      );
+    }
+    case "post": case "thread": {
+      const name = str(f.name) || str(c.sb.fields.name) || "", handle = str(f.handle) || str(c.sb.fields.handle) || "";
+      const ini = (name.split(/\s+/).filter(Boolean).slice(0, 2).map((x) => x[0]).join("") || "?").toUpperCase();
+      const posts = sc.kind === "post" ? [str(f.text)] : ((f.posts as string[]) ?? []).filter(Boolean).slice(0, 3);
+      const per = sc.kind === "post" ? 0 : Math.max(1, (c.dur - 1) / Math.max(1, posts.length));
+      return (
+        <Center c={c} gap={30}>
+          {posts.map((p, k) => {
+            const t0 = .2 + k * per, words = p.split(/\s+/);
+            const shown = Math.max(0, Math.floor((t - t0 - .3) * (sc.kind === "post" ? 9 : 11)));
+            return (
+              <Appear key={k} t={t} at={t0} style={{ width: "100%" }}>
+                <CardBox c={c} style={{ padding: 50, textAlign: "left" }}>
+                  <div style={{ display: "flex", gap: 24, alignItems: "center" }}>
+                    <span style={{ width: 90, height: 90, borderRadius: 99, background: P.accent, color: P.on_accent, display: "grid", placeItems: "center", fontSize: 36, fontWeight: 700 }}>{ini}</span>
+                    <div><div style={{ fontSize: 40, fontWeight: 700, color: P.fg }}>{name}</div><div style={{ fontSize: 32, color: P.muted }}>{handle}{str(f.when) ? ` · ${str(f.when)}` : ""}</div></div>
+                  </div>
+                  <div style={{ fontSize: sc.kind === "post" ? (v ? 56 : 46) : (v ? 42 : 34), color: P.fg, marginTop: 36, lineHeight: 1.35, whiteSpace: "pre-wrap" }}>{words.slice(0, shown).join(" ")}</div>
+                  {sc.kind === "post" && <div style={{ display: "flex", gap: 60, marginTop: 40, paddingTop: 24, borderTop: `2px solid ${P.line}`, fontSize: 32, color: P.muted }}>
+                    <span>💬 {Number(f.replies) || 0}</span><span>⟲ {Number(f.reposts) || 0}</span><span style={{ color: P.accent2 }}>♥ {Number(f.likes) || 0}</span></div>}
+                </CardBox>
+              </Appear>
+            );
+          })}
+        </Center>
+      );
+    }
+    case "split": {
+      const wide = c.wide;
+      const bullets = ((f.bullets as string[]) ?? []).filter(Boolean).slice(0, 4);
+      const per = Math.max(.8, (c.dur - 1.4) / Math.max(1, bullets.length));
+      const mode = str(f.panel) || "code";
+      const code = str(f.code).split("\n"), chars = code.reduce((a, l) => a + l.length + 1, 0);
+      let shown = Math.floor(chars * prog(t, .5, .5 + Math.min(2.5, chars / 50)));
+      const panel = mode === "code"
+        ? <Window c={c} title={str(f.filename) || str(f.language)}><pre style={{ margin: 0, fontFamily: "var(--font-mono)", fontSize: v ? 26 : 24, lineHeight: 1.5, color: P.fg, overflow: "hidden" }}>{code.map((l, k) => { const vis = l.slice(0, Math.max(0, shown)); shown -= l.length + 1; return <div key={k} style={{ whiteSpace: "pre" }}>{vis || " "}</div>; })}</pre></Window>
+        : mode === "video" && str(f.video) ? <ClipVideo src={str(f.video)} at={(Number(f.start) || 0) + t} style={{ width: "100%", height: "100%", objectFit: "cover", borderRadius: 24 }} />
+        : str(f.image) ? <img src={str(f.image)} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: "top", borderRadius: 24 }} />
+        : <div style={{ width: "100%", height: "100%", borderRadius: 24, background: P.bg2, border: `2px solid ${P.line}` }} />;
+      return (
+        <div style={{ position: "absolute", left: v ? 70 : 130, right: v ? 70 : 130, top: v ? 230 : wide ? 150 : 120, bottom: v ? 330 : 140, display: "flex", flexDirection: wide ? "row-reverse" : "column", gap: 60 }}>
+          <div style={{ flex: wide ? "0 0 58%" : "0 0 50%", minHeight: 0, overflow: "hidden", opacity: ease(t, 0, .3) }}>{panel}</div>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 30, textAlign: "left" }}>
+            {str(f.title) && <Words text={str(f.title)} t={t} start={.2} size={v ? 72 : 60} color={P.fg} align="left" />}
+            {bullets.map((b, k) => {
+              const t0 = .9 + k * per, cur = t < t0 + per || k === bullets.length - 1;
+              return <Appear key={k} t={t} at={t0}><div style={{ display: "flex", gap: 20, alignItems: "center", fontSize: v ? 44 : 38, fontWeight: 600, color: P.fg, opacity: cur ? 1 : .5 }}>
+                <span style={{ width: 52, height: 52, flex: "none", borderRadius: 99, background: cur ? P.accent : P.line, color: cur ? P.on_accent : P.muted, display: "grid", placeItems: "center", fontSize: 28, fontWeight: 900 }}>{k + 1}</span>{b}</div></Appear>;
+            })}
+          </div>
+        </div>
+      );
+    }
     case "question": {
       const opts = ((f.options as string[]) ?? []).filter(Boolean).slice(0, 4);
       const ans = Math.max(1, Math.min(opts.length, Number(f.answer) || 1)) - 1;
@@ -480,6 +688,16 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
     default:
       return <Center c={c}><div style={{ fontSize: 60, color: P.fg }}>{sc.kind}</div></Center>;
   }
+}
+
+/** Muted clip that follows the preview clock (re-seeks only when it drifts). */
+function ClipVideo({ src, at, style }: { src: string; at: number; style: CSSProperties }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  useEffect(() => {
+    const el = ref.current;
+    if (el && Number.isFinite(at) && Math.abs(el.currentTime - at) > .35) { try { el.currentTime = at; } catch { /* not ready */ } }
+  }, [at]);
+  return <video ref={ref} src={src} muted playsInline autoPlay loop preload="auto" style={style} />;
 }
 
 function Window({ c, title, children, dark }: { c: Ctx; title: string; children: ReactNode; dark?: boolean }) {

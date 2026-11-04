@@ -1,6 +1,7 @@
 import { useEffect, useId, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
+import { PageHeader, SectionTitle } from "@web/ui";
 import { type Catalog, type Format, type Lang, type ProjectSummary, type StatusInfo, type TemplateDef, loadCatalog, studioApi } from "./api";
 import { applyRecap, loadRecapData } from "./prefill";
 import { strings } from "./strings";
@@ -40,11 +41,7 @@ export default function Studio() {
 
   return (
     <div className="space-y-12">
-      <header className="max-w-[70ch]">
-        <p className="mb-2 inline-flex items-center gap-2 text-sm font-medium text-accent"><Icon name="film" />{s.title}</p>
-        <h1 className="text-3xl font-semibold tracking-tight sm:text-4xl">{s.title}</h1>
-        <p className="mt-3 text-[1.0625rem] leading-relaxed text-muted">{s.lead}</p>
-      </header>
+      <PageHeader eyebrow={<span className="inline-flex items-center gap-1.5"><Icon name="film" />{s.eyebrow}</span>} title={s.title} description={s.lead} className="mb-0 sm:mb-0" />
 
       {status && (!status.ai || !status.renderer || !status.rendererHealth.ok) && (
         <div className="grid gap-3 md:grid-cols-2">
@@ -59,7 +56,7 @@ export default function Studio() {
 
       {(!projects || projects.length > 0) && (
         <section aria-labelledby="studio-projects">
-          <h2 id="studio-projects" className="mb-4 text-xl font-semibold tracking-tight">{s.yourProjects}</h2>
+          <div id="studio-projects"><SectionTitle title={s.yourProjects} /></div>
           {!projects ? (
             <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
               {[0, 1, 2].map((k) => <div key={k} className="aspect-[4/5] animate-pulse rounded-[var(--radius)] bg-surface-2" />)}
@@ -91,8 +88,7 @@ export default function Studio() {
       )}
 
       <section aria-labelledby="studio-new">
-        <h2 id="studio-new" className="text-xl font-semibold tracking-tight">{s.newVideo}</h2>
-        <p className="mb-5 mt-1 max-w-[70ch] text-muted">{projects?.length === 0 ? s.noProjects : s.newVideoLead}</p>
+        <div id="studio-new"><SectionTitle className="mb-5" title={s.newVideo} description={projects?.length === 0 ? s.noProjects : s.newVideoLead} /></div>
         {!cat ? (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{[0, 1, 2].map((k) => <div key={k} className="h-72 animate-pulse rounded-[var(--radius)] bg-surface-2" />)}</div>
         ) : (
