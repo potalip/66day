@@ -1,9 +1,8 @@
-import { useEffect, type ReactNode } from "react";
+import { Suspense, useEffect, type ReactNode } from "react";
 import { Link, NavLink, Outlet, useLocation, useParams } from "react-router";
 import { CalendarCheck2, Clapperboard, Library, Map as MapIcon, Trophy, UserRound } from "lucide-react";
 import { LangContext, LANGS, type Lang, dict } from "./i18n";
-import faviconUrl from "./ui/assets/favicon.svg?url";
-import { Logo, LeafMark, ThemeToggle, LangSwitcher, ToastProvider, ButtonLink, cn, uiStrings } from "./ui";
+import { Logo, LeafMark, ThemeToggle, LangSwitcher, ToastProvider, ButtonLink, RouteFallback, cn, uiStrings, useResolvedTheme } from "./ui";
 
 // OWNER: design agent (layout/visuals). Keep nav items + routes in sync with App.tsx.
 type NavKey = "today" | "path" | "library" | "studio" | "leaderboard";
@@ -25,12 +24,12 @@ export function Shell() {
   const isFocus = rest === "/start"; // onboarding: no tab bar, minimal chrome
 
   useEffect(() => { document.documentElement.lang = l; }, [l]);
+  const resolved = useResolvedTheme();
   useEffect(() => {
-    // Favicon without touching index.html (orchestrator-owned): inject once.
-    if (document.querySelector('link[rel="icon"]')) return;
-    const link = Object.assign(document.createElement("link"), { rel: "icon", type: "image/svg+xml", href: faviconUrl });
-    document.head.appendChild(link);
-  }, []);
+    // Keep the browser chrome colour in sync when the theme is forced (index.html only knows the system scheme).
+    const c = getComputedStyle(document.documentElement).getPropertyValue("--bg").trim();
+    document.querySelectorAll<HTMLMetaElement>('meta[name="theme-color"]').forEach((m) => { if (c) m.content = c; });
+  }, [resolved]);
   useEffect(() => { window.scrollTo(0, 0); }, [loc.pathname]);
   // keep orchestrator dict import alive for title/brand consistency
   useEffect(() => { document.title = dict[l].shell.brand; }, [l]);
@@ -78,7 +77,9 @@ export function Shell() {
 
           <main id="main" tabIndex={-1} className={cn("flex-1 focus:outline-none",
             isLanding ? "" : "mx-auto w-full max-w-6xl px-4 pb-28 pt-6 sm:px-6 sm:pt-10 md:pb-16")}>
-            <Outlet />
+            <Suspense fallback={isLanding ? null : <RouteFallback />}>
+              <Outlet />
+            </Suspense>
           </main>
 
           {(isLanding || !isFocus) && <Footer lang={l} compact={!isLanding} />}

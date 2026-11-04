@@ -388,7 +388,7 @@ function Studio({ t }: { t: LandingStrings }) {
 
 /* ---------------- library ---------------- */
 function LibrarySection({ t }: { t: LandingStrings }) {
-  const kindIcon = (k: string) => k === "YouTube" ? <PlayCircle /> : k === "Reel" || k === "Рилс" ? <Video /> : k === "Telegram" ? <Send /> : <FileText />;
+  const kindIcon = (k: string) => k === "YouTube" ? <PlayCircle /> : <FileText />;
   return (
     <Section>
       <div className="grid gap-12 lg:grid-cols-[1fr_1fr] lg:gap-16">

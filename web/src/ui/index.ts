@@ -25,3 +25,4 @@ export { Stat, Kbd, Divider, Container, VisuallyHidden } from "./Misc";
 export { uiStrings } from "./strings";
 export { formatters, useFormat } from "./format";
 export { AiNotice } from "./AiNotice";
+export { RouteFallback } from "./RouteFallback";

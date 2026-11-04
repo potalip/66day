@@ -1,24 +1,16 @@
-# design → game (consistency notes, from agent/game @ f56a3f6)
+# design → game (round 2 QA, main @ d30deba)
 
-The game screens use tokens well (no hex, nice job). Once `[design]` PR #1 is merged, please swap the local copies in
-`web/src/features/game/ui.tsx` for the shared kit so every page looks and behaves the same:
+Screens checked: Leaderboard, Profile — EN/RU × light/dark × 390/1280. Solid and on-token. Fix list:
 
-| Local | Use instead (`import … from "@web/ui"`) | Why |
-|---|---|---|
-| `cx` | `cn` | same thing |
-| `Card` | `Card` (`as`, `tone`, `padding`, `interactive`) | same radius/border/padding scale everywhere |
-| `Segmented` | `Segmented` (radiogroup, arrow keys) or `Tabs variant="pill"` | one keyboard model app-wide |
-| `Button` | `Button` / `ButtonLink` | variants, sizes, loading, focus ring |
-| `Skeleton` | `Skeleton`, `SkeletonText`, `SkeletonCard` | shimmer is static under reduced motion |
-| `Avatar` (widgets) | `Avatar` (`ring="gold"` for top-3 / you, `ring="accent"`) | same initials tones as everywhere |
-| `LevelRing` internals | `ProgressRing tone="gold"` (children render in the centre) | ring geometry/animation shared |
-| page `<header>` | `PageHeader eyebrow title description actions` | same title scale on every page |
-| `AwardToaster`/`showAwards` | keep the API, but render via `useToast()` → `toast({ tone: "reward", title: "+40 XP", description })` | one toast stack (Shell already mounts `ToastProvider`, placed above the mobile tab bar) |
-| `format.ts` numbers | `useFormat().number / plural` | RU `1 240`, EN `1,240`, RU plurals |
-
-Keep `GameIcon` for badge art if it's bespoke; for UI icons use `lucide-react` (Flame = streak, Zap = XP, Trophy = ranks,
-Crown = boss) so they match the Shell and landing. Gold = rewards only — `text-gold` for text, `text-gold-bright`/`bg-gold-bright`
-for icons and fills.
-
-Rest-day / boss-day visuals on the landing path map: boss = `bg-gold-soft border-gold-bright/70` + Crown, rest = dashed
-`border-line-strong` + Moon. Please mirror this in the Heatmap legend if you show those states (learn's PathMap too).
+1. **Heatmap legend copy is wrong in dark mode.** "Darker means more XP" / «Чем темнее, тем больше XP» — in the dark theme
+   more XP is *brighter*. Use "Deeper green = more XP" / «Чем насыщеннее цвет, тем больше XP».
+2. **Emoji badge art** (🌱🔥🚀🌳🍃) renders differently per OS, looks noisy next to line icons, and the colours ignore the theme.
+   Use lucide icons inside your gold medallion (earned: `bg-gold-soft text-gold-ink ring-gold-bright/50`; locked:
+   `bg-surface-2 text-muted`). Suggested map: first-step `Sprout`, streaks `Flame`, 30-day `TreeDeciduous`, unbroken-66 `Leaf`,
+   it's-alive `Rocket`, milestone `Flag`, boss `Crown`, first-render `Film`, fifty-tasks `Layers`, curious `BookOpen`.
+3. **Leaderboard with 1–3 people** leaves a big empty area on mobile. Add a quiet line under the list:
+   "Finish today's tasks to climb — the week resets in 4 days." / «Сделай задачи на сегодня, чтобы подняться, — неделя
+   обнулится через 4 дня.» (EmptyState `compact` works).
+4. **Kit migration** (PR #1 is on main) — see round-1 table above this line in git history: `cx`→`cn`, `Card`, `Segmented`,
+   `Button`, `Skeleton`, `Avatar` (`ring="gold"`), `ProgressRing tone="gold"`, `PageHeader`, toasts via `useToast({tone:"reward"})`,
+   numbers via `useFormat()`.
