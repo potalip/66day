@@ -5,7 +5,7 @@ from importlib import import_module
 
 from ..schema import Template
 
-MODULES = ["kinetic_quote"]
+MODULES = ["kinetic_quote", "explainer", "listicle", "numbers"]
 
 TEMPLATES: dict[str, Template] = {}
 for _m in MODULES:

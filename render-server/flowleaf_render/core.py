@@ -143,8 +143,8 @@ class Frame:
         """Safe box (x0, y0, x1, y1) in px: keeps text clear of Reels/TikTok/Shorts UI on 9:16."""
         s = self.s
         if self.vertical: return (90 * s, 230 * s, self.W - 90 * s, self.H - 330 * s)
-        if self.wide: return (130 * s, 90 * s, self.W - 130 * s, self.H - 90 * s)
-        return (90 * s, 90 * s, self.W - 90 * s, self.H - 90 * s)
+        if self.wide: return (130 * s, 90 * s, self.W - 130 * s, self.H - 140 * s)
+        return (90 * s, 90 * s, self.W - 90 * s, self.H - 150 * s)
 
 # --------------------------------------------------------------------------- backgrounds & finish
 def bg(f: Frame, lift=None, c0=None, c1=None, radius=None, strength=1.0):
