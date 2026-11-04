@@ -4,7 +4,7 @@ import { CATALOG } from "./badges";
 import { bossTitle, CURRICULUM, isBossDay } from "./curriculum";
 import { levelProgress, rankFor } from "./levels";
 import { loadStats, type StatsRow } from "./store";
-import { loadWeek, pickQuests, questProgress } from "./quests";
+import { loadWeek, pickQuests, questProgress, questTarget } from "./quests";
 import { CATALOG_BY_ID } from "./badges";
 import { MAX_FREEZES, viewStreak } from "./streak";
 import { addDays, daysBetween, isoWeek, localDay, safeTz, weekResetsAt } from "./time";
@@ -12,8 +12,16 @@ import type { CertificateResponse, QuestsResponse, ActivityCell, BadgeInfo, Earn
 
 interface UserRow { id: string; display_name: string | null; track: Track | null; timezone: string | null; started_at: number | null; created_at: number }
 
+/** Which track(s) can earn a badge: only-apps / only-video day badges are track-specific; everything else is for all. */
+export function badgeTracks(id: string): Track[] | null {
+  const tracks = new Set<string>();
+  for (const [key, ids] of CURRICULUM.dayBadges) if (ids.includes(id)) tracks.add(key.split(":")[0]);
+  if (!tracks.size || tracks.has("common") || (tracks.has("apps") && tracks.has("video"))) return null;
+  return [...tracks] as Track[];
+}
+
 export const badgeCatalog = (): BadgeInfo[] =>
-  CATALOG.map(({ id, icon, title, description, group, secret }) => ({ id, icon, title, description, group, secret: !!secret }));
+  CATALOG.map(({ id, icon, title, description, group, secret }) => ({ id, icon, title, description, group, secret: !!secret, tracks: badgeTracks(id) }));
 
 function levelInfo(xp: number): LevelInfo {
   const p = levelProgress(xp);
@@ -243,17 +251,17 @@ export async function getLeaderboard(
 }
 
 export async function getQuests(db: D1Database, userId: string, now = new Date()): Promise<QuestsResponse> {
-  const u = await db.prepare("SELECT u.track AS ut, s.track AS st FROM users u LEFT JOIN game_stats s ON s.user_id = u.id WHERE u.id = ?")
-    .bind(userId).first<{ ut: Track | null; st: Track | null }>();
   const wk = await loadWeek(db, userId, now);
   return {
     week: wk.week,
     resetsAt: wk.end,
-    quests: pickQuests(wk.week, u?.ut ?? u?.st ?? null).map((q) => {
+    programWeek: wk.ctx.programWeek,
+    quests: pickQuests(wk.week, wk.ctx).map((q) => {
       const done = wk.done.has(q.id);
+      const target = questTarget(q);
       return {
-        id: q.id, icon: q.icon, title: q.title, description: q.description, xp: q.xp, target: q.goal.target,
-        progress: done ? q.goal.target : questProgress(q, wk.events), done, completedAt: wk.done.get(q.id) ?? null,
+        id: q.id, icon: q.icon, title: q.title, description: q.description, xp: q.xp, target,
+        progress: done ? target : questProgress(q, wk.events, wk.ctx.track), done, completedAt: wk.done.get(q.id) ?? null,
       };
     }),
   };

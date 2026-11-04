@@ -5,7 +5,7 @@ import { CATALOG_BY_ID } from "./badges";
 import { CURRICULUM, type CurriculumIndex } from "./curriculum";
 import { eventKey, reduce, type AnyGameEvent, type GameState } from "./engine";
 import { isoWeek, safeTz } from "./time";
-import { loadWeek, pickQuests, questProgress } from "./quests";
+import { loadWeek, pickQuests, questProgress, questTarget } from "./quests";
 
 export interface StatsRow {
   user_id: string;
@@ -137,14 +137,12 @@ export async function applyEvent(db: D1Database, userId: string, ev: AnyGameEven
 /** Complete any weekly quest whose goal is now met. Each completion is its own idempotent event. */
 export async function checkQuests(db: D1Database, userId: string, now: Date, opts: ApplyOptions = {}): Promise<Award[]> {
   try {
-    const u = await db.prepare("SELECT s.track AS st, u.track AS ut, u.lang AS lang FROM users u LEFT JOIN game_stats s ON s.user_id = u.id WHERE u.id = ?")
-      .bind(userId).first<{ st: Track | null; ut: Track | null; lang: string | null }>();
-    const track = u?.ut ?? u?.st ?? null;
+    const u = await db.prepare("SELECT lang FROM users WHERE id = ?").bind(userId).first<{ lang: string | null }>();
     const lang = u?.lang === "ru" ? "ru" : "en";
     const wk = await loadWeek(db, userId, now, opts.curriculum);
     const awards: Award[] = [];
-    for (const q of pickQuests(wk.week, track)) {
-      if (wk.done.has(q.id) || questProgress(q, wk.events) < q.goal.target) continue;
+    for (const q of pickQuests(wk.week, wk.ctx)) {
+      if (wk.done.has(q.id) || questProgress(q, wk.events, wk.ctx.track, opts.curriculum) < questTarget(q)) continue;
       awards.push(...(await applyEvent(db, userId, { type: "quest.completed", questId: q.id, week: wk.week, xp: q.xp, title: q.title[lang] }, { ...opts, now })));
     }
     return awards;
