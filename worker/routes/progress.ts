@@ -41,7 +41,15 @@ const cleanText = (v: unknown, max: number) => (typeof v === "string" && v.trim(
 /** GET /api/progress?lang= — everything Today + Path need. */
 progress.get("/", async (c) => {
   const ctx = await loadCtx(c.env, c.get("userId"));
-  return c.json(await overview(ctx, langOf(c)));
+  const lang = langOf(c);
+  const ov = await overview(ctx, lang);
+  // ?withDay=1 (Today page): include today's day in the same response — saves a round trip on slow mobile networks.
+  if (c.req.query("withDay") === "1" && ov.onboarded && ov.status === "open" && ov.nextDay && ov.cells[ov.nextDay - 1]?.available) {
+    const today = await dayView(ctx, lang, ov.nextDay);
+    if (today.day) c.executionCtx.waitUntil(onLessonViewed(c.env, c.get("userId"), today.day.day, lang));
+    return c.json({ ...ov, today });
+  }
+  return c.json(ov);
 });
 
 /** POST /api/progress/onboarding { lang, track, dailyMinutes, goal, goalNote?, name?, timezone? } */

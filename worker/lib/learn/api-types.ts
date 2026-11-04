@@ -82,6 +82,8 @@ export interface Overview {
   source: GeneratedContent["source"];
   program: ProgramResponse["program"];
   cells: PathCell[];
+  /** Only with GET /api/progress?withDay=1 while today's day is open. */
+  today?: DayResponse;
 }
 
 export type SubmissionStatus = "submitted" | "approved" | "needs_work";

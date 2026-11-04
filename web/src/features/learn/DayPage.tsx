@@ -5,7 +5,7 @@ import { useDay } from "./data";
 import { DayHero, DayView } from "./DayView";
 import { strings } from "./strings";
 import { ButtonLink, Card, EmptyState } from "@web/ui";
-import { ErrorState, Icon, PageSkeleton } from "./ui";
+import { DaySkeleton, ErrorState, Icon } from "./ui";
 
 export default function DayPage() {
   const lang = useLang();
@@ -15,7 +15,7 @@ export default function DayPage() {
   const day = useDay(lang, valid ? n : null);
   const d = day.data;
 
-  const nav = valid && (
+  const nav = valid && d && (
     <nav className="mt-12 flex items-center justify-between border-t border-line pt-6 text-sm" aria-label="Days">
       {n > 1 ? <Link to={`/${lang}/day/${n - 1}`} className="inline-flex items-center gap-1.5 text-muted hover:text-fg"><Icon.arrowLeft size={16} />{s.prevDay}</Link> : <span />}
       {n < 66 ? <Link to={`/${lang}/day/${n + 1}`} className="inline-flex items-center gap-1.5 text-muted hover:text-fg">{s.nextDay}<Icon.arrowRight size={16} /></Link> : <span />}
@@ -28,7 +28,7 @@ export default function DayPage() {
       <EmptyState icon={<Icon.map />} title={s.notFound} description={s.notFoundBody}
         action={<ButtonLink to={`/${lang}/path`} variant="outline" icon={<Icon.map />}>{s.backToPath}</ButtonLink>} />
     );
-  } else if (day.loading && !d) body = <PageSkeleton />;
+  } else if (day.loading && !d) body = <DaySkeleton />;
   else if (day.error || !d) body = <ErrorState title={s.errorTitle} body={s.errorBody} retry={s.retry} onRetry={() => day.reload()} />;
   else if (!d.summary.available) {
     body = (
