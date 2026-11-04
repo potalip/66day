@@ -19,7 +19,9 @@
     "APP_ENV": "dev",
     "CLAUDE_MODEL": "claude-sonnet-5-5",
     "CLAUDE_MODEL_SMART": "claude-opus-5-5",
-    "RENDER_SERVER_URL": ""
+    "RENDER_SERVER_URL": "",
+    "STUDIO_MAX_ACTIVE": "2",
+    "STUDIO_MAX_DAILY": "40"
   }
   // Secrets (wrangler secret put / .dev.vars): ANTHROPIC_API_KEY, RENDER_SERVER_TOKEN, ADMIN_TOKEN
 }

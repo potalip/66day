@@ -13,6 +13,8 @@ export interface Env {
   MEDIA_WORKER_URL?: string;   // external transcription service (worker/lib/library/MEDIA-WORKER.md)
   MEDIA_WORKER_TOKEN?: string;
   PUBLIC_BASE_URL?: string;    // public origin, used for callback URLs
+  STUDIO_MAX_ACTIVE?: string;  // concurrent renders per user (default 2)
+  STUDIO_MAX_DAILY?: string;   // renders per user per 24h (default 40)
 }
 
 /** Every async job goes through one queue; `kind` routes it. Add kinds, never rename. */
