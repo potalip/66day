@@ -45,8 +45,7 @@ A **Progressive Web App** is your normal website plus three things:
    as a doorman: every request passes through it, and it can answer from a cache when the network is gone.
 3. **HTTPS** — which you already have, because your app is deployed.
 
-That's it. The browser looks at the manifest, sees a valid icon and HTTPS, and offers "Install app". The service worker
-is what makes the offline part work.
+The browser sees a valid manifest and HTTPS and offers "Install app"; the service worker makes offline work.
 
 > **Important — iOS is different.** On iPhone there's no automatic install prompt. The user opens the Share menu and
 > taps **Add to Home Screen**. Push notifications work on iOS only for apps that were added this way (iOS 16.4+), and
@@ -55,7 +54,7 @@ is what makes the offline part work.
 
 ## What "basic offline" means today
 
-Don't try to make your whole app work offline — that's a sync engine, and a week of work. Today's bar:
+Full offline is a sync engine and a week of work. Today's bar:
 
 - The **app shell** (HTML, CSS, JS, icons, fonts) is cached, so the app opens instantly even with no signal.
 - **API calls** go network-first; if the network fails, the user sees a friendly message, not a blank page.
@@ -65,7 +64,7 @@ Don't try to make your whole app work offline — that's a sync engine, and a we
 
 ### 1. Read and decide (10 min)
 
-Skim the MDN PWA page in the resources. Then decide what your offline screen says. Write it like a human:
+Skim the MDN PWA page, then write your offline message like a human:
 "You're offline. Your last 10 notes are below — new ones will need a connection."
 
 ### 2. Make it installable (35 min)
@@ -111,8 +110,7 @@ activated). Go to the **Network** tab, set throttling to **Offline**, reload. Th
 Deploy, then open the live URL on your phone. Android/Chrome: menu → **Install app** (or your button). iPhone/Safari:
 Share → **Add to Home Screen**. Launch it from the icon. Turn on airplane mode and open it again.
 
-Take a screenshot of your home screen with the icon visible — that's your proof. Bonus: a second screenshot of the
-offline screen in airplane mode.
+Screenshot your home screen with the icon visible — that's your proof. Bonus: the offline screen in airplane mode.
 
 ## Quiz
 
