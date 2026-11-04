@@ -80,7 +80,7 @@ query is an ordered index scan with no temp B-tree.
 npm run db:migrate:local && npm run dev
 curl -X POST localhost:5173/api/game/dev/seed
 # /en/leaderboard  /ru/leaderboard?period=all&track=video  /en/me  /ru/me?u=seed-16
-npm test    # game: 43 tests; real SQL + migrations via node:sqlite
+npm test    # game: 46 tests; real SQL + migrations via node:sqlite
 ```
 
 ## Known gaps / decisions
