@@ -58,9 +58,14 @@ export function useDay(lang: Lang, day: number | null) {
   return useResource(day ? `day:${lang}:${day}` : null, () => call<DayResponse>(`/progress/day/${day}?lang=${lang}`));
 }
 
+/** Tell game widgets (XP bar, streak) to refetch — same event the game area listens to; no import coupling. */
+function gameChanged<T>(p: Promise<T>): Promise<T> {
+  return p.then((r) => { try { window.dispatchEvent(new Event("fl:game-changed")); } catch {} return r; });
+}
+
 export const learnApi = {
   overview: (lang: Lang) => call<Overview>(`/progress?lang=${lang}`),
-  onboarding: (body: Record<string, unknown>) => call<OnboardingResult>(`/progress/onboarding`, { method: "POST", json: body }),
+  onboarding: (body: Record<string, unknown>) => gameChanged(call<OnboardingResult>(`/progress/onboarding`, { method: "POST", json: body })),
   updateProfile: (lang: Lang, body: Record<string, unknown>) => call<Overview>(`/progress/profile?lang=${lang}`, { method: "PATCH", json: body }),
   submitTask: (lang: Lang, day: number, taskId: string, proof: { text?: string; url?: string; file?: File }) => {
     const path = `/progress/day/${day}/task/${encodeURIComponent(taskId)}?lang=${lang}`;
@@ -68,13 +73,13 @@ export const learnApi = {
       const fd = new FormData();
       fd.set("file", proof.file);
       if (proof.text) fd.set("text", proof.text);
-      return call<TaskResult>(path, { method: "POST", body: fd });
+      return gameChanged(call<TaskResult>(path, { method: "POST", body: fd }));
     }
-    return call<TaskResult>(path, { method: "POST", json: { text: proof.text, url: proof.url } });
+    return gameChanged(call<TaskResult>(path, { method: "POST", json: { text: proof.text, url: proof.url } }));
   },
   uncheckTask: (lang: Lang, day: number, taskId: string) =>
     call<DayResponse>(`/progress/day/${day}/task/${encodeURIComponent(taskId)}?lang=${lang}`, { method: "DELETE" }),
-  completeDay: (lang: Lang, day: number) => call<DayCompleteResult>(`/progress/day/${day}/complete?lang=${lang}`, { method: "POST" }),
+  completeDay: (lang: Lang, day: number) => gameChanged(call<DayCompleteResult>(`/progress/day/${day}/complete?lang=${lang}`, { method: "POST" })),
 };
 
 export function formatDate(sec: number, lang: Lang) {

@@ -399,7 +399,9 @@ function Celebration({ s, lang, badges, dayBadges, day, next, xp, awards, result
   }, [onClose]);
 
   // Show game awards if the game layer returned any; otherwise show the XP the tasks are worth.
-  const list: Award[] = awards.some((a) => a.kind === "xp") ? [...awards] : [{ kind: "xp", amount: xp }, ...awards];
+  // Several xp awards (task + day bonus) are merged into one chip.
+  const gameXp = awards.filter((a) => a.kind === "xp").reduce((n, a) => n + (a.amount ?? 0), 0);
+  const list: Award[] = [{ kind: "xp", amount: gameXp || xp }, ...awards.filter((a) => a.kind !== "xp")];
   // Until the game layer returns badge awards, show the day's own badges (from content) as earned.
   if (!awards.some((a) => a.kind === "badge")) for (const id of dayBadges) list.push({ kind: "badge", id });
   const openNow = result?.status === "open" && result.nextDay && next && result.nextDay === next.day && next.available;
