@@ -20,7 +20,7 @@ resources.forEach((r, i) => {
   out.push(`INSERT OR IGNORE INTO lib_resources (id, source_type, url, canonical_url, external_id, title, author, description, duration_sec, thumbnail_url, tracks, topics, level, orig_lang, audience, suggested_days, status, transcript_state, ai_state, featured, sort_weight, created_by, published_at) VALUES (${[
     r.id, r.sourceType, r.url, p.canonicalUrl, r.externalId ?? null, r.title, r.author, r.description ?? null, r.durationSec, thumb,
     JSON.stringify(r.tracks), JSON.stringify(r.topics), r.level, r.origLang, JSON.stringify(r.audience), JSON.stringify(r.suggestedDays),
-    "published", "not_applicable", "ready", r.featured ? 1 : 0, resources.length - i, "seed", PUBLISHED_AT,
+    r.retired ? "review" : "published", "not_applicable", "ready", r.featured && !r.retired ? 1 : 0, resources.length - i, "seed", r.retired ? null : PUBLISHED_AT,
   ].map(q).join(", ")});`);
   for (const lang of r.audience) {
     const m = mats[lang][r.id];

@@ -45,7 +45,7 @@ const S = {
     resources: "Библиотека", viewed: "Чаще смотрят", completed: "Чаще проходят", saved: "Чаще добавляют на сегодня", noRes: "Пока нет данных.", unknown: "Нет в библиотеке",
     pipeline: "Состояние конвейера", status: { draft: "Черновик", processing: "В работе", review: "На проверке", published: "Опубликовано", failed: "Ошибка" } as Record<string, string>,
     failedLessons: "Уроки с ошибкой", needsTranscript: "Нужна расшифровка", stuckProcessing: "В работе > 15 мин", errors: "Ошибок за 24 ч",
-    ai: "AI", mediaWorker: "Медиа-воркер", on: "вкл", off: "выкл", recent: "Последние ошибки", open: "Открыть",
+    ai: "ИИ", mediaWorker: "Медиа-воркер", on: "вкл", off: "выкл", recent: "Последние ошибки", open: "Открыть",
     day: (d: number) => `День ${d}`, students: (n: number) => `учеников: ${n}`, table: "Показать таблицей",
     colsDate: ["Дата", "Ученики"] as [string, string], colsDay: ["День", "Ученики"] as [string, string], colsRate: ["День", "Прошли"] as [string, string], colsStreak: ["Серия", "Ученики"] as [string, string],
     detail: (r: number, c: number, s: number) => `закончили ${c} из ${r} · застряли ${s}`,

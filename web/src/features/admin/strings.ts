@@ -33,7 +33,7 @@ export const strings = {
     },
     days: {
       add: "Add day",
-      track: { common: "Common", apps: "Apps", video: "Video" } as Record<string, string>,
+      track: { common: "Everyone", apps: "Apps", video: "Video" } as Record<string, string>,
       pick: "Pick a day",
       remove: "Remove day",
       none: "No days assigned yet.",
@@ -186,7 +186,7 @@ export const strings = {
     },
     days: {
       add: "Добавить день",
-      track: { common: "Общий", apps: "Приложения", video: "Видео" } as Record<string, string>,
+      track: { common: "Для всех", apps: "Приложения", video: "Видео" } as Record<string, string>,
       pick: "Выбери день",
       remove: "Убрать день",
       none: "Дни пока не назначены.",
@@ -214,8 +214,8 @@ export const strings = {
       logout: "Выйти",
     },
     ai: {
-      on: (m: string) => `AI включён · ${m}`,
-      off: "AI не настроен",
+      on: (m: string) => `ИИ включён · ${m}`,
+      off: "ИИ не настроен",
       offBody: "Не задан ANTHROPIC_API_KEY. Новые материалы всё равно получают метаданные и стартовый черновик, который можно дописать руками; опубликованные работают как обычные ссылки. Добавь ключ и нажми «Пересобрать», чтобы сгенерировать уроки.",
     },
     status: { draft: "Черновик", processing: "В работе", review: "На проверке", published: "Опубликовано", failed: "Ошибка" } as Record<string, string>,
@@ -285,7 +285,7 @@ export const strings = {
       startManual: "Написать вручную",
       origin: { ai: "Claude", fixture: "вручную (сид)", manual: "вручную" } as Record<string, string>,
       edited: "правился",
-      starterNote: "Стартовый черновик (AI не настроен). Допиши и сохрани, чтобы одобрить.",
+      starterNote: "Стартовый черновик (ИИ не настроен). Допиши и сохрани, чтобы одобрить.",
       approve: "Сохранить и одобрить",
       invalid: "Проверь поля:",
       m: {
