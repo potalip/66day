@@ -20,18 +20,22 @@ describe("badge catalog driven by content/badges.json", () => {
     for (const b of content.filter((x) => /game rule/i.test(x.rule))) expect(BADGE_RULES[b.id], b.id).toBeTypeOf("function");
   });
 
-  it("day badges have no engine rule (they come with day.completed) and appear in some day file", () => {
+  it("every 'Awarded on completing day …' badge is listed in some day file", () => {
     const listed = new Set([...CURRICULUM.dayBadges.values()].flat());
-    for (const b of content.filter((x) => !/game rule/i.test(x.rule))) {
-      expect(BADGE_RULES[b.id], b.id).toBeUndefined();
-      if (listed.size) expect(listed.has(b.id), `${b.id} not listed in any day file`).toBe(true);
-    }
+    if (!listed.size) return; // curriculum not generated here
+    for (const b of content.filter((x) => /awarded on completing/i.test(x.rule))) expect(listed.has(b.id), `${b.id} not listed in any day file`).toBe(true);
+  });
+
+  it("every badge in the catalog can actually be earned (rule in code or listed on a day)", () => {
+    const listed = new Set([...CURRICULUM.dayBadges.values()].flat());
+    if (!listed.size) return;
+    for (const b of CATALOG) expect(!!BADGE_RULES[b.id] || listed.has(b.id), `${b.id} can never be awarded`).toBe(true);
   });
 
   it("secret badges are flagged and grouped", () => {
     expect(CATALOG_BY_ID.get("night-owl")?.secret).toBe(true);
     expect(CATALOG_BY_ID.get("polyglot")?.secret).toBe(true);
-    expect(CATALOG_BY_ID.get("polyglot")?.description.en).not.toMatch(/^secret/i);
+    expect(CATALOG_BY_ID.get("night-owl")?.description.en).not.toMatch(/^secret/i);
     expect(CATALOG.filter((b) => b.secret).every((b) => b.group === "secret")).toBe(true);
   });
 

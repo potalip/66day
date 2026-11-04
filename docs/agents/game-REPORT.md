@@ -1,5 +1,27 @@
 # Game agent — report
 
+## Round 3
+- **Completion certificate** at `/:lang/certificate/:userId` (public), backed by `GET /api/game/certificate/:userId`.
+  - Shows name, track, days done, best streak, level and rank, milestone (boss) projects, up to 6 highlight badges
+    (graduation, boss days and long streaks first), completion date, and a stable certificate id derived from the user id
+    (`FL66-XXXX-XXXX`) with a verify URL.
+  - Three states: not started / in progress (with a progress bar and an "In progress" chip) / complete (gold seal).
+  - Print or save as PDF gives one A4 landscape page. While printing, the page switches to the light theme tokens, so it
+    prints cleanly even from dark mode (checked by rendering the PDF). There's also a copy-link button, a link to learn's
+    portfolio, and a link from the profile.
+- **Weekly quests.** The pool lives in `worker/lib/game/quests.json` (11 quests, RU and EN, with per-track filters).
+  - Each UTC ISO week picks one quest per slot (up to 3), rotating deterministically.
+  - Goal kinds: `active_days`, `days_completed`, `tasks`, `task_type`, `consecutive_days`, `resources`, `renders`.
+  - Progress is computed from the event ledger, so no extra table is needed.
+  - Completion is an idempotent `quest:<week>:<id>` event that awards bonus XP. The award comes back with the
+    triggering response and a localised label; 3 completed quests earn "Quest Keeper".
+  - `GET /api/game/quests`; widget `<WeeklyQuests/>` (on your own profile; learn has a one-line request to place it on Today).
+  - Verified live through learn's API: a third consecutive build day completed "Build three days in a row" (+60 XP).
+- **Sharing:** design's ShareCard (`@web/ui/ShareCard`, lazy-loaded, not restyled) in three places:
+  "Share streak" on your own profile (only from a 3-day streak), a share action on 7/14/30/66 streak-milestone reward
+  toasts, and "Share" on the certificate page. `completedDays` was added to `/me`, the profile and the certificate APIs for the card's grid.
+- The seed now includes a graduate (`seed-01`, all 66 days → level 22, a complete certificate).
+
 ## Round 2 (after the first merge)
 - **The real `content/badges.json` (30 badges) drives awards.** Its 23 day badges arrive via `day.completed`; if the
   caller sends no `badges`, the day file of the student's own track is used. Its 7 game-rule badges are evaluated in code:
@@ -80,7 +102,7 @@ query is an ordered index scan with no temp B-tree.
 npm run db:migrate:local && npm run dev
 curl -X POST localhost:5173/api/game/dev/seed
 # /en/leaderboard  /ru/leaderboard?period=all&track=video  /en/me  /ru/me?u=seed-16
-npm test    # game: 46 tests; real SQL + migrations via node:sqlite
+npm test    # game: 55 tests; real SQL + migrations via node:sqlite
 ```
 
 ## Known gaps / decisions

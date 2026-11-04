@@ -31,8 +31,10 @@ export async function seedDemo(db: D1Database, now = new Date()): Promise<{ user
     const id = `${SEED_PREFIX}${String(i + 1).padStart(2, "0")}`;
     const track: Track = rand() < 0.55 ? "apps" : "video";
     const tz = lang === "ru" ? TZ[Math.floor(rand() * 2)] : TZ[2 + Math.floor(rand() * 6)];
-    const daysAgo = 3 + Math.floor(rand() * 40); // started 3–42 days ago
-    const diligence = 0.45 + rand() * 0.55; // chance to show up on a given day
+    // seed-01 is a graduate (all 66 days, for the certificate demo); the rest started 3–42 days ago.
+    const graduate = i === 0;
+    const daysAgo = graduate ? 67 : 3 + Math.floor(rand() * 40);
+    const diligence = graduate ? 1 : 0.45 + rand() * 0.55; // chance to show up on a given day
     const startTs = now.getTime() - daysAgo * 86_400_000;
     await db
       .prepare("INSERT INTO users (id, display_name, lang, track, started_at, timezone, created_at) VALUES (?,?,?,?,?,?,?)")
@@ -51,7 +53,7 @@ export async function seedDemo(db: D1Database, now = new Date()): Promise<{ user
       for (let t = 1; t <= tasks; t++) {
         evs.push([new Date(base + t * 600_000), { type: "task.completed", taskId: `d${String(programDay).padStart(2, "0")}-${prefix}t${t}`, day: programDay, xp: [20, 25, 30, 40][Math.floor(rand() * 4)] }]);
       }
-      if (rand() < 0.9) evs.push([new Date(base + 50 * 60_000), { type: "day.completed", day: programDay }]);
+      if (graduate || rand() < 0.9) evs.push([new Date(base + 50 * 60_000), { type: "day.completed", day: programDay }]);
       if (rand() < 0.4) evs.push([new Date(base + 55 * 60_000), { type: "resource.viewed", resourceId: `seed-res-${Math.floor(rand() * 40)}` }]);
       if (track === "video" && rand() < 0.15) evs.push([new Date(base + 58 * 60_000), { type: "studio.rendered", projectId: `seed-proj-${i}-${d}` }]);
       programDay++;

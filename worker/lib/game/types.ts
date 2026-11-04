@@ -45,6 +45,8 @@ export interface GameMe extends LevelInfo {
   ranks: { week: number | null; all: number | null };
   activity: ActivityCell[];
   recap: WeeklyRecap;
+  /** program days completed (for share cards) */
+  completedDays: number[];
 }
 
 export interface PublicProfile extends LevelInfo {
@@ -57,6 +59,9 @@ export interface PublicProfile extends LevelInfo {
   badges: EarnedBadge[];
   activity: ActivityCell[];
   shipped: ShippedItem[];
+  /** program days completed (0..66) */
+  daysDone: number;
+  completedDays: number[];
   /** only for your own profile */
   recap: WeeklyRecap | null;
 }
@@ -71,4 +76,38 @@ export interface LeaderboardResponse {
   total: number;
   rows: LeaderRow[];
   me: LeaderRow | null;
+}
+
+export interface QuestView {
+  id: string;
+  icon: string;
+  title: Record<Lang, string>;
+  description: Record<Lang, string>;
+  xp: number;
+  target: number;
+  progress: number;
+  done: boolean;
+  completedAt: number | null;
+}
+export interface QuestsResponse { week: string; resetsAt: number; quests: QuestView[] }
+
+export interface CertificateResponse {
+  userId: string;
+  certId: string;
+  name: string | null;
+  track: Track | null;
+  status: "complete" | "in_progress" | "not_started";
+  daysDone: number;
+  totalDays: number;
+  startedAt: number | null;
+  completedAt: number | null;
+  issuedAt: number | null;
+  level: number;
+  rank: RankKey;
+  xp: number;
+  bestStreak: number;
+  badges: { id: string; icon: string; title: Record<Lang, string>; awardedAt: number }[];
+  badgeCount: number;
+  shippedCount: number;
+  completedDays: number[];
 }

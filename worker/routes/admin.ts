@@ -7,6 +7,7 @@ import {
   toResource, getResourceRow, getMaterials, getEvents, getTranscript, setMaterial, updateResource, logEvent,
 } from "../lib/library/repo";
 import { aiConfigured, uploadKey, startBuild } from "../lib/library/pipeline";
+import { buildDashboard } from "../lib/library/analytics";
 
 // OWNER: library agent (docs/OWNERSHIP.md). Founder admin: session + review/edit/publish.
 export const admin = new Hono<AppEnv>();
@@ -138,6 +139,31 @@ admin.post("/resources/:id/unpublish", async (c) => {
   await updateResource(c.env, row.id, { status: "review" });
   await logEvent(c.env, row.id, "unpublish", "info", "moved back to review");
   return c.json({ ok: true });
+});
+
+/**
+ * GET /api/admin/dashboard?range=30&demo=1 — founder analytics (read-only over users / learn_* / game_* / lib_*).
+ * demo=0 hides the game's dev seed students ("seed-…").
+ */
+admin.use("/dashboard", requireAdmin);
+admin.get("/dashboard", async (c) => {
+  const range = Math.min(Math.max(parseInt(c.req.query("range") ?? "30", 10) || 30, 7), 120);
+  let taskCount: ((day: number, track: string | null) => number | null) | undefined;
+  try {
+    const { getDay } = await import("../lib/learn/content");
+    const cache = new Map<string, number | null>();
+    taskCount = (day, track) => {
+      const t = track === "video" ? "video" : "apps";
+      const k = `${day}:${t}`;
+      if (!cache.has(k)) cache.set(k, getDay("en", t, day)?.tasks.length ?? null);
+      return cache.get(k)!;
+    };
+  } catch { /* curriculum not compiled — task rates are omitted */ }
+  const data = await buildDashboard(c.env.DB, {
+    rangeDays: range, includeDemo: c.req.query("demo") !== "0", taskCount,
+    ai: aiConfigured(c.env), mediaWorker: !!c.env.MEDIA_WORKER_URL,
+  });
+  return c.json(data);
 });
 
 /** POST /api/admin/bulk { ids, action: "publish" | "unpublish" | "rebuild" | "delete" } — board multi-select. */

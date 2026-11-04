@@ -56,9 +56,9 @@ export function Attention({ reason, className }: { reason: string | null; classN
 // ---------------- Curriculum day picker ----------------
 
 export interface DayRef { day: number; track: "common" | "apps" | "video"; reason?: string }
-interface DaySummary { day: number; track: "common" | "apps" | "video" | null; title: string }
+export interface DaySummary { day: number; track: "common" | "apps" | "video" | null; title: string }
 const cache = new Map<string, Promise<DaySummary[]>>();
-function loadDays(lang: string, track: "apps" | "video") {
+export function loadDays(lang: string, track: "apps" | "video") {
   const k = `${lang}:${track}`;
   if (!cache.has(k)) cache.set(k, api<{ days: DaySummary[] }>(`/curriculum/program?lang=${lang}&track=${track}`).then((r) => r.days).catch(() => { cache.delete(k); return []; }));
   return cache.get(k)!;

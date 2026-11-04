@@ -2,7 +2,7 @@ import { Hono } from "hono";
 import type { AppEnv } from "../env";
 import type { GameEvent } from "../../shared/types";
 import { onGameEvent, onLessonViewed } from "../lib/game";
-import { badgeCatalog, getLeaderboard, getMe, getProfile, type Period, type TrackFilter } from "../lib/game/queries";
+import { badgeCatalog, getCertificate, getLeaderboard, getMe, getProfile, getQuests, type Period, type TrackFilter } from "../lib/game/queries";
 import { syncTrack, loadStats } from "../lib/game/store";
 import { seedDemo, clearDemo } from "../lib/game/seed";
 import { safeTz } from "../lib/game/time";
@@ -47,6 +47,17 @@ game.get("/profile/:userId", async (c) => {
   if (!/^[\w-]{1,64}$/.test(userId)) return c.json({ error: "not_found" }, 404);
   const p = await getProfile(c.env.DB, userId, c.get("userId"));
   return p ? c.json(p) : c.json({ error: "not_found" }, 404);
+});
+
+/** This week's quests for the current student, with progress. */
+game.get("/quests", async (c) => c.json(await getQuests(c.env.DB, c.get("userId"))));
+
+/** Public, verifiable certificate data (complete after day 66; "in progress" before). */
+game.get("/certificate/:userId", async (c) => {
+  const userId = c.req.param("userId");
+  if (!/^[\w-]{1,64}$/.test(userId)) return c.json({ error: "not_found" }, 404);
+  const cert = await getCertificate(c.env.DB, userId);
+  return cert ? c.json(cert) : c.json({ error: "not_found" }, 404);
 });
 
 /** The browser tells us its IANA timezone so streak days follow the student's local midnight. */

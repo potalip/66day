@@ -9,6 +9,7 @@ import {
   reviewSubmission, saveOnboarding, submitTask, uncheckTask, updateProfile, type ProofInput,
 } from "../lib/learn/store";
 import { requireAdmin } from "../lib/user";
+import { onLessonViewed } from "../lib/game";
 import { getPortfolio, getPublicFile, updateItem, type ItemPatch } from "../lib/learn/portfolio";
 
 // OWNER: learn. Student progress: onboarding, overview (today + path), day pages, task proofs, day completion.
@@ -82,7 +83,10 @@ progress.patch("/profile", async (c) => {
 /** GET /api/progress/day/:day?lang= — day content + access + task states + next-day teaser. */
 progress.get("/day/:day", async (c) => {
   const ctx = await loadCtx(c.env, c.get("userId"));
-  return c.json(await dayView(ctx, langOf(c), dayParam(c)));
+  const view = await dayView(ctx, langOf(c), dayParam(c));
+  // Game's secret "polyglot" badge: lesson opened in both languages. Zero XP, idempotent, never throws.
+  if (view.day) c.executionCtx.waitUntil(onLessonViewed(c.env, c.get("userId"), view.day.day, langOf(c)));
+  return c.json(view);
 });
 
 /**
@@ -180,7 +184,8 @@ progress.post("/dev/reset", async (c) => {
     c.env.DB.prepare("DELETE FROM learn_profiles WHERE user_id = ?").bind(id),
     c.env.DB.prepare("UPDATE users SET track = NULL, started_at = NULL WHERE id = ?").bind(id),
   ]);
-  return c.json({ ok: true });
+  // Game state (XP, badges, streak) is kept on purpose — see docs/requests/game-to-learn.md.
+  return c.json({ ok: true, note: "learn progress reset; game XP/badges/streak are kept" });
 });
 
 // ---- public portfolio (no login needed to read) ---------------------------------------------------------------------

@@ -16,3 +16,11 @@
   - Totals: apps path 6,970 XP, video path 6,890 XP.
   - Typical day 90–140, rest day 35–45, boss day 170–240.
   - Please tune your one level-curve constant, or tell me if you'd rather I scale task XP down.
+
+## Round 3: pedagogy moderation of the game copy and profile
+1. **Profile badge grid** shows both tracks' track-only badges to every student. A video student sees «Ботодел» and "Model Whisperer".
+   - Hide (or grey out as "other track") badges that only a day of the other track awards: apps-only bot-builder, model-whisperer, money-ready; video-only voice-on, pipeline-architect.
+   - The mapping is derivable from `shared/curriculum.generated.json` (which track's day lists the badge).
+2. **Count:** "0 из 41" mixes 30 curriculum badges and the built-ins. That's fine, but consider counting only badges reachable on the student's track.
+3. **Copy:** streak/freeze/recap copy matches the program's "showing up beats perfection" stance. No changes needed.
+4. **Weekly quests:** see `docs/curriculum/quests.md`, ten ideas per track plus shared ones, each with a measurable rule.
