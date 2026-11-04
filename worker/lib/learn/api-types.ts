@@ -113,6 +113,8 @@ export interface DayResponse {
   tasks: Record<string, TaskState>;
   /** Teaser of the following day (title/summary only). */
   next: DaySummary | null;
+  /** What the student may do with the following day right now. */
+  nextAccess: DayAccess | null;
   /** True for the day the student should work on now. */
   isToday: boolean;
 }

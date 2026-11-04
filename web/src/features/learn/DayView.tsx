@@ -139,7 +139,14 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
             </div>
           )}
         </Card>
-        {data.next && dayDone && <NextTeaser s={s} lang={lang} next={data.next} openNow={celebrate?.result?.status === "open" && celebrate.result.nextDay === data.next.day} />}
+        {data.next && dayDone && (() => {
+          // Fresh completion in this view → use the result; otherwise what the server said about the next day.
+          const r = celebrate?.result;
+          const nextState = r ? (r.nextDay === data.next.day ? (r.status === "open" ? "open" : "waiting") : "other") : data.nextAccess;
+          return nextState === "open" || nextState === "waiting"
+            ? <NextTeaser s={s} lang={lang} next={data.next} openNow={nextState === "open"} />
+            : null;
+        })()}
       </aside>
 
       {toast && (

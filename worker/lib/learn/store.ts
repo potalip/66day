@@ -169,6 +169,7 @@ export async function dayView(ctx: Ctx, lang: Lang, dayNum: number): Promise<Day
     completedAt: ctx.completed.find((c) => c.day === dayNum)?.completedAt ?? null,
     tasks: access === "locked" ? {} : await taskStates(ctx, dayNum),
     next: dayNum < TOTAL ? summarize(lang, ctx.track, dayNum + 1) : null,
+    nextAccess: dayNum < TOTAL ? dayAccess(dayNum + 1, ctx.completedSet, ctx.schedule) : null,
     isToday: ctx.schedule.nextDay === dayNum,
   };
 }

@@ -41,11 +41,11 @@ export default function PathMap() {
       {today && today.available && o.status !== "finished" && (
         <Card className="mb-10 flex flex-wrap items-center gap-4 p-4 sm:p-5">
           <div className={cx("grid size-12 shrink-0 place-items-center rounded-xl text-lg font-semibold", o.status === "open" ? "bg-accent text-accent-fg" : "bg-surface-2 text-muted")}>{today.day}</div>
-          <div className="min-w-0 flex-1">
+          <div className="min-w-0 flex-1 basis-[60%]">
             <p className="text-xs font-semibold tracking-wide text-muted uppercase">{o.status === "open" ? s.todayTitle : s.opensTomorrow}</p>
-            <p className="truncate font-semibold">{today.title}</p>
+            <p className="font-semibold text-pretty line-clamp-2">{today.title}</p>
           </div>
-          {o.status === "open" && <ButtonLink to={`/${lang}/today`}>{s.continueToday(today.day)}<Icon.arrowRight size={16} /></ButtonLink>}
+          {o.status === "open" && <ButtonLink to={`/${lang}/today`} className="w-full sm:w-auto">{s.continueToday(today.day)}<Icon.arrowRight size={16} /></ButtonLink>}
         </Card>
       )}
 
