@@ -53,6 +53,8 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   (final / quick draft, progress + stage, video player, download, frame overview, public share link, history).
 - "Day N recap" is prefilled from the student's real progress (`/api/progress`, `/api/game/me`): latest finished
   day, its completed tasks, XP, streak and tomorrow's title.
+- "Use as proof for Day N": a shared video can be submitted straight into an open link-proof task of the student's
+  current day (learn API; respects pacing — only open days are offered).
 - Captions highlight word by word (karaoke style) in both the render and the preview.
 - States: "AI not configured" (start from example), "render server not connected / not responding" (plan + edit +
   preview still work), loading skeletons, errors with retry, not-found.
@@ -85,7 +87,7 @@ Without `ANTHROPIC_API_KEY`: "AI not configured", projects start from the templa
 
 ## Next steps
 1. A small public share *page* (`/:lang/v/:slug` with title, player, "made in FlowLeaf 66") — needs a route in App.tsx.
-2. Toast on render finished; link a finished video to a day's task proof (learn) in one click.
+2. Toast on render finished. (Dev note: learn rejects `localhost` links as proof — use `127.0.0.1` locally.)
 3. More templates (talking-points over an uploaded clip, AI-image slideshow with Ken Burns, quiz/poll short),
    per-word karaoke captions from ElevenLabs timestamps, brand kits (student's own colours/logo).
 4. Render server: SQS-backed queue for horizontal scale, per-user rate limits, webhook signature (HMAC) instead of

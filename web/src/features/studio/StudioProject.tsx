@@ -4,6 +4,7 @@ import { useLang, useStrings } from "@web/i18n";
 import { blankScene, totalDuration, validateStoryboard } from "../../../../worker/lib/studio/storyboard";
 import { type Catalog, type Format, type Lang, type ProjectDetail, type Render, type SbError, type Storyboard, type TemplateDef, errorCode, loadCatalog, studioApi } from "./api";
 import { PreviewPlayer } from "./Preview";
+import { type ProofTarget, loadProofTargets, submitProof } from "./proof";
 import { FieldInput, ProjectIdCtx, SceneCard } from "./SceneEditor";
 import { StatusChip } from "./Studio";
 import { strings } from "./strings";
@@ -395,6 +396,7 @@ function ShareBox({ projectId, render, onChanged }: { projectId: string; render:
             <Button size="sm" onClick={copy}>{copied ? s.copied : s.copy}</Button>
           </div>
           <Button size="sm" variant="ghost" loading={busy} onClick={() => act(() => studioApi.unshare(projectId, render.id))}>{s.stopSharing}</Button>
+          <ProofAttach url={url} />
         </>
       ) : (
         <>
@@ -403,6 +405,36 @@ function ShareBox({ projectId, render, onChanged }: { projectId: string; render:
         </>
       )}
       {err && <p className="text-xs text-danger" role="alert">{s.loadError}</p>}
+    </div>
+  );
+}
+
+/** "Use as proof for Day N": submits the share link to an open link-proof task of the student's current day. */
+function ProofAttach({ url }: { url: string }) {
+  const s = useStrings(strings);
+  const lang = useLang();
+  const [targets, setTargets] = useState<ProofTarget[]>([]);
+  const [pick, setPick] = useState("");
+  const [state, setState] = useState<"idle" | "busy" | "done" | "error">("idle");
+  const selId = useId();
+  useEffect(() => {
+    loadProofTargets(lang).then((t) => { setTargets(t); setPick(t[0]?.taskId ?? ""); });
+  }, [lang]);
+  if (!targets.length && state !== "done") return null;
+  const target = targets.find((t) => t.taskId === pick);
+  return (
+    <div className="space-y-2 border-t border-line pt-3">
+      {state === "done" ? <p className="text-sm text-accent" role="status">✓ {s.proofDone(target?.day ?? 0)}</p> : (
+        <>
+          <Label htmlFor={selId} hint={s.proofHint}>{s.proofTitle(targets[0].day)}</Label>
+          <SelectInput id={selId} value={pick} onChange={setPick} options={targets.map((t) => ({ value: t.taskId, label: t.title }))} />
+          <Button size="sm" loading={state === "busy"} disabled={!target}
+            onClick={async () => { if (!target) return; setState("busy"); setState((await submitProof(lang, target, url)) ? "done" : "error"); }}>
+            {s.proofSubmit}
+          </Button>
+          {state === "error" && <p className="text-xs text-danger" role="alert">{s.loadError}</p>}
+        </>
+      )}
     </div>
   );
 }
