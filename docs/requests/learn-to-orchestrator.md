@@ -11,3 +11,6 @@
 4. **Shell nav:** when a user hasn't onboarded, `/:lang/today` and `/:lang/path` redirect to `/:lang/start`. The landing
    CTA should point to `/:lang/start` (design brief already says so).
 5. Optional: route for dev helpers is under `/api/progress/dev/*` (APP_ENV=dev only): `time-travel {days}` and `reset`.
+6. **`worker/lib/user.ts` race:** on a brand-new visit, parallel API calls without a cookie each create a different anon user;
+   the last `Set-Cookie` wins and earlier writes are orphaned. Suggest issuing the cookie on the first HTML/asset response
+   or making the SPA call `/api/me` once before anything else.

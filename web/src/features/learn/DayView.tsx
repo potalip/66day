@@ -381,7 +381,17 @@ function Celebration({ s, lang, badges, dayBadges, day, next, xp, awards, result
   const nav = useNavigate();
   useEffect(() => {
     closeRef.current?.focus();
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") return onClose();
+      if (e.key !== "Tab") return;
+      // keep focus inside the dialog
+      const box = closeRef.current?.closest("[role=dialog]");
+      const els = box ? Array.from(box.querySelectorAll<HTMLElement>("button, a[href]")) : [];
+      if (!els.length) return;
+      const first = els[0], last = els[els.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    };
     window.addEventListener("keydown", onKey);
     const prev = document.body.style.overflow;
     document.body.style.overflow = "hidden";
