@@ -5,6 +5,7 @@ import type { Track } from "@shared/types";
 import { useLang, useStrings } from "@web/i18n";
 import { learnApi, useOverview, type GoalKey, type Overview } from "../learn/data";
 import { Button, ButtonLink, Card, Container, Input } from "@web/ui";
+import { showAwards } from "@web/features/game/widgets";
 import { ErrorState, Icon, PageSkeleton, cx } from "../learn/ui";
 import { strings, type OnboardingStrings } from "./strings";
 
@@ -73,6 +74,7 @@ export default function Onboarding() {
         setResult(r);
       } else {
         const r = await learnApi.onboarding({ lang, track, dailyMinutes: minutes, goal, goalNote, name, timezone });
+        showAwards(r.awards, { toast: false });
         setResult(r.overview);
       }
       setStep("done");

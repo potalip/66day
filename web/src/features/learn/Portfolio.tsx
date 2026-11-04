@@ -145,7 +145,10 @@ function Header({ s, p, name, lang, shareUrl }: { s: PortfolioStrings; p: Portfo
             {p.stats.lastActive && <Badge tone="outline">{s.lastActive(formatDate(Date.parse(`${p.stats.lastActive}T12:00:00Z`) / 1000, lang))}</Badge>}
           </div>
         </div>
-        <Button variant="outline" onClick={copy} icon={<Icon.link />} className="w-full sm:w-auto">{s.copyLink}</Button>
+        <div className="flex w-full flex-col gap-2 sm:w-auto">
+          <Button variant="outline" onClick={copy} icon={<Icon.link />} className="w-full sm:w-auto">{s.copyLink}</Button>
+          <ButtonLink to={`/${lang}/certificate/${p.user.id}`} variant="ghost" size="sm" icon={<Icon.crown className="text-gold-bright" />} className="w-full sm:w-auto">{s.certificate}</ButtonLink>
+        </div>
       </div>
 
       <dl className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-4">

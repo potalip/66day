@@ -100,6 +100,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
       setDayDone(true);
       const xp = day.tasks.reduce((a, t) => a + ((t.id === task.id || tasks[t.id]?.done) ? t.xp : 0), 0);
       setCelebrate({ awards: r.awards, xp, result: r });
+      showAwards(r.awards, { toast: false }); // level-up moment + live widgets; our dialog shows XP/badges
     } else if (!wasDone) {
       // The game toast (XP, badges, level) when the game returned awards; otherwise a plain reward toast.
       if (r.awards.length) showAwards(r.awards);
@@ -113,6 +114,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
     try {
       const r = await learnApi.completeDay(lang, day.day);
       setDayDone(true);
+      showAwards(r.awards, { toast: false });
       setCelebrate({ awards: r.awards, xp: day.tasks.reduce((a, t) => a + (tasks[t.id]?.done ? t.xp : 0), 0), result: { ...r, taskId: "", task: { done: true, completedAt: null, submission: null } } });
     } catch (e) { error(e); }
   };
