@@ -3,7 +3,7 @@ export const strings = {
   en: {
     title: "Studio of lessons",
     subtitle: "Feed the library: paste links, upload videos, review what Claude drafted, publish.",
-    nav: { board: "Pipeline", add: "Add resources", guide: "Guide" },
+    nav: { board: "Pipeline", add: "Add resources", stats: "Dashboard", guide: "Guide" },
     steps: { fetch: "Fetch", transcript: "Transcript", lesson_ru: "RU lesson", lesson_en: "EN lesson", publish: "Publish" } as Record<string, string>,
     stepState: { todo: "waiting", active: "in progress", done: "done", warn: "needs you", error: "failed", skip: "not needed", ready: "your turn" } as Record<string, string>,
     attention: {
@@ -156,7 +156,7 @@ export const strings = {
   ru: {
     title: "Мастерская уроков",
     subtitle: "Пополняй библиотеку: вставляй ссылки, загружай видео, проверяй черновики Claude и публикуй.",
-    nav: { board: "Конвейер", add: "Добавить", guide: "Как это работает" },
+    nav: { board: "Конвейер", add: "Добавить", stats: "Дашборд", guide: "Как это работает" },
     steps: { fetch: "Загрузка", transcript: "Расшифровка", lesson_ru: "Урок RU", lesson_en: "Урок EN", publish: "Публикация" } as Record<string, string>,
     stepState: { todo: "ждёт", active: "в работе", done: "готово", warn: "нужен ты", error: "ошибка", skip: "не нужно", ready: "твой ход" } as Record<string, string>,
     attention: {
