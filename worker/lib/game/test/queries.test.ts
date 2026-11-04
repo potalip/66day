@@ -59,3 +59,17 @@ describe("me / profile", () => {
     expect((await getProfile(db, "a", "b", now))?.isMe).toBe(false);
   });
 });
+
+describe("legacy badge ids", () => {
+  it("are mapped to their current badge or hidden, never shown as raw ids", async () => {
+    const ins = (id: string) => db.prepare("INSERT INTO game_badges (user_id, badge_id, awarded_at) VALUES ('a', ?, 1)").bind(id).run();
+    await ins("first-day");
+    await ins("boss-3");
+    await ins("totally-unknown");
+    const ids = (await getProfile(db, "a", "a", now))!.badges.map((b) => b.id);
+    expect(ids).toContain("hello-agent");
+    expect(ids).not.toContain("first-day");
+    expect(ids).not.toContain("boss-3");
+    expect(ids).not.toContain("totally-unknown");
+  });
+});

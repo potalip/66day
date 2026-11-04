@@ -223,7 +223,6 @@ function BadgeGrid({ catalog, earned, track }: { catalog: BadgeInfo[] | null; ea
     if (!catalog) return [];
     // Hide the other track's badges unless already earned (e.g. before a track switch).
     const all = catalog.filter((b) => !track || !b.tracks?.length || b.tracks.includes(track) || got.has(b.id));
-    for (const b of earned) if (!all.some((c) => c.id === b.id)) all.push({ id: b.id, icon: "medal", title: { en: b.id, ru: b.id }, description: { en: "", ru: "" }, group: "program", secret: false });
     const order = ["program", "streak", "craft", "rhythm", "level", "secret"];
     const m = new Map<string, BadgeInfo[]>();
     for (const b of all) m.set(b.group, [...(m.get(b.group) ?? []), b]);

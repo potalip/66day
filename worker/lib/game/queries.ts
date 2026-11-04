@@ -5,7 +5,7 @@ import { bossTitle, CURRICULUM, isBossDay } from "./curriculum";
 import { levelProgress, rankFor } from "./levels";
 import { loadStats, type StatsRow } from "./store";
 import { loadWeek, pickQuests, questProgress, questTarget } from "./quests";
-import { CATALOG_BY_ID } from "./badges";
+import { CATALOG_BY_ID, LEGACY_BADGES } from "./badges";
 import { MAX_FREEZES, viewStreak } from "./streak";
 import { addDays, daysBetween, isoWeek, localDay, safeTz, weekResetsAt } from "./time";
 import type { CertificateResponse, QuestsResponse, ActivityCell, BadgeInfo, EarnedBadge, GameMe, LeaderboardResponse, LeaderRow, LevelInfo, PublicProfile, ShippedItem, StreakInfo, WeeklyRecap } from "./types";
@@ -35,7 +35,14 @@ function streakInfo(s: StatsRow | null, today: string): StreakInfo {
 
 async function badgesOf(db: D1Database, userId: string): Promise<EarnedBadge[]> {
   const r = await db.prepare("SELECT badge_id, awarded_at FROM game_badges WHERE user_id = ? ORDER BY awarded_at").bind(userId).all<{ badge_id: string; awarded_at: number }>();
-  return r.results.map((b) => ({ id: b.badge_id, awardedAt: b.awarded_at }));
+  // Map legacy ids to their current badge; drop retired/unknown ids instead of rendering raw ids.
+  const out = new Map<string, number>();
+  for (const b of r.results) {
+    const id = b.badge_id in LEGACY_BADGES ? LEGACY_BADGES[b.badge_id] : b.badge_id;
+    if (!id || !CATALOG_BY_ID.has(id)) continue;
+    if (!out.has(id)) out.set(id, b.awarded_at);
+  }
+  return [...out].map(([id, awardedAt]) => ({ id, awardedAt }));
 }
 
 /** 66 cells starting at the student's first day (start date, else first activity, else today). */
