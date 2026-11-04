@@ -44,7 +44,7 @@ export default function Leaderboard() {
 
       <Card className="overflow-hidden">
         <div className="flex items-center justify-between gap-3 border-b border-line px-4 py-2.5 text-xs text-muted sm:px-5">
-          <span>{fresh ? L.students(fresh.total) : " "}</span>
+          <span>{fresh && fresh.total > 0 ? L.students(fresh.total) : " "}</span>
           {period === "week" && fresh && <span>{L.resets(fmtRelative(fresh.resetsAt, lang))}</span>}
         </div>
 

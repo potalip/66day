@@ -11,9 +11,9 @@ export function Segmented<T extends string>({ value, options, onChange, label, s
   value: T; options: { value: T; label: string }[]; onChange: (v: T) => void; label: string; size?: "sm" | "md";
 }) {
   return (
-    <div role="tablist" aria-label={label} className="inline-flex rounded-xl border border-line bg-surface-2 p-1">
+    <div role="group" aria-label={label} className="inline-flex rounded-xl border border-line bg-surface-2 p-1">
       {options.map((o) => (
-        <button key={o.value} type="button" role="tab" aria-selected={value === o.value} onClick={() => onChange(o.value)}
+        <button key={o.value} type="button" aria-pressed={value === o.value} onClick={() => onChange(o.value)}
           className={cx(
             "rounded-lg font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-accent",
             size === "sm" ? "px-2.5 py-1 text-xs" : "px-3.5 py-1.5 text-sm",
