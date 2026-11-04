@@ -76,9 +76,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 3,
+        "day": 1,
         "track": "common",
-        "reason": "Watch right before installing Claude Code so you know what you are setting up."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -304,9 +304,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 1,
+        "day": 9,
         "track": "common",
-        "reason": "Day one: understand the tool before you start using it."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -402,9 +402,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 2,
+        "day": 7,
         "track": "common",
-        "reason": "A visual follow-up to day one's talk, for students who want to see inside the model."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -515,9 +515,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 7,
+        "day": 21,
         "track": "common",
-        "reason": "End of week one: go deeper on why models behave the way they do."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -710,13 +710,7 @@
         "explain": "AI tools move fast; focus on durable process skills."
       }
     ],
-    "suggestedDays": [
-      {
-        "day": 15,
-        "track": "apps",
-        "reason": "Opening the apps track: a reminder of where agentic coding started and how to judge tools."
-      }
-    ],
+    "suggestedDays": [],
     "tracks": [
       "apps"
     ],
@@ -912,9 +906,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 18,
+        "day": 25,
         "track": "video",
-        "reason": "After your first Remotion clips: meet a second animation tool and learn from a master's workflow."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1026,9 +1020,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 16,
+        "day": 18,
         "track": "video",
-        "reason": "The day after the Remotion intro: learn the concepts properly and render your first MP4."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1124,9 +1118,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 19,
+        "day": 25,
         "track": "video",
-        "reason": "The day after the Manim demo: install it properly and render from the official examples."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1227,9 +1221,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 22,
+        "day": 15,
         "track": "video",
-        "reason": "Once you can render clips: learn the tool that trims, resizes and converts them."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1328,9 +1322,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 3,
+        "day": 1,
         "track": "common",
-        "reason": "Installation day: the official guide to getting your coding agent running."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1437,9 +1431,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 10,
+        "day": 4,
         "track": "common",
-        "reason": "After you have used the agent for a week: sharpen your habits before the build phase."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1548,9 +1542,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 29,
+        "day": 26,
         "track": "apps",
-        "reason": "Mid-build: add an AI feature to your app the simple way first."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1650,9 +1644,14 @@
     ],
     "suggestedDays": [
       {
-        "day": 2,
+        "day": 4,
         "track": "common",
-        "reason": "Early foundation: learn to ask clearly before you start talking to a coding agent."
+        "reason": ""
+      },
+      {
+        "day": 18,
+        "track": "apps",
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1747,9 +1746,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 17,
+        "day": 18,
         "track": "apps",
-        "reason": "Early in the apps track: learn how your code talks to Claude before building AI features."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1860,9 +1859,14 @@
     ],
     "suggestedDays": [
       {
-        "day": 5,
+        "day": 2,
         "track": "common",
-        "reason": "Git day: learn to save your work's history before you build anything bigger."
+        "reason": ""
+      },
+      {
+        "day": 6,
+        "track": "common",
+        "reason": ""
       }
     ],
     "tracks": [
@@ -1960,9 +1964,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 6,
+        "day": 2,
         "track": "common",
-        "reason": "The day after Git basics: put your work online and learn the pull request flow."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -2061,14 +2065,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 12,
+        "day": 11,
         "track": "common",
-        "reason": "First deploy: put your first page on the internet."
-      },
-      {
-        "day": 20,
-        "track": "apps",
-        "reason": "Revisit as the base for an app with its own API."
+        "reason": ""
       }
     ],
     "tracks": [
@@ -2170,9 +2169,9 @@
     ],
     "suggestedDays": [
       {
-        "day": 8,
+        "day": 5,
         "track": "common",
-        "reason": "Before building your first web page: learn what each web language does."
+        "reason": ""
       }
     ],
     "tracks": [

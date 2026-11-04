@@ -1,5 +1,5 @@
 // OWNER: learn. Day hero + lesson + task checklist with proofs + completion moment. Used by Today and DayPage.
-import { useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
+import { Suspense, lazy, useEffect, useRef, useState, type FormEvent, type ReactNode } from "react";
 import { useNavigate } from "react-router";
 import type { Award, CurriculumTask, Lang } from "@shared/types";
 import { useStrings } from "@web/i18n";
@@ -12,6 +12,8 @@ import { strings, type LearnStrings } from "./strings";
 import { Icon, cx, taskTypeIcon } from "./ui";
 
 const MAX_FILE = 50 * 1024 * 1024;
+const ShareDay = lazy(() => import("./ShareDay"));
+const BOSS_SHARE_KEY = (day: number) => `fl-learn-share-boss-${day}`;
 /** Days whose time is spread over a whole day rather than one sitting (curriculum request: boss day 65 = launch day). */
 export const SPREAD_DAYS = new Set([65]);
 
@@ -86,9 +88,31 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
   const [tasks, setTasks] = useState<Record<string, TaskState>>(data.tasks);
   const [dayDone, setDayDone] = useState(data.access === "done");
   const [celebrate, setCelebrate] = useState<{ awards: Award[]; xp: number; result: TaskResult | null } | null>(null);
+  const [shareOpen, setShareOpen] = useState(false);
+  const [shareMounted, setShareMounted] = useState(false);
+  const openShare = () => { setShareMounted(true); setShareOpen(true); };
+  // Closing the celebration refreshes the parent (Today then shows "done for today"), so the refresh waits until the
+  // share dialog is closed too — otherwise it would unmount mid-share.
+  const closeCelebration = (mode: "close" | "share" | "nav" = "close") => {
+    setCelebrate(null);
+    if (mode === "nav") return onChanged();
+    let share = mode === "share";
+    if (!share && data.summary.boss) {
+      // Boss days are portfolio moments: offer the share card once, automatically (design request).
+      try { if (!localStorage.getItem(BOSS_SHARE_KEY(day.day))) { localStorage.setItem(BOSS_SHARE_KEY(day.day), "1"); share = true; } } catch { /* no storage */ }
+    }
+    if (share) openShare(); else onChanged();
+  };
 
   useEffect(() => { setTasks(data.tasks); setDayDone(data.access === "done"); }, [data]);
 
+  const toTasks = (e: React.MouseEvent) => {
+    e.preventDefault();
+    const h = document.getElementById("tasks-h");
+    const reduce = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    h?.scrollIntoView({ behavior: reduce ? "auto" : "smooth", block: "start" });
+    h?.focus({ preventScroll: true });
+  };
   const required = day.tasks.filter((t) => !t.optional);
   const doneCount = day.tasks.filter((t) => tasks[t.id]?.done).length;
   const requiredDone = required.every((t) => tasks[t.id]?.done);
@@ -128,10 +152,18 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
   return (
     <div className="grid grid-cols-1 gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(320px,380px)] lg:gap-12">
       <article className="min-w-0">
+        {/* Keyboard users: first stop on the page jumps to the task list (design a11y audit). */}
+        <a href="#tasks-h" onClick={toTasks}
+          className="sr-only focus:not-sr-only focus:mb-4 focus:inline-flex focus:h-9 focus:items-center focus:rounded-full focus:border focus:border-line focus:bg-surface focus:px-3.5 focus:text-sm focus:font-medium focus:outline-2 focus:outline-ring">
+          {s.skipToTasks}
+        </a>
         <DayHero s={s} summary={data.summary}
-          extra={dayDone ? <Badge tone="accent" icon={<Icon.check />}>{data.completedAt ? s.dayDoneOn(formatDate(data.completedAt, lang)) : s.dayDone}</Badge> : null} />
-        <a href="#tasks-h" className="-mt-2 mb-6 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-sm font-medium hover:bg-surface-2 lg:hidden"
-          onClick={(e) => { e.preventDefault(); document.getElementById("tasks-h")?.scrollIntoView({ behavior: "smooth", block: "start" }); }}>
+          extra={dayDone ? <>
+            <Badge tone="accent" icon={<Icon.check />}>{data.completedAt ? s.dayDoneOn(formatDate(data.completedAt, lang)) : s.dayDone}</Badge>
+            <Button size="sm" variant="ghost" icon={<Icon.share />} onClick={openShare} className="-my-1">{s.share}</Button>
+          </> : null} />
+        <a href="#tasks-h" className="-mt-2 mb-6 inline-flex h-9 items-center gap-2 rounded-full border border-line bg-surface px-3.5 text-sm font-medium hover:bg-surface-2 focus-visible:outline-2 focus-visible:outline-ring lg:hidden"
+          onClick={toTasks}>
           <Icon.check size={15} className="text-accent" />{s.tasks} · {s.tasksProgress(doneCount, day.tasks.length)}<Icon.arrowRight size={14} className="rotate-90 text-muted" />
         </a>
         <h2 className="sr-only">{s.lesson}</h2>
@@ -142,7 +174,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
       <aside className="lg:sticky lg:top-24 lg:self-start" aria-labelledby="tasks-h">
         <Card padding="sm" className="sm:p-5">
           <div className="mb-4 flex items-center justify-between gap-3">
-            <h2 id="tasks-h" className="scroll-mt-24 text-lg font-semibold">{s.tasks}</h2>
+            <h2 id="tasks-h" tabIndex={-1} className="scroll-mt-24 text-lg font-semibold outline-none">{s.tasks}</h2>
             <span className="tabular text-sm text-muted" aria-live="polite">{s.tasksProgress(doneCount, day.tasks.length)}</span>
           </div>
           <ol className="grid grid-cols-1 gap-3">
@@ -181,7 +213,13 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
 
       <Celebration open={!!celebrate} s={s} lang={lang} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next}
         xp={celebrate?.xp ?? 0} awards={celebrate?.awards ?? []} result={celebrate?.result ?? null}
-        onClose={() => { setCelebrate(null); onChanged(); }} />
+        onClose={(mode) => closeCelebration(mode)} onShare={() => closeCelebration("share")} />
+      {shareMounted && (
+        <Suspense fallback={null}>
+          <ShareDay open={shareOpen} lang={lang} day={day.day} title={day.title}
+            onClose={() => { setShareOpen(false); onChanged(); }} />
+        </Suspense>
+      )}
     </div>
   );
 }
@@ -369,9 +407,9 @@ function ProofForm({ s, task, initial, busy, error, editing, onCancel, onSubmit 
   );
 }
 
-function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, result, onClose }: {
+function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, result, onClose, onShare }: {
   open: boolean; s: LearnStrings; lang: Lang; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null;
-  xp: number; awards: Award[]; result: TaskResult | null; onClose: () => void;
+  xp: number; awards: Award[]; result: TaskResult | null; onClose: (mode?: "close" | "nav") => void; onShare: () => void;
 }) {
   const nav = useNavigate();
   // One XP chip (task XP and any day bonus merged), then badges/level/streak. Day badges come from content until the
@@ -395,12 +433,13 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
   };
 
   return (
-    <Dialog open={open} onClose={onClose} title={s.celebrateTitle(day.day)} hideTitle size="sm"
+    <Dialog open={open} onClose={() => onClose()} title={s.celebrateTitle(day.day)} hideTitle size="sm"
       footer={<>
-        <Button variant="outline" onClick={onClose}>{s.close}</Button>
+        <Button variant="outline" onClick={() => onClose()}>{s.close}</Button>
+        <Button variant="soft" icon={<Icon.share />} onClick={onShare}>{s.shareDay(day.day)}</Button>
         {openNow
-          ? <Button onClick={() => { onClose(); nav(`/${lang}/day/${next!.day}`); }} iconRight={<Icon.arrowRight />}>{s.continueNext(next!.day)}</Button>
-          : <Button onClick={() => { onClose(); nav(`/${lang}/path`); }} icon={<Icon.map />}>{s.seePath}</Button>}
+          ? <Button onClick={() => { onClose("nav"); nav(`/${lang}/day/${next!.day}`); }} iconRight={<Icon.arrowRight />}>{s.continueNext(next!.day)}</Button>
+          : <Button onClick={() => { onClose("nav"); nav(`/${lang}/path`); }} icon={<Icon.map />}>{s.seePath}</Button>}
       </>}>
       {open && (
         <div className="text-center">
@@ -428,7 +467,7 @@ function Celebration({ open, s, lang, badges, dayBadges, day, next, xp, awards, 
           {day.boss && (
             <div className="mt-6 flex flex-col items-center gap-2 rounded-[var(--radius-sm)] border border-gold-bright/40 bg-gold-soft p-4 text-sm">
               <p className="text-gold-ink">{s.bossInPortfolio}</p>
-              <Button size="sm" variant="gold" icon={<Icon.crown />} onClick={() => { onClose(); nav(`/${lang}/portfolio/me`); }}>{s.openPortfolio}</Button>
+              <Button size="sm" variant="gold" icon={<Icon.crown />} onClick={() => { onClose("nav"); nav(`/${lang}/portfolio/me`); }}>{s.openPortfolio}</Button>
             </div>
           )}
           {next && next.available && (
