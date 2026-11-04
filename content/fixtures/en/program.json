@@ -1,0 +1,11 @@
+{
+  "lang": "en",
+  "title": "FlowLeaf 66",
+  "tagline": "66 days to make building with AI a habit — and a portfolio to prove it.",
+  "phases": [
+    { "id": 1, "days": [1, 10], "title": "Foundation", "goal": "Get comfortable talking to a coding agent and ship your first tiny thing." },
+    { "id": 2, "days": [11, 30], "title": "Build", "goal": "Build real projects on your track, one small win a day." },
+    { "id": 3, "days": [31, 50], "title": "Ship", "goal": "Put your work in front of real people and improve it from feedback." },
+    { "id": 4, "days": [51, 66], "title": "Portfolio", "goal": "Ship a public capstone and a portfolio you are proud to send." }
+  ]
+}
