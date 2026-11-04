@@ -191,3 +191,16 @@ Branch `agent/learn` was rebased onto `main`. Requests in `docs/requests/*-to-le
   no page errors and no horizontal overflow.
 - Tests: `worker/lib/learn/portfolio.test.ts` covers visibility defaults, kinds, overrides, file URLs and image detection (SVG is
   excluded), tasks removed from the curriculum, and language-independent ids. `npm test` passes 189/189.
+
+**Round 3: game's requests (`game-to-learn.md`, round 2)**
+1. `showAwards(res.awards, { toast: false })` runs after day completion (auto and manual) and after onboarding, so the level-up moment fires and the widgets refresh.
+   Single-task completions keep `showAwards(res.awards)` with the toast.
+2. `<StreakNudge />` sits at the top of Today and only renders when the streak needs today's action.
+3. `onLessonViewed(env, userId, day, lang)` runs through `waitUntil` in `GET /api/progress/day/:day` (when the lesson is visible) and in
+   `GET /api/curriculum/day/:day`. This feeds the secret "polyglot" badge.
+4. Dev time-travel: run `await __flTimeTravel(N)` in the browser console (dev builds only, defined in `data.ts`). It shifts learn and game
+   history together. The plain `POST /api/progress/dev/time-travel` still shifts learn tables only.
+5. `POST /api/progress/dev/reset` now says in its response that game XP, badges and streak are kept.
+- The portfolio header links to game's certificate (`/:lang/certificate/:userId`).
+- Heads-up: on main, `worker/lib/game/test/catalog.test.ts` fails ("first-ship: expected … function"). That's a content vs game rule
+  mismatch in `content/badges.json` / `worker/lib/game`, not learn code. The other 206 tests pass.

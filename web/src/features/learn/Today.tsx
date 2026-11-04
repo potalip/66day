@@ -2,7 +2,7 @@
 import { Link, Navigate } from "react-router";
 import { useLang, useStrings } from "@web/i18n";
 import { Badge, ButtonLink, Card, EmptyState, ProgressBar } from "@web/ui";
-import { StreakChip, XpBar } from "@web/features/game/widgets";
+import { StreakChip, StreakNudge, XpBar } from "@web/features/game/widgets";
 import { useDay, useOverview, type Overview } from "./data";
 import { DayView } from "./DayView";
 import { strings, type LearnStrings } from "./strings";
@@ -24,6 +24,7 @@ export default function Today() {
 
   return (
     <div className="mx-auto max-w-6xl">
+      <StreakNudge className="mb-6" />
       <TodayHeader s={s} o={o} lang={lang} />
       {o.status === "finished" ? (
         <Finished s={s} lang={lang} />

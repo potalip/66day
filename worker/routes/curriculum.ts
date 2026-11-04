@@ -1,5 +1,6 @@
 import { Hono } from "hono";
 import type { AppEnv } from "../env";
+import { onLessonViewed } from "../lib/game";
 import type { ProgramResponse } from "../lib/learn/api-types";
 import { TOTAL, allSummaries, content, getDay, getProgram, isLang, isTrack } from "../lib/learn/content";
 
@@ -34,6 +35,7 @@ curriculum.get("/day/:day{[0-9]+}", async (c) => {
   const { lang, track } = await resolve(c);
   const d = n >= 1 && n <= TOTAL ? getDay(lang, track, n) : null;
   if (!d) return c.json({ error: "day_not_found" }, 404);
+  c.executionCtx.waitUntil(onLessonViewed(c.env, c.get("userId"), n, lang));
   return c.json(d);
 });
 
