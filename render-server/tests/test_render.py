@@ -56,3 +56,14 @@ def test_api_job_lifecycle(tmp_path, monkeypatch):
         v = c.get(url)
         assert v.status_code == 200 and len(v.content) > 1000
         assert c.get(url + "0").status_code == 403
+
+
+def test_janitor_removes_old_jobs(tmp_path):
+    from flowleaf_render.jobs import JobStore
+    from flowleaf_render.storage import LocalStorage
+    st = JobStore(tmp_path, LocalStorage("http://x"), log=lambda *_: None)
+    job = st.create(tiny(), "draft")
+    job.update(status="done", finished_at=time.time() - 10 * 86400); st._save(job)
+    (st.dir / job["id"] / "render").mkdir(parents=True)
+    assert st.cleanup(7) == 1
+    assert not (st.dir / job["id"]).exists() and st.get(job["id"]) is None

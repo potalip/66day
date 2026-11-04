@@ -20,7 +20,8 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
   `worker/lib/studio/catalog.generated.json` (`python -m flowleaf_render.cli catalog --out …`), used by the Worker,
   the web editor and the Claude prompt. Validation is mirrored in TS.
 - **API** (`API.md`): `POST /v1/jobs`, `GET /v1/jobs/:id`, `DELETE`, `/v1/validate`, `/v1/preview` (PNG frame),
-  `/v1/templates`, `/health`; Bearer auth; jobs persisted on disk and resumed after restart; status callbacks with
+  `/v1/templates`, `/health`; Bearer auth; jobs persisted on disk and resumed after restart, old jobs cleaned up
+  hourly (`FLR_RETENTION_DAYS`); status callbacks with
   retry; outputs on local disk with HMAC-signed links or uploaded to any S3-compatible bucket (S3 / R2 / MinIO).
 - **Images** for screenshot scenes are fetched SSRF-safely (public IPs only, size cap, decoded/verified, cached).
 - `Dockerfile`, `README.md` (env vars, AWS ECS Fargate + EC2 deploy notes, cost guide), CLI for render/stills/samples.
@@ -38,7 +39,8 @@ Branch `agent/studio` · PR #6 `[studio] Render server (7 templates) + web Studi
 - `worker/lib/studio/`: `storyboard.ts` (types + validation port), `plan.ts` (Claude prompt with template schema,
   example and language rules; JSON extraction; one repair round-trip; pins the student's style/format/lang),
   `service.ts` (submit, callback/poll sync — local dev works without a reachable callback —, R2 ingest, game event
-  `studio.rendered` via `onGameEvent` on final renders).
+  `studio.rendered` via `onGameEvent` on final renders). Fair-use limits per user: 2 active renders, 40 per day
+  (`STUDIO_MAX_ACTIVE`, `STUDIO_MAX_DAILY`).
 
 ### Web (`/:lang/studio`, `/:lang/studio/:id`)
 - Gallery of the 7 types with real rendered previews (per style, per language), style swatches, "your videos" grid

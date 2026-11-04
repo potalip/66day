@@ -122,7 +122,8 @@ export default function StudioProject() {
       await load();
     } catch (e) {
       const code = errorCode(e);
-      setActionErr(code === "renderer_not_configured" ? s.rendererOffLong : code === "invalid_storyboard" ? s.fixErrors : s.loadError);
+      setActionErr(code === "renderer_not_configured" ? s.rendererOffLong : code === "invalid_storyboard" ? s.fixErrors
+        : code === "too_many_active" ? s.tooManyActive : code === "daily_limit" ? s.dailyLimit : s.loadError);
     }
     setBusy(null);
   };

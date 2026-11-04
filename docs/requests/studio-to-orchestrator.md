@@ -17,3 +17,5 @@
 6. **Public share links** `GET /api/studio/s/<slug>.mp4|.jpg` are opened by anonymous visitors (portfolio viewers);
    please skip `anonUser` for the `/api/studio/s/` prefix too, so viewers don't get `users` rows, e.g.
    `NO_USER.has(c.req.path) || c.req.path.startsWith("/api/studio/s/")`.
+7. Optional vars for render fair-use (defaults in code): `STUDIO_MAX_ACTIVE` (2 concurrent renders per user) and
+   `STUDIO_MAX_DAILY` (40 renders per user per 24 h). Add to `wrangler.jsonc` vars / `Env` if you want to tune them.

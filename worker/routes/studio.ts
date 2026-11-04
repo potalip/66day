@@ -176,6 +176,16 @@ studio.post("/projects/:id/render", async (c) => {
     const r = await getRender(c.env, p.current_render_id);
     if (r && ACTIVE.includes(r.status)) return c.json({ error: "already_rendering", render: renderView(r) }, 409);
   }
+  // fair use: protects the shared render server (env-tunable)
+  const limits = await c.env.DB.prepare(
+    `SELECT SUM(CASE WHEN status IN ('queued','submitted','rendering','ingesting') THEN 1 ELSE 0 END) AS active,
+            SUM(CASE WHEN created_at > unixepoch() - 86400 THEN 1 ELSE 0 END) AS today
+     FROM studio_renders WHERE user_id = ?`,
+  ).bind(c.get("userId")).first<{ active: number | null; today: number | null }>();
+  const maxActive = Number((c.env as unknown as Record<string, string>).STUDIO_MAX_ACTIVE ?? 2);
+  const maxDaily = Number((c.env as unknown as Record<string, string>).STUDIO_MAX_DAILY ?? 40);
+  if ((limits?.active ?? 0) >= maxActive) return c.json({ error: "too_many_active", limit: maxActive }, 429);
+  if ((limits?.today ?? 0) >= maxDaily) return c.json({ error: "daily_limit", limit: maxDaily }, 429);
   const body = await c.req.json<{ quality?: string }>().catch(() => ({} as { quality?: string }));
   const quality = body.quality === "draft" ? "draft" : "final";
   const origin = new URL(c.req.url).origin;

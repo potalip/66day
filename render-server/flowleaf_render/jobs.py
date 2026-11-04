@@ -95,6 +95,26 @@ class JobStore:
     def start(self, n=1):
         for k in range(n):
             threading.Thread(target=self._loop, name=f"render-{k}", daemon=True).start()
+        threading.Thread(target=self._janitor, name="janitor", daemon=True).start()
+
+    def cleanup(self, days: float):
+        """Delete finished jobs (and their files) older than `days`. Returns how many were removed."""
+        cutoff = time.time() - days * 86400
+        old = [j for j in list(self.jobs.values()) if j["status"] in TERMINAL and (j.get("finished_at") or j["created_at"]) < cutoff]
+        for j in old:
+            shutil.rmtree(self.dir / j["id"], ignore_errors=True)
+            with self.lock: self.jobs.pop(j["id"], None)
+        return len(old)
+
+    def _janitor(self):
+        days = float(os.environ.get("FLR_RETENTION_DAYS", "7"))
+        while True:
+            try:
+                n = self.cleanup(days)
+                if n: self.log(f"janitor: removed {n} old job(s)")
+            except Exception as e:  # noqa: BLE001
+                self.log(f"janitor failed: {e}")
+            time.sleep(3600)
 
     def _loop(self):
         while True:

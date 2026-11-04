@@ -82,6 +82,7 @@ Speed (4 vCPU): a 23 s 1080×1920 video renders in ~30 s; `draft` quality in ~8 
 | `FLR_DATA_DIR` | `./data` | jobs, renders, ElevenLabs cache |
 | `FLR_CONCURRENCY` | `1` | renders at once (each render already uses all cores) |
 | `FLR_WORKERS` | cpu count | processes per render |
+| `FLR_RETENTION_DAYS` | `7` | finished jobs (and local files) older than this are deleted hourly. The Worker copies outputs to R2, so a short retention is fine |
 | `FLR_ALLOW_PRIVATE_FETCH` | — | `1` lets image fields point at private/localhost URLs. **Dev only** (Worker on localhost) |
 | `ELEVENLABS_API_KEY` | — | enables voiceover (+ AI SFX/music). Without it: synth music + SFX, captions carry the words |
 | `ELEVEN_VOICE_ID`, `ELEVEN_TTS_MODEL` | Brian, `eleven_multilingual_v2` | voice; the multilingual model speaks Russian |
