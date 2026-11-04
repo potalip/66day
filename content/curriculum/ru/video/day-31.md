@@ -27,7 +27,7 @@ tasks:
     proof: text
   - id: d31-video-t4
     type: reflect
-    title: "Запиши, в чём ты переспорил модель"
+    title: "Запиши, где модель пришлось переспорить"
     xp: 15
     proof: text
 ---
