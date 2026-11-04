@@ -44,7 +44,7 @@ export function Lesson({ m }: { m: LessonMaterial }) {
       </section>
 
       <section aria-labelledby="ls-ex">
-        <Card className="border-accent/40 bg-accent-soft p-5 sm:p-6">
+        <Card tone="accent" className="p-5 sm:p-6">
           <div className="flex flex-wrap items-center justify-between gap-2">
             <h2 id="ls-ex" className="text-sm font-semibold uppercase tracking-wide text-accent">{s.exercise}</h2>
             <span className="inline-flex items-center gap-1 text-sm text-muted"><ClockIcon className="size-4" />{s.minutes(m.exercise.estMinutes)}</span>
