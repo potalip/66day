@@ -80,3 +80,19 @@ export const learnApi = {
 export function formatDate(sec: number, lang: Lang) {
   return new Intl.DateTimeFormat(lang === "ru" ? "ru-RU" : "en-GB", { day: "numeric", month: "long" }).format(new Date(sec * 1000));
 }
+
+// Badge definitions (content/badges.json via API), fetched once per page load.
+import type { BadgeDef } from "../../../../worker/lib/learn/api-types";
+let badgeCache: Promise<Record<string, BadgeDef>> | null = null;
+export function useBadges(): Record<string, BadgeDef> {
+  const [map, setMap] = useState<Record<string, BadgeDef>>({});
+  useEffect(() => {
+    badgeCache ??= call<BadgeDef[]>("/curriculum/badges")
+      .then((list) => Object.fromEntries(list.map((b) => [b.id, b])))
+      .catch(() => { badgeCache = null; return {}; });
+    let live = true;
+    void badgeCache.then((m) => { if (live) setMap(m); });
+    return () => { live = false; };
+  }, []);
+  return map;
+}

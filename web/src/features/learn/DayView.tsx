@@ -3,7 +3,7 @@ import { useEffect, useRef, useState, type FormEvent } from "react";
 import { useNavigate } from "react-router";
 import type { Award, CurriculumTask, Lang } from "@shared/types";
 import { useStrings } from "@web/i18n";
-import { ApiError, formatDate, learnApi, type DayResponse, type DaySummary, type TaskResult, type TaskState } from "./data";
+import { ApiError, formatDate, learnApi, useBadges, type BadgeDef, type DayResponse, type DaySummary, type TaskResult, type TaskState } from "./data";
 import { Markdown } from "./Markdown";
 import { strings, type LearnStrings } from "./strings";
 import { Button, ButtonLink, Card, Chip, Icon, cx, taskTypeIcon } from "./ui";
@@ -40,7 +40,9 @@ function hostOf(url: string) {
 
 export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayResponse; onChanged: () => void }) {
   const s = useStrings(strings);
+  const badges = useBadges();
   const day = data.day!;
+  const dayBadges = (day.badges ?? []).map((id) => badges[id]).filter(Boolean) as BadgeDef[];
   const [tasks, setTasks] = useState<Record<string, TaskState>>(data.tasks);
   const [dayDone, setDayDone] = useState(data.access === "done");
   const [celebrate, setCelebrate] = useState<{ awards: Award[]; xp: number; result: TaskResult | null } | null>(null);
@@ -127,6 +129,17 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
                 onSubmitted={onSubmitted} onUnchecked={onUnchecked} onError={(m) => showToast(m)} />
             ))}
           </ol>
+          {dayBadges.length > 0 && (
+            <div className="mt-4 rounded-xl bg-gold-soft px-3 py-2.5 text-sm">
+              <p className="text-xs font-semibold tracking-wide text-gold uppercase">{dayDone ? s.badgeEarned : s.badgeToEarn}</p>
+              {dayBadges.map((b) => (
+                <p key={b.id} className="mt-1 flex items-start gap-2">
+                  <span aria-hidden="true" className="text-base leading-5">{b.icon}</span>
+                  <span><span className="font-semibold">{b.title[lang]}</span><span className="text-muted"> — {b.description[lang]}</span></span>
+                </p>
+              ))}
+            </div>
+          )}
           {!dayDone && requiredDone && (
             <div className="mt-4 border-t border-line pt-4">
               <p className="mb-3 text-sm text-muted">{s.allRequiredDone}</p>
@@ -155,7 +168,7 @@ export function DayView({ lang, data, onChanged }: { lang: Lang; data: DayRespon
         </div>
       )}
       {celebrate && (
-        <Celebration s={s} lang={lang} day={data.summary} next={data.next} xp={celebrate.xp} awards={celebrate.awards} result={celebrate.result}
+        <Celebration s={s} lang={lang} badges={badges} dayBadges={day.badges ?? []} day={data.summary} next={data.next} xp={celebrate.xp} awards={celebrate.awards} result={celebrate.result}
           onClose={() => { setCelebrate(null); onChanged(); }} />
       )}
       <LearnKeyframes />
@@ -361,8 +374,8 @@ function awardLabel(s: LearnStrings, a: Award, lang: Lang) {
   void lang;
 }
 
-function Celebration({ s, lang, day, next, xp, awards, result, onClose }: {
-  s: LearnStrings; lang: Lang; day: DaySummary; next: DaySummary | null; xp: number; awards: Award[]; result: TaskResult | null; onClose: () => void;
+function Celebration({ s, lang, badges, dayBadges, day, next, xp, awards, result, onClose }: {
+  s: LearnStrings; lang: Lang; badges: Record<string, BadgeDef>; dayBadges: string[]; day: DaySummary; next: DaySummary | null; xp: number; awards: Award[]; result: TaskResult | null; onClose: () => void;
 }) {
   const closeRef = useRef<HTMLButtonElement>(null);
   const nav = useNavigate();
@@ -376,7 +389,9 @@ function Celebration({ s, lang, day, next, xp, awards, result, onClose }: {
   }, [onClose]);
 
   // Show game awards if the game layer returned any; otherwise show the XP the tasks are worth.
-  const list: Award[] = awards.some((a) => a.kind === "xp") ? awards : [{ kind: "xp", amount: xp }, ...awards];
+  const list: Award[] = awards.some((a) => a.kind === "xp") ? [...awards] : [{ kind: "xp", amount: xp }, ...awards];
+  // Until the game layer returns badge awards, show the day's own badges (from content) as earned.
+  if (!awards.some((a) => a.kind === "badge")) for (const id of dayBadges) list.push({ kind: "badge", id });
   const openNow = result?.status === "open" && result.nextDay && next && result.nextDay === next.day && next.available;
   const body = day.boss ? s.celebrateBoss : day.rest ? s.celebrateRest : s.celebrateBody;
   const pieces = Array.from({ length: 14 }, (_, i) => i);
@@ -403,7 +418,7 @@ function Celebration({ s, lang, day, next, xp, awards, result, onClose }: {
           <ul className="flex flex-wrap justify-center gap-2">
             {list.map((a, i) => (
               <li key={i} className="fl-learn-pop rounded-full bg-gold-soft px-3 py-1 text-sm font-semibold text-gold" style={{ animationDelay: `${450 + i * 120}ms` }}>
-                {awardLabel(s, a, lang)}
+                {a.kind === "badge" && a.id && badges[a.id] ? <><span aria-hidden="true">{badges[a.id].icon} </span>{a.label ?? badges[a.id].title[lang]}</> : awardLabel(s, a, lang)}
               </li>
             ))}
           </ul>
