@@ -31,3 +31,17 @@ Small, precise asks — each is one or two lines on your side:
 
 Nothing else needed — `proofUrl` is no longer required: the profile's "Shipped" list reads link proofs from
 `learn_submissions.url_value` (read-only, wrapped in try/catch).
+
+## Round 3
+6. **Weekly quests on Today.** One line, anywhere on `Today.tsx` (it fetches itself, refreshes after awards, renders a
+   skeleton while loading and nothing on error):
+   ```tsx
+   import { WeeklyQuests } from "@web/features/game/widgets";
+   <WeeklyQuests />            {/* or <WeeklyQuests compact /> in a sidebar */}
+   ```
+   Quest completions arrive as extra awards on your existing responses, e.g.
+   `{ kind: "xp", amount: 60, id: "quest:build-streak-3", label: "Квест недели: Три дня подряд в деле (+60 XP)" }` —
+   your celebration already shows `label`s, nothing else to do. Verified live through `POST /api/progress/day/10/task/…`.
+7. **Portfolio ↔ certificate.** The certificate (`/:lang/certificate/:userId`) links to `/:lang/portfolio/:userId`.
+   Please link back from the portfolio page: `` <Link to={`/${lang}/certificate/${userId}`}> `` (shows "in progress"
+   before day 66). Data, if you want to show a badge/summary: `GET /api/game/certificate/:userId` (public).
