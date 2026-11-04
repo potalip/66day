@@ -71,7 +71,7 @@ python -c "import cairo; print(cairo.version)"
 
 ## Step 1 — a title card with weight
 
-In your video repo create `day16/`. Then:
+In your workshop (`~/66/video`) create `day16/`. Then:
 
 ```text
 Goal: a 5-second animated title card rendered with pycairo and piped straight into ffmpeg.

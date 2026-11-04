@@ -56,7 +56,8 @@ smaller and blurrier) and **pixel format** `yuv420p` (the colour layout every ph
 
 ## Step 1 — draw 90 frames, glue them together
 
-Open your phase-2 video repo from day 14 and make a `day15/` folder. Then give your agent this:
+Open your phase-2 video workshop from day 14 (`~/66/video`) and make a `day15/` folder there. All paths in this track
+are relative to that folder. Then give your agent this:
 
 ```text
 Goal: a Python script that draws 90 PNG frames for a 3-second animation.

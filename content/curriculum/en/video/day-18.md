@@ -56,7 +56,7 @@ again. That's how you build a timeline from small reusable parts.
 
 ## Step 1 — create the project and render the starter
 
-In your video repo:
+In your workshop (`~/66/video`):
 
 ```bash
 npx create-video@latest remotion
