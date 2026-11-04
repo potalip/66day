@@ -79,14 +79,15 @@ def main():
         from .schema import validate
         out = Path(a.out or OUT / "previews"); out.mkdir(parents=True, exist_ok=True)
         for tid, T in TEMPLATES.items():
+          for lang in ("en", "ru"):
             for style in T.styles:
-                sb, _ = validate(storyboard_for(tid, "en", style, "1x1"), TEMPLATES)
+                sb, _ = validate(storyboard_for(tid, lang, style, "1x1"), TEMPLATES)
                 sb["captions"] = False
                 scenes = engine.build_scenes(sb)
                 idx = 1 if len(scenes) > 2 else 0
                 name, dur, draw = scenes[idx]
-                p = out / f"{tid}--{style}.png"
-                C.still(draw, dur * .8 if dur * .8 < dur - .45 else dur - .5, dur, p, 540, 540, "1x1", STYLES[style], "en")
+                p = out / f"{tid}--{style}--{lang}.png"
+                C.still(draw, dur * .8 if dur * .8 < dur - .45 else dur - .5, dur, p, 540, 540, "1x1", STYLES[style], lang)
                 from PIL import Image
                 Image.open(p).convert("RGB").resize((360, 360), Image.LANCZOS).save(p.with_suffix(".jpg"), quality=78)
                 p.unlink()

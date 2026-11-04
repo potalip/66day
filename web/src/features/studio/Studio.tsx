@@ -6,7 +6,8 @@ import { strings } from "./strings";
 import { Button, Card, Chip, FormatIcon, Icon, Label, Notice, Segmented, Spinner, TextArea, cx } from "./ui";
 
 const previews = import.meta.glob("./previews/*.jpg", { eager: true, query: "?url", import: "default" }) as Record<string, string>;
-export const previewUrl = (template: string, style: string) => previews[`./previews/${template}--${style}.jpg`];
+export const previewUrl = (template: string, style: string, lang: string = "en") =>
+  previews[`./previews/${template}--${style}--${lang}.jpg`] ?? previews[`./previews/${template}--${style}--en.jpg`];
 
 export default function Studio() {
   const s = useStrings(strings);
@@ -69,7 +70,7 @@ export default function Studio() {
                   <Link to={`/${lang}/studio/${p.id}`} className="group block rounded-[var(--radius)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent">
                     <Card className="overflow-hidden transition group-hover:shadow-md">
                       <div className="relative aspect-square overflow-hidden bg-surface-2">
-                        <img src={p.render?.thumbUrl ?? previewUrl(p.template, p.style)} alt="" loading="lazy"
+                        <img src={p.render?.thumbUrl ?? previewUrl(p.template, p.style, p.lang)} alt="" loading="lazy"
                           className={cx("size-full transition group-hover:scale-[1.02]", p.render?.thumbUrl ? "object-contain" : "object-cover")} />
                         <span className="absolute left-2 top-2"><StatusChip status={p.status} label={s.status[p.status]} /></span>
                       </div>
@@ -123,7 +124,7 @@ function TemplateCard({ T, onPick }: { T: TemplateDef; onPick: () => void }) {
       <Card className="flex h-full flex-col overflow-hidden">
         <button type="button" onClick={onPick} className="group relative block aspect-[16/10] overflow-hidden bg-surface-2 focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-accent"
           aria-label={`${T.name[lang]} — ${s.useTemplate}`}>
-          <img src={previewUrl(T.id, style)} alt="" loading="lazy" className="size-full object-cover transition duration-300 group-hover:scale-[1.03]" />
+          <img src={previewUrl(T.id, style, lang)} alt="" loading="lazy" className="size-full object-cover transition duration-300 group-hover:scale-[1.03]" />
         </button>
         <div className="flex flex-1 flex-col gap-3 p-4">
           <div>
@@ -162,9 +163,9 @@ function CreateSheet({ T, ai, onClose }: { T: TemplateDef; ai: boolean; onClose:
   const titleId = useId(), briefId = useId();
 
   useEffect(() => {
+    // no close() in cleanup: StrictMode re-runs effects and close() would fire onClose and unmount us
     const d = dialog.current;
     if (d && !d.open) d.showModal();
-    return () => d?.close();
   }, []);
 
   const create = async () => {
@@ -196,7 +197,7 @@ function CreateSheet({ T, ai, onClose }: { T: TemplateDef; ai: boolean; onClose:
               <button key={st.id} type="button" role="radio" aria-checked={style === st.id} onClick={() => setStyle(st.id)}
                 className={cx("overflow-hidden rounded-[12px] border-2 text-left transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-accent",
                   style === st.id ? "border-accent" : "border-line hover:border-muted")}>
-                <img src={previewUrl(T.id, st.id)} alt="" className="aspect-square w-full object-cover" />
+                <img src={previewUrl(T.id, st.id, lang)} alt="" className="aspect-square w-full object-cover" />
                 <span className="block px-2.5 py-1.5 text-sm font-medium">{st.name[uiLang]}</span>
               </button>
             ))}
