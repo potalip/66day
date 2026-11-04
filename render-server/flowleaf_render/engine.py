@@ -6,6 +6,7 @@ contact-sheet QA) but is driven by validated storyboard JSON instead of hand-wri
 from __future__ import annotations
 
 import json
+import multiprocessing
 import os
 import re
 import subprocess
@@ -173,7 +174,7 @@ def render(storyboard: dict, outdir: Path, quality="final", workers=None, progre
             _, name, dur, secs = _render_one(j); done += dur
             prog(.05 + .75 * done / total, "scenes")
     else:
-        with ProcessPoolExecutor(min(workers, len(jobs))) as ex:
+        with ProcessPoolExecutor(min(workers, len(jobs)), mp_context=multiprocessing.get_context("forkserver")) as ex:
             for _, name, dur, secs in ex.map(_render_one, jobs):
                 done += dur; log(f"  scene {name:<16} {dur:5.2f}s in {secs:5.1f}s")
                 prog(.05 + .75 * done / total, "scenes")
