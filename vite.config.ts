@@ -2,15 +2,17 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { cloudflare } from "@cloudflare/vite-plugin";
-import path from "node:path";
+
+const dir = import.meta.dirname;
 
 export default defineConfig({
+  publicDir: "web/public",
   plugins: [react(), tailwindcss(), cloudflare()],
   resolve: {
     alias: {
-      "@web": path.resolve(__dirname, "web/src"),
-      "@shared": path.resolve(__dirname, "shared"),
-      "@content": path.resolve(__dirname, "content"),
+      "@web": `${dir}/web/src`,
+      "@shared": `${dir}/shared`,
+      "@content": `${dir}/content`,
     },
   },
 });
