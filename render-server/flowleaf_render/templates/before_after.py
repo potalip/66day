@@ -6,6 +6,7 @@ from ..common import BuildCtx, backdrop, handle_field, intro_kind, outro_kind
 from ..core import Frame
 from ..icons import draw_icon, icon_options
 from ..schema import Field, SceneKind, Template, L, example
+from ._screen import screen_kind
 
 DECO = {"paper": "dots", "night": "dots", "sunrise": "leaves"}
 
@@ -166,6 +167,8 @@ FEATURE = SceneKind("feature", L("Feature", "Фича"), [
 ], (3.8, 2.5, 7.0), draw=draw_feature, hint="One benefit per scene; title = the benefit, body = how.",
     sfx=lambda sc, bc: [(.1, "pop", {"gain": -12})])
 
+SCREEN = screen_kind(hint="Show the finished product: a screenshot in a phone or browser frame.")
+
 TEMPLATE = Template(
     id="before-after",
     name=L("Before / after showcase", "До / после"),
@@ -174,8 +177,8 @@ TEMPLATE = Template(
     category="showcase",
     styles=["paper", "night", "sunrise"],
     fields=[handle_field()],
-    scene_kinds=[intro_kind(), SWIPE, COMPARE, FEATURE, outro_kind()],
-    min_scenes=2, max_scenes=9, music="uplift", transition="wipe",
+    scene_kinds=[intro_kind(), SWIPE, COMPARE, SCREEN, FEATURE, outro_kind()],
+    min_scenes=2, max_scenes=10, music="uplift", transition="wipe",
     ai_notes="Transformation story: intro, a swipe reveal or side-by-side comparison, 1-3 feature scenes, outro. "
              "Points on both sides should mirror each other.",
     examples={
@@ -187,6 +190,8 @@ TEMPLATE = Template(
             ("compare", 5.5, "Before: manual, slow, no reminders. After: one tap, instant, and it nudges me.",
              {"before_title": "Before", "before_points": ["Manual entries", "No reminders", "Charts by hand"],
               "after_title": "After", "after_points": ["One-tap check-in", "Morning nudge", "Live streak chart"]}),
+            ("screen", 4.5, "Here's the morning check-in screen.",
+             {"device": "phone", "title": "One tap a day", "caption": "The whole app is one screen."}),
             ("feature", 3.8, "The best part: it took one weekend.",
              {"icon": "clock", "title": "Built in one weekend", "body": "Planned with Claude, shipped on Sunday night."}),
             ("outro", 3.4, "Want the prompt I used?", {"title": "Want my prompt?", "cta": "Comment “prompt”"}),
@@ -200,6 +205,8 @@ TEMPLATE = Template(
              {"before_title": "Было", "before_points": ["Ручной ввод", "Нет напоминаний", "Графики руками"],
               "after_title": "Стало", "after_points": ["Отметка в одно касание", "Утреннее напоминание",
                                                        "Живой график серии"]}),
+            ("screen", 4.5, "Вот экран утренней отметки.",
+             {"device": "phone", "title": "Одно касание в день", "caption": "Всё приложение — один экран."}),
             ("feature", 3.8, "Самое приятное: всё заняло одни выходные.",
              {"icon": "clock", "title": "Готово за выходные", "body": "План — с Claude, релиз — в воскресенье вечером."}),
             ("outro", 3.4, "Хочешь мой промпт?", {"title": "Нужен мой промпт?", "cta": "Напиши «промпт»"}),

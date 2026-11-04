@@ -17,6 +17,7 @@ from typing import Callable
 
 from PIL import Image, ImageDraw
 
+from . import assets
 from . import audio as A
 from . import core as C
 from .common import BuildCtx, finish
@@ -156,6 +157,7 @@ def render(storyboard: dict, outdir: Path, quality="final", workers=None, progre
     t_start = time.time()
     prog = progress or (lambda u, stage: None)
     sb, warnings = validate(storyboard, TEMPLATES, strict=True)
+    sb = assets.resolve(sb, TEMPLATES, log)
     outdir = Path(outdir); (outdir / "scenes").mkdir(parents=True, exist_ok=True)
     prog(.02, "voiceover")
     sb = fit_to_voiceover(sb, log)
@@ -232,6 +234,7 @@ def contact_sheet(video: Path, total: float, outdir: Path, n=12):
 def stills(storyboard: dict, outdir: Path, per_scene=(.35, .97), quality="final"):
     """Fast layout check without encoding: PNG frames at fractions of each scene + a sheet."""
     sb, _ = validate(storyboard, TEMPLATES, strict=True)
+    sb = assets.resolve(sb, TEMPLATES)
     fmt = sb["format"]; W, H = size_for(fmt, quality)
     outdir = Path(outdir); outdir.mkdir(parents=True, exist_ok=True)
     paths, labels = [], []

@@ -1,8 +1,46 @@
-import { useId } from "react";
+import { createContext, useContext, useId, useRef, useState } from "react";
 import { useLang, useStrings } from "@web/i18n";
 import type { FieldDef, FieldValue, SbError, Scene, TemplateDef } from "./api";
 import { strings } from "./strings";
 import { Button, Card, Icon, Label, SelectInput, TextArea, TextInput, cx } from "./ui";
+
+/** Project id, so image fields can upload into the right project. */
+export const ProjectIdCtx = createContext("");
+
+function ImageField({ id, value, onChange }: { id: string; value: string; onChange: (v: string) => void }) {
+  const s = useStrings(strings);
+  const projectId = useContext(ProjectIdCtx);
+  const input = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState<string | null>(null);
+  const upload = async (file: File) => {
+    setErr(null);
+    if (!/^image\/(png|jpeg|webp)$/.test(file.type)) { setErr(s.imageType); return; }
+    if (file.size > 8 * 1024 * 1024) { setErr(s.imageTooBig); return; }
+    setBusy(true);
+    try {
+      const fd = new FormData(); fd.append("file", file);
+      const res = await fetch(`/api/studio/projects/${projectId}/assets`, { method: "POST", body: fd, credentials: "include" });
+      if (!res.ok) throw new Error(String(res.status));
+      onChange(((await res.json()) as { url: string }).url);
+    } catch { setErr(s.imageFailed); }
+    setBusy(false);
+  };
+  return (
+    <div className="flex items-center gap-3">
+      <div className="grid size-20 shrink-0 place-items-center overflow-hidden rounded-[10px] border border-line bg-surface-2">
+        {value ? <img src={value} alt="" className="size-full object-cover object-top" /> : <Icon name="film" className="size-6 text-muted" />}
+      </div>
+      <div className="flex flex-wrap items-center gap-2">
+        <input ref={input} id={id} type="file" accept="image/png,image/jpeg,image/webp" className="sr-only"
+          onChange={(e) => { const f = e.target.files?.[0]; if (f) upload(f); e.target.value = ""; }} />
+        <Button size="sm" loading={busy} onClick={() => input.current?.click()}>{value ? s.imageReplace : s.imageUpload}</Button>
+        {value && <Button size="sm" variant="ghost" onClick={() => onChange("")}>{s.imageRemove}</Button>}
+        {err && <p className="w-full text-xs text-danger" role="alert">{err}</p>}
+      </div>
+    </div>
+  );
+}
 
 /** Words per second a narrator can comfortably speak (rough, for a "too long" hint). */
 const WPS = { en: 2.6, ru: 2.1 };
@@ -29,13 +67,15 @@ export function FieldInput({ f, value, onChange, error }: { f: FieldDef; value: 
       input = <TextInput id={id} value={String(value ?? "")} onChange={(v) => onChange(v === "" || v === "-" ? v : Number.isNaN(Number(v.replace(",", "."))) ? String(value ?? "") : v)} invalid={invalid} className="max-w-48 tabular-nums" />; break;
     case "select":
       input = <SelectInput id={id} value={String(value ?? f.default ?? "")} onChange={onChange} options={(f.options ?? []).map((o) => ({ value: o.value, label: o.label[lang] }))} />; break;
+    case "image":
+      input = <ImageField id={id} value={String(value ?? "")} onChange={onChange} />; break;
     case "lines":
       input = <TextInput id={id} value={String(value ?? "")} onChange={onChange} placeholder="2, 4-5" className="max-w-48" />; break;
     default:
       input = <TextInput id={id} value={String(value ?? "")} onChange={onChange} maxLength={f.maxLen} invalid={invalid} />;
   }
   return (
-    <div className={cx(f.type === "code" || f.type === "textarea" || f.type === "list" ? "sm:col-span-2" : "")}>
+    <div className={cx(f.type === "code" || f.type === "textarea" || f.type === "list" || f.type === "image" ? "sm:col-span-2" : "")}>
       {lbl}{input}
       {invalid && <p className="mt-1 text-xs text-danger" role="alert">{error!.code === "required" ? s.required : error!.message}</p>}
     </div>

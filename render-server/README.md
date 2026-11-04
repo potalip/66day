@@ -27,12 +27,16 @@ flowleaf_render/
 | id | what | scene kinds | styles |
 |---|---|---|---|
 | `kinetic-quote` | kinetic typography hooks, statements, quotes | hook, statement, quote, outro | night, paper, forest, ink |
-| `explainer` | step-by-step how-to with icons + progress | intro, step, outro | paper, sunrise, night |
+| `explainer` | step-by-step how-to with icons + progress | intro, step, screen, outro | paper, sunrise, night |
 | `listicle` | top-N countdown with big ranks | intro, item, outro | forest, sunrise, night |
 | `numbers` | counters, bar charts, A-vs-B | intro, stat, bars, compare, outro | night, paper, forest |
 | `code-walkthrough` | code typing with syntax colours + terminal | intro, code, terminal, outro | terminal, paper, night |
-| `before-after` | swipe reveal, side-by-side, features | intro, swipe, compare, feature, outro | paper, night, sunrise |
-| `day-recap` | 66-day progress card, XP, streak, tomorrow | recap, next, outro | paper, night, forest |
+| `before-after` | swipe reveal, side-by-side, screenshot in a device, features | intro, swipe, compare, screen, feature, outro | paper, night, sunrise |
+| `day-recap` | 66-day progress card, XP, streak, tomorrow | recap, screen, next, outro | paper, night, forest |
+
+`screen` scenes show an uploaded screenshot in a phone / browser frame (tall phone screenshots scroll slowly).
+Images are fetched by URL at render time (`assets.py`): http(s) only, public IPs only (no loopback/private/link-local,
+so no cloud-metadata SSRF), max 12 MB, cached. Without an image a neutral app wireframe is drawn.
 
 Formats: `9x16` (1080×1920, text kept inside a Reels/TikTok/Shorts safe area), `1x1` (1080²), `16x9` (1920×1080).
 Every template has a full example storyboard in English and Russian (separately written, not translated).
@@ -60,7 +64,7 @@ python -m flowleaf_render.cli render explainer --fmt 9x16 --lang ru     # → da
 python -m flowleaf_render.cli stills listicle --fmt 16x9 --draft        # layout check, no encoding
 python -m flowleaf_render.cli samples                                    # stills for every template/format/lang
 
-RENDER_SERVER_TOKEN=dev-render uvicorn flowleaf_render.server:app --port 8080
+RENDER_SERVER_TOKEN=dev-render FLR_ALLOW_PRIVATE_FETCH=1 uvicorn flowleaf_render.server:app --port 8080
 pytest -q tests
 ```
 
@@ -77,6 +81,7 @@ Speed (4 vCPU): a 23 s 1080×1920 video renders in ~30 s; `draft` quality in ~8 
 | `FLR_DATA_DIR` | `./data` | jobs, renders, ElevenLabs cache |
 | `FLR_CONCURRENCY` | `1` | renders at once (each render already uses all cores) |
 | `FLR_WORKERS` | cpu count | processes per render |
+| `FLR_ALLOW_PRIVATE_FETCH` | — | `1` lets image fields point at private/localhost URLs. **Dev only** (Worker on localhost) |
 | `ELEVENLABS_API_KEY` | — | enables voiceover (+ AI SFX/music). Without it: synth music + SFX, captions carry the words |
 | `ELEVEN_VOICE_ID`, `ELEVEN_TTS_MODEL` | Brian, `eleven_multilingual_v2` | voice; the multilingual model speaks Russian |
 | `ELEVEN_MUSIC` | `1` | set `0` to keep synth music even with a key |

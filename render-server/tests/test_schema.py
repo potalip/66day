@@ -49,3 +49,16 @@ def test_parse_lines_and_items():
     assert parse_lines("x, 3") == [3]
     assert parse_items(["Python: 48%", "JS — 1 200", "bad line", "Go: 7,5"]) == [
         ("Python", 48.0, "%"), ("JS", 1200.0, ""), ("Go", 7.5, "")]
+
+
+def test_image_fields_and_ssrf_guard(monkeypatch):
+    from flowleaf_render.assets import fetch_image
+    from flowleaf_render.schema import deep
+    sb = deep(TEMPLATES["before-after"].examples["en"])
+    i = next(k for k, s in enumerate(sb["scenes"]) if s["kind"] == "screen")
+    sb["scenes"][i]["fields"]["image"] = "file:///etc/passwd"
+    clean, errs = validate(sb, TEMPLATES)
+    assert clean["scenes"][i]["fields"]["image"] == "" and any(e["code"] == "url" for e in errs)
+    monkeypatch.delenv("FLR_ALLOW_PRIVATE_FETCH", raising=False)
+    for url in ("http://169.254.169.254/latest/meta-data/", "http://127.0.0.1:1/x.png", "http://10.0.0.1/a.png"):
+        assert fetch_image(url, log=lambda *_: None) is None

@@ -402,6 +402,40 @@ function sceneBody(c: Ctx, sc: Scene): ReactNode {
         </div>
       );
     }
+    case "screen": {
+      const img = str(f.image), dev = str(f.device) || "phone";
+      const title = str(f.title), cap = str(f.caption);
+      const a = ease(t, .05, .5), rise = (1 - outBack(prog(t, .05, .7))) * 90;
+      const scroll = outCubic(prog(t, .6, 6)) * 25;
+      const shot = img
+        ? <img src={img} alt="" style={{ width: "100%", height: "100%", objectFit: "cover", objectPosition: `50% ${dev === "phone" ? scroll : 0}%` }} />
+        : <div style={{ width: "100%", height: "100%", background: P.dark ? P.surface : P.bg2, display: "flex", flexDirection: "column", gap: 24, padding: "0 0 24px" }}>
+            <div style={{ height: "12%", background: P.accent }} />
+            {[0, 1, 2, 3].map((k) => <div key={k} style={{ margin: "0 8%", height: "13%", borderRadius: 24, border: `2px solid ${P.line}`, background: P.dark ? P.bg2 : P.surface }} />)}
+          </div>;
+      const frame = dev === "phone"
+        ? <div style={{ height: "100%", aspectRatio: "9 / 19.5", background: "#111316", borderRadius: 90, padding: 22, boxShadow: "0 30px 60px rgba(0,0,0,.3)" }}>
+            <div style={{ width: "100%", height: "100%", borderRadius: 70, overflow: "hidden" }}>{shot}</div>
+          </div>
+        : dev === "browser"
+          ? <div style={{ width: "100%", aspectRatio: c.v ? "1 / 1" : "1.45", background: P.surface, border: `2px solid ${P.line}`, borderRadius: 22, overflow: "hidden", boxShadow: "0 24px 50px rgba(0,0,0,.25)", display: "flex", flexDirection: "column" }}>
+              <div style={{ height: 56, flex: "none", display: "flex", alignItems: "center", gap: 12, padding: "0 22px" }}>{["#FF5F57", "#FEBC2E", "#28C840"].map((col) => <span key={col} style={{ width: 14, height: 14, borderRadius: 9, background: col }} />)}</div>
+              <div style={{ flex: 1, overflow: "hidden" }}>{shot}</div>
+            </div>
+          : <div style={{ width: "100%", height: "100%", borderRadius: 30, overflow: "hidden" }}>{shot}</div>;
+      return (
+        <div style={{ position: "absolute", left: c.v ? 90 : 130, right: c.v ? 90 : 130, top: c.v ? 230 : 90, bottom: c.v ? 330 : 140, display: "flex", flexDirection: c.wide ? "row-reverse" : "column", gap: 50, alignItems: "center", textAlign: c.wide ? "left" : "center" }}>
+          {title && !c.wide && <Words text={title} t={t} start={.2} size={v ? 84 : 70} color={P.fg} />}
+          <div style={{ flex: 1, minHeight: 0, width: c.wide ? "56%" : "100%", display: "grid", placeItems: "center", opacity: a, transform: `translateY(${rise}px)` }}>{frame}</div>
+          {c.wide ? (
+            <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: 40 }}>
+              {title && <Words text={title} t={t} start={.3} size={88} color={P.fg} align="left" />}
+              {cap && <Appear t={t} at={.8}><div style={{ fontSize: 44, color: P.muted, lineHeight: 1.35 }}>{cap}</div></Appear>}
+            </div>
+          ) : cap && <Appear t={t} at={.8}><div style={{ fontSize: v ? 42 : 36, color: P.muted }}>{cap}</div></Appear>}
+        </div>
+      );
+    }
     default:
       return <Center c={c}><div style={{ fontSize: 60, color: P.fg }}>{sc.kind}</div></Center>;
   }

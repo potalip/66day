@@ -5,6 +5,7 @@ from ..common import *  # noqa: F403
 from ..common import BuildCtx, backdrop, handle_field, intro_kind, outro_kind
 from ..core import Frame
 from ..icons import draw_icon, icon_options
+from ._screen import screen_kind
 from ..schema import Field, SceneKind, Template, L, example
 
 DECO = {"paper": "dots", "sunrise": "leaves", "night": "dots"}
@@ -105,7 +106,7 @@ TEMPLATE = Template(
     category="explainer",
     styles=["paper", "sunrise", "night"],
     fields=[handle_field()],
-    scene_kinds=[intro_kind(), STEP, outro_kind()],
+    scene_kinds=[intro_kind(), STEP, screen_kind(hint="Optional: show the result as a screenshot."), outro_kind()],
     min_scenes=2, max_scenes=9, music="calm", transition="wipe",
     ai_notes="Teach one process in 3-5 steps. Intro states the outcome; each step is one action with a fitting icon; "
              "outro gives a next action.",

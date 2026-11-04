@@ -804,6 +804,87 @@
      "hint": "One action per step. Title = imperative, 2-6 words. Body = 1-2 short sentences."
     },
     {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Optional: show the result as a screenshot."
+    },
+    {
      "kind": "outro",
      "label": {
       "en": "Outro",
@@ -2839,6 +2920,87 @@
      "hint": "2-4 short, parallel points per side (same order, same length)."
     },
     {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Show the finished product: a screenshot in a phone or browser frame."
+    },
+    {
      "kind": "feature",
      "label": {
       "en": "Feature",
@@ -3058,7 +3220,7 @@
     }
    ],
    "minScenes": 2,
-   "maxScenes": 9,
+   "maxScenes": 10,
    "defaults": {
     "style": "paper",
     "music": "uplift",
@@ -3111,6 +3273,16 @@
          "Morning nudge",
          "Live streak chart"
         ]
+       }
+      },
+      {
+       "kind": "screen",
+       "duration": 4.5,
+       "voiceover": "Here's the morning check-in screen.",
+       "fields": {
+        "device": "phone",
+        "title": "One tap a day",
+        "caption": "The whole app is one screen."
        }
       },
       {
@@ -3179,6 +3351,16 @@
          "Утреннее напоминание",
          "Живой график серии"
         ]
+       }
+      },
+      {
+       "kind": "screen",
+       "duration": 4.5,
+       "voiceover": "Вот экран утренней отметки.",
+       "fields": {
+        "device": "phone",
+        "title": "Одно касание в день",
+        "caption": "Всё приложение — один экран."
        }
       },
       {
@@ -3441,6 +3623,87 @@
      "hint": "Use the student's real day number, tasks, XP and streak."
     },
     {
+     "kind": "screen",
+     "label": {
+      "en": "Screenshot",
+      "ru": "Скриншот"
+     },
+     "fields": [
+      {
+       "key": "image",
+       "type": "image",
+       "label": {
+        "en": "Screenshot (image)",
+        "ru": "Скриншот (картинка)"
+       },
+       "required": false,
+       "help": {
+        "en": "PNG or JPG of your app. Without one we show a neutral sketch.",
+        "ru": "PNG или JPG твоего приложения. Без картинки покажем нейтральный набросок."
+       }
+      },
+      {
+       "key": "device",
+       "type": "select",
+       "label": {
+        "en": "Frame",
+        "ru": "Рамка"
+       },
+       "required": false,
+       "options": [
+        {
+         "value": "phone",
+         "label": {
+          "en": "Phone",
+          "ru": "Телефон"
+         }
+        },
+        {
+         "value": "browser",
+         "label": {
+          "en": "Browser",
+          "ru": "Браузер"
+         }
+        },
+        {
+         "value": "none",
+         "label": {
+          "en": "No frame",
+          "ru": "Без рамки"
+         }
+        }
+       ],
+       "default": "phone"
+      },
+      {
+       "key": "title",
+       "type": "text",
+       "label": {
+        "en": "Title",
+        "ru": "Заголовок"
+       },
+       "required": false,
+       "maxLen": 50
+      },
+      {
+       "key": "caption",
+       "type": "textarea",
+       "label": {
+        "en": "Caption",
+        "ru": "Подпись"
+       },
+       "required": false,
+       "maxLen": 110
+      }
+     ],
+     "duration": {
+      "default": 4.5,
+      "min": 2.5,
+      "max": 9.0
+     },
+     "hint": "Optional: a screenshot of what you built today."
+    },
+    {
      "kind": "next",
      "label": {
       "en": "Tomorrow teaser",
@@ -3532,7 +3795,7 @@
     }
    ],
    "minScenes": 1,
-   "maxScenes": 4,
+   "maxScenes": 5,
    "defaults": {
     "style": "paper",
     "music": "uplift",

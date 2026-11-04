@@ -494,6 +494,40 @@ def counter_text(value, decimals=0, prefix="", suffix="", lang="en"):
     if lang == "ru": s = s.replace(",", " ").replace(".", ",")
     return f"{prefix}{s}{suffix}"
 
+# --------------------------------------------------------------------------- images
+@functools.lru_cache(32)
+def _img_surface(path: str, w: int, h: int):
+    im = Image.open(path).convert("RGBA")
+    sw, sh = im.size; k = max(w / sw, h / sh)
+    im = im.resize((max(1, round(sw * k)), max(1, round(sh * k))), Image.LANCZOS)
+    L = (im.width - w) // 2; T = (im.height - h) // 2
+    return _pil_to_surface(im.crop((L, T, L + w, T + h)))
+
+def image_cover(ctx, path, x, y, w, h, alpha=1.0, zoom=1.0, pan=(0.0, 0.0), radius=0, top=False):
+    """Cover-fit an image into a box with optional Ken Burns zoom/pan (pan in px). top=True anchors to the top
+    (screenshots: keep the header visible)."""
+    if alpha <= 0 or w < 2 or h < 2: return
+    pre = 1.12
+    surf = _img_surface(str(path), int(w * pre), int(h * pre)) if not top else _img_top(str(path), int(w * pre))
+    ctx.save()
+    rrect(ctx, x, y, w, h, radius); ctx.clip()
+    if top:
+        sw = surf.get_width(); k = w / sw * zoom
+        ctx.translate(x + w / 2 + pan[0], y + pan[1]); ctx.scale(k, k)
+        ctx.set_source_surface(surf, -sw / 2, 0)
+    else:
+        ctx.translate(x + w / 2 + pan[0], y + h / 2 + pan[1]); ctx.scale(zoom / pre, zoom / pre)
+        ctx.set_source_surface(surf, -w * pre / 2, -h * pre / 2)
+    ctx.get_source().set_filter(cairo.FILTER_GOOD)
+    ctx.paint_with_alpha(alpha); ctx.restore()
+
+@functools.lru_cache(32)
+def _img_top(path: str, w: int):
+    im = Image.open(path).convert("RGBA")
+    k = w / im.width
+    im = im.resize((w, max(1, round(im.height * k))), Image.LANCZOS)
+    return _pil_to_surface(im)
+
 # --------------------------------------------------------------------------- components
 def pill(f: Frame, label, cx, cy, size, fg=None, bgc=None, alpha=1.0, weight="Bold", pad=.8, anchor="m", outline=False):
     ctx = f.ctx

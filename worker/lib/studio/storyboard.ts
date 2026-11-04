@@ -13,7 +13,7 @@ export type L10n = { en: string; ru: string };
 
 export interface FieldDef {
   key: string;
-  type: "text" | "textarea" | "list" | "code" | "number" | "select" | "lines";
+  type: "text" | "textarea" | "list" | "code" | "number" | "select" | "lines" | "image";
   label: L10n;
   required: boolean;
   maxLen?: number;
@@ -112,6 +112,13 @@ export function normalizeField(f: FieldDef, v: unknown, path: string, errs: SbEr
       const lines = s.split("\n"), ml = f.maxLines ?? 16;
       if (lines.length > ml) { errs.push({ path, code: "too_long", message: `max ${ml} lines`, soft: true }); s = lines.slice(0, ml).join("\n"); }
       return s;
+    }
+    case "image": {
+      // absolute http(s) URL, or one of our own uploaded assets (/api/studio/assets/...), made absolute at render time
+      const u = typeof v === "string" ? v.trim() : "";
+      if (u && !/^(https?:\/\/|\/api\/studio\/assets\/)/.test(u)) { errs.push({ path, code: "url", message: "image must be an uploaded file or an http(s) URL", soft: true }); return ""; }
+      if (f.required && !u) errs.push({ path, code: "required", message: "required" });
+      return u.slice(0, 2000);
     }
     case "lines":
       return parseLines(Array.isArray(v) ? v.join(",") : v).join(", ");

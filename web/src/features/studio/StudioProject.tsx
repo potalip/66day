@@ -4,7 +4,7 @@ import { useLang, useStrings } from "@web/i18n";
 import { blankScene, totalDuration, validateStoryboard } from "../../../../worker/lib/studio/storyboard";
 import { type Catalog, type Format, type Lang, type ProjectDetail, type Render, type SbError, type Storyboard, type TemplateDef, errorCode, loadCatalog, studioApi } from "./api";
 import { PreviewPlayer } from "./Preview";
-import { FieldInput, SceneCard } from "./SceneEditor";
+import { FieldInput, ProjectIdCtx, SceneCard } from "./SceneEditor";
 import { StatusChip } from "./Studio";
 import { strings } from "./strings";
 import { Button, Card, Chip, FormatIcon, Icon, Label, Notice, ProgressBar, Segmented, SelectInput, TextArea, Toggle, cx } from "./ui";
@@ -140,6 +140,7 @@ export default function StudioProject() {
   const labels = { play: s.play, pause: s.pause, restart: s.restart, scene: s.scene };
 
   return (
+    <ProjectIdCtx.Provider value={project.id}>
     <div className="space-y-6">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <BackLink />
@@ -270,6 +271,7 @@ export default function StudioProject() {
         </div>
       </div>
     </div>
+    </ProjectIdCtx.Provider>
   );
 }
 

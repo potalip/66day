@@ -98,6 +98,12 @@ export const strings = {
     draftBadge: "draft",
     emptyScenes: "No scenes yet. Add the first one.",
     unsavedError: "Some fields need attention",
+    imageUpload: "Upload image",
+    imageReplace: "Replace",
+    imageRemove: "Remove",
+    imageType: "Use a PNG, JPG or WebP image.",
+    imageTooBig: "That image is over 8 MB — try a smaller screenshot.",
+    imageFailed: "Upload failed. Try again.",
   },
   ru: {
     title: "Студия",
@@ -196,6 +202,12 @@ export const strings = {
     draftBadge: "черновик",
     emptyScenes: "Сцен пока нет. Добавь первую.",
     unsavedError: "Некоторые поля требуют внимания",
+    imageUpload: "Загрузить картинку",
+    imageReplace: "Заменить",
+    imageRemove: "Убрать",
+    imageType: "Нужна картинка PNG, JPG или WebP.",
+    imageTooBig: "Картинка больше 8 МБ — попробуй скриншот поменьше.",
+    imageFailed: "Не загрузилось. Попробуй ещё раз.",
   },
 };
 

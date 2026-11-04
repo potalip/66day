@@ -132,6 +132,8 @@ studio.delete("/projects/:id", async (c) => {
   if (!p) return c.json({ error: "not_found" }, 404);
   const { results } = await c.env.DB.prepare("SELECT video_key, thumb_key, contact_key FROM studio_renders WHERE project_id = ?").bind(p.id).all<RenderRow>();
   const keys = results.flatMap((r) => [r.video_key, r.thumb_key, r.contact_key]).filter(Boolean) as string[];
+  const assets = await c.env.MEDIA.list({ prefix: `studio/assets/${p.id}/` }).catch(() => null);
+  keys.push(...(assets?.objects.map((o) => o.key) ?? []));
   if (keys.length) c.executionCtx.waitUntil(c.env.MEDIA.delete(keys).catch(() => undefined));
   await c.env.DB.batch([
     c.env.DB.prepare("DELETE FROM studio_renders WHERE project_id = ?").bind(p.id),
@@ -185,6 +187,32 @@ studio.post("/render-callback", async (c) => {
   if (!r.job_id) await c.env.DB.prepare("UPDATE studio_renders SET job_id = ? WHERE id = ?").bind(job.id, r.id).run();
   await applyJob(c.env, r, job as never);
   return c.json({ ok: true });
+});
+
+const IMAGE_TYPES: Record<string, string> = { "image/png": "png", "image/jpeg": "jpg", "image/webp": "webp" };
+
+/** Upload an image (screenshot) for a project's scenes. Stored in R2; served publicly by unguessable key so the
+ *  render server can fetch it. */
+studio.post("/projects/:id/assets", async (c) => {
+  const p = await ownProject(c);
+  if (!p) return c.json({ error: "not_found" }, 404);
+  const form = await c.req.formData().catch(() => null);
+  const file = form?.get("file");
+  if (!file || typeof file === "string") return c.json({ error: "no_file" }, 400);
+  const ext = IMAGE_TYPES[file.type];
+  if (!ext) return c.json({ error: "unsupported_type" }, 415);
+  if (file.size > 8 * 1024 * 1024) return c.json({ error: "too_large" }, 413);
+  const name = `${crypto.randomUUID().replace(/-/g, "")}.${ext}`;
+  await c.env.MEDIA.put(`studio/assets/${p.id}/${name}`, file.stream(), { httpMetadata: { contentType: file.type } });
+  return c.json({ url: `/api/studio/assets/${p.id}/${name}` }, 201);
+});
+
+studio.get("/assets/:pid/:name", async (c) => {
+  const name = c.req.param("name");
+  if (!/^[a-f0-9]{32}\.(png|jpg|webp)$/.test(name)) return c.json({ error: "not_found" }, 404);
+  const obj = await c.env.MEDIA.get(`studio/assets/${c.req.param("pid")}/${name}`);
+  if (!obj) return c.json({ error: "not_found" }, 404);
+  return new Response(obj.body, { headers: { "content-type": obj.httpMetadata?.contentType ?? "image/png", "cache-control": "public, max-age=31536000, immutable" } });
 });
 
 const MEDIA_FILES: Record<string, keyof RenderRow> = { "video.mp4": "video_key", "thumbnail.jpg": "thumb_key", "contact.png": "contact_key" };

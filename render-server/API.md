@@ -33,7 +33,8 @@ durations are clamped to the scene kind's `[min, max]` — these come back as *s
 fields, unknown templates/scene kinds and too few scenes are *hard* errors (HTTP 422).
 
 Field types: `text`, `textarea`, `list` (array of strings), `code` (multi-line, `maxLines`), `number` (`min`/`max`),
-`select` (`options[].value`), `lines` (`"2, 4-6"`).
+`select` (`options[].value`), `lines` (`"2, 4-6"`), `image` (absolute http(s) URL fetched at render time; public hosts
+only unless `FLR_ALLOW_PRIVATE_FETCH=1`; unreachable images render as a neutral placeholder).
 
 ## Endpoints
 

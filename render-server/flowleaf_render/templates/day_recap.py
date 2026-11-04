@@ -7,6 +7,7 @@ from ..common import *  # noqa: F403
 from ..common import BuildCtx, backdrop, handle_field, outro_kind
 from ..core import Frame
 from ..icons import draw_icon
+from ._screen import screen_kind
 from ..schema import Field, SceneKind, Template, L, example
 
 DAYS = 66
@@ -169,8 +170,8 @@ TEMPLATE = Template(
               default="apps"),
         handle_field(),
     ],
-    scene_kinds=[RECAP, NEXT, outro_kind(hint="Invite people to follow the 66-day journey.")],
-    min_scenes=1, max_scenes=4, music="uplift", transition="wipe",
+    scene_kinds=[RECAP, screen_kind(hint="Optional: a screenshot of what you built today."), NEXT, outro_kind(hint="Invite people to follow the 66-day journey.")],
+    min_scenes=1, max_scenes=5, music="uplift", transition="wipe",
     ai_notes="A daily build-in-public post: one recap scene with the real numbers, an optional tomorrow teaser and "
              "an optional outro. Keep the day number consistent in fields.day and the recap scene.",
     examples={

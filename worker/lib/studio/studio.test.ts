@@ -86,3 +86,18 @@ describe("AI plan parsing", () => {
     expect(prompt).toContain("Как сделать бота");
   });
 });
+
+describe("assets", () => {
+  it("accepts uploaded asset paths and http URLs, rejects others", async () => {
+    const T = getTemplate("before-after")!;
+    const sb = exampleStoryboard(T, "en");
+    const i = sb.scenes.findIndex((s) => s.kind === "screen");
+    sb.scenes[i].fields.image = "/api/studio/assets/prj_x/abc.png";
+    expect(validateStoryboard(sb).storyboard!.scenes[i].fields.image).toBe("/api/studio/assets/prj_x/abc.png");
+    sb.scenes[i].fields.image = "javascript:alert(1)";
+    expect(validateStoryboard(sb).storyboard!.scenes[i].fields.image).toBe("");
+    const { absolutizeAssets } = await import("./service");
+    const out = absolutizeAssets({ a: ["/api/studio/assets/p/x.png", "/other"], b: { c: "/api/studio/assets/p/y.jpg" } }, "https://app.example");
+    expect(out).toEqual({ a: ["https://app.example/api/studio/assets/p/x.png", "/other"], b: { c: "https://app.example/api/studio/assets/p/y.jpg" } });
+  });
+});

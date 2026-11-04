@@ -93,7 +93,7 @@ export async function submitRender(env: Env, projectId: string) {
   const res = await rs(env, "/v1/jobs", {
     method: "POST",
     body: JSON.stringify({
-      storyboard: JSON.parse(r.storyboard), quality: r.quality, external_id: r.id,
+      storyboard: absolutizeAssets(JSON.parse(r.storyboard), r.callback_origin ?? ""), quality: r.quality, external_id: r.id,
       callback_url: callback, callback_token: env.RENDER_SERVER_TOKEN, metadata: { project_id: p.id },
     }),
   });
@@ -103,6 +103,14 @@ export async function submitRender(env: Env, projectId: string) {
   }
   await env.DB.prepare("UPDATE studio_renders SET job_id = ?, status = 'submitted', stage = 'queued', updated_at = unixepoch() WHERE id = ? AND status = 'queued'")
     .bind(res.json.id, r.id).run();
+}
+
+/** Our uploaded images are stored as "/api/studio/assets/…" paths; the render server needs absolute URLs. */
+export function absolutizeAssets<T>(sb: T, origin: string): T {
+  const fix = (v: unknown): unknown =>
+    typeof v === "string" && v.startsWith("/api/studio/assets/") ? `${origin}${v}` :
+    Array.isArray(v) ? v.map(fix) : v && typeof v === "object" ? Object.fromEntries(Object.entries(v).map(([k, x]) => [k, fix(x)])) : v;
+  return fix(sb) as T;
 }
 
 async function failRender(env: Env, r: RenderRow, error: string) {

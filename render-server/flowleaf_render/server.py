@@ -127,6 +127,8 @@ def files(jid: str, name: str, exp: int = 0, sig: str = ""):
 def preview(body: dict = Body(...)):
     """One PNG frame (draft size) of scene `scene` at time `t` (seconds into that scene; default 80%)."""
     sb, _ = validate(body.get("storyboard") or {}, TEMPLATES, strict=True)
+    from .assets import resolve
+    sb = resolve(sb, TEMPLATES, log.info)
     k = max(0, min(len(sb["scenes"]) - 1, int(body.get("scene", 0))))
     name, dur, draw = build_scenes(sb)[k]
     t = float(body.get("t", dur * .8))
