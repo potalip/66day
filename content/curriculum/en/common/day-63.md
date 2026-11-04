@@ -50,7 +50,7 @@ Whatever the numbers say, day 1 you would be stunned.
 
 ## 2. The 10-minute pre-check (10 min)
 
-Set a timer. No fixing during it — just note what's broken; fixes go to tomorrow's polish day.
+Set a timer. No fixing during it — just note what's broken; fixes go to tomorrow's polish day. Have yesterday's day-62 checklist open next to you: today you only confirm it still holds.
 
 - **Apps:** open the live link in a private window on your phone; sign up with a fresh email; reach the main
   value in under two minutes; trigger one error on purpose and confirm it shows up in your error log; check that

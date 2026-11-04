@@ -4,7 +4,7 @@ track: apps
 phase: 2
 title: "Taking money: payments that can't be faked"
 summary: "A test-mode Stripe checkout unlocks a paid feature via a verified webhook, and cancelled, failed and duplicate payments are handled."
-estMinutes: 120
+estMinutes: 135
 badges: [money-ready]
 resources:
   - "https://docs.stripe.com/payments/checkout"

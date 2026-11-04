@@ -4,7 +4,7 @@ track: apps
 phase: 2
 title: "Telegram-бот, часть 2: работает всегда"
 summary: "Кнопки, память для каждого пользователя, вебхук вместо ноутбука — и три живых человека, которые пользуются ботом."
-estMinutes: 120
+estMinutes: 130
 badges: [bot-builder]
 resources:
   - "https://core.telegram.org/bots/api"

@@ -82,7 +82,7 @@ Add a voiceover in your own voice or with TTS, or simple on-screen captions.
 
 **Video people — a showreel.** 60–90 s, your best 3–8 seconds of each piece, strongest shot first (not your logo),
 cut on the beat with music you have the rights to, an end card with your name, what you make and how to reach you.
-You built an edit-from-JSON workflow on day 30 — use it:
+If your capstone is a showreel, this reel *is* its centrepiece — it leads your launch on day 65. You built an edit-from-JSON workflow on day 30 — use it:
 
 ```text
 Goal: a 75-second showreel from my best pieces.

@@ -138,4 +138,5 @@ your retry schedule, what makes a job "dead", how you get alerted, and how you'd
 - [ ] Retries with backoff, dead jobs, stuck-job recovery and an alert are described.
 - [ ] Quiz done.
 
-Tomorrow: the boss. A real person, a real problem, a real tool built in a day.
+Tomorrow: the boss. A real person, a real problem, a real tool built in a day. If you haven't yet, message a
+small business, creator or team today and book a 20-minute call for tomorrow.

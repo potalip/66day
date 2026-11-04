@@ -4,7 +4,7 @@ track: apps
 phase: 2
 title: "Принимаем деньги: оплата, которую нельзя подделать"
 summary: "Тестовая оплата через ЮKassa или Telegram Stars открывает платную функцию по проверенному уведомлению. Отмены и дубли — учтены."
-estMinutes: 120
+estMinutes: 135
 badges: [money-ready]
 resources:
   - "https://yookassa.ru/developers"

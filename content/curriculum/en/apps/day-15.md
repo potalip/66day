@@ -103,8 +103,8 @@ when a story sounds like two stories glued together.
 ### 2. Scaffold the project (25 min)
 
 The recommended stack is **Vite + React + TypeScript + Tailwind**, deployed later to Cloudflare Workers like your day-11
-backend (Vercel is fine too). Plain HTML + JS is also OK if React feels like too much — the rest of the course works
-either way.
+backend (Vercel is fine too). Plain HTML + JS is possible if React feels like too much, but from day 29 the lessons assume React + Vite +
+TypeScript — so pick React now unless you have a strong reason; the agent does the typing either way.
 
 ```text
 Goal: scaffold the project for the app in docs/SPEC.md and make the first commit.

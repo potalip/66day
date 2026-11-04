@@ -140,4 +140,5 @@ running for 20 min, then went back to queued, finished on retry; user saw 'Takin
 - [ ] You pasted what happened in your three "break it" tests.
 - [ ] Quiz done.
 
-Tomorrow: the boss. A real client, a real brief, three videos through this very app.
+Tomorrow: the boss. A real client, a real brief, three videos through this very app. No client lined up
+yet? Message a small business or creator today and book a 20-minute call for tomorrow.

@@ -4,7 +4,7 @@ track: apps
 phase: 2
 title: "Telegram bot, part 2: always on"
 summary: "Add buttons and per-user memory, move your bot to a webhook so it runs 24/7, and watch three people use it."
-estMinutes: 120
+estMinutes: 130
 badges: [bot-builder]
 resources:
   - "https://core.telegram.org/bots/api"
