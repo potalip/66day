@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import type { AppEnv, Env, JobMessage } from "./env";
 import { anonUser } from "./lib/user";
+import { portfolioMeta } from "./lib/learn/portfolio";
 import { handleQueue } from "./queue";
 import { curriculum } from "./routes/curriculum";
 import { progress } from "./routes/progress";
@@ -40,7 +41,34 @@ app.route("/pipeline", pipeline);
 app.route("/admin", admin);
 app.route("/studio", studio);
 
+/**
+ * Public portfolio pages: serve the SPA shell but inject per-student <title>/description/OG tags server-side,
+ * so links shared in Telegram/X/LinkedIn preview nicely (crawlers don't run JS).
+ */
+const escAttr = (v: string) => v.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+async function portfolioPage(req: Request, env: Env): Promise<Response> {
+  const url = new URL(req.url);
+  const m = url.pathname.match(/^\/(ru|en)\/portfolio\/([^/]+)\/?$/);
+  const shell = await env.ASSETS.fetch(new Request(new URL("/", url), req));
+  if (!m) return shell;
+  let meta: { title: string; description: string } | null = null;
+  try { meta = await portfolioMeta(env, decodeURIComponent(m[2]), m[1] as "ru" | "en"); } catch (e) { console.error("portfolioMeta", e); }
+  if (!meta) return shell;
+  const { title, description } = meta;
+  const setContent = (content: string) => ({ element(el: Element) { el.setAttribute("content", content); } });
+  return new HTMLRewriter()
+    .on("html", { element(el) { el.setAttribute("lang", m[1]); } })
+    .on("title", { element(el) { el.setInnerContent(title); } })
+    .on('meta[name="description"]', setContent(description))
+    .on('meta[property="og:title"]', setContent(title))
+    .on('meta[property="og:description"]', setContent(description))
+    .on("head", { element(el) { el.append(`<meta property="og:url" content="${escAttr(url.origin + url.pathname)}" />`, { html: true }); } })
+    .transform(shell);
+}
+
 export default {
-  fetch: app.fetch,
+  fetch: (req: Request, env: Env, ctx: ExecutionContext) =>
+    new URL(req.url).pathname.startsWith("/api/") ? app.fetch(req, env, ctx) : portfolioPage(req, env),
   queue: (batch: MessageBatch<JobMessage>, env: Env) => handleQueue(batch, env),
 } satisfies ExportedHandler<Env, JobMessage>;
