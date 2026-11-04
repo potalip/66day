@@ -82,7 +82,7 @@ Constraints: no screen capture, no real-time playback; time comes only from the 
 Done when: the mp4 is 20.0 s give or take one frame (check with ffprobe), and the pulse visibly lands on the kicks.
 ```
 
-If you chose p5.js, swap step 2 and 3 for: "a p5.js sketch with `noLoop()` and a `window.renderFrame(i)` function;
+If you chose p5.js, swap steps 2 and 3 for: "a p5.js sketch with `noLoop()` and a `window.renderFrame(i)` function;
 a Playwright script calls it for each frame and saves the canvas as PNG; ffmpeg joins the PNGs with the audio."
 
 > **If you're stuck:** the visual moves but ignores the beat? Print `bands.json` for the first 60 frames and look for
@@ -114,4 +114,4 @@ screen loop, a conference stage background. For each, one sentence on what you'd
 - [ ] The post link is pasted.
 - [ ] Three client use cases, each with what you'd adapt, are written down.
 
-Tomorrow: screen tutorials that zoom themselves to wherever you click.
+**Tomorrow:** screen tutorials that zoom themselves to wherever you click.

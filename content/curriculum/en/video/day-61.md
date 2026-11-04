@@ -67,7 +67,7 @@ Per video, for a client:
   = floor price per video   ___
 ```
 
-Then package it. Three tiers is the classic shape, because people like choosing the middle one:
+Then package it. Three tiers are the classic shape, because people like choosing the middle one:
 
 - **Starter:** 1 video, one format, 1 revision.
 - **Standard:** 4 videos a month, 16:9 + 9:16 (your day 34 variants), captions, 2 revisions each.

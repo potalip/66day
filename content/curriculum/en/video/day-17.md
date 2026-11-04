@@ -31,9 +31,9 @@ tasks:
     proof: link
 ---
 
-Half the videos in your feed are text on a background, and the good ones are still impossible to scroll past. The
-secret isn't fancy effects — it's that every word lands at the exact moment you hear it. Today you combine yesterday's
-easing with timing, and make words feel spoken.
+Half the videos in your feed are text on a background, yet the good ones are still impossible to scroll past. The
+secret isn't fancy effects. Every word lands at the exact moment you hear it. Today you add timing to yesterday's
+easing and make words feel spoken.
 
 ## Type that moves: four rules
 
@@ -58,7 +58,7 @@ for elegant. Put the `.ttf` files in `assets/fonts/`.
 
 ## Step 1 — pick 15 seconds of words and record them
 
-Choose 30–40 words. Your own line from your build log is perfect. Or pick something in the public domain — for
+Choose 30–40 words. A line from your own build log is perfect. Or pick something in the public domain — for
 example Thoreau, *Walden* (1854): "I went to the woods because I wished to live deliberately, to front only the
 essential facts of life, and see if I could not learn what it had to teach." Avoid modern authors and song lyrics:
 those are copyrighted.

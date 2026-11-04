@@ -33,8 +33,8 @@ tasks:
 ---
 
 Mute any video you love and it loses half its power. Sound is where amateur videos give themselves away: music that
-drowns the voice, effects that make you jump, a track that's twice as loud as the video before it. The fixes are
-three numbers and two ffmpeg filters. Today you learn them once and reuse them for every video after.
+drowns the voice, effects that make you jump, a track that's twice as loud as the video before it. The fixes come
+down to three numbers and two ffmpeg filters. Learn them once today and reuse them on every video after.
 
 ## Three ideas
 
@@ -55,7 +55,7 @@ with effects; on day 22 the key becomes your voiceover.
 - **Freesound** — every sound has its own licence: **CC0** (do anything), **CC BY** (credit the author),
   **CC BY-NC** (non-commercial only — not for client work). It's on each sound's page. Read it every time.
 
-Keep `assets/CREDITS.md`: file name, source URL, author, licence. Future-you, a client and a platform reviewer will
+Keep `assets/CREDITS.md`: file name, source URL, author, licence. Future you, a client and a platform reviewer will
 all ask for it.
 
 ## Step 1 — music + 3 effects, mixed properly

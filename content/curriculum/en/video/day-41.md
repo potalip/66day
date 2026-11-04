@@ -106,8 +106,7 @@ Write a short public post (X, LinkedIn, Threads, your build log): the client's p
 quote, and one thing you learned. Ask the client before you name them or show the videos. Paste the link.
 
 ```text
-Draft a 150-word case study post from my notes below. Structure: problem → what I made → how (pipeline in one line)
-→ time → client quote → one lesson. No hype words, no emojis, first person. Then give me 3 alternative first lines.
+Draft a 150-word case study post from my notes below. Structure: problem → what I made → how (pipeline in one line) → time → client quote → one lesson. No hype words, no emojis, first person. Then give me 3 alternative first lines.
 ```
 
 ## You're done when…

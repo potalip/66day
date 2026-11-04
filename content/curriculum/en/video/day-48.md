@@ -118,4 +118,4 @@ the first thing they see? Write two or three sentences.
 - [ ] One contribution link is pasted: PR, issue or answer.
 - [ ] Your note on what a stranger should notice is written.
 
-Tomorrow is a rest day. Then you choose the capstone you'll launch on day 65.
+**Tomorrow:** rest. Then you choose the capstone you'll launch on day 65.

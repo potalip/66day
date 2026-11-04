@@ -121,4 +121,4 @@ Upload your best clip.
 - [ ] Your selection prompt and rubric are pasted.
 - [ ] Quiz done, and you know when not to track.
 
-Tomorrow: a robot QC inspector that checks every render before you hit Publish.
+**Tomorrow:** a robot QC inspector that checks every render before you hit Publish.

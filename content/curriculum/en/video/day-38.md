@@ -34,7 +34,7 @@ tasks:
 
 One great video is a lottery ticket. A series is a channel. When people know what they'll get — the same length, the same
 shape, the same little ritual at the end — they come back for it, the platform learns who to show it to, and you get faster
-with every episode. And for you, unlike most creators, a series is cheap: it's one template plus a JSON file with a row
+with every episode. And unlike most creators, you can make a series cheaply: it's one template plus a JSON file with a row
 per episode.
 
 ## What makes a format
@@ -129,4 +129,4 @@ change would make 50 realistic?
 - [ ] Episode 1 is published and the link is pasted.
 - [ ] You wrote your honest "50 episodes" analysis.
 
-Tomorrow: someone else's product. Promo and demo videos — the kind businesses actually pay for.
+**Tomorrow:** someone else's product. Promo and demo videos — the kind businesses actually pay for.

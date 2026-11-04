@@ -34,8 +34,8 @@ tasks:
     proof: none
 ---
 
-On day 12 you made a 5-second title and it felt a bit like magic. Today we take the magic apart. Every video you
-will make in the next 50 days — kinetic type, Remotion explainers, data videos, AI clips — ends the same way: a pile
+On day 12 you made a 5-second title, and it felt a bit like magic. Today you take the magic apart. Every video you
+make in the next 50 days — kinetic type, Remotion explainers, data videos, AI clips — ends the same way: a pile
 of pictures becomes an mp4. Once you understand that one step, nothing in this track is mysterious.
 
 ## A video is a flipbook with a lunchbox
@@ -49,13 +49,13 @@ of pictures becomes an mp4. Once you understand that one step, nothing in this t
   are smaller but less universal.
 - **Container** — the box that holds the compressed video, the audio and the metadata: `.mp4`, `.mov`, `.webm`.
 
-Analogy: the container is the lunchbox, the codec is how the sandwich got vacuum-packed to fit. An `.mp4` can hold
+Think of the container as the lunchbox and the codec as the way the sandwich was vacuum-packed to fit inside. An `.mp4` can hold
 H.264 or AV1 — same box, different packing. That's why "it's an mp4" doesn't guarantee it plays on your aunt's TV.
 
 Two more words you'll see in every command: **CRF** (quality for H.264: 18 looks great, 23 is the default, higher =
 smaller and blurrier) and **pixel format** `yuv420p` (the colour layout every phone and browser understands).
 
-## Step 1 — draw 90 frames, glue them together
+## Step 1 — draw 90 frames and glue them together
 
 Open your phase-2 video workshop from day 14 (`~/66/video`) and make a `day15/` folder there. Until day 27, every path
 in this track is relative to `~/66/video`. First give the workshop one Python environment for the whole track — the same
@@ -83,14 +83,14 @@ Constraints:
 Done when: running `python day15/make_frames.py` creates exactly 90 PNGs and prints how many it wrote.
 ```
 
-Run it, open two or three PNGs to see they differ, then build the video yourself:
+Run it, open two or three PNGs to check they differ, then build the video yourself:
 
 ```bash
 ffmpeg -framerate 30 -i day15/frames/frame_%04d.png -c:v libx264 -pix_fmt yuv420p -crf 18 day15/ball.mp4
 ```
 
 `-framerate 30` says how fast to read the pictures, `%04d` means "four-digit number", `-pix_fmt yuv420p` makes it
-play everywhere. Now prove what you made:
+play everywhere. Now check what you made:
 
 ```bash
 ffprobe -v error -select_streams v:0 -show_entries stream=codec_name,width,height,r_frame_rate,nb_frames,pix_fmt -show_entries format=duration -of default=noprint_wrappers=1 day15/ball.mp4

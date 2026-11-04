@@ -31,7 +31,7 @@ tasks:
     proof: none
 ---
 
-Making one video is craft. Making fifty without losing a weekend is engineering. Today is the day your work stops
+Making one video is craft. Making fifty without losing a weekend is engineering. Today your work stops
 being "a video" and becomes "a machine that makes videos" — the idea the rest of this track is built on, all the way
 to your own one-command pipeline on day 33.
 
@@ -59,17 +59,15 @@ words and colours. Use your own subject if you have one (product tips, study fac
 Goal: a parametric Remotion composition driven by JSON, plus 5 data files.
 Context: Remotion project in remotion/, with my Intro composition from yesterday (reuse its font and brand colours).
 Constraints:
-- New composition "Tip", 1080x1920, 30 fps, 240 frames. Props schema with zod:
-  { number: int, title: string (max 40 chars), body: string (max 120 chars), accent: hex colour string }.
+- New composition "Tip", 1080x1920, 30 fps, 240 frames. Props schema with zod: { number: int, title: string (max 40 chars), body: string (max 120 chars), accent: hex colour string }.
 - Pass the schema and sensible defaultProps to <Composition>, so Studio shows editable fields.
 - Layout: big number top-left in the accent colour, title springs in at frame 10, body fades in word groups from frame 30, a progress bar along the bottom fills over the full duration.
 - If the body is longer than 80 characters, use calculateMetadata to make the video 300 frames instead of 240.
 - Create remotion/data/tips.json: an array of 5 tip objects with real, useful content (no filler text). Also write data/tip-1.json ... tip-5.json (one object each) for single renders from the CLI.
-Done when: I can edit props in Studio, and
-`npx remotion render Tip out/tip-1.mp4 --props=./data/tip-1.json` renders a single tip.
+Done when: I can edit props in Studio, and `npx remotion render Tip out/tip-1.mp4 --props=./data/tip-1.json` renders a single tip.
 ```
 
-Read the five tips the agent wrote and rewrite any that sound generic — your name is on them. Open Studio, change the accent in the form, watch it update. Then render one:
+Read the five tips the agent wrote and rewrite any that sound generic. Your name is on them. Open Studio, change the accent in the form, watch it update. Then render one:
 
 ```bash
 cd remotion
@@ -106,8 +104,8 @@ for f in out/tips/*.mp4; do echo "$f $(ffprobe -v error -show_entries format=dur
 Paste the timing table as proof. Look at the average: that number times 100 is how long a hundred videos would take on
 your laptop. Remember it — on day 40 you'll decide where rendering should run.
 
-> **Tip:** run it a second time. Every file gets skipped in a second. Skipping work that's already done is the
-> first rule of every pipeline you'll build.
+> **Tip:** run it a second time. Every file is skipped and it finishes in about a second. Skipping work that's
+> already done is the first rule of every pipeline you'll build.
 
 ## Quiz
 

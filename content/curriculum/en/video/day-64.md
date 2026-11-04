@@ -80,9 +80,9 @@ The input is the pipeline's own high-quality render, never an already compressed
 good as its source. On macOS use `shasum -a 256` instead of `sha256sum`; on Windows the agent can use PowerShell's
 `Get-FileHash`.
 
-Upload the folder to cloud storage (Google Drive, Dropbox, or an object storage bucket) and share a view link.
-If a launch video changed since day 62, delete that scheduled upload and schedule the new file from `delivery/`:
-most platforms won't let you swap the file under an existing video. Then check every scheduled item one last time in the
+Upload the folder to cloud storage (Google Drive, Dropbox, or an object storage bucket) and share a view link. If a
+launch video has changed since day 62, delete that scheduled upload and schedule the new file from `delivery/`: most
+platforms won't let you swap the file under an existing video. Then check every scheduled item one last time in the
 platform studio.
 
 > **If you're stuck:** ProRes masters are huge and your upload is slow? Keep ProRes on your disk and an external

@@ -67,7 +67,7 @@ Three ideas make it professional:
 - **Fail loudly, resume cheaply.** If stage 5 crashes, the message names the stage and the file, and the next run
   starts from stage 5 because 1–4 are cached.
 
-One subtle but crucial detail: **real voice durations win.** The storyboard *guessed* that scene 2 lasts 4 s; the TTS
+One small detail matters a lot: **real voice durations win.** The storyboard *guessed* that scene 2 lasts 4 s; the TTS
 file says 4.6 s. Stage 3 writes the real durations back, and every later stage uses those. Otherwise captions and visuals
 drift out of sync.
 
@@ -98,7 +98,8 @@ small verified steps.
 > changed it, bump its `STAGE_VERSION`.
 
 > **No API key?** Every stage needs a fallback: a fixture storyboard, the offline voice from your day-22 `tts.py`
-> (`say`, `espeak-ng`) or a pre-recorded VO, template visuals instead of AI clips. The pipeline must finish end to end with zero keys. Print "AI not configured" and carry on.
+> (`say`, `espeak-ng`) or a pre-recorded VO, template visuals instead of AI clips. The pipeline must finish end to end
+> with zero keys. Print "AI not configured" and carry on.
 
 ### 2. The real run
 
@@ -106,8 +107,8 @@ small verified steps.
 make-video "why cats knock things off tables" --seconds 45
 ```
 
-Watch the terminal: which stages take longest? Then watch `final.mp4` once, fully. Upload it. It doesn't have to be your
-best video ever; it has to be made by one command.
+Watch the terminal: which stages take longest? Then watch `final.mp4` once, all the way through, and upload it. It
+doesn't have to be your best video ever. It has to come out of one command.
 
 Now prove the cache works: edit one `vo` line in `runs/<slug>/storyboard.json` and run with `--from voice`. Only a
 handful of stages should do work.
@@ -135,4 +136,4 @@ and beyond.
 - [ ] README with inputs, outputs and a measured cost-per-video table is pasted.
 - [ ] Weakest stage named, with a symptom and a fix idea.
 
-You've earned **pipeline-architect**. Tomorrow one master becomes three formats and a thumbnail.
+You've earned the **pipeline-architect** badge. **Tomorrow:** one master becomes three formats and a thumbnail.

@@ -34,14 +34,14 @@ tasks:
 
 A number in a sentence is forgettable. A line that climbs while a year counter ticks by is not — that's why
 data videos get shared, quoted and screenshotted. It's also why they're dangerous: an animated chart persuades faster
-than a reader can check it. Today you make one that's both gripping and honest, so you'd be happy if a statistician
-paused on any frame.
+than anyone can check it. Today you make one that's gripping and honest — one a statistician could pause on any
+frame without wincing.
 
 ## Moving without lying
 
-The usual tricks, and how you'll avoid each:
+The usual tricks, and how to avoid each:
 
-- **Truncated axis.** A bar chart whose y-axis starts at 95 makes 96 look twice as big as 95. **Bars always start
+- **Truncated axis.** A bar chart whose y-axis starts at 94 makes 96 look twice as big as 95. **Bars always start
   at zero.** Lines may zoom in, but label the axis clearly.
 - **Cherry-picked range.** Starting the chart in the one bad year makes any trend look dramatic. Use the full
   available range, or say on screen why you chose yours.

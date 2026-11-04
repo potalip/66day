@@ -108,4 +108,4 @@ yours. Phase 4 turns it into a launch and a portfolio.
 - [ ] A time and cost table with your interpretation is pasted.
 - [ ] Your progress post with a clip and one number is live.
 
-Tomorrow: the craft pass, where good becomes good enough to launch.
+**Tomorrow:** the craft pass, where good becomes good enough to launch.

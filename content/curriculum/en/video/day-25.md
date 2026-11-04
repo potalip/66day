@@ -34,8 +34,8 @@ tasks:
 ---
 
 The best explainer videos don't *tell* you how something works — they let you watch it work. A sorting algorithm
-becomes bars swapping places; compound interest becomes a snowball. Today you make one of those, and you'll find the
-hard part isn't the code: it's deciding what to draw.
+becomes bars swapping places; compound interest becomes a snowball. Today you make one, and you'll find the hard part
+isn't the code. It's deciding what to draw.
 
 ## Visual metaphors and step builds
 
@@ -59,7 +59,7 @@ Three rules that keep explainers clear:
 - **Motion Canvas** — TypeScript, with a live editor in the browser and a timeline you can sync to audio. Great if you
   liked Remotion's web workflow.
 
-Pick one. If unsure, take Manim: you already know Python.
+Pick one. Not sure? Take Manim: you already know Python.
 
 ```bash
 # in ~/66/video with the venv active (day 15)
@@ -94,14 +94,12 @@ moves. Save as `day25/storyboard.md` and paste it.
 
 ```text
 Goal: a 30-second animated explainer from my storyboard, with voiceover.
-Context: day25/storyboard.md. Manim CE installed. TTS script day22/tts.py, mixing script day20/mix.py.
-Folder day25/.
+Context: day25/storyboard.md. Manim CE installed. TTS script day22/tts.py, mixing script day20/mix.py. Folder day25/.
 Constraints:
 - Generate one TTS file per voiceover line (cached) and write day25/durations.json with each line's length (ffprobe).
 - day25/explainer.py: one Manim Scene. Each storyboard frame is a section whose animations' run_time plus wait equals that line's duration, so picture and voice stay in sync.
 - Use Transform/ReplacementTransform between frames where the storyboard says objects change. A consistent palette: dark background, one accent colour, one highlight colour. Text with Text(), clear sans-serif font.
-- Render 1920x1080 at 30 fps (manim -qh --fps 30). Concatenate the voice lines,
-  mux them with the render, then run mix.py for music ducked under the voice at -14 LUFS.
+- Render 1920x1080 at 30 fps (manim -qh --fps 30). Concatenate the voice lines, mux them with the render, then run mix.py for music ducked under the voice at -14 LUFS.
 Done when: day25/explainer.mp4 is ~30 s and each visual change happens when the voice describes it.
 ```
 

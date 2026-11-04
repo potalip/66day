@@ -101,7 +101,7 @@ Anything you still fix by hand goes into that output's `manual.log`, as on day 5
 > **Tip:** if your capstone is a **tool** rather than a series, do the craft pass on the tool's *default* output —
 > the one a new user gets on their first try. That render is your product's first impression.
 
-### 3. Two strange viewings (20 min)
+### 3. Two odd viewings (20 min)
 
 Now the old editor's trick. Watch the new version twice:
 

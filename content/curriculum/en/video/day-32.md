@@ -34,8 +34,8 @@ tasks:
 
 Look at your last five videos side by side. Odds are each one has a slightly different green, a different font size for
 titles, a different way of fading in. Viewers can't name it, but they feel it: "amateur". Big channels don't fix this
-with better taste. They fix it with a **system**: decisions made once, written down, reused everywhere. You're about to
-write yours as code, which matters a lot tomorrow, when a pipeline starts producing videos without you watching.
+with better taste. They fix it with a **system**: decisions made once, written down, reused everywhere. Today you
+write yours as code. That matters tomorrow, when a pipeline starts producing videos without you watching.
 
 ## Config vs components
 
@@ -85,7 +85,7 @@ Python with pycairo.
 ```text
 Goal: a brand kit in my video project: brand/brand.json + three reusable components + a sample sheet.
 Context: ~/66/video/pipeline/ and my renderer (Remotion project in ~/66/video/remotion | Python + pycairo).
-Paste of my brand.json below.
+My brand.json is pasted below.
 Build:
 - A typed loader for brand.json (zod or TypeScript type in Remotion; dataclass in Python) that fails loudly on a missing key.
 - Title(text, subtitle?), LowerThird(name, role), EndCard(headline, cta, logo) — all colours, fonts, sizes, radii and motion read from the brand config, nothing hard-coded. Motion uses motion.enter / motion.exit presets.
@@ -112,8 +112,8 @@ changing config values, not component code. Upload the sample sheet.
 ### 2. Re-skin an old video
 
 Pick your day-27 explainer or yesterday's edit. First, let the agent swap its hard-coded titles and colours for your new
-components (a one-time refactor) and commit that. Then create a second config, `brand/brand-alt.json`: a completely different palette,
-another font pair, a snappier `enter` preset. Render the same video with it:
+components (a one-time refactor) and commit that. Then create a second config, `brand/brand-alt.json`, with a
+completely different palette, another font pair and a snappier `enter` preset. Render the same video with it:
 
 ```text
 Add a --brand flag (or BRAND env var) to my render command so I can render any composition with brand/brand.json or brand/brand-alt.json. Then render my explainer with brand-alt.json to out/explainer-alt.mp4. Do not change any component.
@@ -147,4 +147,4 @@ Config or component?
 - [ ] An old video re-rendered with a second config — and no component changed — is uploaded.
 - [ ] Quiz done.
 
-Tomorrow: the big one. Storyboard, voice, visuals, captions, music and render, all from one command.
+**Tomorrow:** the big one. Storyboard, voice, visuals, captions, music and render, all from one command.

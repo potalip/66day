@@ -39,7 +39,7 @@ heard. That last part is on you, not the model.
 
 ## Writing for the ear
 
-Reading and listening are different skills. A sentence that works on a page can collapse when spoken. Rules:
+Reading and listening are different skills. A sentence that works on the page can fall apart when spoken. The rules:
 
 - **One idea per sentence.** Aim for under 15 words. Listeners can't scroll back.
 - **Say numbers the way people say them.** "About two thirds", not "64.7%". "Nineteen sixty-nine", not "1969" if the

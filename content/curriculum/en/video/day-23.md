@@ -33,7 +33,7 @@ tasks:
 ---
 
 A large share of people watch short videos with the sound off — on the bus, in bed, in a meeting they're pretending
-to attend. Without captions your beautiful voiceover is silence. With *good* captions, the words become part of the
+to attend. Without captions, your beautiful voiceover is silence. With *good* captions, the words become part of the
 design: the current word lights up and the eye follows the voice. Today you build that, entirely in code.
 
 ## Three pieces
@@ -51,7 +51,7 @@ every word with a start and end time — exactly the data yesterday's line-timin
 **Styles.** For shorts the winning pattern is **chunked word-highlight**: 2–4 words on screen, the current word in the
 accent colour, a thick outline for contrast. For long horizontal videos, classic two-line subtitles at the bottom.
 
-Whisper will mishear some things — names, jargon, your brand. Since you *have* the script, you can keep Whisper's
+Whisper will mishear some things: names, jargon, your brand. But you *have* the script, so you can keep Whisper's
 timings and take the words from your script. Best of both.
 
 ## Step 1 — words with timestamps, then SRT
@@ -97,7 +97,7 @@ Constraints:
 Done when: captioned.mp4 plays with the current word lit up exactly as it's spoken.
 ```
 
-Remember ASS colours are written **blue-green-red**: gold `#FFD700` becomes `&H00D7FF&`. Check the result:
+Remember that ASS colours are written **blue-green-red**: gold `#FFD700` becomes `&H00D7FF&`. Check the result:
 
 ```bash
 ffprobe -v error -show_entries stream=codec_type,width,height -show_entries format=duration -of default=noprint_wrappers=1 day23/captioned.mp4

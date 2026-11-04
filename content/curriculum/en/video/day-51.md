@@ -97,4 +97,4 @@ judgement.
 - [ ] A done / next / blocked build log is pasted.
 - [ ] Every cut has a verdict: gone, day 53, or after launch.
 
-Tomorrow: outputs 2 and 3, and the honest numbers on time and money per video.
+**Tomorrow:** outputs 2 and 3, and the honest numbers on time and money per video.

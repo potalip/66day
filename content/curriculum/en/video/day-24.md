@@ -33,7 +33,7 @@ tasks:
 
 On YouTube Shorts, TikTok and Reels, people decide in about one second whether you get the next nineteen. Not because
 they're shallow — because the next video is one thumb-flick away. That makes the first second the most important
-creative decision in a short, so today you'll stop guessing and make three openings for the same video.
+creative decision in a short. Today you stop guessing and make three openings for the same video.
 
 ## The grammar
 
@@ -110,7 +110,7 @@ Is this a hook? Yes or no, and why.
 
 > **Answers:**
 >
-> 1. No — nothing to wonder about for two seconds is two seconds of goodbye.
+> 1. No — two seconds with nothing to wonder about are two seconds to say goodbye.
 > 2. Yes — result first, a visual change in frame one, and a promise of how.
 > 3. No — a greeting, not a question or a promise.
 > 4. Yes, if the video explains it honestly (battery percentage readings drift in the cold). A hook that the video

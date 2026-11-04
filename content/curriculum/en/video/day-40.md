@@ -54,7 +54,7 @@ at a time, and nobody stands at the stove holding the customer's hand.
 
 Three rules that save you from real pain:
 
-- **One render at a time** per machine to start with. Two parallel renders usually aren't faster, they just both get slow.
+- **One render at a time** per machine to start with. Two parallel renders usually aren't faster; they just both get slow.
 - **Limits before launch.** Every job costs API money. Allow-list who can use it, cap jobs per person per day, cap the
   video length.
 - **Jobs can die.** If the worker crashes mid-render, the job stays `running` forever. A job that's been `running` longer
@@ -133,5 +133,5 @@ running for 20 min, then went back to queued, finished on retry; user saw 'Takin
 - [ ] You pasted what happened in your three "break it" tests.
 - [ ] Quiz done.
 
-Tomorrow: the boss. A real client, a real brief, three videos through this very app. No client lined up
+**Tomorrow:** the boss. A real client, a real brief, three videos through this very app. No client lined up
 yet? Message a small business or creator today and book a 20-minute call for tomorrow.

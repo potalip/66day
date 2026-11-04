@@ -48,8 +48,8 @@ Each signal gets a timestamp. Five viewers, five timestamps (or "watched to the 
 
 ### 1. Pick five and set the scene (15 min, plus waiting)
 
-Five people who match the audience in your day 50 spec. If your capstone is a **series**, show the episode you craft-passed yesterday. If it's a
-**tool**, have them *use* it to make one video and then watch the result. If it's a **showreel**, show it to people
+Five people who match the audience in your day 50 spec. If your capstone is a **series**, show the episode you
+craft-passed yesterday. If it's a **tool**, have them *use* it to make one video and then watch the result. If it's a **showreel**, show it to people
 who hire — a small-business owner, a marketer, a creator you know.
 
 Ask, don't beg:
@@ -65,8 +65,7 @@ Can't watch everyone live? Let the agent build a tiny watch page:
 
 ```text
 Goal: a private watch page that tells me where each test viewer stopped watching.
-Build a single static page with an HTML <video> element for [video url], a "name" field, and one big button:
-"I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp, and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1 (or KV), and give me a /report page listing each viewer's events in order.
+Build a single static page with an HTML <video> element for [video url], a "name" field, and one big button: "I'd scroll away here". Log: viewer name, the furthest second reached, every pause/seek with its timestamp, and button presses with their timestamp. Send events to a tiny Cloudflare Worker that stores them in D1 (or KV), and give me a /report page listing each viewer's events in order.
 Constraints: no third-party trackers; nothing stored beyond name + timestamps; one line on the page says exactly what is logged; the URL is unlisted.
 Done when: I watch it myself, press the button at 0:12, and see that row on /report.
 ```
@@ -105,7 +104,7 @@ Done when: v2 is rendered, QC is clean, and the total runtime change is reported
 
 If you can, show v2 to one of the people who dropped. Did they get past the spot? **Proof for task 2:** attach v2.
 
-> **Tip:** resist fixing the second and third issue today. One fix you can measure teaches you more than three you
+> **Tip:** resist fixing the second and third issues today. One fix you can measure teaches you more than three you
 > can't tell apart.
 
 ### 5. The "not now" list (10 min)

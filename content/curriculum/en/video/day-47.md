@@ -35,7 +35,7 @@ tasks:
 
 Your pipeline can make ten videos a day now. That also means it can make ten broken videos a day: a scene that renders
 black, music that clips, a caption that hangs on screen after the voice moves on. Broadcasters solved this decades ago
-with automated QC. Today you get your own inspector, plus the boring paperwork that keeps you out of copyright trouble.
+with automated QC. Today you build your own inspector, plus the boring paperwork that keeps you out of copyright trouble.
 
 ## What to check, and why
 
@@ -122,4 +122,4 @@ now on. Paste the checklist.
 - [ ] A rights checklist covers every asset in your last video.
 - [ ] Quiz done.
 
-Tomorrow: you open-source your template, and strangers can use it.
+**Tomorrow:** you open-source your template, and strangers can use it.

@@ -33,8 +33,8 @@ tasks:
 ---
 
 Fifty days ago you hadn't rendered a single frame. Now you have a pipeline, a series format, a client pack, dubbing,
-clipping and QC. The capstone is where it all points at one thing you launch on day 65 and show for years. Today you
-decide what that thing is, and you write it down so firmly that future-you can't wriggle out of it.
+clipping and QC. The capstone points all of it at one thing you launch on day 65 and show for years. Today you
+decide what that thing is, and you write it down so firmly that future you can't wriggle out of it.
 
 ## What makes a good video capstone
 
@@ -50,8 +50,9 @@ A good capstone, whichever shape:
 
 - **Uses the pipeline.** If episode 3 takes as long as episode 1, it isn't a pipeline project yet.
 - **Has a real viewer or user.** A named audience ("solo bakers on Instagram", "Python beginners"), not "everyone".
-- **Is small enough to finish.** Days 51–65 hold nine capstone days of about two hours each,
-  with rest days and the earning block (days 56–60) in between. Scope for 70% of your energy; the last 30% goes to polish and things breaking.
+- **Is small enough to finish.** Days 51–65 hold nine capstone days of about two hours each, with rest days and the
+  earning block (days 56–60) in between. Scope for 70% of your energy; the last 30% goes to polish and to things
+  breaking.
 - **Shows range.** It should use at least three things from days 29–47 (AI clips, dubbing, clipping, QC, publishing API).
 
 Examples: a 5-episode explainer series "Money basics in 60 seconds" in English and Spanish; a Telegram bot that turns
@@ -106,4 +107,4 @@ a tool. Say what, for whom, and the launch date. Public dates get finished.
 - [ ] Risks with fallbacks and at least two kill criteria are written.
 - [ ] The public announcement link is pasted.
 
-Tomorrow: the first full output, start to finish.
+**Tomorrow:** the first full output, start to finish.

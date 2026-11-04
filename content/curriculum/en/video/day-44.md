@@ -33,7 +33,7 @@ tasks:
 ---
 
 Raw screen recordings are a 1920-pixel desert with a tiny cursor somewhere in it. On a phone, nobody can read the
-button you clicked. Editors fix this by zooming in by hand, click after click. You'll make code do it: log every click,
+button you clicked. Editors fix this by zooming in by hand, click after click. You'll have code do it: log every click,
 then let the renderer push in, highlight and pull back out. The subject is your own pipeline web form from day 40.
 Went the Telegram-bot route on day 40? Ask the agent for a one-page local form in front of `make-video` (about
 10 minutes of its work), or record any web tool you know well.
@@ -69,9 +69,10 @@ Steps:
 Done when: out/tutorial.mp4 is about 60 s, every click is zoomed and labelled, nothing jitters.
 ```
 
-If you'd rather stay in ffmpeg, `scale` with `eval=frame` (the zoom) plus a `crop` whose x and y
-follow time (the pan) can do the same job; easing is just more painful to write. `zoompan` looks like the obvious
-filter, but it was built for still images and often wobbles on moving video because it snaps to whole pixels. Remotion keeps the zoom as React math you already know from days 18–19.
+If you'd rather stay in ffmpeg, `scale` with `eval=frame` (the zoom) plus a `crop` whose x and y follow time (the
+pan) can do the same job; easing is just more painful to write. `zoompan` looks like the obvious filter, but it was
+built for still images and often wobbles on moving video because it snaps to whole pixels. Remotion keeps the zoom as
+React math you already know from days 18–19.
 
 > **If you're stuck:** zoom lands next to the button, not on it? Your coordinates are in a different space: CSS pixels
 > vs video pixels, or a device scale factor of 2. Ask the agent to draw a red dot at each logged point on a frame grab
@@ -85,8 +86,7 @@ Upload `tutorial.mp4` as proof.
 
 ```text
 Goal: YouTube-ready chapters and a description for out/tutorial.mp4.
-Steps: transcribe with faster-whisper (segment timestamps) to transcript.json. Send the transcript to the LLM:
-group it into 3-5 chapters, each at least 10 s, first one at 0:00, titles of max 5 words in the viewer's language. Then write a 2-sentence description, the chapter list, and one line about what tool is shown.
+Steps: transcribe with faster-whisper (segment timestamps) to transcript.json. Send the transcript to the LLM: group it into 3-5 chapters, each at least 10 s, first one at 0:00, titles of max 5 words in the viewer's language. Then write a 2-sentence description, the chapter list, and one line about what tool is shown.
 Validate in code: first chapter 0:00, ascending, >= 10 s apart. Print the result to paste.
 Done when: the block pastes straight into a YouTube description and the chapters show up.
 ```
@@ -114,4 +114,4 @@ Paste the generated chapters and description.
 - [ ] Generated chapters and a description are pasted, starting at 0:00.
 - [ ] Quiz answered without peeking (mostly).
 
-Tomorrow: the same video, in a second language, without hiring a voice actor.
+**Tomorrow:** the same video, in a second language, without hiring a voice actor.

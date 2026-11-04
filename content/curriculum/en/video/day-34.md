@@ -67,8 +67,7 @@ pixels wide in a phone feed.
 ### 1. Aspect ratios as a flag
 
 ```text
-Goal: make-video renders the same storyboard as 16:9 (1920x1080), 9:16 (1080x1920) and 1:1 (1080x1080) with
---formats 16:9,9:16,1:1. Outputs: runs/<slug>/final-16x9.mp4, final-9x16.mp4, final-1x1.mp4.
+Goal: make-video renders the same storyboard as 16:9 (1920x1080), 9:16 (1080x1920) and 1:1 (1080x1080) with --formats 16:9,9:16,1:1. Outputs: runs/<slug>/final-16x9.mp4, final-9x16.mp4, final-1x1.mp4.
 Context: my pipeline from day 33 and my brand components from day 32. Read both first.
 Constraints:
 - Code-made scenes are re-rendered at each size (no cropping). Components size type from min(width, height), wrap text, and respect a per-format safe zone defined in brand.json (vertical: keep bottom 20% and right 12% clear).
@@ -107,8 +106,8 @@ Done when: the stage runs as part of make-video and preview.png shows three dist
 
 Judge them at feed size, not full size. Upload the three thumbnails.
 
-> **Tip:** a thumbnail is a promise, the first 3 seconds are the delivery. If the thumbnail shows a cat mid-air and the
-> video opens on a title card, people leave. Pick the frame that your hook actually opens on.
+> **Tip:** a thumbnail is a promise; the first 3 seconds are the delivery. If the thumbnail shows a cat mid-air and the
+> video opens on a title card, people leave. Pick the frame your hook actually opens on.
 
 ## Quiz
 
@@ -131,4 +130,4 @@ Judge them at feed size, not full size. Upload the three thumbnails.
 - [ ] Three auto-generated thumbnails are uploaded, checked at feed size.
 - [ ] Quiz done.
 
-Tomorrow is a rest day. After it, your videos meet the platforms — uploaded by code.
+**Tomorrow:** rest. After that, your videos meet the platforms — uploaded by code.

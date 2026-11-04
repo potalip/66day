@@ -60,7 +60,7 @@ times segment duration.
 - **Voice cloning only with consent.** Your own voice: fine. Anyone else's: written permission, saying what it's used
   for. Most TTS providers require you to confirm consent, and some verify it. Never clone a celebrity or a client's
   voice "just to test".
-- **Lip-sync is the hard limit.** Motion graphics and voiceover-over-B-roll dub perfectly. A talking head will look
+- **Lip-sync is the hard limit.** Motion graphics and voiceover over B-roll dub perfectly. A talking head will look
   off when lips don't match. Lip-sync models exist but often look uncanny; for faces, prefer cutting away to visuals
   during dubbed lines, or keep the original with subtitles.
 - **Say it's a dub.** One line in the description ("AI-dubbed from English, voice: my own clone") keeps viewers'
@@ -128,4 +128,4 @@ overflow, an example that means nothing in that culture. Write what you (or the 
 - [ ] Your note on what literal translation broke is written.
 - [ ] Quiz done.
 
-Tomorrow: you'll turn one long video into three shorts with a script and a rubric.
+**Tomorrow:** you'll turn one long video into three shorts with a script and a rubric.

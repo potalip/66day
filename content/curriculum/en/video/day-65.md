@@ -29,8 +29,8 @@ tasks:
     proof: link
 ---
 
-Fifty days ago, on day 15, you rendered 90 frames of a circle sliding across the screen and felt like a wizard. Today you launch a body of work
-made by your own pipeline: masters locked, trailer cut, uploads scheduled, a service page waiting for clients. The
+Fifty days ago, on day 15, you rendered 90 frames of a circle sliding across the screen and felt like a wizard.
+Today you launch a body of work made by your own pipeline: masters locked, trailer cut, uploads scheduled, a service page waiting for clients. The
 making is done. Launch day is about **showing up**: posting well, answering every person, fixing what breaks in
 public, and writing down what happened while it's fresh.
 
@@ -68,9 +68,10 @@ Then open on your phone: the main video, captions on, then off. Keep three tabs 
 
 ### T+0: Go live and post (15 min)
 
-The main video goes public (or your scheduled YouTube Premiere starts): for a series, the newest episode joins the ones from
-your premiere in one playlist; for a tool, the public version with its gallery; for a showreel, the day 58 reel at
-the top of your page. Post your launch message on the main channel with the trailer attached. Templates to adapt — make them sound like you:
+The main video goes public (or your scheduled YouTube Premiere starts). For a series, the newest episode joins the
+ones from your premiere in one playlist; for a tool, the public version goes live with its gallery; for a showreel,
+the day 58 reel sits at the top of your page. Post your launch message on the main channel with the trailer
+attached. Templates to adapt — make them sound like you:
 
 ```text
 X / THREADS / LINKEDIN
@@ -122,8 +123,7 @@ weak after a few hundred impressions, swap to your second-best thumbnail and not
 ### T+24 h: The report and the thank-you (30 min)
 
 ```text
-Help me write the 24-hour launch report. I'll paste the analytics export / screenshots numbers for each video and platform: views, impressions and click-through rate, average view duration, average percentage viewed, retention at
-30 s, new followers, comments. Build one markdown table across platforms, then summarise comments into top 3 praises, top 3 complaints, top 3 requests. List what broke and how it was fixed. Don't round small numbers up.
+Help me write the 24-hour launch report. I'll paste the numbers from the analytics export or screenshots for each video and platform: views, impressions and click-through rate, average view duration, average percentage viewed, retention at 30 s, new followers, comments. Build one markdown table across platforms, then summarise comments into top 3 praises, top 3 complaints, top 3 requests. List what broke and how it was fixed. Don't round small numbers up.
 ```
 
 Check every number against the studio yourself. Add one line comparing it to your day 64 success definition.
@@ -139,4 +139,4 @@ Finally, the thank-you post: *thanks* (name helpers who are happy to be named), 
 - [ ] Your 24-hour report covers views, retention, comments and what broke.
 - [ ] Your thank-you and learnings post is live; the link is pasted.
 
-You launched. Whatever the numbers say, you are now someone who finishes and ships. Tomorrow: graduation.
+You launched. Whatever the numbers say, you are now someone who finishes and ships. **Tomorrow:** graduation.

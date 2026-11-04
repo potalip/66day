@@ -133,4 +133,4 @@ A café owner writes: *"Can you make us a video for Instagram about our new brea
 - [ ] Your client brief template is pasted.
 - [ ] Quiz done.
 
-Tomorrow: your pipeline gets a front door — a bot or a web form anyone can use.
+**Tomorrow:** your pipeline gets a front door — a bot or a web form anyone can use.

@@ -34,7 +34,7 @@ tasks:
 
 Phase 3 is called "Ship" for a reason. Your pipeline can make a video in one command, but right now the last mile is
 still you, dragging a file into a browser and typing a title at midnight. Today the pipeline learns to publish: proper
-file specs, metadata written for each platform, and an upload through an official API.
+file specs, metadata written for each platform and an upload through an official API.
 
 ## Specs and metadata
 
@@ -100,8 +100,7 @@ Run `--dry-run`, then the real thing. Paste the link. If YouTube locked it to pr
 ### 3. Metadata per platform
 
 ```text
-Add a metadata stage: from storyboard.json and the transcript, ask the LLM (CLAUDE_MODEL, default claude-sonnet-5-5) for metadata.json with: youtube {title <= 70 chars, description with a 2-line hook, chapters from scene start times,
-5 tags}, shorts {title}, tiktok {caption <= 150 chars, 3 hashtags}, x {post <= 240 chars}. Add an AI disclosure line when ai_footage is true. Validate lengths in code. Without an API key, build plain metadata from the storyboard title.
+Add a metadata stage: from storyboard.json and the transcript, ask the LLM (CLAUDE_MODEL, default claude-sonnet-5-5) for metadata.json with: youtube {title <= 70 chars, description with a 2-line hook, chapters from scene start times, 5 tags}, shorts {title}, tiktok {caption <= 150 chars, 3 hashtags}, x {post <= 240 chars}. Add an AI disclosure line when ai_footage is true. Validate lengths in code. Without an API key, build plain metadata from the storyboard title.
 ```
 
 Paste the generated `metadata.json`. Then edit the YouTube title by hand: models love "Unlocking the secrets of…". You
@@ -128,4 +127,4 @@ don't.
 - [ ] `metadata.json` for four platforms is pasted, with at least one title you rewrote.
 - [ ] Quiz done.
 
-Tomorrow: the numbers come in. You'll find the exact second people leave — and fix it.
+**Tomorrow:** the numbers come in. You'll find the exact second people leave — and fix it.
