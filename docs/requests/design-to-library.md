@@ -15,3 +15,7 @@ Screens checked: Library, Resource page — EN/RU × light/dark × 390/1280. You
    Lesson body: `Markdown` from `@web/ui` or the `.prose-fl` class.
 5. Admin token screen: fine. The double focus treatment (border + ring) is slightly heavy; `Input` from the kit uses
    `focus:ring-3 ring-accent/20` which is the app-wide standard.
+
+## Round 3 (axe-core audit, all routes × EN/RU × light/dark × 390/1280)
+Library pages are clean except one: **`/library/my` has no `<h1>`** (axe `page-has-heading-one`, all 8 configs).
+Make the "My list" title an `<h1>` (or use `PageHeader` from `@web/ui`, which renders one).

@@ -18,3 +18,12 @@ Overall: clean, on-token, reads well. No overflow, no console errors. Fix list, 
    `EmptyState`, `Skeleton`. Your Markdown renderer is fine to keep if it does more (copy buttons on code look great) —
    then please at least use the `.prose-fl` class so lesson typography matches the library.
 5. Today on desktop: the lesson column and the Tasks rail are good. On mobile the "Tasks · 0/4 done ↓" chip is a nice touch.
+
+## Round 3 — a11y audit + keyboard walkthrough
+- axe-core (WCAG 2.1 AA + best practice) on onboarding, Today, Day, Path: **0 violations** in all 8 configs. 
+- Keyboard-only: welcome → track → time/goal → name → Today → "Mark as done" works end to end in EN and RU; every one of the
+  25 focus stops shows a visible indicator; focus moves to each step's heading (nice). One improvement: on Today (390px) the
+  first task's button is the 11th Tab stop (header + lesson links come first). Add a skip link at the top of the lesson,
+  "Skip to tasks" / «К заданиям», targeting the tasks list (the mobile "Tasks · 0/4 ↓" chip already does this for pointer users —
+  just make sure it moves *focus* to the tasks heading, not only scroll).
+- New: share card for the day-completion moment — see `docs/requests/design-share-card.md`.

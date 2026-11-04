@@ -22,8 +22,9 @@ export function cellState(d: number, today = TODAY): CellState {
 }
 
 /** Fades content up once when it scrolls into view. Static under reduced motion (CSS kills the animation). */
-function Reveal({ children, className, delay = 0 }: { children: ReactNode; className?: string; delay?: number }) {
-  const ref = useRef<HTMLDivElement>(null);
+function Reveal({ children, className, delay = 0, as = "div" }: { children: ReactNode; className?: string; delay?: number; as?: "div" | "li" }) {
+  const ref = useRef<HTMLDivElement & HTMLLIElement>(null);
+  const As = as;
   const [shown, setShown] = useState(false);
   useEffect(() => {
     const el = ref.current;
@@ -33,9 +34,9 @@ function Reveal({ children, className, delay = 0 }: { children: ReactNode; class
     return () => io.disconnect();
   }, []);
   return (
-    <div ref={ref} className={cn(shown ? "animate-rise" : "opacity-0", className)} style={{ animationDelay: `${delay}ms` }}>
+    <As ref={ref} className={cn(shown ? "animate-rise" : "opacity-0", className)} style={{ animationDelay: `${delay}ms` }}>
       {children}
-    </div>
+    </As>
   );
 }
 
@@ -131,7 +132,7 @@ function PathVisual({ t }: { t: LandingStrings }) {
                   s === "today" && "bg-surface text-accent-ink ring-2 ring-accent ring-offset-2 ring-offset-surface",
                   s === "boss" && "border border-gold-bright/70 bg-gold-soft text-gold-ink",
                   s === "rest" && "border border-dashed border-line-strong text-muted",
-                  s === "locked" && "bg-surface-2 text-muted/70",
+                  s === "locked" && "bg-surface-2 text-muted",
                 )}>
                 {s === "boss" ? <Crown className="size-3 sm:size-3.5" aria-hidden /> : s === "rest" ? <Moon className="size-2.5 sm:size-3" aria-hidden /> : d}
                 <span className="sr-only">{t.map[s === "locked" ? "day" : s]}</span>
@@ -229,8 +230,8 @@ function Day({ t }: { t: LandingStrings }) {
           </Reveal>
           <ol className="mt-10 grid gap-2">
             {t.steps.map((s, i) => (
-              <Reveal key={s.t} delay={i * 70}>
-                <li className="grid grid-cols-[auto_1fr] gap-4 rounded-[var(--radius)] p-3 sm:gap-5 sm:p-4">
+              <Reveal key={s.t} delay={i * 70} as="li">
+                <div className="grid grid-cols-[auto_1fr] gap-4 rounded-[var(--radius)] p-3 sm:gap-5 sm:p-4">
                   <div className="relative">
                     <span className="grid size-11 place-items-center rounded-full border border-line bg-surface text-accent-ink shadow-soft [&_svg]:size-5" aria-hidden>{icons[i]}</span>
                   </div>
@@ -241,7 +242,7 @@ function Day({ t }: { t: LandingStrings }) {
                     </div>
                     <p className="mt-1 max-w-[52ch] text-muted">{s.d}</p>
                   </div>
-                </li>
+                </div>
               </Reveal>
             ))}
           </ol>

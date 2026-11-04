@@ -48,7 +48,7 @@ export function Shell() {
         <div className="flex min-h-dvh flex-col">
           <header className="sticky top-0 z-40 border-b border-line bg-bg/80 backdrop-blur-md supports-[backdrop-filter]:bg-bg/70">
             <div className="mx-auto flex h-14 max-w-6xl items-center gap-3 px-4 sm:h-16 sm:px-6">
-              <Link to={`/${l}`} className="-ml-1 rounded-lg px-1 py-1" aria-label={s.brand}>
+              <Link to={`/${l}`} className="-ml-1 rounded-lg px-1 py-1">
                 <Logo size={26} />
               </Link>
               {!isFocus && (
