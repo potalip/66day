@@ -12,6 +12,7 @@
     "typecheck": "tsc -b --noEmit",
     "pretest": "node scripts/build-content.mjs --quiet",
     "test": "vitest run",
+    "test:learn": "node scripts/build-content.mjs --quiet && vitest run --config worker/lib/learn/vitest.config.mjs",
     "db:migrate:local": "wrangler d1 migrations apply DB --local",
     "content:build": "node scripts/build-content.mjs",
     "content:check": "node scripts/build-content.mjs --check --strict",
