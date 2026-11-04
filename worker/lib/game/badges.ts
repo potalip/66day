@@ -31,6 +31,7 @@ export interface Counters {
   comebacks: number;
   freezesUsed: number;
   polyglot: number;
+  quests?: number;
   onboarded?: number;
   /** resource XP limiter: [local day, count] */
   resDay?: [string, number];
@@ -63,6 +64,7 @@ export const BUILTIN_BADGES: BadgeDef[] = [
   B("streak-14", "streak", 302, "flame", ["Two Weeks Strong", "Fourteen days in a row. A rhythm is forming."], ["Две недели в ритме", "Четырнадцать дней подряд. Ритм уже складывается."]),
   B("streak-30", "streak", 303, "🌳", ["30-Day Streak", "Thirty days in a row."], ["Месяц в потоке", "Тридцать дней подряд."]),
   B("streak-66", "streak", 304, "🍃", ["Unbroken 66", "66 days in a row."], ["Непрерывные 66", "66 дней подряд."]),
+  B("quest-3", "rhythm", 402, "🧭", ["Quest Keeper", "Completed three weekly quests."], ["Хранитель квестов", "Три квеста недели выполнены."]),
   B("comeback", "rhythm", 400, "🔁", ["Comeback", "Lost the streak and came back anyway."], ["Вернулся", "Серия прервалась — а ты всё равно вернулся."]),
   B("saved-by-freeze", "rhythm", 401, "snowflake", ["Saved by Frost", "A streak freeze kept your streak alive."], ["Спасено морозом", "Заморозка сохранила твою серию."]),
   B("level-5", "level", 500, "star", ["Level 5", "Reached level 5."], ["Уровень 5", "Пятый уровень взят."]),
@@ -94,6 +96,7 @@ export const BADGE_RULES: Record<string, (x: RuleCtx) => boolean> = {
   polyglot: (x) => x.c.polyglot >= 1,
   "early-bird": (x) => x.c.earlyBird >= 1,
   "well-rested": (x) => x.c.rests >= 3,
+  "quest-3": (x) => (x.c.quests ?? 0) >= 3,
 };
 
 export const BADGE_ID = /^[a-z0-9][a-z0-9-]{0,47}$/;

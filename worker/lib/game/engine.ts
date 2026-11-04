@@ -19,7 +19,8 @@ export const XP = {
 
 /** Game-internal events on top of the shared contract (shared/types.ts is orchestrator-owned). */
 export type LessonViewedEvent = { type: "lesson.viewed"; day: number; lang: Lang };
-export type AnyGameEvent = GameEvent | LessonViewedEvent;
+export type QuestCompletedEvent = { type: "quest.completed"; questId: string; week: string; xp: number; title?: string };
+export type AnyGameEvent = GameEvent | LessonViewedEvent | QuestCompletedEvent;
 
 export interface GameState {
   xp: number;
@@ -69,6 +70,9 @@ export function eventKey(ev: AnyGameEvent): string {
     case "lesson.viewed":
       if (ev.lang !== "en" && ev.lang !== "ru") throw new InvalidEvent("bad lang");
       return `lesson:${dayNum(ev.day)}:${ev.lang}`;
+    case "quest.completed":
+      if (!/^\d{4}-W\d{2}$/.test(String(ev.week))) throw new InvalidEvent("bad week");
+      return `quest:${ev.week}:${str(ev.questId, 48)}`;
     default: throw new InvalidEvent("unknown event type");
   }
 }
@@ -85,6 +89,7 @@ export const label = {
   xp: (n: number) => `+${n} XP`,
   level: (l: Lang, n: number) => (l === "ru" ? `Уровень ${n} · ${RANK_LABEL.ru[rankFor(n)]}` : `Level ${n} · ${RANK_LABEL.en[rankFor(n)]}`),
   streak: (l: Lang, n: number) => (l === "ru" ? `Серия: ${n} ${ruDays(n)}` : `${n}-day streak`),
+  quest: (l: Lang, title: string, xp: number) => (l === "ru" ? `Квест недели: ${title} (+${xp} XP)` : `Weekly quest: ${title} (+${xp} XP)`),
   freezeEarned: (l: Lang) => (l === "ru" ? "Получена заморозка серии" : "Streak freeze earned"),
   freezeUsed: (l: Lang, n: number) => (l === "ru" ? (n === 1 ? "Заморозка спасла серию" : `Заморозки спасли серию (${n})`) : n === 1 ? "A freeze saved your streak" : `${n} freezes saved your streak`),
 };
@@ -144,6 +149,10 @@ export function reduce(prev: GameState, ev: AnyGameEvent, ctx: EventCtx): Outcom
       c.renders++;
       xp = XP.render;
       break;
+    case "quest.completed":
+      c.quests = (c.quests ?? 0) + 1;
+      xp = Math.max(0, Math.min(300, Math.round(Number(ev.xp) || 0)));
+      break;
     case "lesson.viewed": {
       const lessons = { ...(c.lessons ?? {}) };
       const mask = (lessons[ev.day] ?? 0) | (ev.lang === "en" ? 1 : 2);
@@ -174,7 +183,11 @@ export function reduce(prev: GameState, ev: AnyGameEvent, ctx: EventCtx): Outcom
 
   const totalXp = prev.xp + xp;
   const level = levelForXp(totalXp);
-  if (xp > 0) awards.unshift({ kind: "xp", amount: xp, label: label.xp(xp) });
+  if (xp > 0) {
+    awards.unshift(ev.type === "quest.completed"
+      ? { kind: "xp", amount: xp, id: `quest:${ev.questId}`, label: label.quest(ctx.lang, ev.title ?? ev.questId, xp) }
+      : { kind: "xp", amount: xp, label: label.xp(xp) });
+  }
   if (level > prev.level) awards.push({ kind: "level", amount: level, id: rankFor(level), label: label.level(ctx.lang, level) });
 
   const ruleCtx = { c, streak: streak.streak, level };

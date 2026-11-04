@@ -72,3 +72,36 @@ export interface LeaderboardResponse {
   rows: LeaderRow[];
   me: LeaderRow | null;
 }
+
+export interface QuestView {
+  id: string;
+  icon: string;
+  title: Record<Lang, string>;
+  description: Record<Lang, string>;
+  xp: number;
+  target: number;
+  progress: number;
+  done: boolean;
+  completedAt: number | null;
+}
+export interface QuestsResponse { week: string; resetsAt: number; quests: QuestView[] }
+
+export interface CertificateResponse {
+  userId: string;
+  certId: string;
+  name: string | null;
+  track: Track | null;
+  status: "complete" | "in_progress" | "not_started";
+  daysDone: number;
+  totalDays: number;
+  startedAt: number | null;
+  completedAt: number | null;
+  issuedAt: number | null;
+  level: number;
+  rank: RankKey;
+  xp: number;
+  bestStreak: number;
+  badges: { id: string; icon: string; title: Record<Lang, string>; awardedAt: number }[];
+  badgeCount: number;
+  shippedCount: number;
+}
