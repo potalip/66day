@@ -1,0 +1,3 @@
+# Optional: run Whisper on the box instead of the OpenAI API (TRANSCRIBE_BACKEND=faster-whisper). Needs ~2 GB RAM for "small".
+-r requirements.txt
+faster-whisper==1.1.1

@@ -1,6 +1,7 @@
 # Media worker contract (library pipeline ⇄ external transcription service)
 
-The Worker can't download YouTube/Instagram media or run Whisper. A separate service (planned on AWS) does that.
+The Worker can't download YouTube/Instagram media or run Whisper. A separate service does that: **[`media-worker/`](../../../media-worker/README.md)**
+(Python/FastAPI, Dockerfile, deploy notes for AWS App Runner/ECS).
 The seam is already wired: if `MEDIA_WORKER_URL` is set, the pipeline calls it whenever a transcript is missing.
 Everything below is plain HTTPS + JSON, and both sides authenticate with one shared bearer token, `MEDIA_WORKER_TOKEN`.
 
@@ -41,6 +42,8 @@ On success, the Worker saves the transcript (source `media_worker`), fills in th
 `resource.build_lesson` for every audience language. A failure is logged, and the resource stays in "needs transcript".
 The callback is idempotent: send it again to replace the transcript.
 
-## Suggested implementation
-yt-dlp (audio only) → ffmpeg → 16 kHz mono → Whisper (large-v3 or a hosted API) → join segments into paragraphs.
-Instagram usually needs cookies from a logged-in account, so keep those cookies in AWS Secrets Manager, never in this repo.
+## Implementation
+See `media-worker/`: an upload is fetched via the source URL; YouTube goes through yt-dlp, audio only (only for platforms in
+`YTDLP_SOURCES`); ffmpeg converts to 16 kHz mono mp3 in 20-min parts; transcription uses the OpenAI API, faster-whisper or the
+`fake` backend; segments are joined into paragraphs; then the callback, with retries.
+Instagram is off by default (login wall + terms). The founder uploads the reel file instead, which takes the upload path.

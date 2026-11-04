@@ -17,8 +17,10 @@ export function ResourceCardView({ r, compact }: { r: ResourceCard; compact?: bo
       <Thumb src={r.thumbnailUrl} type={r.sourceType} label={r.title} host={r.sourceType === "upload" ? "FlowLeaf" : hostOf(r.url)} />
       <div className={cx("flex flex-1 flex-col gap-2", compact ? "p-3" : "p-4")}>
         <div className="flex flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted">
-          <span className="inline-flex items-center gap-1"><TypeIcon type={r.sourceType} className="size-3.5" />{s.type[r.sourceType]}</span>
-          {r.estMinutes ? <span className="inline-flex items-center gap-1"><ClockIcon className="size-3.5" />{s.minutes(r.estMinutes)}</span> : null}
+          <span className="inline-flex items-center gap-1" title={r.durationSec ? s.videoLength : undefined}>
+            <TypeIcon type={r.sourceType} className="size-3.5" />{r.durationSec ? s.minutes(Math.max(1, Math.round(r.durationSec / 60))) : s.type[r.sourceType]}
+          </span>
+          {r.hasLesson && r.estMinutes ? <span className="inline-flex items-center gap-1" title={s.lessonLength}><ClockIcon className="size-3.5" />{s.lessonTime(s.minutes(r.estMinutes))}</span> : null}
           <span>{s.level[r.level]}</span>
         </div>
         <h3 className={cx("font-semibold leading-snug tracking-tight text-fg", compact ? "line-clamp-2 text-sm" : "line-clamp-2 text-base")}>{r.title}</h3>
@@ -26,7 +28,7 @@ export function ResourceCardView({ r, compact }: { r: ResourceCard; compact?: bo
         <div className="mt-auto flex flex-wrap items-center gap-1.5 pt-1">
           {r.author && <span className="mr-auto truncate text-xs text-muted">{r.author}</span>}
           {foreign && <Pill>{r.origLang === "en" ? s.inEnglish : s.inRussian}</Pill>}
-          {r.hasLesson && <Pill tone="accent">{s.lessonBadge}</Pill>}
+          {r.hasLesson && !r.estMinutes && <Pill tone="accent">{s.lessonBadge}</Pill>}
         </div>
       </div>
     </Link>
